@@ -16,20 +16,43 @@ The first proof-of-concept is [already working](https://xcp-ng.github.io/news/20
 
 ## Phase I
 
-Initial release of XCP-ng, based on latest XenServer sources. Simple yet functional release.
+Initial release of XCP-ng, based on latest XenServer sources. Simple yet functional release, with:
+
+* a manually crafted XCP-ng ISO
+* a RPM repo
 
 ## Phase II
 
-Automation + documentation for building XCP-ng packages, creating the ISO and/or the RPM repo.
+Automation + documentation for building XCP-ng packages, creating the ISO and/or the RPM repo. Also:
+
+* turn a CentOS into XCP-ng via RPM repo
+* turn a XenServer to XCP-ng via ISO upgrade
 
 ## Phase III
 
-Community code inserted into XCP-ng project (Gluster support, soft RAID etc.)
+Community code inserted into XCP-ng project, like:
+
+* bundled Gluster support
+* Software RAID during install
+* ZFS driver
+* better compression
+* etc.
 
 # People and companies behind XCP-ng
 
+## Companies
+
 * Vates (Xen Orchestra editor)
 * Zentific
+* Your company if you sponsor it!
+
+## People
+
+* Olivier (Xen Orchestra project founder)
+* John Else (contractor, former XAPI dev)
+* Nick Couchman
+* Jon Sands
+* Mike Hidalgo
 
 # Risks and challenges
 
