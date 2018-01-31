@@ -9,7 +9,7 @@ Our very special thanks for joining the adventure.
 You will be kept informed about the campaign and the release of XCP-ng
 
 **2. 20€ - XCP-ng stickers**
-Get 2 XCP-ng stickers for your laptop
+Get 2x shiny XCP-ng stickers for your laptop or server!
 
 **3. 50€ - XCP-ng t-shirt**
 Show a great style with an awesome XCP-ng t-shirt
@@ -23,14 +23,14 @@ Your morning coffee will never be better
 Receive an USB key with XCP-ng ready to boot!
 +all of the above
 
-## Enterprise pledges level
+## Sponsors level
 
 **6. 500€ - Official partner**
 Your company/blog logo and link will be on a dedicated partner page on XCP website
 +a bunch of goodies for your team
 
 **7. 1000€ - Silver partner**
-Your logo will be printed on every communication we make for XCP-ng
+Your logo will appear on printed documentation (flyers, posters...)
 +1 roadmap vote regarding the 3rd stretch goal
 +a bunch of goodies for your team
 
