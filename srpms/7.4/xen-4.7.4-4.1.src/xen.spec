@@ -578,7 +578,6 @@ chmod -x %{buildroot}/boot/xen-syms-*
 /boot/%{name}-%{version}-%{release}-d.map
 /boot/%{name}-%{version}-%{release}-d.config
 %config %{_sysconfdir}/sysconfig/kernel-xen
-%doc xcp-ng_logo.png
 %ghost %attr(0644,root,root) %{_sysconfdir}/sysconfig/kernel-xen-args
 
 %files hypervisor-debuginfo
