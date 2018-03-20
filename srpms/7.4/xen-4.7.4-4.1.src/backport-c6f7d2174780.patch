@@ -1,0 +1,134 @@
+From c6f7d21747805b50123fc1b8d73518fea2aa9096 Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:21 -0400
+Subject: [PATCH] xen/xsm: remove .xsm_initcall.init section
+
+Since FLASK is the only implementation of XSM hooks in Xen, using an
+iterated initcall dispatch for setup is overly complex.  Change this to
+a direct function call to a globally visible function; if additional XSM
+hooks are added in the future, a switching mechanism will be needed
+regardless, and that can be placed in xsm_core.c.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Julien Grall <julien.grall@arm.com>
+diff --git a/xen/arch/arm/xen.lds.S b/xen/arch/arm/xen.lds.S
+index 1f010bd..c544524 100644
+--- a/xen/arch/arm/xen.lds.S
++++ b/xen/arch/arm/xen.lds.S
+@@ -162,11 +162,6 @@ SECTIONS
+        *(.initcall1.init)
+        __initcall_end = .;
+   } :text
+-  .xsm_initcall.init : {
+-       __xsm_initcall_start = .;
+-       *(.xsm_initcall.init)
+-       __xsm_initcall_end = .;
+-  } :text
+   __init_end_efi = .;
+   . = ALIGN(STACK_SIZE);
+   __init_end = .;
+diff --git a/xen/arch/x86/xen.lds.S b/xen/arch/x86/xen.lds.S
+index c948a59..ebeaf8e 100644
+--- a/xen/arch/x86/xen.lds.S
++++ b/xen/arch/x86/xen.lds.S
+@@ -201,11 +201,6 @@ SECTIONS
+        *(.initcall1.init)
+        __initcall_end = .;
+   } :text
+-  .xsm_initcall.init : {
+-       __xsm_initcall_start = .;
+-       *(.xsm_initcall.init)
+-       __xsm_initcall_end = .;
+-  } :text
+ 
+ #ifdef EFI
+   . = ALIGN(MB(2));
+diff --git a/xen/include/xsm/xsm.h b/xen/include/xsm/xsm.h
+index 8ed8ee5..0d525ec 100644
+--- a/xen/include/xsm/xsm.h
++++ b/xen/include/xsm/xsm.h
+@@ -46,14 +46,6 @@ typedef enum xsm_default xsm_default_t;
+ extern char *policy_buffer;
+ extern u32 policy_size;
+ 
+-typedef void (*xsm_initcall_t)(void);
+-
+-extern xsm_initcall_t __xsm_initcall_start[], __xsm_initcall_end[];
+-
+-#define xsm_initcall(fn) \
+-    static xsm_initcall_t __initcall_##fn \
+-    __used_section(".xsm_initcall.init") = fn
+-
+ struct xsm_operations {
+     void (*security_domaininfo) (struct domain *d,
+                                         struct xen_domctl_getdomaininfo *info);
+@@ -763,6 +755,14 @@ extern int unregister_xsm(struct xsm_operations *ops);
+ extern struct xsm_operations dummy_xsm_ops;
+ extern void xsm_fixup_ops(struct xsm_operations *ops);
+ 
++#ifdef CONFIG_FLASK
++extern void flask_init(void);
++#else
++static inline void flask_init(void)
++{
++}
++#endif
++
+ #else /* CONFIG_XSM */
+ 
+ #include <xsm/dummy.h>
+diff --git a/xen/xsm/flask/hooks.c b/xen/xsm/flask/hooks.c
+index 543406b..d632b0e 100644
+--- a/xen/xsm/flask/hooks.c
++++ b/xen/xsm/flask/hooks.c
+@@ -1817,7 +1817,7 @@ static struct xsm_operations flask_ops = {
+     .xen_version = flask_xen_version,
+ };
+ 
+-static __init void flask_init(void)
++__init void flask_init(void)
+ {
+     int ret = -ENOENT;
+ 
+@@ -1860,8 +1860,6 @@ static __init void flask_init(void)
+         printk(XENLOG_INFO "Flask:  Starting in permissive mode.\n");
+ }
+ 
+-xsm_initcall(flask_init);
+-
+ /*
+  * Local variables:
+  * mode: C
+diff --git a/xen/xsm/xsm_core.c b/xen/xsm/xsm_core.c
+index 634ec98..3487742 100644
+--- a/xen/xsm/xsm_core.c
++++ b/xen/xsm/xsm_core.c
+@@ -36,17 +36,6 @@ static inline int verify(struct xsm_operations *ops)
+     return 0;
+ }
+ 
+-static void __init do_xsm_initcalls(void)
+-{
+-    xsm_initcall_t *call;
+-    call = __xsm_initcall_start;
+-    while ( call < __xsm_initcall_end )
+-    {
+-        (*call) ();
+-        call++;
+-    }
+-}
+-
+ static int __init xsm_core_init(void)
+ {
+     if ( verify(&dummy_xsm_ops) )
+@@ -57,7 +46,7 @@ static int __init xsm_core_init(void)
+     }
+ 
+     xsm_ops = &dummy_xsm_ops;
+-    do_xsm_initcalls();
++    flask_init();
+ 
+     return 0;
+ }

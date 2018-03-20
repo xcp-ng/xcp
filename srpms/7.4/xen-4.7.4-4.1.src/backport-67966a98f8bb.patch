@@ -1,0 +1,79 @@
+From 67966a98f8bba55c255a9eddcca846a42a65d116 Mon Sep 17 00:00:00 2001
+From: Julien Grall <julien.grall@linaro.org>
+Date: Tue, 28 Nov 2017 13:44:09 +0100
+Subject: [PATCH] x86/pod: prevent infinite loop when shattering large pages
+
+When populating pages, the PoD may need to split large ones using
+p2m_set_entry and request the caller to retry (see ept_get_entry for
+instance).
+
+p2m_set_entry may fail to shatter if it is not possible to allocate
+memory for the new page table. However, the error is not propagated
+resulting to the callers to retry infinitely the PoD.
+
+Prevent the infinite loop by return false when it is not possible to
+shatter the large mapping.
+
+This is XSA-246.
+
+Signed-off-by: Julien Grall <julien.grall@linaro.org>
+Signed-off-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: George Dunlap <george.dunlap@citrix.com>
+master commit: a1c6c6768971ea387d7eba0803908ef0928b43ac
+master date: 2017-11-28 13:11:55 +0100
+diff --git a/xen/arch/x86/mm/p2m-pod.c b/xen/arch/x86/mm/p2m-pod.c
+index b7ab169..87082cf 100644
+--- a/xen/arch/x86/mm/p2m-pod.c
++++ b/xen/arch/x86/mm/p2m-pod.c
+@@ -1073,9 +1073,8 @@ p2m_pod_demand_populate(struct p2m_domain *p2m, unsigned long gfn,
+          * NOTE: In a fine-grained p2m locking scenario this operation
+          * may need to promote its locking from gfn->1g superpage
+          */
+-        p2m_set_entry(p2m, gfn_aligned, _mfn(INVALID_MFN), PAGE_ORDER_2M,
+-                      p2m_populate_on_demand, p2m->default_access);
+-        return 0;
++        return p2m_set_entry(p2m, gfn_aligned, _mfn(INVALID_MFN), PAGE_ORDER_2M,
++                             p2m_populate_on_demand, p2m->default_access);
+     }
+ 
+     /* Only reclaim if we're in actual need of more cache. */
+@@ -1106,8 +1105,12 @@ p2m_pod_demand_populate(struct p2m_domain *p2m, unsigned long gfn,
+ 
+     gfn_aligned = (gfn >> order) << order;
+ 
+-    p2m_set_entry(p2m, gfn_aligned, mfn, order, p2m_ram_rw,
+-                  p2m->default_access);
++    if ( p2m_set_entry(p2m, gfn_aligned, mfn, order, p2m_ram_rw,
++                       p2m->default_access) )
++    {
++        p2m_pod_cache_add(p2m, p, order);
++        goto out_fail;
++    }
+ 
+     for( i = 0; i < (1UL << order); i++ )
+     {
+@@ -1152,13 +1155,18 @@ remap_and_retry:
+     BUG_ON(order != PAGE_ORDER_2M);
+     pod_unlock(p2m);
+ 
+-    /* Remap this 2-meg region in singleton chunks */
+-    /* NOTE: In a p2m fine-grained lock scenario this might
+-     * need promoting the gfn lock from gfn->2M superpage */
++    /*
++     * Remap this 2-meg region in singleton chunks. See the comment on the
++     * 1G page splitting path above for why a single call suffices.
++     *
++     * NOTE: In a p2m fine-grained lock scenario this might
++     * need promoting the gfn lock from gfn->2M superpage.
++     */
+     gfn_aligned = (gfn>>order)<<order;
+-    for(i=0; i<(1<<order); i++)
+-        p2m_set_entry(p2m, gfn_aligned + i, _mfn(INVALID_MFN), PAGE_ORDER_4K,
+-                      p2m_populate_on_demand, p2m->default_access);
++    if ( p2m_set_entry(p2m, gfn_aligned, _mfn(INVALID_MFN), PAGE_ORDER_4K,
++                       p2m_populate_on_demand, p2m->default_access) )
++        return -1;
++
+     if ( tb_init_done )
+     {
+         struct {

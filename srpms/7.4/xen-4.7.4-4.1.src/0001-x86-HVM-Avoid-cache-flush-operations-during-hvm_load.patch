@@ -1,0 +1,128 @@
+From 5ae9ddb9a4086c63a50bd3c4c96a06fad04f3be9 Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Wed, 13 May 2015 12:44:29 +0100
+Subject: [PATCH] x86/HVM: Avoid cache flush operations during hvm_load
+
+An MTRR record is processed for each vCPU during hvm_load. Each MTRR
+record sets several mtrrs, each of which flushes the cache on all pCPUs.
+This can take some time and trip the watchdog for HVM guests with many
+CPUs.
+
+To fix this, introduce a flag which prevents flushing the cache when
+doing MTRR operations and instead do a flush at the end of hvm_load.
+
+This reduces the time to restore an HVM guest with 32 vCPUs by about 5
+seconds.
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+diff --git a/xen/arch/x86/hvm/mtrr.c b/xen/arch/x86/hvm/mtrr.c
+index a69ee62..f21b367 100644
+--- a/xen/arch/x86/hvm/mtrr.c
++++ b/xen/arch/x86/hvm/mtrr.c
+@@ -65,6 +65,8 @@ static const uint8_t mm_type_tbl[MTRR_NUM_TYPES][PAT_TYPE_NUMS] = {
+ #undef RS
+ };
+ 
++DEFINE_PER_CPU(bool_t, memory_type_changed_ignore);
++
+ /*
+  * Reverse lookup table, to find a pat type according to MTRR and effective
+  * memory type. This table is dynamically generated.
+@@ -789,6 +791,9 @@ HVM_REGISTER_SAVE_RESTORE(MTRR, hvm_save_mtrr_msr, hvm_load_mtrr_msr,
+ 
+ void memory_type_changed(struct domain *d)
+ {
++    if ( this_cpu(memory_type_changed_ignore) )
++        return;
++
+     if ( need_iommu(d) && d->vcpu && d->vcpu[0] )
+     {
+         p2m_memory_type_changed(d);
+diff --git a/xen/common/hvm/save.c b/xen/common/hvm/save.c
+index da6e668..c6c27e4 100644
+--- a/xen/common/hvm/save.c
++++ b/xen/common/hvm/save.c
+@@ -206,6 +206,7 @@ int hvm_load(struct domain *d, hvm_domain_context_t *h)
+     struct hvm_save_descriptor *desc;
+     hvm_load_handler handler;
+     struct vcpu *v;
++    int ret = 0;
+     
+     if ( d->is_dying )
+         return -EINVAL;
+@@ -222,6 +223,8 @@ int hvm_load(struct domain *d, hvm_domain_context_t *h)
+         if ( test_and_set_bit(_VPF_down, &v->pause_flags) )
+             vcpu_sleep_nosync(v);
+ 
++    this_cpu(memory_type_changed_ignore) = 1;
++
+     for ( ; ; )
+     {
+         if ( h->size - h->cur < sizeof(struct hvm_save_descriptor) )
+@@ -230,13 +233,14 @@ int hvm_load(struct domain *d, hvm_domain_context_t *h)
+             printk(XENLOG_G_ERR
+                    "HVM%d restore: save did not end with a null entry\n",
+                    d->domain_id);
+-            return -1;
++            ret = -1;
++            goto out;
+         }
+         
+         /* Read the typecode of the next entry  and check for the end-marker */
+         desc = (struct hvm_save_descriptor *)(&h->data[h->cur]);
+         if ( desc->typecode == 0 )
+-            return 0; 
++            goto out;
+         
+         /* Find the handler for this entry */
+         if ( (desc->typecode > HVM_SAVE_CODE_MAX) ||
+@@ -244,7 +248,8 @@ int hvm_load(struct domain *d, hvm_domain_context_t *h)
+         {
+             printk(XENLOG_G_ERR "HVM%d restore: unknown entry typecode %u\n",
+                    d->domain_id, desc->typecode);
+-            return -1;
++            ret = -1;
++            goto out;
+         }
+ 
+         /* Load the entry */
+@@ -254,11 +259,17 @@ int hvm_load(struct domain *d, hvm_domain_context_t *h)
+         {
+             printk(XENLOG_G_ERR "HVM%d restore: failed to load entry %u/%u\n",
+                    d->domain_id, desc->typecode, desc->instance);
+-            return -1;
++            ret = -1;
++            goto out;
+         }
+     }
+ 
+-    /* Not reached */
++    ASSERT_UNREACHABLE();
++
++out:
++    this_cpu(memory_type_changed_ignore) = 0;
++    memory_type_changed(d);
++    return ret;
+ }
+ 
+ int _hvm_init_entry(struct hvm_domain_context *h,
+diff --git a/xen/include/asm-x86/mtrr.h b/xen/include/asm-x86/mtrr.h
+index 0569db6..9df87cd 100644
+--- a/xen/include/asm-x86/mtrr.h
++++ b/xen/include/asm-x86/mtrr.h
+@@ -60,6 +60,15 @@ struct mtrr_state {
+ };
+ extern struct mtrr_state mtrr_state;
+ 
++/*
++ * The purpose of the memory_type_changed_ignore cpu flag is to
++ * avoid unecessary cache flushes when doing multiple memory type
++ * operations that may flush the cache. Code can set this flag, do
++ * several memory type operations, clear the flag and then call
++ * memory_type_changed() to flush the cache at the end.
++ */
++DECLARE_PER_CPU(bool_t, memory_type_changed_ignore);
++
+ extern void mtrr_save_fixed_ranges(void *);
+ extern void mtrr_save_state(void);
+ extern int mtrr_add(unsigned long base, unsigned long size,

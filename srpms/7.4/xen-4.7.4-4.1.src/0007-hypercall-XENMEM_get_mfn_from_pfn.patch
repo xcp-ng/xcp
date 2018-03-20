@@ -1,0 +1,126 @@
+From 8aca1e3dfa347dafdf7df482bb1267de46bc572a Mon Sep 17 00:00:00 2001
+From: Wei Ye <wei.ye@intel.com>
+Date: Thu, 21 Aug 2014 03:45:38 +0800
+Subject: [PATCH 07/18] hypercall: XENMEM_get_mfn_from_pfn
+
+Suppose that we should find an existing method to achieve the same
+goal.
+
+Signed-off-by: Wei Ye <wei.ye@intel.com>
+Signed-off-by: Yu Zhang <yu.c.zhang@intel.com>
+diff --git a/xen/arch/x86/mm.c b/xen/arch/x86/mm.c
+index cec8a7f..043afb4 100644
+--- a/xen/arch/x86/mm.c
++++ b/xen/arch/x86/mm.c
+@@ -4815,6 +4815,61 @@ int xenmem_add_to_physmap_one(
+     return rc;
+ }
+ 
++static int get_mfn_from_pfn(XEN_GUEST_HANDLE(xen_get_mfn_from_pfn_t) arg)
++{
++    struct xen_get_mfn_from_pfn cmd_info;
++    struct domain *d;
++    int rc=0, i;
++    xen_pfn_t *pfns = NULL;
++    xen_pfn_t pfn;
++    struct p2m_domain *p2m;
++    p2m_type_t t;
++
++    if ( !is_hardware_domain(current->domain) )
++        return -EPERM;
++
++    if ( copy_from_guest(&cmd_info, arg, 1) )
++        return -EFAULT;
++
++    d = rcu_lock_domain_by_any_id(cmd_info.domid);
++    if ( d == NULL )
++        return -ESRCH;
++
++    /* sanity check for security */
++    if (cmd_info.nr_pfns > 2048 )
++        return -ENOMEM;
++
++    pfns = xmalloc_array(xen_pfn_t, cmd_info.nr_pfns);
++    if (pfns == NULL)
++        return -ENOMEM;
++
++    if (copy_from_guest(pfns, cmd_info.pfn_list, cmd_info.nr_pfns)){
++        rc = -EFAULT;
++        goto out;
++    }
++
++    p2m = p2m_get_hostp2m(d);
++    for(i=0; i < cmd_info.nr_pfns; i++){
++        pfn = pfns[i];
++        pfns[i] = mfn_x(get_gfn_query(d, pfn, &t));
++		if(pfns[i] == INVALID_MFN){
++			rc = -EINVAL;
++			goto out;
++		}
++		put_gfn(d, pfn);
++    }
++
++    if (copy_to_guest(cmd_info.pfn_list, pfns, cmd_info.nr_pfns)){
++        rc = -EFAULT;
++        goto out;
++    }
++
++out:
++    rcu_unlock_domain(d);
++    xfree(pfns);
++    return rc;
++}
++
+ long arch_memory_op(unsigned long cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
+ {
+     int rc;
+@@ -5036,6 +5091,15 @@ long arch_memory_op(unsigned long cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
+         return rc;
+     }
+ 
++#ifdef __x86_64__
++    case XENMEM_get_sharing_freed_pages:
++        return mem_sharing_get_nr_saved_mfns();
++#endif
++
++    case XENMEM_get_mfn_from_pfn:
++        return get_mfn_from_pfn(guest_handle_cast(arg, xen_get_mfn_from_pfn_t));
++        break;
++
+     default:
+         return subarch_memory_op(cmd, arg);
+     }
+diff --git a/xen/include/public/memory.h b/xen/include/public/memory.h
+index 21471f4..0e63a48 100644
+--- a/xen/include/public/memory.h
++++ b/xen/include/public/memory.h
+@@ -564,6 +564,29 @@ DEFINE_XEN_GUEST_HANDLE(xen_reserved_device_memory_map_t);
+ #endif /* defined(__XEN__) || defined(__XEN_TOOLS__) */
+ 
+ /*
++ * Translate the given guest PFNs to MFNs
++ */
++#define XENMEM_get_mfn_from_pfn    28
++struct xen_get_mfn_from_pfn {
++    /*
++     * Pointer to buffer to fill with list of pfn.
++     * for IN, it contains the guest PFN that need to translated
++     * for OUT, it contains the translated MFN. or INVALID_MFN if no valid translation
++     */
++    XEN_GUEST_HANDLE(xen_pfn_t) pfn_list;
++
++    /*
++     * IN: Size of the pfn_array.
++     */
++    unsigned int nr_pfns;
++
++    /* IN: which domain */
++    domid_t domid;
++};
++typedef struct xen_get_mfn_from_pfn xen_get_mfn_from_pfn_t;
++DEFINE_XEN_GUEST_HANDLE(xen_get_mfn_from_pfn_t);
++
++/*
+  * XENMEM_get_vnumainfo used by guest to get
+  * vNUMA topology from hypervisor.
+  */

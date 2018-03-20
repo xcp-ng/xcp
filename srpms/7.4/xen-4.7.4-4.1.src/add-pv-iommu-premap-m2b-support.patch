@@ -1,0 +1,195 @@
+diff --git a/xen/arch/x86/mm/m2b.c b/xen/arch/x86/mm/m2b.c
+index 64cb4d8..c2f3a8c 100644
+--- a/xen/arch/x86/mm/m2b.c
++++ b/xen/arch/x86/mm/m2b.c
+@@ -31,6 +31,8 @@ struct pv_iommu_info
+ 
+ DEFINE_RCU_READ_LOCK(m2b_rcu);
+ 
++uint64_t **hwdom_premap_m2b;
++
+ struct m2b_entry *lookup_m2b_entry(struct page_info *page, struct domain *d,
+                                    ioservid_t ioserver, unsigned long bfn)
+ {
+diff --git a/xen/common/pv_iommu.c b/xen/common/pv_iommu.c
+index 4f02a61..91b6df6 100644
+--- a/xen/common/pv_iommu.c
++++ b/xen/common/pv_iommu.c
+@@ -102,6 +102,13 @@ void do_iommu_sub_op(struct pv_iommu_op *op)
+             if ( can_use_iommu_check(d) )
+                 op->flags |= IOMMU_QUERY_map_cap;
+ 
++            if ( is_hardware_domain(d) && !d->need_iommu )
++            {
++                op->flags |= IOMMU_QUERY_map_all_mfns;
++                hwdom_premap_m2b = xzalloc_array(unsigned long *,
++                                        ((sizeof(unsigned long) * max_pdx)/
++                                        PAGE_SIZE) + 1);
++            }
+             break;
+         }
+         case IOMMUOP_map_page:
+@@ -164,12 +171,40 @@ void do_iommu_sub_op(struct pv_iommu_op *op)
+                 goto finish;
+             }
+ 
++            /* Add to M2B with wildcard ioserver entry */
++            if ( is_hardware_domain(d) && (op->flags & IOMMU_MAP_OP_add_m2b ))
++            {
++                if ( !hwdom_premap_m2b )
++                {
++                    op->status = -EPERM;
++                    goto finish;
++                }
++                /* Check if tracking page is allocated */
++                if ( !hwdom_premap_m2b[PREMAP_M2B_PAGE(mfn)] )
++                {
++                    hwdom_premap_m2b[PREMAP_M2B_PAGE(mfn)] =
++                            alloc_xenheap_page();
++                    if ( !hwdom_premap_m2b[PREMAP_M2B_PAGE(mfn)] )
++                    {
++                        op->status = -ENOMEM;
++                        goto finish;
++                    }
++                    clear_page(hwdom_premap_m2b[PREMAP_M2B_PAGE(mfn)]);
++                } else if ( read_atomic(&PREMAP_M2B(mfn)) )
++                {
++                    op->status = -EPERM;
++                    goto finish;
++                }
++
++                write_atomic(&PREMAP_M2B(mfn), op->u.map_page.bfn);
++            }
+             op->status = 0;
+             break;
+         }
+ 
+         case IOMMUOP_unmap_page:
+         {
++            struct page_info *page;
+             unsigned long mfn;
+ 
+             /* Check if there is a valid BFN mapping for this domain */
+@@ -185,6 +220,22 @@ void do_iommu_sub_op(struct pv_iommu_op *op)
+                 goto finish;
+             }
+ 
++            /* Use MFN from B2M mapping to lookup page */
++            page = mfn_to_page(mfn);
++
++            /* Remove wildcard M2B mapping */
++            if ( is_hardware_domain(d) &&
++                (op->flags & IOMMU_UNMAP_OP_remove_m2b) &&
++                hwdom_premap_m2b &&
++                hwdom_premap_m2b[PREMAP_M2B_PAGE(mfn)] &&
++                read_atomic(&PREMAP_M2B(mfn)) )
++            {
++                /* Remove M2B entry */
++                write_atomic(&PREMAP_M2B(mfn), 0);
++            }
++            if ( !(op->flags & IOMMU_MAP_OP_no_ref_cnt) )
++                put_page(page);
++
+             op->status = 0;
+             break;
+         }
+@@ -389,6 +440,44 @@ void do_iommu_sub_op(struct pv_iommu_op *op)
+                 }
+                 op->u.lookup_foreign_page.bfn = mfn;
+             }
++            else if ( is_hardware_domain(d) )
++            {
++                uint64_t bfn;
++                /* Check if a premap already exists */
++                if ( !hwdom_premap_m2b ||
++                     !hwdom_premap_m2b[PREMAP_M2B_PAGE(mfn)])
++                {
++                    put_page(page);
++                    op->status = -ENOENT;
++                    goto finish;
++                }
++
++                bfn = read_atomic(&PREMAP_M2B(mfn));
++
++                /* Check if BFN is non zero */
++                if ( !bfn )
++                {
++                    put_page(page);
++                    op->status = -ENOENT;
++                    goto finish;
++                }
++
++                locked = page_lock(page);
++                ret = add_m2b_entry(page, d,
++                                    op->u.lookup_foreign_page.ioserver,
++                                    bfn);
++                atomic_inc(&rd->m2b_count);
++                if ( locked )
++                page_unlock(page);
++
++                if ( ret )
++                {
++                   put_page(page);
++                   op->status = -ENOMEM;
++                   goto finish;
++                }
++                op->u.lookup_foreign_page.bfn = bfn;
++            }
+             op->status = 0;
+             break;
+         }
+@@ -436,6 +525,12 @@ void do_iommu_sub_op(struct pv_iommu_op *op)
+                goto finish;
+             }
+ 
++            /* Check if hwdom IOMMU premap is present */
++            if ( is_hardware_domain(d) && can_use_iommu_check(d) &&
++                 hwdom_premap_m2b && hwdom_premap_m2b[PREMAP_M2B_PAGE(mfn)] &&
++                 (read_atomic(&PREMAP_M2B(mfn)) == op->u.unmap_foreign_page.bfn) )
++                goto foreign_unmap_done;
++
+             if ( can_use_iommu_check(d) )
+             {
+                 /* Check if there are any M2B mappings left for this domain */
+@@ -450,6 +545,11 @@ void do_iommu_sub_op(struct pv_iommu_op *op)
+                         domain_crash(d);
+                 }
+             }
++foreign_unmap_done:
++            /* Remove the reference to the page */
++            put_page(page);
++            op->status = 0;
++        break;
+         }
+ #endif
+         default:
+diff --git a/xen/include/asm-x86/m2b.h b/xen/include/asm-x86/m2b.h
+index a21502c..4d06b08 100644
+--- a/xen/include/asm-x86/m2b.h
++++ b/xen/include/asm-x86/m2b.h
+@@ -46,6 +46,12 @@ int add_m2b_entry(struct page_info *page, struct domain *d,
+ int del_m2b_entry(struct page_info *page, struct domain *d, ioservid_t ioserver,
+                   unsigned long bfn);
+ 
++extern uint64_t **hwdom_premap_m2b;
++
++#define PREMAP_M2B_PAGE(x) ( pfn_to_pdx(x) / (PAGE_SIZE/sizeof(uint64_t) ) )
++#define PREMAP_M2B_IDX(x) ( pfn_to_pdx(x) % (PAGE_SIZE/sizeof(uint64_t) ) )
++#define PREMAP_M2B(x) hwdom_premap_m2b[PREMAP_M2B_PAGE(x)][PREMAP_M2B_IDX(x)]
++
+ #endif
+ 
+ /*
+diff --git a/xen/include/public/pv-iommu.h b/xen/include/public/pv-iommu.h
+index 366037c..4505f3e 100644
+--- a/xen/include/public/pv-iommu.h
++++ b/xen/include/public/pv-iommu.h
+@@ -40,6 +40,8 @@ struct pv_iommu_op {
+ #define IOMMU_OP_readable (1 << 0)
+ #define IOMMU_OP_writeable (1 << 1)
+ #define IOMMU_MAP_OP_no_ref_cnt (1 << 2)
++#define IOMMU_MAP_OP_add_m2b (1 << 3)
++#define IOMMU_UNMAP_OP_remove_m2b (1 << 0)
+     uint16_t flags;
+     int32_t status;
+ 

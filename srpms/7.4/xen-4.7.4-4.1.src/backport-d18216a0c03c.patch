@@ -1,0 +1,131 @@
+From a8bb590e9ab1d4f5e4226a66720a52ca04fd2f52 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Mon, 13 Feb 2017 14:21:09 +0000
+Subject: [PATCH] x86/vvmx: correctly emulate VMWRITE
+
+There is an issue with the original __vmwrite() in nested vmx mode:
+emulation of a guest's VMWRITE with invalid arguments leads to BUG().
+
+Fix this by using vmwrite_safe() and reporting any kind of VMfail back
+to the guest.
+
+A new safe versions of set_vvmcs() macro and related functions are
+introduced because of new function signatures and lots of existing
+users.
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vmcs.c b/xen/arch/x86/hvm/vmx/vmcs.c
+index c23fd8e..898f790 100644
+--- a/xen/arch/x86/hvm/vmx/vmcs.c
++++ b/xen/arch/x86/hvm/vmx/vmcs.c
+@@ -950,6 +950,18 @@ void virtual_vmcs_vmwrite(const struct vcpu *v, u32 vmcs_encoding, u64 val)
+     virtual_vmcs_exit(v);
+ }
+ 
++enum vmx_insn_errno virtual_vmcs_vmwrite_safe(const struct vcpu *v,
++                                              u32 vmcs_encoding, u64 val)
++{
++    enum vmx_insn_errno ret;
++
++    virtual_vmcs_enter(v);
++    ret = vmwrite_safe(vmcs_encoding, val);
++    virtual_vmcs_exit(v);
++
++    return ret;
++}
++
+ /*
+  * This function is only called in a vCPU's initialization phase,
+  * so we can update the posted-interrupt descriptor in non-atomic way.
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index e4acaa9..77cc4a0 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -314,6 +314,25 @@ void set_vvmcs_real(const struct vcpu *v, u32 encoding, u64 val)
+     virtual_vmcs_vmwrite(v, encoding, val);
+ }
+ 
++enum vmx_insn_errno set_vvmcs_virtual_safe(void *vvmcs, u32 encoding, u64 val)
++{
++    set_vvmcs_virtual(vvmcs, encoding, val);
++
++    /*
++     * TODO: This should not always succeed. Fields and values need to be
++     * audited against the features offered to the guest in the VT-x MSRs.
++     * This should be fixed when the MSR levelling work is started, at which
++     * point there will be a cpuid_policy-like object.
++     */
++    return VMX_INSN_SUCCEED;
++}
++
++enum vmx_insn_errno set_vvmcs_real_safe(const struct vcpu *v, u32 encoding,
++                                        u64 val)
++{
++    return virtual_vmcs_vmwrite_safe(v, encoding, val);
++}
++
+ static unsigned long reg_read(struct cpu_user_regs *regs,
+                               enum vmx_regs_enc index)
+ {
+@@ -1748,13 +1767,19 @@ int nvmx_handle_vmwrite(struct cpu_user_regs *regs)
+     unsigned long operand; 
+     u64 vmcs_encoding;
+     bool_t okay = 1;
++    enum vmx_insn_errno err;
+ 
+     if ( decode_vmx_inst(regs, &decode, &operand, 0)
+              != X86EMUL_OKAY )
+         return X86EMUL_EXCEPTION;
+ 
+     vmcs_encoding = reg_read(regs, decode.reg2);
+-    set_vvmcs(v, vmcs_encoding, operand);
++    err = set_vvmcs_safe(v, vmcs_encoding, operand);
++    if ( err != VMX_INSN_SUCCEED )
++    {
++        vmfail(regs, err);
++        return X86EMUL_OKAY;
++    }
+ 
+     switch ( vmcs_encoding & ~VMCS_HIGH(0) )
+     {
+diff --git a/xen/include/asm-x86/hvm/vmx/vmcs.h b/xen/include/asm-x86/hvm/vmx/vmcs.h
+index 9754754..58786fa 100644
+--- a/xen/include/asm-x86/hvm/vmx/vmcs.h
++++ b/xen/include/asm-x86/hvm/vmx/vmcs.h
+@@ -598,6 +598,8 @@ void virtual_vmcs_enter(const struct vcpu *);
+ void virtual_vmcs_exit(const struct vcpu *);
+ u64 virtual_vmcs_vmread(const struct vcpu *, u32 encoding);
+ void virtual_vmcs_vmwrite(const struct vcpu *, u32 encoding, u64 val);
++enum vmx_insn_errno virtual_vmcs_vmwrite_safe(const struct vcpu *v,
++                                              u32 vmcs_encoding, u64 val);
+ 
+ static inline int vmx_add_guest_msr(u32 msr)
+ {
+diff --git a/xen/include/asm-x86/hvm/vmx/vvmx.h b/xen/include/asm-x86/hvm/vmx/vvmx.h
+index 8f96417..1d50624 100644
+--- a/xen/include/asm-x86/hvm/vmx/vvmx.h
++++ b/xen/include/asm-x86/hvm/vmx/vvmx.h
+@@ -192,6 +192,9 @@ u64 get_vvmcs_virtual(void *vvmcs, u32 encoding);
+ u64 get_vvmcs_real(const struct vcpu *, u32 encoding);
+ void set_vvmcs_virtual(void *vvmcs, u32 encoding, u64 val);
+ void set_vvmcs_real(const struct vcpu *, u32 encoding, u64 val);
++enum vmx_insn_errno set_vvmcs_virtual_safe(void *vvmcs, u32 encoding, u64 val);
++enum vmx_insn_errno set_vvmcs_real_safe(const struct vcpu *, u32 encoding,
++                                        u64 val);
+ 
+ #define get_vvmcs(vcpu, encoding) \
+   (cpu_has_vmx_vmcs_shadowing ? \
+@@ -203,6 +206,11 @@ void set_vvmcs_real(const struct vcpu *, u32 encoding, u64 val);
+    set_vvmcs_real(vcpu, encoding, val) : \
+    set_vvmcs_virtual(vcpu_nestedhvm(vcpu).nv_vvmcx, encoding, val))
+ 
++#define set_vvmcs_safe(vcpu, encoding, val) \
++  (cpu_has_vmx_vmcs_shadowing ? \
++   set_vvmcs_real_safe(vcpu, encoding, val) : \
++   set_vvmcs_virtual_safe(vcpu_nestedhvm(vcpu).nv_vvmcx, encoding, val))
++
+ uint64_t get_shadow_eptp(struct vcpu *v);
+ 
+ void nvmx_destroy_vmcs(struct vcpu *v);

@@ -1,0 +1,143 @@
+Cause to be defined all those extra Xen symbol offsets that kdump needs
+to navigate its way around a memory image.
+
+diff --git a/xen/Makefile b/xen/Makefile
+index 5943088..31f5b07 100644
+--- a/xen/Makefile
++++ b/xen/Makefile
+@@ -229,6 +229,7 @@ _cscope:
+ .PHONY: _MAP
+ _MAP:
+ 	$(NM) -n $(TARGET)-syms | grep -v '\(compiled\)\|\(\.o$$\)\|\( [aUw] \)\|\(\.\.ng$$\)\|\(LASH[RL]DI\)' > System.map
++	cat include/asm/asm-offsets.h | awk '/^#define __ASM_OFFSETS_H__/ { next } ; /^#define / { printf "%016x - +%s\n", $$3, $$2 }' >> System.map
+ 
+ .PHONY: FORCE
+ FORCE:
+diff --git a/xen/arch/x86/x86_64/asm-offsets.c b/xen/arch/x86/x86_64/asm-offsets.c
+index 6546944..0c7faae 100644
+--- a/xen/arch/x86/x86_64/asm-offsets.c
++++ b/xen/arch/x86/x86_64/asm-offsets.c
+@@ -14,6 +14,9 @@
+ #include <asm/hardirq.h>
+ #include <xen/multiboot.h>
+ #include <xen/multiboot2.h>
++#include <public/sysctl.h>
++#include <xen/symbols.h>
++#include <xen/livepatch.h>
+ 
+ #define DEFINE(_sym, _val)                                                 \
+     asm volatile ("\n.ascii\"==>#define " #_sym " %0 /* " #_val " */<==\"" \
+@@ -56,8 +59,51 @@ void __dummy__(void)
+     DEFINE(UREGS_user_sizeof, sizeof(struct cpu_user_regs));
+     BLANK();
+ 
++    OFFSET(DOMAIN_id, struct domain, domain_id);
++    OFFSET(DOMAIN_shared_info, struct domain, shared_info);
++    OFFSET(DOMAIN_next, struct domain, next_in_list);
++    OFFSET(DOMAIN_max_vcpus, struct domain, max_vcpus);
++    OFFSET(DOMAIN_vcpus, struct domain, vcpu);
++    // TODO - fix this up properly in combination with the crashdump analyser
++    OFFSET(DOMAIN_is_hvm, struct domain, guest_type);
++    OFFSET(DOMAIN_is_privileged, struct domain, is_privileged);
++    OFFSET(DOMAIN_tot_pages, struct domain, tot_pages);
++    OFFSET(DOMAIN_max_pages, struct domain, max_pages);
++    OFFSET(DOMAIN_shr_pages, struct domain, shr_pages);
++    OFFSET(DOMAIN_has_32bit_shinfo, struct domain, arch.has_32bit_shinfo);
++    OFFSET(DOMAIN_pause_count, struct domain, pause_count);
++    OFFSET(DOMAIN_handle, struct domain, handle);
++    OFFSET(DOMAIN_paging_mode, struct domain, arch.paging.mode);
++    DEFINE(DOMAIN_sizeof, sizeof(struct domain));
++    BLANK();
++
++    OFFSET(SHARED_max_pfn, struct shared_info, arch.max_pfn);
++    OFFSET(SHARED_pfn_to_mfn_list_list, struct shared_info, arch.pfn_to_mfn_frame_list_list);
++    BLANK();
++
++    DEFINE(VIRT_XEN_START, XEN_VIRT_START);
++    DEFINE(VIRT_XEN_END, XEN_VIRT_END);
++    DEFINE(VIRT_DIRECTMAP_START, DIRECTMAP_VIRT_START);
++    DEFINE(VIRT_DIRECTMAP_END, DIRECTMAP_VIRT_END);
++
++    DEFINE(XEN_DEBUG, debug_build());
++    DEFINE(XEN_STACK_SIZE, STACK_SIZE);
++    DEFINE(XEN_PRIMARY_STACK_SIZE, PRIMARY_STACK_SIZE);
++#ifdef MEMORY_GUARD
++    DEFINE(XEN_MEMORY_GUARD, 1);
++#else
++    DEFINE(XEN_MEMORY_GUARD, 0);
++#endif
++#ifdef CONFIG_FRAME_POINTER
++    DEFINE(XEN_FRAME_POINTER, 1);
++#else
++    DEFINE(XEN_FRAME_POINTER, 0);
++#endif
++    BLANK();
++
+     OFFSET(irq_caps_offset, struct domain, irq_caps);
+     OFFSET(next_in_list_offset, struct domain, next_in_list);
++    OFFSET(VCPU_vcpu_id, struct vcpu, vcpu_id);
+     OFFSET(VCPU_processor, struct vcpu, processor);
+     OFFSET(VCPU_domain, struct vcpu, domain);
+     OFFSET(VCPU_vcpu_info, struct vcpu, vcpu_info);
+@@ -89,8 +135,15 @@ void __dummy__(void)
+     OFFSET(VCPU_kernel_ss, struct vcpu, arch.pv_vcpu.kernel_ss);
+     OFFSET(VCPU_iopl, struct vcpu, arch.pv_vcpu.iopl);
+     OFFSET(VCPU_guest_context_flags, struct vcpu, arch.vgc_flags);
++    OFFSET(VCPU_user_regs, struct vcpu, arch.user_regs);
++    OFFSET(VCPU_flags, struct vcpu, arch.flags);
++    OFFSET(VCPU_guest_table_user, struct vcpu, arch.guest_table_user);
++    OFFSET(VCPU_guest_table, struct vcpu, arch.guest_table);
++    OFFSET(VCPU_cr3, struct vcpu, arch.cr3);
+     OFFSET(VCPU_arch_msr, struct vcpu, arch.msr);
+     OFFSET(VCPU_nmi_pending, struct vcpu, nmi_pending);
++    OFFSET(VCPU_pause_flags, struct vcpu, pause_flags);
++    OFFSET(VCPU_pause_count, struct vcpu, pause_count);
+     OFFSET(VCPU_mce_pending, struct vcpu, mce_pending);
+     OFFSET(VCPU_nmi_old_mask, struct vcpu, nmi_state.old_mask);
+     OFFSET(VCPU_mce_old_mask, struct vcpu, mce_state.old_mask);
+@@ -99,6 +152,7 @@ void __dummy__(void)
+     DEFINE(VCPU_TRAP_MCE, VCPU_TRAP_MCE);
+     DEFINE(_VGCF_failsafe_disables_events, _VGCF_failsafe_disables_events);
+     DEFINE(_VGCF_syscall_disables_events,  _VGCF_syscall_disables_events);
++    DEFINE(VCPU_sizeof, sizeof(struct vcpu));
+     BLANK();
+ 
+     OFFSET(VCPU_svm_vmcb_pa, struct vcpu, arch.hvm_svm.vmcb_pa);
+@@ -139,6 +193,7 @@ void __dummy__(void)
+     OFFSET(CPUINFO_processor_id, struct cpu_info, processor_id);
+     OFFSET(CPUINFO_current_vcpu, struct cpu_info, current_vcpu);
+     OFFSET(CPUINFO_cr4, struct cpu_info, cr4);
++    OFFSET(CPUINFO_per_cpu_offset, struct cpu_info, per_cpu_offset);
+     OFFSET(CPUINFO_shadow_spec_ctrl, struct cpu_info, shadow_spec_ctrl);
+     OFFSET(CPUINFO_use_shadow_spec_ctrl, struct cpu_info, use_shadow_spec_ctrl);
+     DEFINE(CPUINFO_sizeof, sizeof(struct cpu_info));
+@@ -184,4 +239,29 @@ void __dummy__(void)
+     OFFSET(MB2_efi64_ih, multiboot2_tag_efi64_ih_t, pointer);
+ 
+     OFFSET(DOMAIN_vm_assist, struct domain, vm_assist);
++
++    OFFSET(LIST_HEAD_next, struct list_head, next);
++
++#ifdef CONFIG_LIVEPATCH
++    OFFSET(LIVEPATCH_payload_list, struct payload, list);
++    OFFSET(LIVEPATCH_payload_state, struct payload, state);
++    OFFSET(LIVEPATCH_payload_rc, struct payload, rc);
++    OFFSET(LIVEPATCH_payload_buildid, struct payload, id.p);
++    OFFSET(LIVEPATCH_payload_buildid_len, struct payload, id.len);
++    OFFSET(LIVEPATCH_payload_text_addr, struct payload, text_addr);
++    OFFSET(LIVEPATCH_payload_text_size, struct payload, text_size);
++    OFFSET(LIVEPATCH_payload_rw_addr, struct payload, rw_addr);
++    OFFSET(LIVEPATCH_payload_rw_size, struct payload, rw_size);
++    OFFSET(LIVEPATCH_payload_ro_addr, struct payload, ro_addr);
++    OFFSET(LIVEPATCH_payload_ro_size, struct payload, ro_size);
++    OFFSET(LIVEPATCH_payload_applied_list, struct payload, applied_list);
++    OFFSET(LIVEPATCH_payload_symtab, struct payload, symtab);
++    OFFSET(LIVEPATCH_payload_nsyms, struct payload, nsyms);
++    OFFSET(LIVEPATCH_payload_name, struct payload, name);
++    DEFINE(LIVEPATCH_payload_name_max_len, XEN_LIVEPATCH_NAME_SIZE);
++    OFFSET(LIVEPATCH_symbol_name, struct livepatch_symbol, name);
++    OFFSET(LIVEPATCH_symbol_value, struct livepatch_symbol, value);
++    DEFINE(LIVEPATCH_symbol_sizeof, sizeof(struct livepatch_symbol));
++    DEFINE(LIVEPATCH_symbol_max_len, KSYM_NAME_LEN);
++#endif
+ }

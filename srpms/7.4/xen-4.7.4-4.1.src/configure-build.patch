@@ -1,0 +1,663 @@
+Various configuration files.
+
+Most notibly, the cached results of
+
+./configure --prefix=/usr --libdir=/usr/lib64 --libexecdir=/usr/libexec --disable-seabios --disable-stubdom --disable-xsmpolicy --disable-blktap2 --with-system-qemu=/usr/lib64/xen/bin/qemu-system-i386 --with-xenstored=oxenstored --enable-systemd
+
+diff --git a/.config b/.config
+new file mode 100644
+index 0000000..5a6e37f
+--- /dev/null
++++ b/.config
+@@ -0,0 +1,17 @@
++# -*- mode: Makefile; -*-
++
++# Perform a debug build for trunk
++debug := y
++
++# Always produce debug symbols for debuginfo RPMs
++debug_symbols := y
++
++# Enable all config options
++XEN_CONFIG_EXPERT := y
++export XEN_CONFIG_EXPERT
++
++# No tests
++CONFIG_TESTS := n
++
++# No remus netbuffering
++override CONFIG_REMUS_NETBUF := n
+diff --git a/buildconfigs/config-coverage b/buildconfigs/config-coverage
+new file mode 100644
+index 0000000..0de18a3
+--- /dev/null
++++ b/buildconfigs/config-coverage
+@@ -0,0 +1,76 @@
++#
++# Automatically generated file; DO NOT EDIT.
++# Xen/x86 4.7.1 Configuration
++#
++CONFIG_X86_64=y
++CONFIG_X86=y
++CONFIG_ARCH_DEFCONFIG="arch/x86/configs/x86_64_defconfig"
++
++#
++# Architecture Features
++#
++CONFIG_NR_CPUS=512
++CONFIG_SHADOW_PAGING=y
++# CONFIG_BIGMEM is not set
++CONFIG_HVM_FEP=y
++
++#
++# Common Features
++#
++CONFIG_COMPAT=y
++CONFIG_CORE_PARKING=y
++CONFIG_HAS_MEM_ACCESS=y
++CONFIG_HAS_MEM_PAGING=y
++CONFIG_HAS_MEM_SHARING=y
++CONFIG_HAS_PDX=y
++CONFIG_HAS_KEXEC=y
++CONFIG_HAS_GDBSX=y
++CONFIG_HAS_IOPORTS=y
++CONFIG_KEXEC=y
++# CONFIG_TMEM is not set
++CONFIG_XENOPROF=y
++# CONFIG_XSM is not set
++
++#
++# Schedulers
++#
++CONFIG_SCHED_CREDIT=y
++CONFIG_SCHED_CREDIT2=y
++CONFIG_SCHED_RTDS=y
++CONFIG_SCHED_ARINC653=y
++CONFIG_SCHED_CREDIT_DEFAULT=y
++# CONFIG_SCHED_CREDIT2_DEFAULT is not set
++# CONFIG_SCHED_RTDS_DEFAULT is not set
++# CONFIG_SCHED_ARINC653_DEFAULT is not set
++CONFIG_SCHED_DEFAULT="credit"
++# CONFIG_LIVEPATCH is not set
++
++#
++# Device Drivers
++#
++CONFIG_ACPI=y
++CONFIG_ACPI_LEGACY_TABLES_LOOKUP=y
++CONFIG_NUMA=y
++CONFIG_HAS_NS16550=y
++CONFIG_HAS_EHCI=y
++CONFIG_HAS_CPUFREQ=y
++CONFIG_HAS_PASSTHROUGH=y
++CONFIG_HAS_PCI=y
++CONFIG_VIDEO=y
++CONFIG_VGA=y
++CONFIG_DEFCONFIG_LIST="$ARCH_DEFCONFIG"
++
++#
++# Debugging Options
++#
++CONFIG_DEBUG=y
++# CONFIG_CRASH_DEBUG is not set
++CONFIG_FRAME_POINTER=y
++# CONFIG_PERF_COUNTERS is not set
++CONFIG_VERBOSE_DEBUG=y
++CONFIG_GCOV=y
++CONFIG_GCOV_FORMAT_AUTODETECT=y
++# CONFIG_GCOV_FORMAT_5 is not set
++# CONFIG_GCOV_FORMAT_4_9 is not set
++# CONFIG_GCOV_FORMAT_4_7 is not set
++# CONFIG_GCOV_FORMAT_3_4 is not set
+diff --git a/buildconfigs/config-debug b/buildconfigs/config-debug
+new file mode 100644
+index 0000000..b1d7025
+--- /dev/null
++++ b/buildconfigs/config-debug
+@@ -0,0 +1,72 @@
++#
++# Automatically generated file; DO NOT EDIT.
++# Xen/x86 4.7.3 Configuration
++#
++CONFIG_X86_64=y
++CONFIG_X86=y
++CONFIG_ARCH_DEFCONFIG="arch/x86/configs/x86_64_defconfig"
++
++#
++# Architecture Features
++#
++CONFIG_NR_CPUS=512
++CONFIG_PV_LINEAR_PT=y
++CONFIG_SHADOW_PAGING=y
++# CONFIG_BIGMEM is not set
++CONFIG_HVM_FEP=y
++
++#
++# Common Features
++#
++CONFIG_COMPAT=y
++CONFIG_CORE_PARKING=y
++CONFIG_HAS_MEM_ACCESS=y
++CONFIG_HAS_MEM_PAGING=y
++CONFIG_HAS_MEM_SHARING=y
++CONFIG_HAS_PDX=y
++CONFIG_HAS_KEXEC=y
++CONFIG_HAS_GDBSX=y
++CONFIG_HAS_IOPORTS=y
++CONFIG_KEXEC=y
++# CONFIG_TMEM is not set
++CONFIG_XENOPROF=y
++# CONFIG_XSM is not set
++
++#
++# Schedulers
++#
++CONFIG_SCHED_CREDIT=y
++CONFIG_SCHED_CREDIT2=y
++CONFIG_SCHED_RTDS=y
++CONFIG_SCHED_ARINC653=y
++CONFIG_SCHED_CREDIT_DEFAULT=y
++# CONFIG_SCHED_CREDIT2_DEFAULT is not set
++# CONFIG_SCHED_RTDS_DEFAULT is not set
++# CONFIG_SCHED_ARINC653_DEFAULT is not set
++CONFIG_SCHED_DEFAULT="credit"
++CONFIG_LIVEPATCH=y
++CONFIG_FAST_SYMBOL_LOOKUP=y
++
++#
++# Device Drivers
++#
++CONFIG_ACPI=y
++CONFIG_ACPI_LEGACY_TABLES_LOOKUP=y
++CONFIG_NUMA=y
++CONFIG_HAS_NS16550=y
++CONFIG_HAS_EHCI=y
++CONFIG_HAS_CPUFREQ=y
++CONFIG_HAS_PASSTHROUGH=y
++CONFIG_HAS_PCI=y
++CONFIG_VIDEO=y
++CONFIG_VGA=y
++CONFIG_DEFCONFIG_LIST="$ARCH_DEFCONFIG"
++
++#
++# Debugging Options
++#
++CONFIG_DEBUG=y
++# CONFIG_CRASH_DEBUG is not set
++CONFIG_FRAME_POINTER=y
++# CONFIG_PERF_COUNTERS is not set
++CONFIG_VERBOSE_DEBUG=y
+diff --git a/buildconfigs/config-release b/buildconfigs/config-release
+new file mode 100644
+index 0000000..4583ea4
+--- /dev/null
++++ b/buildconfigs/config-release
+@@ -0,0 +1,72 @@
++#
++# Automatically generated file; DO NOT EDIT.
++# Xen/x86 4.7.3 Configuration
++#
++CONFIG_X86_64=y
++CONFIG_X86=y
++CONFIG_ARCH_DEFCONFIG="arch/x86/configs/x86_64_defconfig"
++
++#
++# Architecture Features
++#
++CONFIG_NR_CPUS=512
++CONFIG_PV_LINEAR_PT=y
++CONFIG_SHADOW_PAGING=y
++# CONFIG_BIGMEM is not set
++CONFIG_HVM_FEP=y
++
++#
++# Common Features
++#
++CONFIG_COMPAT=y
++CONFIG_CORE_PARKING=y
++CONFIG_HAS_MEM_ACCESS=y
++CONFIG_HAS_MEM_PAGING=y
++CONFIG_HAS_MEM_SHARING=y
++CONFIG_HAS_PDX=y
++CONFIG_HAS_KEXEC=y
++CONFIG_HAS_GDBSX=y
++CONFIG_HAS_IOPORTS=y
++CONFIG_KEXEC=y
++# CONFIG_TMEM is not set
++CONFIG_XENOPROF=y
++# CONFIG_XSM is not set
++
++#
++# Schedulers
++#
++CONFIG_SCHED_CREDIT=y
++CONFIG_SCHED_CREDIT2=y
++CONFIG_SCHED_RTDS=y
++CONFIG_SCHED_ARINC653=y
++CONFIG_SCHED_CREDIT_DEFAULT=y
++# CONFIG_SCHED_CREDIT2_DEFAULT is not set
++# CONFIG_SCHED_RTDS_DEFAULT is not set
++# CONFIG_SCHED_ARINC653_DEFAULT is not set
++CONFIG_SCHED_DEFAULT="credit"
++CONFIG_LIVEPATCH=y
++CONFIG_FAST_SYMBOL_LOOKUP=y
++
++#
++# Device Drivers
++#
++CONFIG_ACPI=y
++CONFIG_ACPI_LEGACY_TABLES_LOOKUP=y
++CONFIG_NUMA=y
++CONFIG_HAS_NS16550=y
++CONFIG_HAS_EHCI=y
++CONFIG_HAS_CPUFREQ=y
++CONFIG_HAS_PASSTHROUGH=y
++CONFIG_HAS_PCI=y
++CONFIG_VIDEO=y
++CONFIG_VGA=y
++CONFIG_DEFCONFIG_LIST="$ARCH_DEFCONFIG"
++
++#
++# Debugging Options
++#
++# CONFIG_DEBUG is not set
++# CONFIG_CRASH_DEBUG is not set
++# CONFIG_FRAME_POINTER is not set
++# CONFIG_PERF_COUNTERS is not set
++# CONFIG_VERBOSE_DEBUG is not set
+diff --git a/config/Docs.mk b/config/Docs.mk
+new file mode 100644
+index 0000000..b1a32cb
+--- /dev/null
++++ b/config/Docs.mk
+@@ -0,0 +1,10 @@
++-include $(XEN_ROOT)/config/Paths.mk
++
++# Tools
++FIG2DEV             := 
++POD2MAN             := /usr/bin/pod2man
++POD2HTML            := /usr/bin/pod2html
++POD2TEXT            := /usr/bin/pod2text
++MARKDOWN            := 
++PANDOC              := 
++PERL                := /usr/bin/perl
+diff --git a/config/Paths.mk b/config/Paths.mk
+new file mode 100644
+index 0000000..1952bb0
+--- /dev/null
++++ b/config/Paths.mk
+@@ -0,0 +1,56 @@
++# Xen system configuration
++# ========================
++#
++# Xen uses a set of variables for system configuration and at build time,
++# because of this these variables are defined on one master input source file
++# and is generated after running ./configure. The master source is located
++# on the xen source tree at under config/Paths.mk.in and it is used to
++# generate shell or header files by the build system upon demand through the
++# use of the helper makefile helper buildmakevars2file().
++#
++# For more documentation you can refer to the wiki:
++#
++# http://wiki.xen.org/wiki/Category:Host_Configuration#System_wide_xen_configuration
++
++PACKAGE_TARNAME          := xen
++prefix                   := /usr
++bindir                   := /usr/bin
++sbindir                  := /usr/sbin
++libdir                   := /usr/lib64
++libexecdir               := /usr/libexec
++datarootdir              := ${prefix}/share
++mandir                   := ${datarootdir}/man
++docdir                   := ${datarootdir}/doc/${PACKAGE_TARNAME}
++dvidir                   := ${docdir}
++htmldir                  := ${docdir}
++pdfdir                   := ${docdir}
++psdir                    := ${docdir}
++includedir               := ${prefix}/include
++localstatedir            := /var
++sysconfdir               := /etc
++
++LIBEXEC                  := /usr/libexec/xen
++LIBEXEC_BIN              := /usr/libexec/xen/bin
++LIBEXEC_LIB              := /usr/libexec/xen/lib
++LIBEXEC_INC              := /usr/libexec/xen/include
++
++SHAREDIR                 := /usr/share
++MAN1DIR                  := $(mandir)/man1
++MAN8DIR                  := $(mandir)/man8
++
++XEN_RUN_DIR              := /var/run/xen
++XEN_LOG_DIR              := /var/log/xen
++XEN_LIB_STORED           := /var/lib/xenstored
++
++CONFIG_DIR               := /etc
++INITD_DIR                := /etc/rc.d/init.d
++CONFIG_LEAF_DIR          := sysconfig
++BASH_COMPLETION_DIR      := $(CONFIG_DIR)/bash_completion.d
++XEN_LOCK_DIR             := /var/lock
++XEN_PAGING_DIR           := /var/lib/xen/xenpaging
++XEN_DUMP_DIR             := /var/lib/xen/dump
++
++XENFIRMWAREDIR           := /usr/libexec/xen/boot
++
++XEN_CONFIG_DIR           := /etc/xen
++XEN_SCRIPT_DIR           := /etc/xen/scripts
+diff --git a/config/Stubdom.mk b/config/Stubdom.mk
+new file mode 100644
+index 0000000..a8bb1d3
+--- /dev/null
++++ b/config/Stubdom.mk
+@@ -0,0 +1,45 @@
++# Prefix and install folder
++prefix              := /usr/local
++PREFIX              := $(prefix)
++exec_prefix         := ${prefix}
++libdir              := ${exec_prefix}/lib
++LIBDIR              := $(libdir)
++
++# Path Programs
++CMAKE               := /usr/bin/cmake
++FETCHER             := /usr/bin/wget -c -O
++
++# A debug build of stubdom? //FIXME: Someone make this do something
++debug               := y
++vtpm = y
++
++STUBDOM_TARGETS     :=  ioemu grub xenstore vtpm vtpmmgr
++STUBDOM_BUILD       :=  ioemu-stubdom pv-grub xenstore-stubdom vtpm-stubdom vtpmmgr-stubdom
++STUBDOM_INSTALL     :=  install-ioemu install-grub install-xenstore install-vtpm install-vtpmmgr
++
++ZLIB_VERSION        := 1.2.3
++ZLIB_URL            := $(XEN_EXTFILES_URL)
++
++LIBPCI_VERSION      := 2.2.9
++LIBPCI_URL          := $(XEN_EXTFILES_URL)
++
++NEWLIB_VERSION      := 1.16.0
++NEWLIB_URL          := $(XEN_EXTFILES_URL)
++
++LWIP_VERSION        := 1.3.0
++LWIP_URL            := $(XEN_EXTFILES_URL)
++
++GRUB_VERSION        := 0.97
++GRUB_URL            := $(XEN_EXTFILES_URL)
++
++OCAML_VERSION       := 3.11.0
++OCAML_URL           := http://caml.inria.fr/pub/distrib/ocaml-3.11
++
++GMP_VERSION         := 4.3.2
++GMP_URL             := $(XEN_EXTFILES_URL)
++
++POLARSSL_VERSION    := 1.1.4
++POLARSSL_URL        := $(XEN_EXTFILES_URL)
++
++TPMEMU_VERSION      := 0.7.4
++TPMEMU_URL          := $(XEN_EXTFILES_URL)
+diff --git a/config/Tools.mk b/config/Tools.mk
+new file mode 100644
+index 0000000..130672b
+--- /dev/null
++++ b/config/Tools.mk
+@@ -0,0 +1,80 @@
++-include $(XEN_ROOT)/config/Paths.mk
++
++CONFIG_RUMP         := n
++ifeq ($(CONFIG_RUMP),y)
++XEN_OS              := NetBSDRump
++endif
++
++# Tools path
++BISON               := /usr/bin/bison
++FLEX                := /usr/bin/flex
++PYTHON              := python
++PYTHON_PATH         := /usr/bin/python
++PY_NOOPT_CFLAGS     := -O1
++PERL                := /usr/bin/perl
++CURL_CONFIG         := 
++XML2_CONFIG         := 
++BASH                := /bin/sh
++XGETTTEXT           := /usr/bin/xgettext
++AS86                := /usr/bin/as86
++LD86                := /usr/bin/ld86
++BCC                 := /usr/bin/bcc
++IASL                := /usr/bin/iasl
++AWK                 := /usr/bin/awk
++FETCHER             := /bin/false -c -O
++SEABIOS_PATH        := 
++OVMF_PATH           := 
++
++# Extra folder for libs/includes
++PREPEND_INCLUDES    := 
++PREPEND_LIB         := 
++APPEND_INCLUDES     := 
++APPEND_LIB          := 
++
++PTHREAD_CFLAGS      := -pthread
++PTHREAD_LDFLAGS     := -pthread
++PTHREAD_LIBS        := 
++
++PTYFUNCS_LIBS       := -lutil
++
++LIBNL3_LIBS         := 
++LIBNL3_CFLAGS       := 
++XEN_TOOLS_RPATH     := n
++
++# Download GIT repositories via HTTP or GIT's own protocol?
++# GIT's protocol is faster and more robust, when it works at all (firewalls
++# may block it). We make it the default, but if your GIT repository downloads
++# fail or hang, please specify GIT_HTTP=y in your environment.
++GIT_HTTP            := n
++
++# Optional components
++XENSTAT_XENTOP      := y
++OCAML_TOOLS         := y
++FLASK_POLICY        := n
++CONFIG_OVMF         := n
++CONFIG_ROMBIOS      := y
++CONFIG_SEABIOS      := n
++CONFIG_QEMU_TRAD    := y
++CONFIG_QEMU_XEN     := n
++CONFIG_BLKTAP2      := n
++CONFIG_QEMUU_EXTRA_ARGS:= 
++CONFIG_LIBNL        := n
++
++CONFIG_SYSTEMD      := y
++SYSTEMD_CFLAGS      :=  
++SYSTEMD_LIBS        := -lsystemd  
++XEN_SYSTEMD_DIR     := $(prefix)/lib/systemd/system/
++XEN_SYSTEMD_MODULES_LOAD := $(prefix)/lib/modules-load.d/
++
++LINUX_BACKEND_MODULES := xen-evtchn xen-gntdev xen-gntalloc xen-blkback xen-netback xen-pciback evtchn gntdev netbk blkbk xen-scsibk usbbk pciback xen-acpi-processor blktap2
++
++#System options
++ZLIB                :=  -DHAVE_BZLIB -lbz2 -DHAVE_LZMA -llzma -DHAVE_LZO1X -llzo2
++CONFIG_LIBICONV     := n
++CONFIG_GCRYPT       := y
++EXTFS_LIBS          := -lext2fs
++CURSES_LIBS         := -lncurses
++TINFO_LIBS          := -ltinfo
++ARGP_LDFLAGS        := 
++
++FILE_OFFSET_BITS    := 
+diff --git a/config/Toplevel.mk b/config/Toplevel.mk
+new file mode 100644
+index 0000000..ac13a6f
+--- /dev/null
++++ b/config/Toplevel.mk
+@@ -0,0 +1,2 @@
++SUBSYSTEMS               :=  xen tools docs
++GIT_HTTP                 := n
+diff --git a/tools/config.h b/tools/config.h
+new file mode 100644
+index 0000000..4351c9b
+--- /dev/null
++++ b/tools/config.h
+@@ -0,0 +1,136 @@
++/* config.h.  Generated from config.h.in by configure.  */
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Enabling support partial device tree in libxl */
++/* #undef ENABLE_PARTIAL_DEVICE_TREE */
++
++/* Blktap2 enabled */
++/* #undef HAVE_BLKTAP2 */
++
++/* Define to 1 if you have the declaration of `fdt_first_subnode', and to 0 if
++   you don't. */
++/* #undef HAVE_DECL_FDT_FIRST_SUBNODE */
++
++/* Define to 1 if you have the declaration of `fdt_next_subnode', and to 0 if
++   you don't. */
++/* #undef HAVE_DECL_FDT_NEXT_SUBNODE */
++
++/* Define to 1 if you have the declaration of `fdt_property_u32', and to 0 if
++   you don't. */
++/* #undef HAVE_DECL_FDT_PROPERTY_U32 */
++
++/* Define to 1 if you have the `fdt_first_subnode' function. */
++/* #undef HAVE_FDT_FIRST_SUBNODE */
++
++/* Define to 1 if you have the `fdt_next_subnode' function. */
++/* #undef HAVE_FDT_NEXT_SUBNODE */
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#define HAVE_INTTYPES_H 1
++
++/* Define to 1 if you have the `aio' library (-laio). */
++/* #undef HAVE_LIBAIO */
++
++/* Define to 1 if you have the `crypto' library (-lcrypto). */
++#define HAVE_LIBCRYPTO 1
++
++/* Define to 1 if you have the `fdt' library (-lfdt). */
++/* #undef HAVE_LIBFDT */
++
++/* Define to 1 if you have the `yajl' library (-lyajl). */
++#define HAVE_LIBYAJL 1
++
++/* Define to 1 if you have the `z' library (-lz). */
++#define HAVE_LIBZ 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Qemu traditional enabled */
++#define HAVE_QEMU_TRADITIONAL 1
++
++/* ROMBIOS enabled */
++#define HAVE_ROMBIOS 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Systemd available and enabled */
++#define HAVE_SYSTEMD 1
++
++/* Define to 1 if you have the <sys/eventfd.h> header file. */
++#define HAVE_SYS_EVENTFD_H 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to 1 if you have the <utmp.h> header file. */
++#define HAVE_UTMP_H 1
++
++/* Define to 1 if you have the <valgrind/memcheck.h> header file. */
++/* #undef HAVE_VALGRIND_MEMCHECK_H */
++
++/* Define to 1 if you have the <yajl/yajl_version.h> header file. */
++#define HAVE_YAJL_YAJL_VERSION_H 1
++
++/* Define curses header to use */
++#define INCLUDE_CURSES_H <ncurses.h>
++
++/* Define extfs header to use */
++#define INCLUDE_EXTFS_H <ext2fs/ext2fs.h>
++
++/* Define json header to use */
++#define INCLUDE_JSON_H <json/json.h>
++
++/* libutil header file name */
++/* #undef INCLUDE_LIBUTIL_H */
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT "xen-devel@lists.xen.org"
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "Xen Hypervisor Tools"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "Xen Hypervisor Tools 4.7"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "xen"
++
++/* Define to the home page for this package. */
++#define PACKAGE_URL "http://www.xen.org/"
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "4.7"
++
++/* Qemu Xen path */
++#define QEMU_XEN_PATH "/usr/lib64/xen/bin/qemu-system-i386"
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Enable large inode numbers on Mac OS X 10.5.  */
++#ifndef _DARWIN_USE_64_BIT_INODE
++# define _DARWIN_USE_64_BIT_INODE 1
++#endif
++
++/* Number of bits in a file offset, on hosts where this is settable. */
++/* #undef _FILE_OFFSET_BITS */
++
++/* Define for large files, on AIX-style hosts. */
++/* #undef _LARGE_FILES */
+diff --git a/tools/ocaml/xenstored/oxenstored.conf b/tools/ocaml/xenstored/oxenstored.conf
+index dd9649b..da40df6 100644
+--- a/tools/ocaml/xenstored/oxenstored.conf
++++ b/tools/ocaml/xenstored/oxenstored.conf
+@@ -46,9 +46,9 @@ perms-activate = true
+ 
+ # Activate quota
+ quota-activate = true
+-quota-maxentity = 1000
++quota-maxentity = 8192
+ quota-maxsize = 2048
+-quota-maxwatch = 100
++quota-maxwatch = 512
+ quota-transaction = 10
+ quota-maxrequests = 1024
+ 
+@@ -59,12 +59,14 @@ persistent = false
+ # xenstored-log-file = /var/log/xenstored.log
+ # xenstored-log-level = null
+ # xenstored-log-nb-files = 10
++xenstored-log-file = syslog:daemon
+ 
+ # Xenstored access logs
+ # access-log-file = /var/log/xenstored-access.log
+ # access-log-nb-lines = 13215
+ # acesss-log-nb-chars = 180
+ # access-log-special-ops = false
++access-log-file = syslog:local3
+ 
+ # Perodically scanning all the rings as a safenet for lazy clients.
+ # Define the interval in seconds, set to negative to disable.

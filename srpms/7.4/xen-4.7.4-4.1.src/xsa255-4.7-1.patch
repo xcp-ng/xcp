@@ -1,0 +1,134 @@
+From: Jan Beulich <jbeulich@suse.com>
+Subject: gnttab/ARM: don't corrupt shared GFN array
+
+... by writing status GFNs to it. Introduce a second array instead.
+Also implement gnttab_status_gmfn() properly now that the information is
+suitably being tracked.
+
+While touching it anyway, remove a misguided (but luckily benign) upper
+bound check from gnttab_shared_gmfn(): We should never access beyond the
+bounds of that array.
+
+This is part of XSA-255.
+
+Signed-off-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+
+diff --git a/xen/arch/arm/domain.c b/xen/arch/arm/domain.c
+index 1365b4a..30e1e90 100644
+--- a/xen/arch/arm/domain.c
++++ b/xen/arch/arm/domain.c
+@@ -438,19 +438,37 @@ void startup_cpu_idle_loop(void)
+ struct domain *alloc_domain_struct(void)
+ {
+     struct domain *d;
++    unsigned int i, max_status_frames;
++
+     BUILD_BUG_ON(sizeof(*d) > PAGE_SIZE);
+     d = alloc_xenheap_pages(0, 0);
+     if ( d == NULL )
+         return NULL;
+ 
+     clear_page(d);
+-    d->arch.grant_table_gpfn = xzalloc_array(xen_pfn_t, max_grant_frames);
++
++    d->arch.grant_shared_gfn = xmalloc_array(gfn_t, max_grant_frames);
++    max_status_frames = grant_to_status_frames(max_grant_frames);
++    d->arch.grant_status_gfn = xmalloc_array(gfn_t, max_status_frames);
++    if ( !d->arch.grant_shared_gfn || !d->arch.grant_status_gfn )
++    {
++        free_domain_struct(d);
++        return NULL;
++    }
++
++    for ( i = 0; i < max_grant_frames; ++i )
++        d->arch.grant_shared_gfn[i] = INVALID_GFN;
++
++    for ( i = 0; i < max_status_frames; ++i )
++        d->arch.grant_status_gfn[i] = INVALID_GFN;
++
+     return d;
+ }
+ 
+ void free_domain_struct(struct domain *d)
+ {
+-    xfree(d->arch.grant_table_gpfn);
++    xfree(d->arch.grant_shared_gfn);
++    xfree(d->arch.grant_status_gfn);
+     free_xenheap_page(d);
+ }
+ 
+diff --git a/xen/arch/arm/mm.c b/xen/arch/arm/mm.c
+index 0a82698..3bd78c1 100644
+--- a/xen/arch/arm/mm.c
++++ b/xen/arch/arm/mm.c
+@@ -1065,6 +1065,7 @@ int xenmem_add_to_physmap_one(
+     int rc;
+     p2m_type_t t;
+     struct page_info *page = NULL;
++    bool_t status = 0;
+ 
+     switch ( space )
+     {
+@@ -1082,6 +1083,7 @@ int xenmem_add_to_physmap_one(
+                 mfn = virt_to_mfn(d->grant_table->status[idx]);
+             else
+                 mfn = INVALID_MFN;
++            status = 1;
+         }
+         else
+         {
+@@ -1097,7 +1099,10 @@ int xenmem_add_to_physmap_one(
+         
+         if ( mfn != INVALID_MFN )
+         {
+-            d->arch.grant_table_gpfn[idx] = gpfn;
++            if ( status )
++                d->arch.grant_status_gfn[idx] = gpfn;
++            else
++                d->arch.grant_shared_gfn[idx] = gpfn;
+ 
+             t = p2m_ram_rw;
+         }
+diff --git a/xen/include/asm-arm/domain.h b/xen/include/asm-arm/domain.h
+index 370cdeb..cb1ffec 100644
+--- a/xen/include/asm-arm/domain.h
++++ b/xen/include/asm-arm/domain.h
+@@ -51,7 +51,8 @@ struct arch_domain
+     uint64_t vttbr;
+ 
+     struct hvm_domain hvm_domain;
+-    xen_pfn_t *grant_table_gpfn;
++    gfn_t *grant_shared_gfn;
++    gfn_t *grant_status_gfn;
+ 
+     struct vmmio vmmio;
+ 
+diff --git a/xen/include/asm-arm/grant_table.h b/xen/include/asm-arm/grant_table.h
+index d76c7c7..4d576c5 100644
+--- a/xen/include/asm-arm/grant_table.h
++++ b/xen/include/asm-arm/grant_table.h
+@@ -14,7 +14,6 @@ int replace_grant_host_mapping(unsigned long gpaddr, unsigned long mfn,
+         unsigned long new_gpaddr, unsigned int flags);
+ void gnttab_mark_dirty(struct domain *d, unsigned long l);
+ #define gnttab_create_status_page(d, t, i) do {} while (0)
+-#define gnttab_status_gmfn(d, t, i) (0)
+ #define gnttab_release_host_mappings(domain) 1
+ static inline int replace_grant_supported(void)
+ {
+@@ -29,8 +28,12 @@ static inline int replace_grant_supported(void)
+     } while ( 0 )
+ 
+ #define gnttab_shared_gmfn(d, t, i)                                      \
+-    ( ((i >= nr_grant_frames(d->grant_table)) &&                         \
+-     (i < max_grant_frames)) ? 0 : (d->arch.grant_table_gpfn[i]))
++    gfn_x(((i) >= nr_grant_frames(t)) ? INVALID_GFN                      \
++                                      : (d)->arch.grant_shared_gfn[i])
++
++#define gnttab_status_gmfn(d, t, i)                                      \
++    gfn_x(((i) >= nr_status_frames(t)) ? INVALID_GFN                     \
++                                       : (d)->arch.grant_status_gfn[i])
+ 
+ #define gnttab_need_iommu_mapping(d)                    \
+     (is_domain_direct_mapped(d) && need_iommu(d))

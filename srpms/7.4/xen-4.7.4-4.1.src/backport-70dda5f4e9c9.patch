@@ -1,0 +1,36 @@
+From 70dda5f4e9c92b35c88b8f52f0fddd52f8778e51 Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:23 -0400
+Subject: [PATCH] xsm: annotate setup functions with __init
+
+These functions were only called from __init functions.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+diff --git a/xen/xsm/dummy.c b/xen/xsm/dummy.c
+index 9791ad4..a082b28 100644
+--- a/xen/xsm/dummy.c
++++ b/xen/xsm/dummy.c
+@@ -27,7 +27,7 @@ struct xsm_operations dummy_xsm_ops;
+         }                                                              \
+     } while (0)
+ 
+-void xsm_fixup_ops (struct xsm_operations *ops)
++void __init xsm_fixup_ops (struct xsm_operations *ops)
+ {
+     set_to_dummy_if_null(ops, security_domaininfo);
+     set_to_dummy_if_null(ops, domain_create);
+diff --git a/xen/xsm/xsm_core.c b/xen/xsm/xsm_core.c
+index 3487742..78d881b 100644
+--- a/xen/xsm/xsm_core.c
++++ b/xen/xsm/xsm_core.c
+@@ -127,7 +127,7 @@ bool __init has_xsm_magic(paddr_t start)
+ }
+ #endif
+ 
+-int register_xsm(struct xsm_operations *ops)
++int __init register_xsm(struct xsm_operations *ops)
+ {
+     if ( verify(ops) )
+     {

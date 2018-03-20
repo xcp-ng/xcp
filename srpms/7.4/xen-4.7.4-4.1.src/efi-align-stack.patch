@@ -1,0 +1,24 @@
+x86/boot: Align the EFI stack
+
+Backport some code from the upstream multiboot2 patches to ensure the
+stack is aligned otherwise the UEFI firmware crashes during early boot
+on purley-4s.
+
+diff --git a/xen/arch/x86/boot/head.S b/xen/arch/x86/boot/head.S
+index 42ef80f..3c78c1e 100644
+--- a/xen/arch/x86/boot/head.S
++++ b/xen/arch/x86/boot/head.S
+@@ -216,6 +216,13 @@ efi_multiboot2_proto:
+         jmp     0b
+ 
+ run_bs:
++        /*
++         * Align the stack as UEFI spec requires. Keep it aligned
++         * before efi_multiboot2() call by pushing/popping even
++         * numbers of items on it.
++         */
++        and     $~15,%rsp
++
+         push    %rax
+         push    %rdx
+ 

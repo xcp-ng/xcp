@@ -1,0 +1,40 @@
+From baa04e809c1220caae19d1135a627808d9f50f87 Mon Sep 17 00:00:00 2001
+From: David Vrabel <david.vrabel@citrix.com>
+Date: Thu, 22 Jan 2015 10:58:41 +0000
+Subject: [PATCH 2/2] libxc: retry shadow ops if -EBUSY is returned
+
+DOMCTL_shadow_op may return -EBUSY if there is a pending preempted
+hypercall (issued by another task).  Handle this by retrying the op.
+
+Signed-off-by: David Vrabel <david.vrabel@citrix.com>
+diff --git a/tools/libxc/xc_domain.c b/tools/libxc/xc_domain.c
+index b864872..b92b888 100644
+--- a/tools/libxc/xc_domain.c
++++ b/tools/libxc/xc_domain.c
+@@ -603,6 +603,7 @@ int xc_shadow_control(xc_interface *xch,
+     int rc;
+     DECLARE_DOMCTL;
+     DECLARE_HYPERCALL_BUFFER_ARGUMENT(dirty_bitmap);
++    int retries = 10; /* Retry for approx 100 ms. */
+ 
+     memset(&domctl, 0, sizeof(domctl));
+ 
+@@ -616,7 +617,17 @@ int xc_shadow_control(xc_interface *xch,
+         set_xen_guest_handle(domctl.u.shadow_op.dirty_bitmap,
+                                 dirty_bitmap);
+ 
+-    rc = do_domctl(xch, &domctl);
++    for (;;) {
++        rc = do_domctl(xch, &domctl);
++        if ( rc >= 0 || errno != EBUSY )
++            break;
++
++        if ( --retries == 0 ) {
++            PERROR("Shadow op %u still busy", sop);
++            return rc;
++        }
++        usleep(10000);
++    }
+ 
+     if ( stats )
+         memcpy(stats, &domctl.u.shadow_op.stats,

@@ -1,0 +1,56 @@
+From 2511f89d9a5e13d6ddc808545bbb5b760ab3d6e9 Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:14 -0400
+Subject: [PATCH] flask/policy: xenstore stubdom policy
+
+This adds the xenstore_t type to the example policy for use by a
+xenstore stub domain; see the init-xenstore-domain tool for how this
+type needs to be used.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+diff --git a/tools/flask/policy/modules/modules.conf b/tools/flask/policy/modules/modules.conf
+index 9aac6a0..6dba0a3 100644
+--- a/tools/flask/policy/modules/modules.conf
++++ b/tools/flask/policy/modules/modules.conf
+@@ -33,6 +33,9 @@ nomigrate = on
+ # Example device policy.  Also see policy/device_contexts.
+ nic_dev = on
+ 
++# Xenstore stub domain (see init-xenstore-domain).
++xenstore = on
++
+ # This allows any domain type to be created using the system_r role.  When it is
+ # disabled, domains not using the default types (dom0_t, domU_t, dm_dom_t) must
+ # use another role (such as vm_r from the vm_role module below).
+diff --git a/tools/flask/policy/modules/xenstore.te b/tools/flask/policy/modules/xenstore.te
+new file mode 100644
+index 0000000..519566a
+--- /dev/null
++++ b/tools/flask/policy/modules/xenstore.te
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# Xenstore stubdomain
++#
++################################################################################
++declare_singleton_domain(xenstore_t)
++create_domain(dom0_t, xenstore_t)
++manage_domain(dom0_t, xenstore_t)
++
++# Xenstore requires the global VIRQ for domain destroy operations
++allow dom0_t xenstore_t:domain set_virq_handler;
++# Current xenstore stubdom uses the hypervisor console, not "xl console"
++allow xenstore_t xen_t:xen writeconsole;
++# Xenstore queries domaininfo on all domains
++allow xenstore_t domain_type:domain getdomaininfo;
++
++# As a shortcut, the following 3 rules are used instead of adding a domain_comms
++# rule between xenstore_t and every domain type that talks to xenstore
++create_channel(xenstore_t, domain_type, xenstore_t_channel)
++allow event_type xenstore_t: event bind;
++allow xenstore_t domain_type:grant { map_read map_write unmap };
++
++# Xenstore is a utility domain, so it should use the system role
++role system_r types xenstore_t;

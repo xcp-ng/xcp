@@ -1,0 +1,55 @@
+From 6b792e28bca8301e04d7f0f0dd7033410ea941b5 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Wed, 28 Jun 2017 10:35:45 +0100
+Subject: [PATCH] vvmx: fix ept_sync() for nested p2m
+
+If ept_sync_domain() is called for np2m, the following happens:
+
+    1. *np2m*::ept_data::invalidate cpumask is updated
+    2. IPIs are sent for CPUs in domain_dirty_cpumask forcing vmexits
+    3. vmx_vmenter_helper() checks *hostp2m*::ept_data::invalidate
+       and does nothing
+
+Which is clearly a bug. Make ept_sync_domain() to update hostp2m's
+invalidate mask in nested p2m case and make vmx_vmenter_helper() to
+invalidate EPT translations for all EPTPs if nested virt is enabled.
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vmx.c b/xen/arch/x86/hvm/vmx/vmx.c
+index 2663e685fc..3b9bdc053d 100644
+--- a/xen/arch/x86/hvm/vmx/vmx.c
++++ b/xen/arch/x86/hvm/vmx/vmx.c
+@@ -4101,7 +4101,10 @@ void vmx_vmenter_helper(const struct cpu_user_regs *regs)
+         if ( cpumask_test_cpu(cpu, ept->invalidate) )
+         {
+             cpumask_clear_cpu(cpu, ept->invalidate);
+-            __invept(INVEPT_SINGLE_CONTEXT, ept_get_eptp(ept), 0);
++            if ( nestedhvm_enabled(curr->domain) )
++                __invept(INVEPT_ALL_CONTEXT, 0, 0);
++            else
++                __invept(INVEPT_SINGLE_CONTEXT, ept_get_eptp(ept), 0);
+         }
+     }
+ 
+diff --git a/xen/arch/x86/mm/p2m-ept.c b/xen/arch/x86/mm/p2m-ept.c
+index 2ef79b6d17..a3b51e0804 100644
+--- a/xen/arch/x86/mm/p2m-ept.c
++++ b/xen/arch/x86/mm/p2m-ept.c
+@@ -1103,8 +1103,13 @@ static void ept_sync_domain_prepare(struct p2m_domain *p2m)
+     struct domain *d = p2m->domain;
+     struct ept_data *ept = &p2m->ept;
+ 
+-    if ( nestedhvm_enabled(d) && !p2m_is_nestedp2m(p2m) )
+-        p2m_flush_nestedp2m(d);
++    if ( nestedhvm_enabled(d) )
++    {
++        if ( p2m_is_nestedp2m(p2m) )
++            ept = &p2m_get_hostp2m(d)->ept;
++        else
++            p2m_flush_nestedp2m(d);
++    }
+ 
+     /*
+      * Need to invalidate on all PCPUs because either:

@@ -1,0 +1,55 @@
+From 04f34e76ac50acaeaf9758225a9678e91e4297ec Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Thu, 30 Mar 2017 17:32:33 +0100
+Subject: [PATCH] tools/python: Adjust migration v2 library to warn about
+ zero-content records
+
+These records shouldn't be in a stream, but accidentally are.  Warn about
+them, but don't abort the verification.
+
+While here, add a missing length check to the X86_PV_P2M_FRAMES record
+checker.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+diff --git a/tools/python/xen/migration/libxc.py b/tools/python/xen/migration/libxc.py
+index 85a78f4..2037c85 100644
+--- a/tools/python/xen/migration/libxc.py
++++ b/tools/python/xen/migration/libxc.py
+@@ -308,6 +308,10 @@ class VerifyLibxc(VerifyBase):
+     def verify_record_x86_pv_p2m_frames(self, content):
+         """ x86 PV p2m frames record """
+ 
++        if len(content) < 8:
++            raise RecordError("x86_pv_p2m_frames: record length must be at"
++                              " least 8 bytes long")
++
+         if len(content) % 8 != 0:
+             raise RecordError("Length expected to be a multiple of 8, not %d"
+                               % (len(content), ))
+@@ -320,10 +324,14 @@ class VerifyLibxc(VerifyBase):
+         """ Generic for all REC_TYPE_x86_pv_vcpu_{basic,extended,xsave,msrs} """
+         minsz = calcsize(X86_PV_VCPU_HDR_FORMAT)
+ 
+-        if len(content) <= minsz:
++        if len(content) < minsz:
+             raise RecordError("X86_PV_VCPU_%s record length must be at least %d"
+                               " bytes long" % (name, minsz))
+ 
++        if len(content) == minsz:
++            self.info("Warning: X86_PV_VCPU_%s record with zero content"
++                      % (name, ))
++
+         vcpuid, res1 = unpack(X86_PV_VCPU_HDR_FORMAT, content[:minsz])
+ 
+         if res1 != 0:
+@@ -381,6 +389,9 @@ class VerifyLibxc(VerifyBase):
+         if rsvd != 0:
+             raise RecordError("Reserved field not zero (0x%04x)" % (rsvd, ))
+ 
++        if count == 0:
++            self.info("Warning: HVM_PARAMS record with zero content")
++
+         sz += count * calcsize(HVM_PARAMS_ENTRY_FORMAT)
+ 
+         if len(content) != sz:

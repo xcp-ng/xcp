@@ -1,0 +1,42 @@
+From 23044a4e00c1a6bfb70a19a8ed263d47ea5412fc Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Tue, 3 Oct 2017 16:21:04 +0100
+Subject: [PATCH] x86/np2m: add break to np2m_flush_eptp()
+
+Now that np2m sharing is implemented, there can be only one np2m object
+with the same np2m_base. Break from loop if the required np2m was found
+during np2m_flush_eptp().
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Reviewed-by: George Dunlap <george.dunlap@citrix.com>
+Acked-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Jun Nakajima <jun.nakajima@intel.com>
+diff --git a/xen/arch/x86/mm/p2m.c b/xen/arch/x86/mm/p2m.c
+index e342a3b05a..38f74deb4d 100644
+--- a/xen/arch/x86/mm/p2m.c
++++ b/xen/arch/x86/mm/p2m.c
+@@ -2106,7 +2106,11 @@ void np2m_flush_base(struct vcpu *v, unsigned long np2m_base)
+         p2m = d->arch.nested_p2m[i];
+         p2m_lock(p2m);
+         if ( p2m->np2m_base == np2m_base )
++        {
+             p2m_flush_table_locked(p2m);
++            p2m_unlock(p2m);
++            break;
++        }
+         p2m_unlock(p2m);
+     }
+     nestedp2m_unlock(d);
+diff --git a/xen/include/asm-x86/p2m.h b/xen/include/asm-x86/p2m.h
+index 623be21115..c06b0d9409 100644
+--- a/xen/include/asm-x86/p2m.h
++++ b/xen/include/asm-x86/p2m.h
+@@ -763,7 +763,7 @@ int p2m_pt_handle_deferred_changes(uint64_t gpa);
+ void p2m_flush(struct vcpu *v, struct p2m_domain *p2m);
+ /* Flushes all nested p2m tables */
+ void p2m_flush_nestedp2m(struct domain *d);
+-/* Flushes all np2m objects with the specified np2m_base */
++/* Flushes the np2m specified by np2m_base (if it exists) */
+ void np2m_flush_base(struct vcpu *v, unsigned long np2m_base);
+ 
+ void nestedp2m_write_p2m_entry(struct p2m_domain *p2m, unsigned long gfn,

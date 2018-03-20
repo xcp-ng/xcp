@@ -1,0 +1,308 @@
+From d1c4eb00ba5a55c5f6db3cd554acff5543994e4a Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Mon, 18 Dec 2017 13:54:25 +0000
+Subject: [PATCH] x86: Support indirect thunks from assembly code
+
+Introduce CALL_THUNK and JMP_THUNK which either degrade to a normal indirect
+branch, or dispatch to the __x86.indirect_thunk.* symbols.
+
+Update all the manual indirect branches in to use the new thunks.  The
+indirect branches in the boot and kexec path are left intact as we can't use
+the compiled-in thunks at those points.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/xen/arch/x86/boot/trampoline.S b/xen/arch/x86/boot/trampoline.S
+index b0136148bb..2a6ee4c3bb 100644
+--- a/xen/arch/x86/boot/trampoline.S
++++ b/xen/arch/x86/boot/trampoline.S
+@@ -128,8 +128,28 @@ trampoline_protmode_entry:
+         .code64
+ start64:
+         /* Jump to high mappings. */
+-        movabs  $__high_start,%rax
+-        jmpq    *%rax
++        movabs  $__high_start, %rdi
++
++#ifdef CONFIG_INDIRECT_THUNK
++        /*
++         * If booting virtualised, or hot-onlining a CPU, sibling threads can
++         * attempt Branch Target Injection against this jmp.
++         *
++         * We've got no usable stack so can't use a RETPOLINE thunk, and are
++         * further than +- 2G from the high mappings so couldn't use JUMP_THUNK
++         * even if was a non-RETPOLINE thunk.  Futhermore, an LFENCE isn't
++         * necesserily safe to use at this point.
++         *
++         * As this isn't a hotpath, use a fully serialising event to reduce
++         * the speculation window as much as possible.  %ebx needs preserving
++         * for __high_start.
++         */
++        mov     %ebx, %esi
++        cpuid
++        mov     %esi, %ebx
++#endif
++
++        jmpq    *%rdi
+ 
+         .code32
+ trampoline_boot_cpu_entry:
+diff --git a/xen/arch/x86/traps.c b/xen/arch/x86/traps.c
+index 5f8d939b22..1b0068a5c3 100644
+--- a/xen/arch/x86/traps.c
++++ b/xen/arch/x86/traps.c
+@@ -2216,6 +2216,10 @@ static int is_cpufreq_controller(struct domain *d)
+ 
+ #include "x86_64/mmconfig.h"
+ 
++#ifdef CONFIG_INDIRECT_THUNK
++extern char ind_thunk_rcx[] asm ("__x86.indirect_thunk.rcx");
++#endif
++
+ static int emulate_privileged_op(struct cpu_user_regs *regs)
+ {
+     struct vcpu *v = current;
+@@ -2239,6 +2243,8 @@ static int emulate_privileged_op(struct cpu_user_regs *regs)
+     unsigned long code_base, code_limit;
+     char *io_emul_stub = NULL;
+     void (*io_emul)(struct cpu_user_regs *) __attribute__((__regparm__(1)));
++    struct stubs *this_stubs = &this_cpu(stubs);
++    unsigned long stub_va = this_stubs->addr + STUB_BUF_SIZE / 2;
+     uint64_t val;
+     bool_t vpmu_msr;
+ 
+@@ -2424,31 +2430,46 @@ static int emulate_privileged_op(struct cpu_user_regs *regs)
+      * context. This is needed for some systems which (ab)use IN/OUT
+      * to communicate with BIOS code in system-management mode.
+      */
+-    io_emul_stub = map_domain_page(_mfn(this_cpu(stubs.mfn))) +
+-                   (this_cpu(stubs.addr) & ~PAGE_MASK) +
+-                   STUB_BUF_SIZE / 2;
++    io_emul_stub =
++        map_domain_page(_mfn(this_stubs->mfn)) + (stub_va & ~PAGE_MASK);
++
+     /* movq $host_to_guest_gpr_switch,%rcx */
+     io_emul_stub[0] = 0x48;
+     io_emul_stub[1] = 0xb9;
+     *(void **)&io_emul_stub[2] = (void *)host_to_guest_gpr_switch;
++
++#ifdef CONFIG_INDIRECT_THUNK
++    /* callq __x86.indirect_thunk.rcx */
++    io_emul_stub[10] = 0xe8;
++    *(int32_t *)&io_emul_stub[11] = _p(ind_thunk_rcx) - _p(stub_va + 11 + 4);
++
++#else
+     /* callq *%rcx */
+     io_emul_stub[10] = 0xff;
+     io_emul_stub[11] = 0xd1;
++
++    /*
++     * 3 bytes of P6_NOPS.
++     * TODO: untangle ideal_nops from init/livepatch Kconfig options.
++     */
++    memcpy(&io_emul_stub[12], "\x0f\x1f\x00", 3);
++#endif
++
+     /* data16 or nop */
+-    io_emul_stub[12] = (op_bytes != 2) ? 0x90 : 0x66;
++    io_emul_stub[15] = (op_bytes != 2) ? 0x90 : 0x66;
+     /* <io-access opcode> */
+-    io_emul_stub[13] = opcode;
++    io_emul_stub[16] = opcode;
+     /* imm8 or nop */
+-    io_emul_stub[14] = 0x90;
++    io_emul_stub[17] = 0x90;
+     /* ret (jumps to guest_to_host_gpr_switch) */
+-    io_emul_stub[15] = 0xc3;
+-    BUILD_BUG_ON(STUB_BUF_SIZE / 2 < 16);
++    io_emul_stub[18] = 0xc3;
++    BUILD_BUG_ON(STUB_BUF_SIZE / 2 < 19);
+ 
+     /* Handy function-typed pointer to the stub. */
+-    io_emul = (void *)(this_cpu(stubs.addr) + STUB_BUF_SIZE / 2);
++    io_emul = (void *)stub_va;
+ 
+     if ( ioemul_handle_quirk )
+-        ioemul_handle_quirk(opcode, &io_emul_stub[12], regs);
++        ioemul_handle_quirk(opcode, &io_emul_stub[15], regs);
+ 
+     /* I/O Port and Interrupt Flag instructions. */
+     switch ( opcode )
+@@ -2457,7 +2478,7 @@ static int emulate_privileged_op(struct cpu_user_regs *regs)
+         op_bytes = 1;
+     case 0xe5: /* IN imm8,%eax */
+         port = insn_fetch(u8, code_base, eip, code_limit);
+-        io_emul_stub[14] = port; /* imm8 */
++        io_emul_stub[17] = port; /* imm8 */
+     exec_in:
+         if ( !guest_io_okay(port, op_bytes, v, regs) )
+             goto fail;
+@@ -2486,7 +2507,7 @@ static int emulate_privileged_op(struct cpu_user_regs *regs)
+         op_bytes = 1;
+     case 0xe7: /* OUT %eax,imm8 */
+         port = insn_fetch(u8, code_base, eip, code_limit);
+-        io_emul_stub[14] = port; /* imm8 */
++        io_emul_stub[17] = port; /* imm8 */
+     exec_out:
+         if ( !guest_io_okay(port, op_bytes, v, regs) )
+             goto fail;
+diff --git a/xen/arch/x86/x86_64/entry.S b/xen/arch/x86/x86_64/entry.S
+index c824d5b009..33c1155cbd 100644
+--- a/xen/arch/x86/x86_64/entry.S
++++ b/xen/arch/x86/x86_64/entry.S
+@@ -473,7 +473,8 @@ handle_exception_saved:
+         movzbl UREGS_entry_vector(%rsp),%eax
+         leaq  exception_table(%rip),%rdx
+         PERFC_INCR(exceptions, %rax, %rbx)
+-        callq *(%rdx,%rax,8)
++        mov   (%rdx, %rax, 8), %rdx
++        CALL_THUNK %rdx
+         testb $3,UREGS_cs(%rsp)
+         jz    restore_all_xen
+         leaq  VCPU_trap_bounce(%rbx),%rdx
+@@ -613,7 +614,8 @@ handle_ist_exception:
+ 1:      movq  %rsp,%rdi
+         movzbl UREGS_entry_vector(%rsp),%eax
+         leaq  exception_table(%rip),%rdx
+-        callq *(%rdx,%rax,8)
++        mov   (%rdx, %rax, 8), %rdx
++        CALL_THUNK %rdx
+         cmpb  $TRAP_nmi,UREGS_entry_vector(%rsp)
+         jne   ret_from_intr
+ 
+diff --git a/xen/arch/x86/x86_emulate/x86_emulate.c b/xen/arch/x86/x86_emulate/x86_emulate.c
+index cf6f4fe027..f8f79d501f 100644
+--- a/xen/arch/x86/x86_emulate/x86_emulate.c
++++ b/xen/arch/x86/x86_emulate/x86_emulate.c
+@@ -4322,7 +4322,7 @@ x86_emulate(
+         if ( !rc )
+         {
+            copy_REX_VEX(buf, rex_prefix, vex);
+-           asm volatile ( "call *%0" : : "r" (stub.func), "a" (mmvalp)
++           asm volatile ( "CALL_THUNK %0" : : "r" (stub.func), "a" (mmvalp)
+                                      : "memory" );
+         }
+         put_fpu(&fic);
+@@ -4608,7 +4608,7 @@ x86_emulate(
+         if ( !rc )
+         {
+            copy_REX_VEX(buf, rex_prefix, vex);
+-           asm volatile ( "call *%0" : : "r" (stub.func), "a" (ea.reg)
++           asm volatile ( "CALL_THUNK %0" : : "r" (stub.func), "a" (ea.reg)
+                                      : "memory" );
+         }
+         put_fpu(&fic);
+diff --git a/xen/common/wait.c b/xen/common/wait.c
+index 877ef19638..34b4799d8f 100644
+--- a/xen/common/wait.c
++++ b/xen/common/wait.c
+@@ -204,12 +204,14 @@ void check_wakeup_from_wait(void)
+ 
+     /*
+      * Hand-rolled longjmp().  Returns to the pointer on the top of
+-     * wqv->stack, and lands on a `rep movs` instruction.
++     * wqv->stack, and lands on a `rep movs` instruction.  All other GPRs are
++     * restored from the stack, so are available for use here.
+      */
+     asm volatile (
+-        "mov %1,%%"__OP"sp; jmp *(%0)"
++        "mov %1,%%"__OP"sp; JMP_THUNK %[ip]"
+         : : "S" (wqv->stack), "D" (wqv->esp),
+-        "c" ((char *)get_cpu_info() - (char *)wqv->esp)
++          "c" ((char *)get_cpu_info() - (char *)wqv->esp),
++          [ip] "r" (*(unsigned long *)wqv->stack)
+         : "memory" );
+     unreachable();
+ }
+diff --git a/xen/include/asm-x86/asm_defns.h b/xen/include/asm-x86/asm_defns.h
+index af49a64870..1acef90bd0 100644
+--- a/xen/include/asm-x86/asm_defns.h
++++ b/xen/include/asm-x86/asm_defns.h
+@@ -13,6 +13,19 @@
+ #include <asm/cpufeature.h>
+ #include <asm/alternative.h>
+ 
++#ifdef __ASSEMBLY__
++# include <asm/indirect_thunk_asm.h>
++#else
++
++#ifdef CONFIG_INDIRECT_THUNK
++asm ( "\t.equ CONFIG_INDIRECT_THUNK, 1" );
++#else
++asm ( "\t.equ CONFIG_INDIRECT_THUNK, 0" );
++#endif
++
++asm ( "\t.include \"asm/indirect_thunk_asm.h\"" );
++#endif
++
+ #ifndef __ASSEMBLY__
+ void ret_from_intr(void);
+ #endif
+diff --git a/xen/include/asm-x86/indirect_thunk_asm.h b/xen/include/asm-x86/indirect_thunk_asm.h
+new file mode 100644
+index 0000000000..554dd7e618
+--- /dev/null
++++ b/xen/include/asm-x86/indirect_thunk_asm.h
+@@ -0,0 +1,41 @@
++/*
++ * Warning!  This file is included at an assembler level for .c files, causing
++ * usual #ifdef'ary to turn into comments.
++ */
++
++.macro IND_THUNK insn:req arg:req
++/*
++ * Create an indirect branch.  insn is one of call/jmp, arg is a single
++ * register.
++ *
++ * With no compiler support, this degrated into a plain indirect call/jmp.
++ * With compiler support, dispatch to the correct __x86.indirect_thunk.*
++ */
++    .if CONFIG_INDIRECT_THUNK == 1
++
++        $done = 0
++        .irp reg, rax, rbx, rcx, rdx, rsi, rdi, rbp, r8, r9, r10, r11, r12, r13, r14, r15
++        .ifeqs "\arg", "%\reg"
++            \insn __x86.indirect_thunk.\reg
++            $done = 1
++           .exitm
++        .endif
++        .endr
++
++        .if $done != 1
++        .error "Bad register arg \arg"
++        .endif
++
++    .else
++        \insn *\arg
++    .endif
++.endm
++
++/* Convenience wrappers. */
++.macro CALL_THUNK arg:req
++    IND_THUNK call, \arg
++.endm
++
++.macro JMP_THUNK arg:req
++    IND_THUNK jmp, \arg
++.endm
+diff --git a/xen/include/asm-x86/multicall.h b/xen/include/asm-x86/multicall.h
+index 3cb0b6d9a0..0d6f1e461f 100644
+--- a/xen/include/asm-x86/multicall.h
++++ b/xen/include/asm-x86/multicall.h
+@@ -34,7 +34,7 @@ enum mc_disposition {
+             "    movq  %c2+3*%c3(%0),%%rcx; "                \
+             "    movq  %c2+4*%c3(%0),%%r8; "                 \
+             "    movq  %c2+5*%c3(%0),%%r9; "                 \
+-            "    callq *%%rax; "                             \
++            "    CALL_THUNK %%rax; "                         \
+             "1:  movq  %%rax,%c4(%0)\n"                      \
+             ".section .fixup,\"ax\"\n"                       \
+             "2:  movq  %5,%%rax\n"                           \
+@@ -67,7 +67,7 @@ enum mc_disposition {
+             "    movl  %c2+3*%c3(%0),%%ecx; "                \
+             "    movl  %c2+4*%c3(%0),%%r8d; "                \
+             "    movl  %c2+5*%c3(%0),%%r9d; "                \
+-            "    callq *%%rax; "                             \
++            "    CALL_THUNK %%rax; "                         \
+             "1:  movl  %%eax,%c4(%0)\n"                      \
+             ".section .fixup,\"ax\"\n"                       \
+             "2:  movl  %5,%%eax\n"                           \

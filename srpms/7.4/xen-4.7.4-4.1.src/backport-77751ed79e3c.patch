@@ -1,0 +1,22 @@
+From 77751ed79e3c615f3d85dbf2b1573c3f5ed6aa5c Mon Sep 17 00:00:00 2001
+From: Haozhong Zhang <haozhong.zhang@intel.com>
+Date: Wed, 1 Mar 2017 10:30:32 +0100
+Subject: [PATCH] x86/hvm: check HAP before enabling nested VMX
+
+The current implementation of nested VMX cannot work without HAP.
+
+Signed-off-by: Haozhong Zhang <haozhong.zhang@intel.com>
+Acked-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 1f5d1c58a4..a29b8dac58 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -5129,7 +5129,7 @@ static int hvmop_set_param(
+          * Remove the check below once we have
+          * shadow-on-shadow.
+          */
+-        if ( cpu_has_svm && !paging_mode_hap(d) && a.value )
++        if ( !paging_mode_hap(d) && a.value )
+             rc = -EINVAL;
+         if ( a.value &&
+              d->arch.hvm_domain.params[HVM_PARAM_ALTP2M] )

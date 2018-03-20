@@ -1,0 +1,47 @@
+diff --git a/docs/misc/xen-command-line.markdown b/docs/misc/xen-command-line.markdown
+index ca77e3b..0e28666 100644
+--- a/docs/misc/xen-command-line.markdown
++++ b/docs/misc/xen-command-line.markdown
+@@ -984,6 +984,14 @@ Use this to work around firmware issues providing correct RMRR entries. Rather
+ than only mapping RAM pages for IOMMU accesses for Dom0, with this option all
+ pages not marked as unusable in the E820 table will get a mapping established.
+ 
++### introspection\_extn
++> '= <boolean>'
++
++> Default: 'false'
++
++This parameter enables/disables the use of extra introspection extensions in
++addition to the existing ones.
++
+ ### irq\_ratelimit
+ > `= <integer>`
+ 
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 768b3e2..898a432 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -107,6 +107,9 @@ boolean_param("hvm_fep", opt_hvm_fep);
+ static bool_t __initdata opt_altp2m_enabled = 0;
+ boolean_param("altp2m", opt_altp2m_enabled);
+ 
++bool_t __read_mostly opt_introspection_extn = 0;
++boolean_param("introspection_extn", opt_introspection_extn);
++
+ static int cpu_callback(
+     struct notifier_block *nfb, unsigned long action, void *hcpu)
+ {
+diff --git a/xen/include/asm-x86/hvm/hvm.h b/xen/include/asm-x86/hvm/hvm.h
+index 6328f57..dc9eefc 100644
+--- a/xen/include/asm-x86/hvm/hvm.h
++++ b/xen/include/asm-x86/hvm/hvm.h
+@@ -603,6 +603,9 @@ void altp2m_vcpu_update_vmfunc_ve(struct vcpu *v);
+ /* emulates #VE */
+ bool_t altp2m_vcpu_emulate_ve(struct vcpu *v);
+ 
++/* introspection extensions commandline argument value */
++extern bool_t opt_introspection_extn;
++
+ /* Check CR4/EFER values */
+ const char *hvm_efer_valid(const struct vcpu *v, uint64_t value,
+                            signed int cr0_pg);

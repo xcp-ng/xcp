@@ -1,0 +1,114 @@
+From 9f342e2773783cc862e6104e03687483426d4583 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Thu, 16 Nov 2017 18:35:11 +0000
+Subject: [PATCH] x86/ctxt: Issue a speculation barrier between vcpu contexts
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/docs/misc/xen-command-line.markdown b/docs/misc/xen-command-line.markdown
+index 59e63ef..b23ddd5 100644
+--- a/docs/misc/xen-command-line.markdown
++++ b/docs/misc/xen-command-line.markdown
+@@ -245,7 +245,7 @@ enough. Setting this to a high value may cause boot failure, particularly if
+ the NMI watchdog is also enabled.
+ 
+ ### bti (x86)
+-> `= List of [ thunk=retpoline|lfence|plain, ibrs=<bool>, rsb_{vmexit,native}=bool ]`
++> `= List of [ thunk=retpoline|lfence|plain, ibrs=<bool>, ibpb=<bool>, rsb_{vmexit,native}=bool ]`
+ 
+ Branch Target Injection controls.  By default, Xen will pick the most
+ appropriate BTI mitigations based on compiled in support, loaded microcode,
+@@ -262,6 +262,9 @@ On hardware supporting IBRS, the `ibrs=` option can be used to force or
+ prevent Xen using the feature itself.  If Xen is not using IBRS itself,
+ functionality is still set up so IBRS can be virtualised for guests.
+ 
++On hardware supporting IBPB, the `ibpb=` option can be used to prevent Xen
++from issuing Branch Prediction Barriers on vcpu context switches.
++
+ The `rsb_vmexit=` and `rsb_native=` options can be used to fine tune when the
+ RSB gets overwritten.  There are individual controls for an entry from HVM
+ context, and an entry from a native (PV or Xen) context.
+diff --git a/xen/arch/x86/domain.c b/xen/arch/x86/domain.c
+index 1191cc0..0e31b7c 100644
+--- a/xen/arch/x86/domain.c
++++ b/xen/arch/x86/domain.c
+@@ -2173,6 +2173,9 @@ void context_switch(struct vcpu *prev, struct vcpu *next)
+         }
+ 
+         ctxt_switch_levelling(next);
++
++        if ( cpu_has_xen_ibpb )
++            wrmsrl(MSR_PRED_CMD, PRED_CMD_IBPB);
+     }
+ 
+     context_saved(prev);
+diff --git a/xen/arch/x86/spec_ctrl.c b/xen/arch/x86/spec_ctrl.c
+index b299548..10dea0d 100644
+--- a/xen/arch/x86/spec_ctrl.c
++++ b/xen/arch/x86/spec_ctrl.c
+@@ -33,7 +33,7 @@ enum ind_thunk {
+     THUNK_LFENCE,
+     THUNK_JMP,
+ } opt_thunk __initdata = THUNK_DEFAULT;
+-int opt_ibrs __initdata = -1;
++int opt_ibrs __initdata = -1, opt_ibpb __initdata = -1;
+ int opt_rsb_native __initdata = -1, opt_rsb_vmexit __initdata = -1;
+ 
+ static int __init parse_bti(const char *s)
+@@ -61,6 +61,8 @@ static int __init parse_bti(const char *s)
+         }
+         else if ( (val = parse_boolean("ibrs", s, ss)) >= 0 )
+             opt_ibrs = val;
++        else if ( (val = parse_boolean("ibpb", s, ss)) >= 0 )
++            opt_ibpb = val;
+         else if ( (val = parse_boolean("rsb_native", s, ss)) >= 0 )
+             opt_rsb_native = val;
+         else if ( (val = parse_boolean("rsb_vmexit", s, ss)) >= 0 )
+@@ -103,13 +105,14 @@ static void __init print_details(enum ind_thunk thunk)
+         printk(XENLOG_DEBUG "  Compiled-in support: INDIRECT_THUNK\n");
+ 
+     printk(XENLOG_INFO
+-           "BTI mitigations: Thunk %s, Others:%s%s%s%s\n",
++           "BTI mitigations: Thunk %s, Others:%s%s%s%s%s\n",
+            thunk == THUNK_NONE      ? "N/A" :
+            thunk == THUNK_RETPOLINE ? "RETPOLINE" :
+            thunk == THUNK_LFENCE    ? "LFENCE" :
+            thunk == THUNK_JMP       ? "JMP" : "?",
+            boot_cpu_has(X86_FEATURE_XEN_IBRS_SET)    ? " IBRS+" :
+            boot_cpu_has(X86_FEATURE_XEN_IBRS_CLEAR)  ? " IBRS-"      : "",
++           cpu_has_xen_ibpb                          ? " IBPB"       : "",
+            cpu_has_xen_smep                          ? " SMEP"       : "",
+            (boot_cpu_has(X86_FEATURE_RSB_VMEXIT) ||
+             boot_cpu_has(X86_FEATURE_RSB_VMEXIT_SS)) ? " RSB_VMEXIT" : "",
+@@ -180,7 +183,7 @@ void __init init_speculation_mitigations(void)
+      * Has the user specified any custom BTI mitigations?  If so, follow their
+      * instructions exactly and disable all heuristics.
+      */
+-    if ( opt_thunk != THUNK_DEFAULT || opt_ibrs != -1 ||
++    if ( opt_thunk != THUNK_DEFAULT || opt_ibrs != -1 || opt_ibrs != -1 ||
+          opt_rsb_native != -1 || opt_rsb_vmexit != -1 )
+     {
+         thunk = opt_thunk;
+@@ -308,6 +311,10 @@ void __init init_speculation_mitigations(void)
+         }
+     }
+ 
++    if ( (boot_cpu_has(X86_FEATURE_IBRSB) ||
++          boot_cpu_has(X86_FEATURE_IBPB)) && opt_ibpb )
++        setup_force_cpu_cap(X86_FEATURE_XEN_IBPB);
++
+     print_details(thunk);
+ }
+ 
+diff --git a/xen/include/asm-x86/cpufeature.h b/xen/include/asm-x86/cpufeature.h
+index 8bbaddf..4c21229 100644
+--- a/xen/include/asm-x86/cpufeature.h
++++ b/xen/include/asm-x86/cpufeature.h
+@@ -105,6 +105,7 @@
+ #define cpu_has_xen_smep        cpu_has_smep
+ #define cpu_has_lfence_dispatch boot_cpu_has(X86_FEATURE_LFENCE_DISPATCH)
+ #define cpu_has_stibp           boot_cpu_has(X86_FEATURE_STIBP)
++#define cpu_has_xen_ibpb        boot_cpu_has(X86_FEATURE_XEN_IBPB)
+ 
+ enum _cache_type {
+     CACHE_TYPE_NULL = 0,

@@ -1,0 +1,224 @@
+From 68209ad1d2a749b7257cd90b7dea742b9683f98c Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Tue, 18 Jul 2017 14:14:32 +0000
+Subject: [PATCH] x86/vmx: Improvements to vmx_{dis,en}able_intercept_for_msr()
+
+ * Shorten the names to vmx_{clear,set}_msr_intercept()
+ * Use an enumeration for MSR_TYPE rather than a plain integer
+ * Introduce VMX_MSR_RW, as most callers alter both the read and write
+   intercept at the same time.
+
+No functional change.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vmcs.c b/xen/arch/x86/hvm/vmx/vmcs.c
+index 939ca7e777..0bb0338885 100644
+--- a/xen/arch/x86/hvm/vmx/vmcs.c
++++ b/xen/arch/x86/hvm/vmx/vmcs.c
+@@ -803,7 +803,8 @@ static void vmx_set_host_env(struct vcpu *v)
+               (unsigned long)&get_cpu_info()->guest_cpu_user_regs.error_code);
+ }
+ 
+-void vmx_disable_intercept_for_msr(struct vcpu *v, u32 msr, int type)
++void vmx_clear_msr_intercept(struct vcpu *v, unsigned int msr,
++                             enum vmx_msr_intercept_type type)
+ {
+     unsigned long *msr_bitmap = v->arch.hvm_vmx.msr_bitmap;
+     struct domain *d = v->domain;
+@@ -822,17 +823,17 @@ void vmx_disable_intercept_for_msr(struct vcpu *v, u32 msr, int type)
+      */
+     if ( msr <= 0x1fff )
+     {
+-        if ( type & MSR_TYPE_R )
++        if ( type & VMX_MSR_R )
+             clear_bit(msr, msr_bitmap + 0x000/BYTES_PER_LONG); /* read-low */
+-        if ( type & MSR_TYPE_W )
++        if ( type & VMX_MSR_W )
+             clear_bit(msr, msr_bitmap + 0x800/BYTES_PER_LONG); /* write-low */
+     }
+     else if ( (msr >= 0xc0000000) && (msr <= 0xc0001fff) )
+     {
+         msr &= 0x1fff;
+-        if ( type & MSR_TYPE_R )
++        if ( type & VMX_MSR_R )
+             clear_bit(msr, msr_bitmap + 0x400/BYTES_PER_LONG); /* read-high */
+-        if ( type & MSR_TYPE_W )
++        if ( type & VMX_MSR_W )
+             clear_bit(msr, msr_bitmap + 0xc00/BYTES_PER_LONG); /* write-high */
+     }
+     else
+@@ -843,7 +844,8 @@ void vmx_disable_intercept_for_msr(struct vcpu *v, u32 msr, int type)
+ 
+ }
+ 
+-void vmx_enable_intercept_for_msr(struct vcpu *v, u32 msr, int type)
++void vmx_set_msr_intercept(struct vcpu *v, unsigned int msr,
++                           enum vmx_msr_intercept_type type)
+ {
+     unsigned long *msr_bitmap = v->arch.hvm_vmx.msr_bitmap;
+ 
+@@ -858,17 +860,17 @@ void vmx_enable_intercept_for_msr(struct vcpu *v, u32 msr, int type)
+      */
+     if ( msr <= 0x1fff )
+     {
+-        if ( type & MSR_TYPE_R )
++        if ( type & VMX_MSR_R )
+             set_bit(msr, msr_bitmap + 0x000/BYTES_PER_LONG); /* read-low */
+-        if ( type & MSR_TYPE_W )
++        if ( type & VMX_MSR_W )
+             set_bit(msr, msr_bitmap + 0x800/BYTES_PER_LONG); /* write-low */
+     }
+     else if ( (msr >= 0xc0000000) && (msr <= 0xc0001fff) )
+     {
+         msr &= 0x1fff;
+-        if ( type & MSR_TYPE_R )
++        if ( type & VMX_MSR_R )
+             set_bit(msr, msr_bitmap + 0x400/BYTES_PER_LONG); /* read-high */
+-        if ( type & MSR_TYPE_W )
++        if ( type & VMX_MSR_W )
+             set_bit(msr, msr_bitmap + 0xc00/BYTES_PER_LONG); /* write-high */
+     }
+     else
+@@ -1115,17 +1117,17 @@ static int construct_vmcs(struct vcpu *v)
+         v->arch.hvm_vmx.msr_bitmap = msr_bitmap;
+         __vmwrite(MSR_BITMAP, virt_to_maddr(msr_bitmap));
+ 
+-        vmx_disable_intercept_for_msr(v, MSR_FS_BASE, MSR_TYPE_R | MSR_TYPE_W);
+-        vmx_disable_intercept_for_msr(v, MSR_GS_BASE, MSR_TYPE_R | MSR_TYPE_W);
+-        vmx_disable_intercept_for_msr(v, MSR_SHADOW_GS_BASE, MSR_TYPE_R | MSR_TYPE_W);
+-        vmx_disable_intercept_for_msr(v, MSR_IA32_SYSENTER_CS, MSR_TYPE_R | MSR_TYPE_W);
+-        vmx_disable_intercept_for_msr(v, MSR_IA32_SYSENTER_ESP, MSR_TYPE_R | MSR_TYPE_W);
+-        vmx_disable_intercept_for_msr(v, MSR_IA32_SYSENTER_EIP, MSR_TYPE_R | MSR_TYPE_W);
++        vmx_clear_msr_intercept(v, MSR_FS_BASE, VMX_MSR_RW);
++        vmx_clear_msr_intercept(v, MSR_GS_BASE, VMX_MSR_RW);
++        vmx_clear_msr_intercept(v, MSR_SHADOW_GS_BASE, VMX_MSR_RW);
++        vmx_clear_msr_intercept(v, MSR_IA32_SYSENTER_CS, VMX_MSR_RW);
++        vmx_clear_msr_intercept(v, MSR_IA32_SYSENTER_ESP, VMX_MSR_RW);
++        vmx_clear_msr_intercept(v, MSR_IA32_SYSENTER_EIP, VMX_MSR_RW);
+         if ( paging_mode_hap(d) && (!iommu_enabled || iommu_snoop) )
+-            vmx_disable_intercept_for_msr(v, MSR_IA32_CR_PAT, MSR_TYPE_R | MSR_TYPE_W);
++            vmx_clear_msr_intercept(v, MSR_IA32_CR_PAT, VMX_MSR_RW);
+         if ( (vmexit_ctl & VM_EXIT_CLEAR_BNDCFGS) &&
+              (vmentry_ctl & VM_ENTRY_LOAD_BNDCFGS) )
+-            vmx_disable_intercept_for_msr(v, MSR_IA32_BNDCFGS, MSR_TYPE_R | MSR_TYPE_W);
++            vmx_clear_msr_intercept(v, MSR_IA32_BNDCFGS, VMX_MSR_RW);
+     }
+ 
+     /* All guest MSR state is dirty. */
+diff --git a/xen/arch/x86/hvm/vmx/vmx.c b/xen/arch/x86/hvm/vmx/vmx.c
+index 3b9bdc053d..87ca9cb7d1 100644
+--- a/xen/arch/x86/hvm/vmx/vmx.c
++++ b/xen/arch/x86/hvm/vmx/vmx.c
+@@ -1305,8 +1305,7 @@ static void vmx_handle_cd(struct vcpu *v, unsigned long value)
+ 
+             vmx_get_guest_pat(v, pat);
+             vmx_set_guest_pat(v, uc_pat);
+-            vmx_enable_intercept_for_msr(v, MSR_IA32_CR_PAT,
+-                                         MSR_TYPE_R | MSR_TYPE_W);
++            vmx_set_msr_intercept(v, MSR_IA32_CR_PAT, VMX_MSR_RW);
+ 
+             wbinvd();               /* flush possibly polluted cache */
+             hvm_asid_flush_vcpu(v); /* invalidate memory type cached in TLB */
+@@ -1317,8 +1316,7 @@ static void vmx_handle_cd(struct vcpu *v, unsigned long value)
+             v->arch.hvm_vcpu.cache_mode = NORMAL_CACHE_MODE;
+             vmx_set_guest_pat(v, *pat);
+             if ( !iommu_enabled || iommu_snoop )
+-                vmx_disable_intercept_for_msr(v, MSR_IA32_CR_PAT,
+-                                              MSR_TYPE_R | MSR_TYPE_W);
++                vmx_clear_msr_intercept(v, MSR_IA32_CR_PAT, VMX_MSR_RW);
+             hvm_asid_flush_vcpu(v); /* no need to flush cache */
+         }
+     }
+@@ -2017,7 +2015,7 @@ static void vmx_enable_msr_interception(struct domain *d, uint32_t msr)
+     struct vcpu *v;
+ 
+     for_each_vcpu ( d, v )
+-        vmx_enable_intercept_for_msr(v, msr, MSR_TYPE_W);
++        vmx_set_msr_intercept(v, msr, VMX_MSR_W);
+ }
+ 
+ static bool_t vmx_is_singlestep_supported(void)
+@@ -2918,23 +2916,17 @@ void vmx_vlapic_msr_changed(struct vcpu *v)
+             {
+                 for ( msr = MSR_IA32_APICBASE_MSR;
+                       msr <= MSR_IA32_APICBASE_MSR + 0xff; msr++ )
+-                    vmx_disable_intercept_for_msr(v, msr, MSR_TYPE_R);
+-
+-                vmx_enable_intercept_for_msr(v, MSR_IA32_APICPPR_MSR,
+-                                             MSR_TYPE_R);
+-                vmx_enable_intercept_for_msr(v, MSR_IA32_APICTMICT_MSR,
+-                                             MSR_TYPE_R);
+-                vmx_enable_intercept_for_msr(v, MSR_IA32_APICTMCCT_MSR,
+-                                             MSR_TYPE_R);
++                    vmx_clear_msr_intercept(v, msr, VMX_MSR_R);
++
++                vmx_set_msr_intercept(v, MSR_IA32_APICPPR_MSR, VMX_MSR_R);
++                vmx_set_msr_intercept(v, MSR_IA32_APICTMICT_MSR, VMX_MSR_R);
++                vmx_set_msr_intercept(v, MSR_IA32_APICTMCCT_MSR, VMX_MSR_R);
+             }
+             if ( cpu_has_vmx_virtual_intr_delivery )
+             {
+-                vmx_disable_intercept_for_msr(v, MSR_IA32_APICTPR_MSR,
+-                                              MSR_TYPE_W);
+-                vmx_disable_intercept_for_msr(v, MSR_IA32_APICEOI_MSR,
+-                                              MSR_TYPE_W);
+-                vmx_disable_intercept_for_msr(v, MSR_IA32_APICSELF_MSR,
+-                                              MSR_TYPE_W);
++                vmx_clear_msr_intercept(v, MSR_IA32_APICTPR_MSR, VMX_MSR_W);
++                vmx_clear_msr_intercept(v, MSR_IA32_APICEOI_MSR, VMX_MSR_W);
++                vmx_clear_msr_intercept(v, MSR_IA32_APICSELF_MSR, VMX_MSR_W);
+             }
+         }
+         else
+@@ -2945,7 +2937,7 @@ void vmx_vlapic_msr_changed(struct vcpu *v)
+            SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE) )
+         for ( msr = MSR_IA32_APICBASE_MSR;
+               msr <= MSR_IA32_APICBASE_MSR + 0xff; msr++ )
+-            vmx_enable_intercept_for_msr(v, msr, MSR_TYPE_R | MSR_TYPE_W);
++            vmx_set_msr_intercept(v, msr, VMX_MSR_RW);
+ 
+     vmx_update_secondary_exec_control(v);
+     vmx_vmcs_exit(v);
+@@ -2994,7 +2986,7 @@ static int vmx_msr_write_intercept(unsigned int msr, uint64_t msr_content)
+                 for ( i = 0; (rc == 0) && (i < lbr->count); i++ )
+                     if ( (rc = vmx_add_guest_msr(lbr->base + i)) == 0 )
+                     {
+-                        vmx_disable_intercept_for_msr(v, lbr->base + i, MSR_TYPE_R | MSR_TYPE_W);
++                        vmx_clear_msr_intercept(v, lbr->base + i, VMX_MSR_RW);
+                         if ( lbr_tsx_fixup_needed )
+                             v->arch.hvm_vmx.lbr_fixup_enabled |= FIXUP_LBR_TSX;
+                         if ( bdw_erratum_bdf14_fixup_needed )
+diff --git a/xen/include/asm-x86/hvm/vmx/vmcs.h b/xen/include/asm-x86/hvm/vmx/vmcs.h
+index 03dcaf13f5..25a10a590e 100644
+--- a/xen/include/asm-x86/hvm/vmx/vmcs.h
++++ b/xen/include/asm-x86/hvm/vmx/vmcs.h
+@@ -569,9 +569,6 @@ enum vmcs_field {
+ 
+ #define VMCS_VPID_WIDTH 16
+ 
+-#define MSR_TYPE_R 1
+-#define MSR_TYPE_W 2
+-
+ #define VMX_GUEST_MSR 0
+ #define VMX_HOST_MSR  1
+ 
+@@ -592,8 +589,16 @@ enum vmx_insn_errno
+     VMX_INSN_FAIL_INVALID                  = ~0,
+ };
+ 
+-void vmx_disable_intercept_for_msr(struct vcpu *v, u32 msr, int type);
+-void vmx_enable_intercept_for_msr(struct vcpu *v, u32 msr, int type);
++enum vmx_msr_intercept_type {
++    VMX_MSR_R  = 1,
++    VMX_MSR_W  = 2,
++    VMX_MSR_RW = VMX_MSR_R | VMX_MSR_W,
++};
++
++void vmx_clear_msr_intercept(struct vcpu *v, unsigned int msr,
++                             enum vmx_msr_intercept_type type);
++void vmx_set_msr_intercept(struct vcpu *v, unsigned int msr,
++                           enum vmx_msr_intercept_type type);
+ int vmx_read_guest_msr(u32 msr, u64 *val);
+ int vmx_write_guest_msr(u32 msr, u64 val);
+ struct vmx_msr_entry *vmx_find_msr(u32 msr, int type);

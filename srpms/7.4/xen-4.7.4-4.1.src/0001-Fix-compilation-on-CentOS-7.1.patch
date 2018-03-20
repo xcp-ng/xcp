@@ -1,0 +1,28 @@
+From 580163ea0612022cffb1b817ceec20c264538178 Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Tue, 18 Aug 2015 08:45:19 +0000
+Subject: [PATCH] Fix compilation on CentOS 7.1
+
+The new multiboot 2 code fails to build with:
+  Error: non-empty .rodata: 0x01c
+unless -fno-jump-tables is used.
+---
+ xen/arch/x86/boot/build32.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xen/arch/x86/boot/build32.mk b/xen/arch/x86/boot/build32.mk
+index c208249..9c74a4f 100644
+--- a/xen/arch/x86/boot/build32.mk
++++ b/xen/arch/x86/boot/build32.mk
+@@ -4,7 +4,7 @@ include $(XEN_ROOT)/Config.mk
+ 
+ $(call cc-options-add,CFLAGS,CC,$(EMBEDDED_EXTRA_CFLAGS))
+ 
+-CFLAGS += -Werror -fno-builtin -msoft-float
++CFLAGS += -Werror -fno-builtin -fno-jump-tables -msoft-float
+ CFLAGS := $(filter-out -flto,$(CFLAGS)) 
+ 
+ # NB. awk invocation is a portable alternative to 'head -n -1'
+-- 
+1.7.10.4
+

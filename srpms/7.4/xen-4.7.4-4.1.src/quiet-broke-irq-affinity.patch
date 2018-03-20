@@ -1,0 +1,99 @@
+Quiet "Broke affinity for irq" messages during shutdown
+
+Quiet the "Broke affinity for irq" messages during a shutdown or
+suspend, as it is already done during a reboot. Do this by conditionally
+printing the messages depending on the system state, as originally
+suggested by Jan when discussing commit e509b8e09c00 ("x86: fixup IRQs
+when CPUs go down during shutdown").
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+Suggested-by: Jan Beulich <jbeulich@suse.com>
+
+diff --git a/xen/arch/x86/irq.c b/xen/arch/x86/irq.c
+index 3f93c31..34dab6f 100644
+--- a/xen/arch/x86/irq.c
++++ b/xen/arch/x86/irq.c
+@@ -2329,7 +2329,7 @@ static int __init setup_dump_irqs(void)
+ __initcall(setup_dump_irqs);
+ 
+ /* Reset irq affinities to match the given CPU mask. */
+-void fixup_irqs(const cpumask_t *mask, bool_t verbose)
++void fixup_irqs(const cpumask_t *mask)
+ {
+     unsigned int irq;
+     static int warned;
+@@ -2382,7 +2382,8 @@ void fixup_irqs(const cpumask_t *mask, bool_t verbose)
+ 
+         spin_unlock(&desc->lock);
+ 
+-        if ( !verbose )
++        if ( system_state == SYS_STATE_reboot ||
++             system_state == SYS_STATE_suspend )
+             continue;
+ 
+         if ( break_affinity && set_affinity )
+diff --git a/xen/arch/x86/shutdown.c b/xen/arch/x86/shutdown.c
+index 985879d..e6c7ddd 100644
+--- a/xen/arch/x86/shutdown.c
++++ b/xen/arch/x86/shutdown.c
+@@ -504,6 +504,7 @@ void machine_restart(unsigned int delay_millisecs)
+ 
+     if ( system_state >= SYS_STATE_smp_boot )
+     {
++        system_state = SYS_STATE_reboot;
+         local_irq_enable();
+ 
+         /* Ensure we are the boot CPU. */
+diff --git a/xen/arch/x86/smp.c b/xen/arch/x86/smp.c
+index 4abb16f..3dee22c 100644
+--- a/xen/arch/x86/smp.c
++++ b/xen/arch/x86/smp.c
+@@ -304,7 +304,7 @@ void smp_send_stop(void)
+     int timeout = 10;
+ 
+     local_irq_disable();
+-    fixup_irqs(cpumask_of(smp_processor_id()), 0);
++    fixup_irqs(cpumask_of(smp_processor_id()));
+     local_irq_enable();
+ 
+     smp_call_function(stop_this_cpu, NULL, 0);
+diff --git a/xen/arch/x86/smpboot.c b/xen/arch/x86/smpboot.c
+index 1c02681..0c96da5 100644
+--- a/xen/arch/x86/smpboot.c
++++ b/xen/arch/x86/smpboot.c
+@@ -889,7 +889,7 @@ void __cpu_disable(void)
+ 
+     /* It's now safe to remove this processor from the online map */
+     cpumask_clear_cpu(cpu, &cpu_online_map);
+-    fixup_irqs(&cpu_online_map, 1);
++    fixup_irqs(&cpu_online_map);
+     fixup_eoi();
+ 
+     if ( cpu_disable_scheduler(cpu) )
+diff --git a/xen/include/asm-x86/irq.h b/xen/include/asm-x86/irq.h
+index 7efdd37..49e3da2 100644
+--- a/xen/include/asm-x86/irq.h
++++ b/xen/include/asm-x86/irq.h
+@@ -149,7 +149,7 @@ int unmap_domain_pirq_emuirq(struct domain *d, int pirq);
+ bool_t hvm_domain_use_pirq(const struct domain *, const struct pirq *);
+ 
+ /* Reset irq affinities to match the given CPU mask. */
+-void fixup_irqs(const cpumask_t *mask, bool_t verbose);
++void fixup_irqs(const cpumask_t *mask);
+ void fixup_eoi(void);
+ 
+ int  init_irq_data(void);
+diff --git a/xen/include/xen/kernel.h b/xen/include/xen/kernel.h
+index 548b64d..f98a5cf 100644
+--- a/xen/include/xen/kernel.h
++++ b/xen/include/xen/kernel.h
+@@ -95,7 +95,8 @@ extern enum system_state {
+     SYS_STATE_smp_boot,
+     SYS_STATE_active,
+     SYS_STATE_suspend,
+-    SYS_STATE_resume
++    SYS_STATE_resume,
++    SYS_STATE_reboot,
+ } system_state;
+ 
+ bool_t is_active_kernel_text(unsigned long addr);

@@ -1,0 +1,54 @@
+From d2f86bf604698806d311cc251c1b66fbb752673c Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Thu, 16 Nov 2017 21:34:02 +0000
+Subject: [PATCH] x86/hvm: Don't corrupt the HVM context stream when writing
+ the MSR record
+
+Ever since it was introduced in c/s bd1f0b45ff, hvm_save_cpu_msrs() has had a
+bug whereby it corrupts the HVM context stream if some, but fewer than the
+maximum number of MSRs are written.
+
+_hvm_init_entry() creates an hvm_save_descriptor with length for
+msr_count_max, but in the case that we write fewer than max, h->cur only moves
+forward by the amount of space used, causing the subsequent
+hvm_save_descriptor to be written within the bounds of the previous one.
+
+To resolve this, reduce the length reported by the descriptor to match the
+actual number of bytes used.
+
+A typical failure on the destination side looks like:
+
+    (XEN) HVM4 restore: CPU_MSR 0
+    (XEN) HVM4.0 restore: not enough data left to read 56 MSR bytes
+    (XEN) HVM4 restore: failed to load entry 20/0
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Release-acked-by: Julien Grall <julien.grall@linaro.org>
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 0b773a2..273ef40 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -1468,6 +1468,7 @@ static int hvm_save_cpu_msrs(struct domain *d, hvm_domain_context_t *h)
+ 
+     for_each_vcpu ( d, v )
+     {
++        struct hvm_save_descriptor *d = _p(&h->data[h->cur]);
+         struct hvm_msr *ctxt;
+         unsigned int i;
+ 
+@@ -1486,8 +1487,13 @@ static int hvm_save_cpu_msrs(struct domain *d, hvm_domain_context_t *h)
+             ctxt->msr[i]._rsvd = 0;
+ 
+         if ( ctxt->count )
++        {
++            /* Rewrite length to indicate how much space we actually used. */
++            d->length = HVM_CPU_MSR_SIZE(ctxt->count);
+             h->cur += HVM_CPU_MSR_SIZE(ctxt->count);
++        }
+         else
++            /* or rewind and remove the descriptor from the stream. */
+             h->cur -= sizeof(struct hvm_save_descriptor);
+     }
+ 

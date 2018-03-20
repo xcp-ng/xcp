@@ -1,0 +1,32 @@
+diff --git a/tools/firmware/hvmloader/pci.c b/tools/firmware/hvmloader/pci.c
+index 85c9153..c05e289 100644
+--- a/tools/firmware/hvmloader/pci.c
++++ b/tools/firmware/hvmloader/pci.c
+@@ -132,6 +132,27 @@ void pci_setup(void)
+     if ( s )
+         mmio_hole_size = strtoll(s, NULL, 0);
+ 
++    for ( devfn = 0; devfn < 256; devfn++ )
++    {
++        vendor_id = pci_readw(devfn, PCI_VENDOR_ID);
++        device_id = pci_readw(devfn, PCI_DEVICE_ID);
++
++        if ((vendor_id != 0x1002) || (device_id != 0x692f))
++            continue;
++
++        /*
++         * The S7150x2 cards have buggy PLX bridges so boost the
++         * low MMIO hole to at least 2G to make sure no guest RAM
++         * aliases any ranges in use by those bridges.
++         */
++        if (mmio_hole_size < 0x80000000)
++            mmio_hole_size = 0x80000000;
++
++        printf("MxGPU device found. Low MMIO hole set to 0x%08x\n",
++               (unsigned int)mmio_hole_size);
++        break;
++    }
++
+     /* Program PCI-ISA bridge with appropriate link routes. */
+     isa_irq = 0;
+     for ( link = 0; link < 4; link++ )

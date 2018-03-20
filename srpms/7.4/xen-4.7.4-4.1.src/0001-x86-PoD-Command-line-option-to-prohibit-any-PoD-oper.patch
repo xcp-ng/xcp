@@ -1,0 +1,65 @@
+From 1aed396e7d39af5e5e819eb606221a8d6575994d Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Wed, 21 Oct 2015 22:24:34 +0100
+Subject: [PATCH] x86/PoD: Command line option to prohibit any PoD operations
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index d2dd6bb..e070155 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -96,6 +96,9 @@ unsigned long __section(".bss.page_aligned")
+ static bool_t __initdata opt_hap_enabled = 1;
+ boolean_param("hap", opt_hap_enabled);
+ 
++bool_t opt_pod_enabled = 1;
++boolean_param("pod", opt_pod_enabled);
++
+ #ifndef opt_hvm_fep
+ /* Permit use of the Forced Emulation Prefix in HVM guests */
+ bool_t __read_mostly opt_hvm_fep;
+diff --git a/xen/arch/x86/mm.c b/xen/arch/x86/mm.c
+index 646ff33..b3c3394 100644
+--- a/xen/arch/x86/mm.c
++++ b/xen/arch/x86/mm.c
+@@ -5070,6 +5070,12 @@ long arch_memory_op(unsigned long cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
+ 
+         if ( cmd == XENMEM_set_pod_target )
+         {
++            if ( unlikely(!opt_pod_enabled) )
++            {
++                rc = -EOPNOTSUPP;
++                goto pod_target_out_unlock;
++            }
++
+             if ( target.target_pages > d->max_pages )
+             {
+                 rc = -EINVAL;
+diff --git a/xen/common/memory.c b/xen/common/memory.c
+index 767536d..526ad81 100644
+--- a/xen/common/memory.c
++++ b/xen/common/memory.c
+@@ -882,6 +882,10 @@ long do_memory_op(unsigned long cmd, XEN_GUEST_HANDLE_PARAM(void) arg)
+         if ( unlikely(start_extent >= reservation.nr_extents) )
+             return start_extent;
+ 
++        if ( unlikely(!opt_pod_enabled) &&
++             (reservation.mem_flags & XENMEMF_populate_on_demand) )
++            return start_extent;
++
+         d = rcu_lock_domain_by_any_id(reservation.domid);
+         if ( d == NULL )
+             return start_extent;
+diff --git a/xen/include/asm-x86/hvm/hvm.h b/xen/include/asm-x86/hvm/hvm.h
+index 4ee4905..76c1b01 100644
+--- a/xen/include/asm-x86/hvm/hvm.h
++++ b/xen/include/asm-x86/hvm/hvm.h
+@@ -588,6 +588,8 @@ static inline bool_t hvm_altp2m_supported(void)
+     return hvm_funcs.altp2m_supported;
+ }
+ 
++extern bool_t opt_pod_enabled;
++
+ /* updates the current hardware p2m */
+ void altp2m_vcpu_update_p2m(struct vcpu *v);
+ 

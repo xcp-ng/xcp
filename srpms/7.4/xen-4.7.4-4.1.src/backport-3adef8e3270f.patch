@@ -1,0 +1,239 @@
+From ee803b7aacc5b015a26c274f7e480c9da0121454 Mon Sep 17 00:00:00 2001
+From: Razvan Cojocaru <rcojocaru@bitdefender.com>
+Date: Wed, 5 Apr 2017 10:48:43 +0300
+Subject: [PATCH] mem_access: sanitize code around sending vm_event request
+
+The two functions monitor_traps and mem_access_send_req duplicate some of the
+same functionality. The mem_access_send_req however leaves a lot of the
+standard vm_event fields to be filled by other functions.
+
+Remove mem_access_send_req() completely, making use of monitor_traps() to put
+requests into the monitor ring.  This in turn causes some cleanup around the
+old callsites of mem_access_send_req(). We also update monitor_traps to now
+include setting the common vcpu_id field so that all other call-sites can ommit
+this step.
+
+Finally, this change identifies that errors from mem_access_send_req() were
+never checked.  As errors constitute a problem with the monitor ring,
+crashing the domain is the most appropriate action to take.
+
+Signed-off-by: Tamas K Lengyel <tamas.lengyel@zentific.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Razvan Cojocaru <rcojocaru@bitdefender.com>
+Acked-by: George Dunlap <george.dunlap@citrix.com>
+Acked-by: Stefano Stabellini <sstabellini@kernel.org>
+diff --git a/xen/arch/arm/p2m.c b/xen/arch/arm/p2m.c
+index 6a19c57..7dc497d 100644
+--- a/xen/arch/arm/p2m.c
++++ b/xen/arch/arm/p2m.c
+@@ -6,7 +6,7 @@
+ #include <xen/domain_page.h>
+ #include <xen/bitops.h>
+ #include <xen/vm_event.h>
+-#include <xen/mem_access.h>
++#include <xen/monitor.h>
+ #include <xen/iocap.h>
+ #include <public/vm_event.h>
+ #include <asm/flushtlb.h>
+@@ -1798,10 +1798,6 @@ bool_t p2m_mem_access_check(paddr_t gpa, vaddr_t gla, const struct npfec npfec)
+     {
+         req->reason = VM_EVENT_REASON_MEM_ACCESS;
+ 
+-        /* Pause the current VCPU */
+-        if ( xma != XENMEM_access_n2rwx )
+-            req->flags |= VM_EVENT_FLAG_VCPU_PAUSED;
+-
+         /* Send request to mem access subscriber */
+         req->u.mem_access.gfn = gpa >> PAGE_SHIFT;
+         req->u.mem_access.offset =  gpa & ((1 << PAGE_SHIFT) - 1);
+@@ -1818,16 +1814,13 @@ bool_t p2m_mem_access_check(paddr_t gpa, vaddr_t gla, const struct npfec npfec)
+         req->u.mem_access.flags |= npfec.read_access    ? MEM_ACCESS_R : 0;
+         req->u.mem_access.flags |= npfec.write_access   ? MEM_ACCESS_W : 0;
+         req->u.mem_access.flags |= npfec.insn_fetch     ? MEM_ACCESS_X : 0;
+-        req->vcpu_id = v->vcpu_id;
+ 
+-        mem_access_send_req(v->domain, req);
++        if ( vm_event_monitor_traps(v, (xma != XENMEM_access_n2rwx), req) < 0 )
++            domain_crash(v->domain);
++
+         xfree(req);
+     }
+ 
+-    /* Pause the current VCPU */
+-    if ( xma != XENMEM_access_n2rwx )
+-        vm_event_vcpu_pause(v);
+-
+     return false;
+ }
+ 
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 498be08..718c59d 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -1734,7 +1734,7 @@ int hvm_hap_nested_page_fault(paddr_t gpa, unsigned long gla,
+     int rc, fall_through = 0, paged = 0;
+     int sharing_enomem = 0;
+     vm_event_request_t *req_ptr = NULL;
+-    bool_t ap2m_active;
++    bool_t ap2m_active, sync = 0;
+ 
+     /* On Nested Virtualization, walk the guest page table.
+      * If this succeeds, all is fine.
+@@ -1873,11 +1873,13 @@ int hvm_hap_nested_page_fault(paddr_t gpa, unsigned long gla,
+                 }
+             }
+ 
+-            if ( p2m_mem_access_check(gpa, gla, npfec, &req_ptr) )
+-            {
++            sync = p2m_mem_access_check(gpa, gla, npfec, &req_ptr);
++
++            if ( !sync )
+                 fall_through = 1;
+-            } else {
+-                /* Rights not promoted, vcpu paused, work here is done */
++            else
++            {
++                /* Rights not promoted (aka. sync event), work here is done */
+                 rc = 1;
+                 goto out_put_gfn;
+             }
+@@ -1983,7 +1985,9 @@ out:
+     }
+     if ( req_ptr )
+     {
+-        mem_access_send_req(currd, req_ptr);
++        if ( vm_event_monitor_traps(curr, sync, req_ptr) < 0 )
++            rc = 0;
++
+         xfree(req_ptr);
+     }
+     return rc;
+diff --git a/xen/arch/x86/mm/p2m.c b/xen/arch/x86/mm/p2m.c
+index d289c1c..9c17a83 100644
+--- a/xen/arch/x86/mm/p2m.c
++++ b/xen/arch/x86/mm/p2m.c
+@@ -1709,13 +1709,9 @@ bool_t p2m_mem_access_check(paddr_t gpa, unsigned long gla,
+     if ( req )
+     {
+         *req_ptr = req;
+-        req->reason = VM_EVENT_REASON_MEM_ACCESS;
+-
+-        /* Pause the current VCPU */
+-        if ( p2ma != p2m_access_n2rwx )
+-            req->flags |= VM_EVENT_FLAG_VCPU_PAUSED;
+ 
+         /* Send request to mem event */
++        req->reason = VM_EVENT_REASON_MEM_ACCESS;
+         req->u.mem_access.gfn = gfn;
+         req->u.mem_access.offset = gpa & ((1 << PAGE_SHIFT) - 1);
+         if ( npfec.gla_valid )
+@@ -1731,23 +1727,10 @@ bool_t p2m_mem_access_check(paddr_t gpa, unsigned long gla,
+         req->u.mem_access.flags |= npfec.read_access    ? MEM_ACCESS_R : 0;
+         req->u.mem_access.flags |= npfec.write_access   ? MEM_ACCESS_W : 0;
+         req->u.mem_access.flags |= npfec.insn_fetch     ? MEM_ACCESS_X : 0;
+-        req->vcpu_id = v->vcpu_id;
+-
+-        vm_event_fill_regs(req);
+-
+-        if ( altp2m_active(v->domain) )
+-        {
+-            req->flags |= VM_EVENT_FLAG_ALTERNATE_P2M;
+-            req->altp2m_idx = vcpu_altp2m(v).p2midx;
+-        }
+     }
+ 
+-    /* Pause the current VCPU */
+-    if ( p2ma != p2m_access_n2rwx )
+-        vm_event_vcpu_pause(v);
+-
+-    /* VCPU may be paused, return whether we promoted automatically */
+-    return (p2ma == p2m_access_n2rwx);
++    /* Return whether vCPU pause is required (aka. sync event) */
++    return (p2ma != p2m_access_n2rwx);
+ }
+ 
+ static inline
+diff --git a/xen/common/mem_access.c b/xen/common/mem_access.c
+index b4033f0..82f4bad 100644
+--- a/xen/common/mem_access.c
++++ b/xen/common/mem_access.c
+@@ -108,17 +108,6 @@ int mem_access_memop(unsigned long cmd,
+     return rc;
+ }
+ 
+-int mem_access_send_req(struct domain *d, vm_event_request_t *req)
+-{
+-    int rc = vm_event_claim_slot(d, &d->vm_event->monitor);
+-    if ( rc < 0 )
+-        return rc;
+-
+-    vm_event_put_request(d, &d->vm_event->monitor, req);
+-
+-    return 0;
+-}
+-
+ /*
+  * Local variables:
+  * mode: C
+diff --git a/xen/common/vm_event.c b/xen/common/vm_event.c
+index 0955dea..b8f2f45 100644
+--- a/xen/common/vm_event.c
++++ b/xen/common/vm_event.c
+@@ -818,6 +818,8 @@ int vm_event_monitor_traps(struct vcpu *v, uint8_t sync,
+         return rc;
+     };
+ 
++    req->vcpu_id = v->vcpu_id;
++
+     if ( sync )
+     {
+         req->flags |= VM_EVENT_FLAG_VCPU_PAUSED;
+diff --git a/xen/include/asm-x86/p2m.h b/xen/include/asm-x86/p2m.h
+index 65675a2..878ebea 100644
+--- a/xen/include/asm-x86/p2m.h
++++ b/xen/include/asm-x86/p2m.h
+@@ -661,11 +661,14 @@ int p2m_mem_paging_prep(struct domain *d, unsigned long gfn, uint64_t buffer);
+ /* Resume normal operation (in case a domain was paused) */
+ void p2m_mem_paging_resume(struct domain *d, vm_event_response_t *rsp);
+ 
+-/* Send mem event based on the access (gla is -1ull if not available).  Handles
+- * the rw2rx conversion. Boolean return value indicates if access rights have 
+- * been promoted with no underlying vcpu pause. If the req_ptr has been populated, 
+- * then the caller must put the event in the ring (once having released get_gfn*
+- * locks -- caller must also xfree the request. */
++/*
++ * Setup vm_event request based on the access (gla is -1ull if not available).
++ * Handles the rw2rx conversion. Boolean return value indicates if event type
++ * is syncronous (aka. requires vCPU pause). If the req_ptr has been populated,
++ * then the caller should use monitor_traps to send the event on the MONITOR
++ * ring. Once having released get_gfn* locks caller must also xfree the
++ * request.
++ */
+ bool_t p2m_mem_access_check(paddr_t gpa, unsigned long gla,
+                             struct npfec npfec,
+                             vm_event_request_t **req_ptr);
+diff --git a/xen/include/xen/mem_access.h b/xen/include/xen/mem_access.h
+index 272f1e4..3d054e0 100644
+--- a/xen/include/xen/mem_access.h
++++ b/xen/include/xen/mem_access.h
+@@ -29,7 +29,6 @@
+ 
+ int mem_access_memop(unsigned long cmd,
+                      XEN_GUEST_HANDLE_PARAM(xen_mem_access_op_t) arg);
+-int mem_access_send_req(struct domain *d, vm_event_request_t *req);
+ 
+ static inline
+ void mem_access_resume(struct vcpu *v, vm_event_response_t *rsp)
+@@ -47,12 +46,6 @@ int mem_access_memop(unsigned long cmd,
+ }
+ 
+ static inline
+-int mem_access_send_req(struct domain *d, vm_event_request_t *req)
+-{
+-    return -ENOSYS;
+-}
+-
+-static inline
+ void mem_access_resume(struct vcpu *vcpu, vm_event_response_t *rsp)
+ {
+     /* Nothing to do. */

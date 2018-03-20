@@ -1,0 +1,2616 @@
+diff --git a/.gitignore b/.gitignore
+index 2156b80..d649316 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -209,6 +209,7 @@ tools/tests/mem-sharing/memshrtool
+ tools/tests/mce-test/tools/xen-mceinj
+ tools/xcutils/lsevtchn
+ tools/xcutils/readnotes
++tools/xenguest/xenguest
+ tools/xenmon/xentrace_setmask
+ tools/xenmon/xenbaked
+ tools/xenpaging/xenpaging
+diff --git a/mk/xen.spec.in b/mk/xen.spec.in
+index a8dcf1d..0939fa0 100644
+--- a/mk/xen.spec.in
++++ b/mk/xen.spec.in
+@@ -466,6 +466,7 @@ chmod -x %{buildroot}/boot/xen-syms-*
+ %{_libexecdir}/%{name}/bin/xenconsole
+ %{_libexecdir}/%{name}/bin/xenctx
+ %{_libexecdir}/%{name}/bin/xendomains
++%{_libexecdir}/%{name}/bin/xenguest
+ %{_libexecdir}/%{name}/bin/xenpaging
+ %{_libexecdir}/%{name}/bin/xenpvnetboot
+ %{_libexecdir}/%{name}/boot/hvmloader
+diff --git a/tools/Makefile b/tools/Makefile
+index 772f5f0..4c6127e 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -21,6 +21,7 @@ SUBDIRS-$(CONFIG_BLKTAP2) += blktap2
+ SUBDIRS-$(CONFIG_NetBSD) += xenbackendd
+ SUBDIRS-y += libfsimage
+ SUBDIRS-$(CONFIG_Linux) += libvchan
++SUBDIRS-y += xenguest
+ 
+ # do not recurse in to a dir we are about to delete
+ ifneq "$(MAKECMDGOALS)" "distclean"
+diff --git a/tools/xenguest/Makefile b/tools/xenguest/Makefile
+new file mode 100644
+index 0000000..0e8c170
+--- /dev/null
++++ b/tools/xenguest/Makefile
+@@ -0,0 +1,31 @@
++XEN_ROOT=$(CURDIR)/../..
++include $(XEN_ROOT)/tools/Rules.mk
++
++CFLAGS += -Werror -Wshadow
++CFLAGS += -I. -I$(XEN_ROOT)/tools/libxc -include $(XEN_ROOT)/tools/config.h
++CFLAGS += $(CFLAGS_libxentoollog) $(CFLAGS_libxenctrl) $(CFLAGS_libguest) $(CFLAGS_libxenstore)
++CFLAGS += -D_GNU_SOURCE -D_BSD_SOURCE -DXC_WANT_COMPAT_MAP_FOREIGN_API
++
++PROGRAMS := xenguest
++
++.PHONY: all
++all: build
++
++.PHONY: build
++build: $(PROGRAMS)
++
++xenguest: xenguest.o xenguest_stubs.o xg_emu.o
++	$(CC) $(CFLAGS) -o $@ $(LDFLAGS) $^ \
++		$(LDLIBS_libxentoollog) $(LDLIBS_libxenctrl) $(LDLIBS_libxenguest) $(LDLIBS_libxenstore) -ljson-c -pthread -lempserver
++
++.PHONY: install
++install: build
++	$(INSTALL_DIR) $(DESTDIR)$(LIBEXEC_BIN)
++	$(INSTALL_PROG) $(PROGRAMS) $(DESTDIR)$(LIBEXEC_BIN)
++
++.PHONY: clean
++clean:
++	$(RM) *.o $(ALL_TARGETS)
++	$(RM) $(DEPS)
++
++-include $(DEPS)
+diff --git a/tools/xenguest/xenguest.c b/tools/xenguest/xenguest.c
+new file mode 100644
+index 0000000..7dcc36c
+--- /dev/null
++++ b/tools/xenguest/xenguest.c
+@@ -0,0 +1,707 @@
++#include <getopt.h>
++#include <errno.h>
++#include <syslog.h>
++#include <stdlib.h>
++#include <stdio.h>
++#include <string.h>
++#include <stdarg.h>
++#include <stdbool.h>
++#include <unistd.h>
++#include <pthread.h>
++#include <fcntl.h>
++#include <sys/time.h>
++
++#include <xenctrl.h>
++#include <xenguest.h>
++#include <xenstore.h>
++
++#include "xg_internal.h"
++
++/*
++ * Xapi uses a strange protocol to communicate which xenguest, which seems to
++ * be a relic from the xend days.
++ *
++ * For all domain functions, Xapi expects on the controloutfd:
++ *
++ *   result:<xenstore mfn> <console mfn>[ <PV ABI>]\n
++ *
++ * with the xenstore and console mfn in decimal and a PV ABI for PV domains
++ * only; HVM domains only require the two mfns.  This information is only
++ * relevent when constructing and restoring domains, but must be present for
++ * suspend as well, with 0 for both MFNs and no ABI.
++ *
++ * In addition for suspend only, Xapi expects to see the string "suspend:\n"
++ * written to the controloutfd, and expects xenguest to wait until it
++ * successfully reads a line from controlinfd.
++ */
++
++enum xenguest_opts {
++    XG_OPT_MODE, /* choice */
++    XG_OPT_CONTROLINFD, /* int */
++    XG_OPT_CONTROLOUTFD, /* int */
++    XG_OPT_DEBUGLOG, /* str */
++    XG_OPT_FAKE, /* bool */
++    XG_OPT_FD, /* int */
++    XG_OPT_IMAGE, /* str */
++    XG_OPT_CMDLINE, /* str */
++    XG_OPT_RAMDISK, /* str */
++    XG_OPT_DOMID, /* int */
++    XG_OPT_LIVE, /* bool */
++    XG_OPT_DEBUG, /* bool */
++    XG_OPT_STORE_PORT, /* str */
++    XG_OPT_STORE_DOMID, /* str */
++    XG_OPT_CONSOLE_PORT, /* str */
++    XG_OPT_CONSOLE_DOMID, /* str */
++    XG_OPT_FEATURES, /* str */
++    XG_OPT_FLAGS, /* int */
++    XG_OPT_MEM_MAX_MIB, /* int */
++    XG_OPT_MEM_START_MIB, /* int */
++    XG_OPT_FORK, /* bool */
++    XG_OPT_NO_INC_GENID, /* bool */
++    XG_OPT_SUPPORTS, /* str */
++    XG_OPT_PCI_PASSTHROUGH, /* str */
++    XG_OPT_FORCE, /* bool */
++};
++
++static int opt_mode = -1;
++static int opt_controlinfd = -1;
++static int opt_controloutfd = -1;
++static FILE *opt_debugfile = NULL;
++static int opt_fd = -1;
++static const char *opt_image = NULL;
++static const char *opt_cmdline = NULL;
++static const char *opt_ramdisk = NULL;
++static int opt_store_port = -1;
++static int opt_store_domid = 0;
++static int opt_console_port = -1;
++static int opt_console_domid = 0;
++static const char *opt_features = NULL;
++static int opt_mem_max_mib = -1;
++static int opt_mem_start_mib = -1;
++
++static const char *xg_mode_names[] = {
++    [XG_MODE_SAVE] = "save",
++    [XG_MODE_HVM_SAVE] = "hvm_save",
++    [XG_MODE_RESTORE] = "restore",
++    [XG_MODE_HVM_RESTORE] = "hvm_restore",
++    [XG_MODE_RESUME_SLOW] = "resume_slow",
++    [XG_MODE_LINUX_BUILD] = "linux_build",
++    [XG_MODE_HVM_BUILD] = "hvm_build",
++    [XG_MODE_TEST] = "test",
++    [XG_MODE_LISTEN] = "listen",
++};
++
++xc_interface *xch = NULL;
++xs_handle *xsh = NULL;
++int domid = -1;
++bool force = false;
++int opt_flags;
++
++void xg_err(const char *msg, ...)
++{
++    char *buf = NULL;
++    va_list args;
++    int rc;
++
++    va_start(args, msg);
++    rc = vasprintf(&buf, msg, args);
++    va_end(args);
++
++    if ( rc != -1 )
++    {
++        if ( opt_debugfile )
++            fputs(buf, opt_debugfile);
++        fputs(buf, stderr);
++        syslog(LOG_ERR|LOG_DAEMON, "%s", buf);
++
++        if ( opt_controloutfd != -1 )
++        {
++            char reply[] = "error:";
++
++            write(opt_controloutfd, reply, strlen(reply));
++            write(opt_controloutfd, buf, rc);
++        }
++    }
++
++    free(buf);
++}
++
++void xg_info(const char *msg, ...)
++{
++    char *buf = NULL;
++    va_list args;
++    int rc;
++
++    va_start(args, msg);
++    rc = vasprintf(&buf, msg, args);
++    va_end(args);
++
++    if ( rc != -1 )
++    {
++        if ( opt_debugfile )
++            fputs(buf, opt_debugfile);
++        syslog(LOG_INFO|LOG_DAEMON, "%s", buf);
++    }
++
++    free(buf);
++}
++
++static void logfn(struct xentoollog_logger *logger,
++                  xentoollog_level level,
++                  int errnoval,
++                  const char *context,
++                  const char *format,
++                  va_list al)
++{
++    char *buf = NULL;
++
++    if ( level == XTL_DEBUG && !(opt_flags & XCFLAGS_DEBUG) )
++        return;
++
++    if ( vasprintf(&buf, format, al) != -1 )
++        xg_info("%s: %s: %s\n", context, xtl_level_to_string(level), buf);
++
++    free(buf);
++}
++
++static void progressfn(struct xentoollog_logger *logger,
++                       const char *context, const char *doing_what,
++                       int percent, unsigned long done, unsigned long total)
++{
++    static struct timeval lasttime = { 0 };
++    struct timeval curtime;
++    uint64_t time_delta;
++
++    gettimeofday(&curtime, NULL);
++    time_delta = tv_delta_us(&curtime, &lasttime);
++
++    send_emu_progress(done, total);
++
++    if ( (( done == 0 || done == total ) && (time_delta > 1UL * 500 * 1000 ))
++         || (time_delta > 5UL * 1000 * 1000) )
++    {
++        if ( done == 0 && total == 0 )
++            xg_info("progress: %s\n", doing_what);
++        else
++            xg_info("progress: %s: %ld of %ld (%d%%)\n",
++                 doing_what, done, total, percent);
++
++        lasttime = curtime;
++    }
++}
++
++static int parse_mode(const char *mode)
++{
++    int i;
++
++    for (i = 0; i < XG_MODE__END__; i++) {
++        if (strcmp(mode, xg_mode_names[i]) == 0)
++            return i;
++    }
++    xg_err("xenguest: unrecognized mode '%s'\n", mode);
++    exit(1);
++}
++
++static int parse_int(const char *str)
++{
++    char *end;
++    int result;
++
++    result = strtol(str, &end, 10);
++
++    if (*end != '\0') {
++        xg_err("xenguest: '%s' is not a valid integer\n", str);
++        exit(1);
++    }
++
++    return result;
++}
++
++static void parse_options(int argc, char *const argv[])
++{
++    static const struct option opts[] = {
++        { "mode", required_argument, NULL, XG_OPT_MODE, },
++        { "controlinfd", required_argument, NULL, XG_OPT_CONTROLINFD, },
++        { "controloutfd", required_argument, NULL, XG_OPT_CONTROLOUTFD, },
++        { "debuglog", required_argument, NULL, XG_OPT_DEBUGLOG, },
++        { "fake", no_argument, NULL, XG_OPT_FAKE, },
++
++        { "fd", required_argument, NULL, XG_OPT_FD, },
++        { "image", required_argument, NULL, XG_OPT_IMAGE, },
++        { "cmdline", required_argument, NULL, XG_OPT_CMDLINE, },
++        { "ramdisk", required_argument, NULL, XG_OPT_RAMDISK, },
++        { "domid", required_argument, NULL, XG_OPT_DOMID, },
++        { "live", no_argument, NULL, XG_OPT_LIVE, },
++        { "debug", no_argument, NULL, XG_OPT_DEBUG, },
++        { "store_port", required_argument, NULL, XG_OPT_STORE_PORT, },
++        { "store_domid", required_argument, NULL, XG_OPT_STORE_DOMID, },
++        { "console_port", required_argument, NULL, XG_OPT_CONSOLE_PORT, },
++        { "console_domid", required_argument, NULL, XG_OPT_CONSOLE_DOMID, },
++        { "features", required_argument, NULL, XG_OPT_FEATURES, },
++        { "flags", required_argument, NULL, XG_OPT_FLAGS, },
++        { "mem_max_mib", required_argument, NULL, XG_OPT_MEM_MAX_MIB, },
++        { "mem_start_mib", required_argument, NULL, XG_OPT_MEM_START_MIB, },
++        { "fork", no_argument, NULL, XG_OPT_FORK, },
++        { "no_incr_generationid", no_argument, NULL, XG_OPT_NO_INC_GENID, },
++        { "supports", required_argument, NULL, XG_OPT_SUPPORTS, },
++        { "pci_passthrough", required_argument, NULL, XG_OPT_PCI_PASSTHROUGH, },
++        { "force", no_argument, NULL, XG_OPT_FORCE, },
++        { NULL },
++    };
++
++    int c;
++
++    for(;;) {
++        int option_index = 0;
++
++        c = getopt_long_only(argc, argv, "", opts, &option_index);
++
++        switch (c) {
++        case -1:
++            return;
++
++        case XG_OPT_MODE:
++            opt_mode = parse_mode(optarg);
++            break;
++
++        case XG_OPT_CONTROLINFD:
++            opt_controlinfd = parse_int(optarg);
++            break;
++
++        case XG_OPT_CONTROLOUTFD:
++            opt_controloutfd = parse_int(optarg);
++            break;
++
++        case XG_OPT_DEBUGLOG:
++            if ( opt_debugfile && fclose(opt_debugfile) )
++            {
++                xg_err("Unable to close existing debug file: %d %s\n",
++                    errno, strerror(errno));
++                exit(1);
++            }
++
++            opt_debugfile = fopen(optarg, "a");
++            if ( !opt_debugfile )
++            {
++                xg_err("Unable to open debug file '%s': %d %s\n",
++                    optarg, errno, strerror(errno));
++                exit(1);
++            }
++            break;
++
++        case XG_OPT_FD:
++            opt_fd = parse_int(optarg);
++            break;
++
++        case XG_OPT_IMAGE:
++            opt_image = optarg;
++            break;
++
++        case XG_OPT_CMDLINE:
++            opt_cmdline = optarg;
++            break;
++
++        case XG_OPT_RAMDISK:
++            opt_ramdisk = optarg;
++            break;
++
++        case XG_OPT_DOMID:
++            domid = parse_int(optarg);
++            break;
++
++        case XG_OPT_LIVE:
++            opt_flags |= XCFLAGS_LIVE;
++            break;
++
++        case XG_OPT_DEBUG:
++            opt_flags |= XCFLAGS_DEBUG;
++            break;
++
++        case XG_OPT_STORE_PORT:
++            opt_store_port = parse_int(optarg);
++            break;
++
++        case XG_OPT_STORE_DOMID:
++            opt_store_domid = parse_int(optarg);
++            break;
++
++        case XG_OPT_CONSOLE_PORT:
++            opt_console_port = parse_int(optarg);
++            break;
++
++        case XG_OPT_CONSOLE_DOMID:
++            opt_console_domid = parse_int(optarg);
++            break;
++
++        case XG_OPT_FEATURES:
++            opt_features = optarg;
++            break;
++
++        case XG_OPT_FLAGS:
++            opt_flags = parse_int(optarg);
++            break;
++
++        case XG_OPT_MEM_MAX_MIB:
++            opt_mem_max_mib = parse_int(optarg);
++            break;
++
++        case XG_OPT_MEM_START_MIB:
++            opt_mem_start_mib = parse_int(optarg);
++            break;
++
++        case XG_OPT_SUPPORTS:
++            if ( !strcmp("migration-v2", optarg) )
++            {
++                if ( getenv("XG_MIGRATION_V2") )
++                {
++                    printf("true\n");
++                    exit(0);
++                }
++                else
++                {
++                    printf("false\n");
++                    exit(0);
++                }
++            }
++            else
++            {
++                printf("false\n");
++                exit(0);
++            }
++            break;
++
++        case XG_OPT_PCI_PASSTHROUGH:
++            pci_passthrough_sbdf_list = optarg;
++            break;
++
++        case XG_OPT_FORCE:
++            force = true;
++            break;
++
++        case XG_OPT_FAKE:
++        case XG_OPT_FORK:
++        case XG_OPT_NO_INC_GENID:
++            /* ignored */
++            break;
++
++        default:
++            xg_err("xenguest: invalid command line '%s'\n", argv[optind - 1]);
++            exit(1);
++        }
++    }
++}
++
++static void set_cloexec(int fd)
++{
++    int flags = fcntl(fd, F_GETFD);
++
++    if ( flags == -1 )
++    {
++        xg_err("Failed fcntl(F_GETFD) on fd %d: %d, %s\n",
++               fd, errno, strerror(errno));
++        exit(1);
++    }
++
++    if ( fcntl(fd, flags | FD_CLOEXEC) == -1 )
++    {
++        xg_err("Failed to set FD_CLOEXEC on fd %d: %d %s\n",
++            fd, errno, strerror(errno));
++        exit(1);
++    }
++}
++
++static void write_status(unsigned long store_mfn, unsigned long console_mfn,
++                         const char *protocol)
++{
++    if ( opt_controloutfd != -1 )
++    {
++        char buf[64];
++        size_t len;
++
++        if (protocol)
++            len = snprintf(buf, sizeof(buf), "result:%lu %lu %s\n", store_mfn, console_mfn, protocol);
++        else
++            len = snprintf(buf, sizeof(buf), "result:%lu %lu\n", store_mfn, console_mfn);
++        write(opt_controloutfd, buf, len);
++        xg_info("Writing to control: '%s'\n", buf);
++    }
++    else
++        xg_err("No control fd to write success to\n");
++}
++
++static void do_save(bool is_hvm)
++{
++    if (domid == -1 || opt_fd == -1) {
++        xg_err("xenguest: missing command line options\n");
++        exit(1);
++    }
++
++    stub_xc_domain_save(opt_fd, 0, 0, opt_flags, is_hvm);
++    write_status(0, 0, NULL);
++}
++
++static void do_restore(bool is_hvm)
++{
++    unsigned long store_mfn = 0, console_mfn = 0;
++
++    if (domid == -1 || opt_fd == -1
++        || opt_store_port == -1 || opt_console_port == -1) {
++        xg_err("xenguest: missing command line options\n");
++        exit(1);
++    }
++
++    stub_xc_domain_restore(opt_fd, opt_store_port, opt_console_port, is_hvm,
++                           &store_mfn, &console_mfn);
++
++    write_status(store_mfn, console_mfn, NULL);
++}
++
++static void do_resume(void)
++{
++    if (domid == -1) {
++        xg_err("xenguest: missing command line options\n");
++        exit(1);
++    }
++
++    stub_xc_domain_resume_slow();
++    write_status(0, 0, NULL);
++}
++
++int suspend_callback(void *data)
++{
++    static const char suspend_message[] = "suspend:\n";
++
++    write(opt_controloutfd, suspend_message, sizeof(suspend_message)-1);
++
++    /* Read one line from control fd. */
++    for (;;) {
++        char buf[8];
++        ssize_t len, i;
++
++        len = read(opt_controlinfd, buf, sizeof(buf));
++        if (len < 0 && errno == EINTR)
++            continue;
++        if (len < 0) {
++            xg_err("xenguest: read from control FD failed: %s\n", strerror(errno));
++            return 0;
++        }
++        if (len == 0) {
++            xg_err("xenguest: unexpected EOF on control FD\n");
++            return 0;
++        }
++        for ( i = 0; i < len; ++i )
++            if (buf[i] == '\n')
++                return 1;
++    }
++}
++
++static void do_linux_build(void)
++{
++    unsigned long store_mfn = 0, console_mfn = 0;
++    char protocol[64];
++
++    if (domid == -1 || opt_mem_max_mib == -1 || opt_mem_start_mib == -1
++        || !opt_image || !opt_ramdisk || !opt_cmdline
++        || !opt_features || opt_flags == -1
++        || opt_store_port == -1 || opt_store_domid == -1
++        || opt_console_port == -1 || opt_console_domid == -1) {
++        xg_err("xenguest: missing command line options\n");
++        exit(1);
++    }
++
++    stub_xc_linux_build(opt_mem_max_mib, opt_mem_start_mib,
++                        opt_image, opt_ramdisk,
++                        opt_cmdline, opt_features, opt_flags,
++                        opt_store_port, opt_store_domid,
++                        opt_console_port, opt_console_domid,
++                        &store_mfn, &console_mfn, protocol);
++    write_status(store_mfn, console_mfn, protocol);
++}
++
++static void do_hvm_build(void)
++{
++    unsigned long store_mfn = 0, console_mfn = 0;
++
++    if (domid == -1 || opt_mem_max_mib == -1 || opt_mem_start_mib == -1
++        || !opt_image || opt_store_port == -1 || opt_store_domid == -1
++        || opt_console_port == -1 || opt_console_domid == -1) {
++        xg_err("xenguest: missing command line options\n");
++        exit(1);
++    }
++
++    stub_xc_hvm_build(opt_mem_max_mib, opt_mem_start_mib,
++                      opt_image, opt_store_port, opt_store_domid,
++                      opt_console_port, opt_console_domid, &store_mfn,
++                      &console_mfn);
++    write_status(store_mfn, console_mfn, NULL);
++}
++
++static void do_test(void)
++{
++    xg_err("xenguest: test mode not supported\n");
++    exit(1);
++}
++
++int main(int argc, char * const argv[])
++{
++    static char ident[32];
++    char *cmdline = NULL;
++    static xentoollog_logger logger = { logfn, progressfn, NULL };
++
++    /* Force migration v2 all the time. */
++    setenv("XG_MIGRATION_V2", "", 1);
++
++    {   /* Conjoin the command line into a single string for logging */
++        size_t sum, s;
++        int i;
++        char *ptr;
++
++        sum = argc-1; /* Account for spaces and null */
++        for ( i = 1; i < argc; ++i )
++            sum += strlen(argv[i]);
++
++        ptr = cmdline = malloc(sum);
++
++        if ( !cmdline )
++        {
++            fprintf(stderr, "Out of Memory\n");
++            exit(1);
++        }
++
++        for ( i = 1; i < argc; ++i )
++        {
++            s = strlen(argv[i]);
++            memcpy(ptr, argv[i], s);
++            ptr[s] = ' ';
++            ptr = &ptr[s+1];
++        }
++        ptr[-1] = 0;
++    }
++
++    parse_options(argc, argv);
++
++    /* Set up syslog with the domid and action in the ident string */
++    if ( domid >= 0 )
++    {
++        const char *suffix;
++
++        switch ( opt_mode )
++        {
++        case XG_MODE_SAVE:
++        case XG_MODE_HVM_SAVE:
++            suffix = "-save";
++            break;
++        case XG_MODE_LISTEN:
++            suffix = "-emp";
++            break;
++
++        case XG_MODE_RESTORE:
++        case XG_MODE_HVM_RESTORE:
++            suffix = "-restore";
++            break;
++
++        case XG_MODE_RESUME_SLOW:
++            suffix = "-resume";
++            break;
++
++        case XG_MODE_LINUX_BUILD:
++        case XG_MODE_HVM_BUILD:
++            suffix = "-build";
++            break;
++
++        default:
++            suffix = "";
++            break;
++        }
++
++        snprintf(ident, sizeof ident, "xenguest-%d%s", domid, suffix);
++    }
++    else
++        strncpy(ident, "xenguest", sizeof ident);
++
++    openlog(ident, LOG_NDELAY | LOG_PID, LOG_DAEMON);
++
++    xg_info("Command line: %s\n", cmdline);
++    free(cmdline);
++
++    set_cloexec(opt_controlinfd);
++    set_cloexec(opt_controloutfd);
++
++    xch = xc_interface_open(&logger, &logger, 0);
++    if ( !xch ) {
++        xg_err("xenguest: Failed to open xc interface\n");
++        exit(1);
++    }
++
++    xsh = xs_open(0);
++    if ( !xsh ) {
++        xg_err("xenguest: Failed to open xenstore interface\n");
++        exit(1);
++    }
++
++    if ( domid > 0 )
++    {
++        xs_domain_path = xs_get_domain_path(xsh, domid);
++
++        if ( !xs_domain_path )
++        {
++            xg_err("Failed to obtain XenStore domain path\n");
++            exit(1);
++        }
++    }
++
++    switch (opt_mode) {
++    case -1:
++        xg_err("xenguest: no `-mode' option specified\n");
++        exit(1);
++
++    case XG_MODE_SAVE:
++    case XG_MODE_HVM_SAVE:
++        do_save(opt_mode == XG_MODE_HVM_SAVE);
++        break;
++
++    case XG_MODE_RESTORE:
++    case XG_MODE_HVM_RESTORE:
++        do_restore(opt_mode == XG_MODE_HVM_RESTORE);
++        break;
++
++    case XG_MODE_RESUME_SLOW:
++        do_resume();
++        break;
++
++    case XG_MODE_LINUX_BUILD:
++        do_linux_build();
++        break;
++
++    case XG_MODE_HVM_BUILD:
++        do_hvm_build();
++        break;
++
++    case XG_MODE_TEST:
++        do_test();
++        break;
++    case XG_MODE_LISTEN:
++        emp_do_listen();
++        break;
++    }
++
++    free(xs_domain_path);
++
++    xs_close(xsh);
++    xc_interface_close(xch);
++
++    xg_info("All done\n");
++    if ( opt_debugfile )
++        fclose(opt_debugfile);
++    return 0;
++}
++
++/*
++ * Local variables:
++ * mode: C
++ * c-file-style: "BSD"
++ * c-basic-offset: 4
++ * tab-width: 4
++ * indent-tabs-mode: nil
++ * End:
++ */
+diff --git a/tools/xenguest/xenguest_stubs.c b/tools/xenguest/xenguest_stubs.c
+new file mode 100644
+index 0000000..d11961a
+--- /dev/null
++++ b/tools/xenguest/xenguest_stubs.c
+@@ -0,0 +1,1270 @@
++/*
++ * Copyright (C) 2006-2009 Citrix Systems Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published
++ * by the Free Software Foundation; version 2.1 only. with the special
++ * exception on linking described in file LICENSE.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ */
++
++#include <stdlib.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <string.h>
++#include <stdarg.h>
++#include <inttypes.h>
++
++#include <errno.h>
++#include <sys/mman.h>
++#include <unistd.h>
++
++#include <xenctrl.h>
++#include <xenguest.h>
++#include <xenstore.h>
++#include <xc_dom.h>
++#include <xen/hvm/hvm_info_table.h>
++#include <xen/hvm/hvm_xs_strings.h>
++#include <xen/hvm/params.h>
++#include <xen/hvm/e820.h>
++
++enum {
++#define XEN_CPUFEATURE(name, value) X86_FEATURE_##name = value,
++#include <xen/arch-x86/cpufeatureset.h>
++};
++
++#include "xg_internal.h"
++#include "xc_bitops.h"
++
++char *xs_domain_path = NULL;
++char *pci_passthrough_sbdf_list = NULL;
++
++#define SYSFS_PCI_DEV "/sys/bus/pci/devices"
++#define PCI_SBDF      "%04x:%02x:%02x.%01x"
++
++static void failwith_oss_xc(char *fct)
++{
++    char buf[80];
++    const xc_error *error;
++
++    error = xc_get_last_error(xch);
++    if (error->code == XC_ERROR_NONE)
++        snprintf(buf, 80, "%s: [%d] %s", fct, errno, strerror(errno));
++    else
++        snprintf(buf, 80, "%s: [%d] %s", fct, error->code, error->message);
++    xc_clear_last_error(xch);
++    xg_err("xenguest: %s\n", buf);
++    exit(1);
++}
++
++/* The following boolean flags are all set by their value
++   in the platform area of xenstore. The only value that
++   is considered true is the string 'true' */
++struct flags {
++    xc_dominfo_t dominfo;
++    int vcpus;
++    int vcpus_current;
++    char** vcpu_affinity; /* 0 means unset */
++    uint16_t vcpu_weight;   /* 0 means unset (0 is an illegal weight) */
++    uint16_t vcpu_cap;      /* 0 is default (no cap) */
++    int nx;
++    int viridian;
++    int viridian_time_ref_count;
++    int viridian_reference_tsc;
++    int pae;
++    int acpi;
++    int apic;
++    int acpi_s3;
++    int acpi_s4;
++    int tsc_mode;
++    int hpet;
++    int nomigrate;
++    int nested_virt;
++    unsigned cores_per_socket;
++    unsigned x87_fip_width;
++};
++
++char *xenstore_getsv(const char *fmt, va_list ap)
++{
++    char *s = NULL;
++    int n, m;
++    char key[1024] = { 0 };
++
++    n = snprintf(key, sizeof(key), "%s/", xs_domain_path);
++    if (n < 0)
++        goto out;
++    m = vsnprintf(key + n, sizeof(key) - n, fmt, ap);
++    if (m < 0)
++        goto out;
++
++    s = xs_read(xsh, XBT_NULL, key, NULL);
++out:
++    return s;
++}
++
++char *xenstore_gets(const char *fmt, ...)
++{
++    char *s;
++    va_list ap;
++
++    va_start(ap, fmt);
++    s = xenstore_getsv(fmt, ap);
++    va_end(ap);
++    return s;
++}
++
++uint64_t xenstore_get(const char *fmt, ...)
++{
++    char *s;
++    uint64_t value = 0;
++    va_list ap;
++
++    va_start(ap, fmt);
++    s = xenstore_getsv(fmt, ap);
++    if (s) {
++        if (!strcasecmp(s, "true"))
++            value = 1;
++        else
++        {
++            errno = 0;
++            value = strtoull(s, NULL, 0);
++            if ( errno )
++                value = 0;
++        }
++        free(s);
++    }
++    va_end(ap);
++    return value;
++}
++
++int xenstore_putsv(const char *_key, const char *fmt, ...)
++{
++    int n, m, rc = -1;
++    char key[512], val[512];
++    va_list ap;
++
++    n = snprintf(key, sizeof(key), "%s/%s", xs_domain_path, _key);
++    if (n < 0)
++        goto out;
++
++    va_start(ap, fmt);
++    m = vsnprintf(val, sizeof(val), fmt, ap);
++    va_end(ap);
++    if (m < 0)
++        goto out;
++
++    rc = xs_write(xsh, XBT_NULL, key, val, strlen(val));
++out:
++    return rc;
++}
++
++int xenstore_puts(const char *key, const char *val)
++{
++    return xenstore_putsv(key, "%s", val);
++}
++
++static uint32_t *host_featureset, *featureset, nr_features;
++
++/*
++ * Choose the featureset to use for a VM.
++ *
++ * The toolstack is expected to provide a featureset in the
++ * platform/featureset xenstore key, fomatted as a bitmap of '-' delimited
++ * 32bit hex-encoded words.  e.g.
++ *
++ *   aaaaaaaa-bbbbbbbb-cccccccc
++ *
++ * If no featureset is found, default to the host maximum.  It is important in
++ * a heterogenous case to permit featuresets longer than this hosts maximum,
++ * if they have been zero-extended to make a common longest length.
++ */
++static int get_vm_featureset(bool hvm)
++{
++    char *platform = xenstore_gets("platform/featureset");
++    char *s = platform, *e;
++    unsigned int i = 0;
++    int rc = 0;
++
++    if ( !platform )
++    {
++        xg_info("No featureset provided - using host maximum\n");
++
++        return xc_get_cpu_featureset(xch,
++                                     hvm ? XEN_SYSCTL_cpu_featureset_hvm
++                                         : XEN_SYSCTL_cpu_featureset_pv,
++                                     &nr_features, featureset);
++    }
++    else
++        xg_info("Parsing '%s' as featureset\n", platform);
++
++    while ( *s != '\0' )
++    {
++        unsigned long val;
++
++        errno = 0;
++        val = strtoul(s, &e, 16);
++        if ( (errno != 0) ||            /* Error converting. */
++             (val > ~(uint32_t)0) ||    /* Value out of range. */
++             (e == s) ||                /* No digits found. */
++                                        /* Bad following characters. */
++             !(*e == '\0' || *e == '-' || *e == ':')
++            )
++        {
++            xg_err("Bad '%s' in featureset\n", s);
++            rc = -1;
++            break;
++        }
++
++        if ( i < nr_features )
++            featureset[i++] = val;
++        else if ( val != 0 )
++        {
++            xg_err("Requested featureset '%s' truncated on this host\n", platform);
++            rc = -1;
++            break;
++        }
++
++        s = e;
++        if ( *s == '-' || *s == ':' )
++            s++;
++    }
++
++    free(platform);
++    return rc;
++}
++
++int construct_cpuid_policy(const struct flags *f, bool hvm)
++{
++    int rc = -1;
++
++    if ( xc_get_cpu_featureset(xch,
++                               XEN_SYSCTL_cpu_featureset_host,
++                               &nr_features, NULL) ||
++         nr_features == 0 )
++    {
++        xg_err("Failed to obtain featureset size %d %s\n",
++               errno, strerror(errno));
++        goto out;
++    }
++
++    host_featureset = calloc(nr_features, sizeof(*host_featureset));
++    featureset = calloc(nr_features, sizeof(*featureset));
++    if ( !host_featureset || !featureset )
++    {
++        xg_err("Failed to allocate memory for featureset\n");
++        goto out;
++    }
++
++    if ( xc_get_cpu_featureset(xch,
++                               XEN_SYSCTL_cpu_featureset_host,
++                               &nr_features, host_featureset) ||
++         nr_features == 0 )
++    {
++        xg_err("Failed to obtain featureset size %d %s\n",
++               errno, strerror(errno));
++        goto out;
++    }
++
++    if ( get_vm_featureset(hvm) )
++        goto out;
++
++    if ( !f->nx )
++        clear_bit(X86_FEATURE_NX, featureset);
++
++    /*
++     * Optionally advertise ITSC, given hardware support an a non-migratealbe
++     * domain.
++     */
++    if ( f->nomigrate && test_bit(X86_FEATURE_ITSC, host_featureset) )
++        set_bit(X86_FEATURE_ITSC, featureset);
++
++    rc = xc_cpuid_apply_policy(xch, domid, featureset, nr_features);
++
++ out:
++    free(featureset);
++    featureset = NULL;
++    return rc;
++}
++
++static int hvmloader_flag(const char *key)
++{
++    /* Params going to hvmloader need to convert "true" -> '1' as Xapi gets
++     * this wrong when migrating from older hosts. */
++
++    char *val = xenstore_gets(key);
++    int ret = -1;
++
++    if ( val )
++    {
++        if ( !strcmp(val, "1") )
++        {
++            ret = 1;
++            goto out;
++        }
++        else if ( !strcmp(val, "0") )
++        {
++            ret = 0;
++            goto out;
++        }
++        if ( !strcasecmp(val, "true") )
++            ret = 1;
++        else
++        {
++            errno = 0;
++            ret = strtol(val, NULL, 0);
++            if ( errno )
++                ret = 0;
++        }
++
++        xg_info("HVMLoader error: Fixing up key '%s' from '%s' to '%d'\n", key, val, ret);
++        xenstore_putsv(key, "%d", !!ret);
++    }
++    else
++        xenstore_puts(key, "0");
++
++ out:
++    free(val);
++    return ret;
++}
++
++static void get_flags(struct flags *f)
++{
++    char * tmp;
++    int n;
++
++    if ( xc_domain_getinfo(xch, domid, 1, &f->dominfo) != 1 ||
++         f->dominfo.domid != domid )
++        failwith_oss_xc("xc_domain_getinfo");
++
++    f->vcpus = xenstore_get("platform/vcpu/number");
++    f->vcpu_affinity = malloc(sizeof(char*) * f->vcpus);
++
++    for (n = 0; n < f->vcpus; n++) {
++        f->vcpu_affinity[n] = xenstore_gets("platform/vcpu/%d/affinity", n);
++    }
++    f->vcpus_current = xenstore_get("platform/vcpu/current");
++    f->vcpu_weight = xenstore_get("platform/vcpu/weight");
++    f->vcpu_cap = xenstore_get("platform/vcpu/cap");
++    f->nx       = xenstore_get("platform/nx");
++    f->viridian = xenstore_get("platform/viridian");
++    f->viridian_time_ref_count = xenstore_get("platform/viridian_time_ref_count");
++    f->viridian_reference_tsc = xenstore_get("platform/viridian_reference_tsc");
++    f->apic     = xenstore_get("platform/apic");
++    f->pae      = xenstore_get("platform/pae");
++    f->tsc_mode = xenstore_get("platform/tsc_mode");
++    f->cores_per_socket = xenstore_get("platform/cores-per-socket");
++    f->x87_fip_width = xenstore_get("platform/x87-fip-width");
++    f->nomigrate = xenstore_get("platform/nomigrate");
++
++    /*
++     * Follow 'nested-virt' if present.  Fall back to checking
++     * 'exp-nested-hvm' for compatibility.
++     */
++    tmp = xenstore_gets("platform/nested-virt");
++    f->nested_virt = tmp
++        ? xenstore_get("platform/nested-virt")
++        : xenstore_get("platform/exp-nested-hvm");
++    free(tmp);
++
++    /* Nested virt doesn't currently work with migration. */
++    if ( f->nested_virt )
++        f->nomigrate = 1;
++    /* VM's can't migrate if they are cold-plugged with PCI devices. */
++    if ( pci_passthrough_sbdf_list )
++        f->nomigrate = 1;
++
++    /* Params going to hvmloader - need to convert "true" -> '1' as Xapi gets
++     * this wrong when migrating from older hosts. */
++    f->acpi    = hvmloader_flag("platform/acpi");
++    f->acpi_s4 = hvmloader_flag("platform/acpi_s4");
++    f->acpi_s3 = hvmloader_flag("platform/acpi_s3");
++
++    /*
++     * HACK - Migrated VMs wont have this xs key set, so the naive action
++     * would result in the HPET mysteriously disappearing.  If the key is not
++     * present then enable the hpet to match its default.
++     */
++    tmp = xenstore_gets("platform/hpet");
++    if ( tmp && strlen(tmp) )
++        f->hpet = xenstore_get("platform/hpet");
++    else
++        f->hpet = 1;
++    free(tmp);
++
++    xg_info("Domain Properties: Type %s, hap %u\n",
++            f->dominfo.hvm ? "HVM" : "PV", f->dominfo.hap);
++
++    xg_info("Determined the following parameters from xenstore:\n");
++    xg_info("vcpu/number:%d vcpu/weight:%d vcpu/cap:%d\n",
++            f->vcpus, f->vcpu_weight, f->vcpu_cap);
++    xg_info("nx: %d, pae %d, cores-per-socket %u, x86-fip-width %u, nested %u\n",
++            f->nx, f->pae, f->cores_per_socket, f->x87_fip_width, f->nested_virt);
++    xg_info("apic: %d acpi: %d acpi_s4: %d acpi_s3: %d tsc_mode: %d hpet: %d\n",
++            f->apic, f->acpi, f->acpi_s4, f->acpi_s3, f->tsc_mode, f->hpet);
++    xg_info("nomigrate %d\n",
++            f->nomigrate);
++    xg_info("viridian: %d, time_ref_count: %d, reference_tsc: %d\n",
++            f->viridian, f->viridian_time_ref_count, f->viridian_reference_tsc);
++    for (n = 0; n < f->vcpus; n++){
++        xg_info("vcpu/%d/affinity:%s\n", n, (f->vcpu_affinity[n])?f->vcpu_affinity[n]:"unset");
++    }
++}
++
++static void free_flags(struct flags *f)
++{
++    int n;
++    for ( n = 0; n < f->vcpus; ++n )
++        free(f->vcpu_affinity[n]);
++    free(f->vcpu_affinity);
++}
++
++static void configure_vcpus(struct flags *f){
++    struct xen_domctl_sched_credit sdom;
++    int i, j, r, size, pcpus_supplied, min;
++    xc_cpumap_t cpumap;
++
++    size = xc_get_cpumap_size(xch) * 8; /* array is of uint8_t */
++
++    for (i=0; i<f->vcpus; i++){
++        if (f->vcpu_affinity[i]){ /* NULL means unset */
++            pcpus_supplied = strlen(f->vcpu_affinity[i]);
++            min = (pcpus_supplied < size)?pcpus_supplied:size;
++            cpumap = xc_cpumap_alloc(xch);
++            if (cpumap == NULL)
++                failwith_oss_xc("xc_cpumap_alloc");
++
++            for (j=0; j<min; j++) {
++                if (f->vcpu_affinity[i][j] == '1')
++                    cpumap[j/8] |= 1 << (j&7);
++            }
++            r = xc_vcpu_setaffinity(xch, domid, i, cpumap, NULL,
++                                    XEN_VCPUAFFINITY_HARD);
++            free(cpumap);
++            if (r) {
++                failwith_oss_xc("xc_vcpu_setaffinity");
++            }
++        }
++    }
++
++    r = xc_sched_credit_domain_get(xch, domid, &sdom);
++    /* This should only happen when a different scheduler is set */
++    if (r) {
++        xg_info("Failed to get credit scheduler parameters: scheduler not enabled?\n");
++        return;
++    }
++    if (f->vcpu_weight != 0L) sdom.weight = f->vcpu_weight;
++    if (f->vcpu_cap != 0L) sdom.cap = f->vcpu_cap;
++    /* This shouldn't fail, if "get" above succeeds. This error is fatal
++       to highlight the need to investigate further. */
++    r = xc_sched_credit_domain_set(xch, domid, &sdom);
++    if (r)
++        failwith_oss_xc("xc_sched_credit_domain_set");
++}
++
++static uint64_t get_image_max_size(const char *type)
++{
++    char key[64];
++    char *s;
++    uint64_t max_size = 0;
++
++    snprintf(key, sizeof(key), "/mh/limits/pv-%s-max_size", type);
++
++    s = xs_read(xsh, XBT_NULL, key, NULL);
++    if (s) {
++        errno = 0;
++        max_size = strtoull(s, NULL, 0);
++        if (errno)
++            max_size = 0;
++        free(s);
++    }
++    return max_size ? max_size : XC_DOM_DECOMPRESS_MAX;
++}
++
++static void configure_tsc(struct flags *f)
++{
++    int rc = xc_domain_set_tsc_info(xch, domid, f->tsc_mode, 0, 0, 0);
++
++    if (rc)
++        failwith_oss_xc("xc_domain_set_tsc_info");
++}
++
++
++int stub_xc_linux_build(int c_mem_max_mib, int mem_start_mib,
++                        const char *image_name, const char *ramdisk_name,
++                        const char *cmdline, const char *features,
++                        int flags, int store_evtchn, int store_domid,
++                        int console_evtchn, int console_domid,
++                        unsigned long *store_mfn, unsigned long *console_mfn,
++                        char *protocol)
++{
++    struct xc_dom_image *dom;
++
++    struct flags f = {};
++    get_flags(&f);
++
++    dom = xc_dom_allocate(xch, cmdline, features);
++    if (!dom)
++        failwith_oss_xc("xc_dom_allocate");
++
++    dom->container_type = XC_DOM_PV_CONTAINER;
++
++    /* The default image size limits are too large. */
++    if ( xc_dom_kernel_max_size(dom, get_image_max_size("kernel")) )
++        failwith_oss_xc("xc_dom_kernel_max_size");
++    if ( xc_dom_ramdisk_max_size(dom, get_image_max_size("ramdisk")) )
++        failwith_oss_xc("xc_dom_ramdisk_max_size");
++
++    configure_vcpus(&f);
++    configure_tsc(&f);
++
++    if ( xc_dom_kernel_file(dom, image_name) )
++        failwith_oss_xc("xc_dom_kernel_file");
++    if ( ramdisk_name && strlen(ramdisk_name) &&
++         xc_dom_ramdisk_file(dom, ramdisk_name) )
++        failwith_oss_xc("xc_dom_ramdisk_file");
++
++    dom->flags = flags;
++    dom->console_evtchn = console_evtchn;
++    dom->xenstore_evtchn = store_evtchn;
++
++    if ( xc_dom_boot_xen_init(dom, xch, domid) )
++        failwith_oss_xc("xc_dom_boot_xen_init");
++    if ( xc_dom_parse_image(dom) )
++        failwith_oss_xc("xc_dom_parse_image");
++    if ( xc_dom_mem_init(dom, mem_start_mib) )
++        failwith_oss_xc("xc_dom_mem_init");
++    if ( xc_dom_boot_mem_init(dom) )
++        failwith_oss_xc("xc_dom_boot_mem_init");
++    if ( xc_dom_build_image(dom) )
++        failwith_oss_xc("xc_dom_build_image");
++    if ( xc_dom_boot_image(dom) )
++        failwith_oss_xc("xc_dom_boot_image");
++    if ( xc_dom_gnttab_init(dom) )
++        failwith_oss_xc("xc_dom_gnttab_init");
++
++    *console_mfn = xc_dom_p2m(dom, dom->console_pfn);
++    *store_mfn = xc_dom_p2m(dom, dom->xenstore_pfn);
++
++    if ( construct_cpuid_policy(&f, false) )
++        failwith_oss_xc("construct_cpuid_policy");
++
++    strncpy(protocol, xc_domain_get_native_protocol(xch, domid), 64);
++
++    free_flags(&f);
++    xc_dom_release(dom);
++
++    return 0;
++}
++
++static void hvm_set_viridian_features(struct flags *f)
++{
++    uint64_t feature_mask = HVMPV_base_freq;
++
++    xg_info("viridian base\n");
++
++    if (f->viridian_time_ref_count) {
++        xg_info("+ time_ref_count\n");
++        feature_mask |= HVMPV_time_ref_count;
++    }
++
++    if (f->viridian_reference_tsc) {
++        xg_info("+ viridian_reference_tsc\n");
++        feature_mask |= HVMPV_reference_tsc;
++    }
++
++    xc_set_hvm_param(xch, domid, HVM_PARAM_VIRIDIAN, feature_mask);
++}
++
++static int hvm_build_set_params(int store_evtchn, unsigned long *store_mfn,
++                                int console_evtchn, unsigned long *console_mfn,
++                                struct flags *f)
++{
++    struct hvm_info_table *va_hvm;
++    uint8_t *va_map, sum;
++    uint32_t i;
++    int rc = 0;
++
++    va_map = xc_map_foreign_range(xch, domid,
++                                  XC_PAGE_SIZE, PROT_READ | PROT_WRITE,
++                                  HVM_INFO_PFN);
++    if (va_map == NULL)
++        return -1;
++
++    va_hvm = (struct hvm_info_table *)(va_map + HVM_INFO_OFFSET);
++    va_hvm->apic_mode = f->apic;
++    va_hvm->nr_vcpus = f->vcpus;
++    memset(va_hvm->vcpu_online, 0, sizeof(va_hvm->vcpu_online));
++    for (i = 0; i < f->vcpus_current; i++)
++        va_hvm->vcpu_online[i/8] |= 1 << (i % 8);
++    va_hvm->checksum = 0;
++    for (i = 0, sum = 0; i < va_hvm->length; i++)
++        sum += ((uint8_t *) va_hvm)[i];
++    va_hvm->checksum = -sum;
++    munmap(va_map, XC_PAGE_SIZE);
++
++    xc_get_hvm_param(xch, domid, HVM_PARAM_STORE_PFN, store_mfn);
++    xc_set_hvm_param(xch, domid, HVM_PARAM_PAE_ENABLED, f->pae);
++
++    if (f->viridian)
++        hvm_set_viridian_features(f);
++
++    xc_set_hvm_param(xch, domid, HVM_PARAM_STORE_EVTCHN, store_evtchn);
++    xc_set_hvm_param(xch, domid, HVM_PARAM_HPET_ENABLED, f->hpet);
++    if ( f->nested_virt )
++        xc_set_hvm_param(xch, domid, HVM_PARAM_NESTEDHVM, f->nested_virt);
++    if ( f->nomigrate )
++        xc_domain_disable_migrate(xch, domid);
++    xc_get_hvm_param(xch, domid, HVM_PARAM_CONSOLE_PFN, console_mfn);
++    xc_set_hvm_param(xch, domid, HVM_PARAM_CONSOLE_EVTCHN, console_evtchn);
++    xc_set_hvm_param(xch, domid, HVM_PARAM_TRIPLE_FAULT_REASON, SHUTDOWN_crash);
++
++    /*
++     * If an specific FIP width is requested, only allow it to
++     * override auto-mode.
++     */
++    if ( f->x87_fip_width )
++    {
++        uint64_t old = 0;
++
++        xc_hvm_param_get(xch, domid, HVM_PARAM_X87_FIP_WIDTH, &old);
++        if ( !old )
++            xc_hvm_param_set(xch, domid, HVM_PARAM_X87_FIP_WIDTH, f->x87_fip_width);
++    }
++
++    if ( f->cores_per_socket > 0 )
++        rc = xc_domain_set_cores_per_socket(xch, domid, f->cores_per_socket);
++
++    return rc;
++}
++
++static int get_mmio_dev(uint16_t seg, uint8_t bus, uint8_t dev, uint8_t func,
++                        uint64_t *mmio_dev)
++{
++    char namebuf[64], buf[256];
++    FILE *file;
++    int i, rc = 0;
++
++    snprintf(namebuf, sizeof(namebuf), SYSFS_PCI_DEV"/"PCI_SBDF"/resource",
++             seg, bus, dev, func);
++
++    file = fopen(namebuf, "r");
++    if (!file) {
++        xg_err("Cannot open '%s': %s\n", namebuf, strerror(errno));
++        return -1;
++    }
++
++    *mmio_dev = 0;
++    for (i = 0; i < 7; i++)
++    {
++        unsigned long long start, end, size, flags;
++        if (!fgets(buf, sizeof(buf), file))
++            break;
++
++        if (sscanf(buf, "%llx %llx %llx", &start, &end, &flags) != 3) {
++            xg_err("Syntax error in '%s'\n", namebuf);
++            rc = -1;
++            goto out;
++        }
++
++        if (start)
++            size = end - start + 1;
++        else
++            size = 0;
++
++        *mmio_dev += size;
++    }
++out:
++    fclose(file);
++    return rc;
++}
++
++static int get_rdm(uint16_t seg, uint8_t bus, uint8_t devfn,
++                   unsigned int *nr_entries,
++                   struct xen_reserved_device_memory **xrdm)
++{
++    int rc = 0, r;
++
++    *nr_entries = 0;
++    r = xc_reserved_device_memory_map(xch, 0, seg, bus, devfn,
++                                      NULL, nr_entries);
++    /* "0" means we have no any rdm entry. */
++    if (!r)
++        goto out;
++
++    if (errno != ENOBUFS) {
++        rc = -1;
++        goto out;
++    }
++    *xrdm = malloc(sizeof(**xrdm) * (*nr_entries));
++    if (!*xrdm)
++        rc = -1;
++
++    r = xc_reserved_device_memory_map(xch, 0, seg, bus, devfn,
++                                      *xrdm, nr_entries);
++    if (r)
++        rc = -1;
++out:
++    return rc;
++}
++
++/* Copied from xen hypervisor itself */
++const char * parse_pci_sbdf(char *s, unsigned int *seg_p,
++                             unsigned int *bus_p, unsigned int *dev_p,
++                             unsigned int *func_p)
++{
++    unsigned long seg = strtoul(s, &s, 16), bus, dev, func;
++
++    if ( *s != ':' )
++        return NULL;
++    bus = strtoul(s + 1, &s, 16);
++    if ( *s == ':' )
++        dev = strtoul(s + 1, &s, 16);
++    else
++    {
++        dev = bus;
++        bus = seg;
++        seg = 0;
++    }
++    if ( func_p )
++    {
++        if ( *s != '.' )
++            return NULL;
++        func = strtoul(s + 1, &s, 0);
++    }
++    else
++        func = 0;
++
++    if ( seg_p )
++        *seg_p = seg;
++    *bus_p = bus;
++    *dev_p = dev;
++    if ( func_p )
++        *func_p = func;
++
++    return s;
++}
++
++#define MAX_RMRR_DEVICES 16
++#define ALLOW_MEMORY_RELOCATE 1
++
++int stub_xc_hvm_build_with_mem(uint64_t max_mem_mib, uint64_t max_start_mib,
++                               const char *image)
++{
++    struct xc_dom_image *dom;
++
++    uint64_t lowmem_end, highmem_start, highmem_end, mmio_start, mmio_size;
++    uint64_t mmio_total = 0;
++    unsigned int i, j, nr = 0;
++    struct e820entry *e820;
++    unsigned int nr_rdm_entries[MAX_RMRR_DEVICES] = {0};
++    unsigned int nr_rmrr_devs = 0;
++    struct xen_reserved_device_memory *xrdm[MAX_RMRR_DEVICES] = {0};
++    unsigned long rmrr_overlapped_ram = 0;
++    bool allow_memory_relocate = ALLOW_MEMORY_RELOCATE;
++    char *s;
++
++    if ( pci_passthrough_sbdf_list )
++    {
++        s = strtok(pci_passthrough_sbdf_list,",");
++        while ( s != NULL )
++        {
++            unsigned int seg, bus, device, func;
++            uint64_t mmio_dev;
++
++            xg_info("Getting RMRRs for device '%s'\n",s);
++            if ( parse_pci_sbdf(s, &seg, &bus, &device, &func) )
++            {
++                if ( !get_rdm(seg, bus, (device << 3) + func,
++                        &nr_rdm_entries[nr_rmrr_devs], &xrdm[nr_rmrr_devs]) )
++                    nr_rmrr_devs++;
++            }
++            if ( nr_rmrr_devs == MAX_RMRR_DEVICES )
++            {
++                xg_err("Error: hit limit of %d RMRR devices for domain\n",
++                            MAX_RMRR_DEVICES);
++                exit(1);
++            }
++
++            xg_info("Getting total MMIO space occupied for device '%s'\n",s);
++            if ( get_mmio_dev(seg, bus, device, func, &mmio_dev) )
++            {
++                xg_err("Error: unable to get PCI MMIO info\n");
++                exit(1);
++            }
++            mmio_total += mmio_dev;
++
++            s = strtok (NULL, ",");
++        }
++    }
++    e820 = malloc(sizeof(*e820) * E820MAX);
++    if (!e820)
++	    return -ENOMEM;
++
++    dom = xc_dom_allocate(xch, NULL, NULL);
++    if ( !dom )
++        failwith_oss_xc("xc_dom_allocate");
++
++    dom->container_type = XC_DOM_HVM_CONTAINER;
++    dom->device_model = true;
++
++    dom->target_pages = max_start_mib << (20 - XC_PAGE_SHIFT);
++
++    lowmem_end  = max_mem_mib << 20;
++    highmem_end = highmem_start = 1ull << 32;
++    mmio_size   = HVM_BELOW_4G_MMIO_LENGTH;
++
++    if (allow_memory_relocate)
++    {
++        while (mmio_size < mmio_total && (uint32_t)(mmio_size << 1) != 0)
++            mmio_size <<= 1;
++
++        xg_info("Calculated provisional MMIO hole size as 0x%lx\n", mmio_size);
++    }
++
++    mmio_start  = highmem_start - mmio_size;
++
++    if ( lowmem_end > mmio_start )
++    {
++        highmem_end = (1ull << 32) + (lowmem_end - mmio_start);
++        lowmem_end = mmio_start;
++    }
++
++    /* Leave low 1MB to HVMLoader... */
++    e820[nr].addr = 0x100000u;
++    e820[nr].size = lowmem_end - 0x100000u;
++    e820[nr].type = E820_RAM;
++    nr++;
++
++    /* RDM mapping */
++    for (i = 0; i < nr_rmrr_devs; i++)
++    {
++        for (j = 0; j < nr_rdm_entries[i]; j++)
++        {
++            e820[nr].addr = xrdm[i][j].start_pfn << XC_PAGE_SHIFT;
++            e820[nr].size = xrdm[i][j].nr_pages << XC_PAGE_SHIFT;
++            e820[nr].type = E820_RESERVED;
++            xg_info("Adding RMRR 0x%lx size 0x%lx\n", e820[nr].addr, e820[nr].size);
++            if ( e820[nr].addr < lowmem_end ) {
++                rmrr_overlapped_ram += ( lowmem_end - e820[nr].addr );
++                lowmem_end = e820[nr].addr;
++            }
++            nr++;
++        }
++    }
++    e820[0].size -= rmrr_overlapped_ram;
++    highmem_end += rmrr_overlapped_ram;
++    mmio_size += rmrr_overlapped_ram;
++    mmio_start -= rmrr_overlapped_ram;
++
++    for (i = 0; i < nr_rmrr_devs; i++)
++    {
++        free(xrdm[i]);
++    }
++
++    if ( highmem_end > highmem_start )
++    {
++        e820[nr].addr = highmem_start;
++        e820[nr].size = highmem_end - e820[nr].addr;
++        e820[nr].type = E820_RAM;
++        nr++;
++    }
++
++    dom->lowmem_end = lowmem_end;
++    dom->highmem_end = highmem_end;
++    dom->mmio_size = mmio_size;
++    dom->mmio_start = mmio_start;
++
++    xg_info("Final lower MMIO hole size is 0x%lx\n", mmio_size);
++    /* Put the lower MMIO hole size to Xenstore so we could
++     * read it later from QEMU wrapper */
++    xenstore_putsv("data/mmio-hole-size", "%lu", mmio_size);
++
++    if ( xc_dom_kernel_file(dom, image) )
++        failwith_oss_xc("xc_dom_kernel_file");
++
++    if ( xc_dom_boot_xen_init(dom, xch, domid) )
++        failwith_oss_xc("xc_dom_boot_xen_init");
++    if ( xc_dom_parse_image(dom) )
++        failwith_oss_xc("xc_dom_parse_image");
++    if ( xc_dom_mem_init(dom, max_mem_mib) )
++        failwith_oss_xc("xc_dom_mem_init");
++    if ( xc_dom_boot_mem_init(dom) )
++        failwith_oss_xc("xc_dom_boot_mem_init");
++    if ( xc_dom_build_image(dom) )
++        failwith_oss_xc("xc_dom_build_image");
++    if ( xc_dom_boot_image(dom) )
++        failwith_oss_xc("xc_dom_boot_image");
++
++    if ( xc_domain_set_memory_map(xch, domid, e820, nr) )
++        failwith_oss_xc("xc_domain_set_memory_map");
++
++    xc_dom_release(dom);
++    free(e820);
++
++    return 0;
++}
++
++static void hvm_safety_check(struct flags *f, bool pod)
++{
++    if ( force )
++    {
++        xg_info("--force in effect - skipping safety checks\n");
++        return;
++    }
++
++    if ( pod )
++    {
++        if ( f->nested_virt )
++        {
++            xg_err("Populate on Demand and Nested Virtualisation are mutually exclusive\n");
++            goto fail;
++        }
++
++        if ( pci_passthrough_sbdf_list )
++        {
++            xg_err("Populate on Demand and PCI Passthrough are mutually exclusive\n");
++            goto fail;
++        }
++    }
++
++    if ( !f->dominfo.hap && f->nested_virt )
++    {
++        xg_err("Shadow Paging and Nested Virtualisation are mutually exclusive\n");
++        goto fail;
++    }
++
++    return;
++
++ fail:
++    xg_info("Safety checks failed.  Aborting domain build\n");
++    exit(1);
++}
++
++int stub_xc_hvm_build(int mem_max_mib, int mem_start_mib, const char *image_name,
++                      int store_evtchn, int store_domid,
++                      int console_evtchn, int console_domid,
++                      unsigned long *store_mfn, unsigned long *console_mfn)
++{
++    int r;
++    struct flags f = {};
++
++    get_flags(&f);
++
++    hvm_safety_check(&f, mem_start_mib < mem_max_mib);
++
++    configure_vcpus(&f);
++    configure_tsc(&f);
++
++    r = stub_xc_hvm_build_with_mem(mem_max_mib, mem_start_mib, image_name);
++    if ( r )
++        failwith_oss_xc("hvm_build");
++
++    r = hvm_build_set_params(store_evtchn, store_mfn,
++                             console_evtchn, console_mfn, &f);
++    if ( r )
++        failwith_oss_xc("hvm_build_params");
++
++    r = construct_cpuid_policy(&f, true);
++    if ( r )
++        failwith_oss_xc("construct_cpuid_policy");
++
++    r = xc_dom_gnttab_hvm_seed(xch, domid, *console_mfn, *store_mfn,
++                               console_domid, store_domid);
++    if ( r )
++        failwith_oss_xc("xc_dom_gnttab_hvm_seed");
++
++    free_flags(&f);
++
++    return 0;
++}
++
++static int switch_qemu_logdirty(int _domid, unsigned enable, void *_data)
++{
++    char buf[64], *reply = NULL;
++    static const char cmd_enable[] = "enable";
++    static const char cmd_disable[] = "disable";
++    const char *cmd = enable ? cmd_enable : cmd_disable;
++    struct timeval start, now;
++    uint64_t timeout_us = 15 * 1000 * 1000; /* 15 seconds, in microseconds. */
++    bool rc = 0;
++
++    snprintf(buf, sizeof buf, "/libxl/%u/dm-version", domid);
++
++    if ( (reply = xs_read(xsh, XBT_NULL, buf, NULL)) ) {
++        rc = strcmp("qemu_xen", reply) == 0;
++        free(reply);
++
++        /* qemu-upstream doesn't use xenguest to enable/disable logdirty. */
++        if ( rc )
++            return 0;
++    }
++
++    /* Clear logdirty/ret before reading it, to avoid reading stale data */
++    snprintf(buf, sizeof buf, "/local/domain/0/device-model/%u/logdirty/ret", domid);
++    if ( !xs_write(xsh, XBT_NULL, buf, "", 0) )
++    {
++        int saved_errno = errno;
++
++        xg_err("Failed to NULL logdirty/ret\n");
++        errno = saved_errno;
++        return 1;
++    }
++
++    snprintf(buf, sizeof buf, "/local/domain/0/device-model/%u/logdirty/cmd", domid);
++    if ( !xs_write(xsh, XBT_NULL, buf, cmd, strlen(cmd)) )
++    {
++        int saved_errno = errno;
++
++        xg_err("Failed to write logdirty '%s' command to xenstore\n", cmd);
++        errno = saved_errno;
++        return 1;
++    }
++
++    xg_info("Waiting for qemu to confirm logdirty '%s'\n", cmd);
++
++    snprintf(buf, sizeof buf, "/local/domain/0/device-model/%u/logdirty/ret", domid);
++    gettimeofday(&start, NULL);
++    do
++    {
++        usleep(100000); /* Wait a short while for Qemu to reply. */
++
++        reply = xs_read(xsh, XBT_NULL, buf, NULL);
++
++        if ( reply )
++        {
++            rc = strcmp(cmd, reply) == 0;
++            free(reply);
++        }
++
++        if ( !rc )
++            gettimeofday(&now, NULL);
++    } while ( !rc && (tv_delta_us(&now, &start) < timeout_us) );
++
++    if ( !rc )
++    {
++        xg_err("Timeout waiting for qemu to acknowledge logdirty '%s'\n", cmd);
++        errno = ETIMEDOUT;
++    }
++    else
++        xg_info("  got reply\n");
++
++    return !rc;
++}
++
++void migration_safety_checks(void)
++{
++    bool migration_disabled;
++    int ret;
++
++    if ( force )
++    {
++        xg_info("--force in effect - skipping safety checks\n");
++        return;
++    }
++
++    ret = xc_domain_query_disable_migrate(xch, domid, &migration_disabled);
++    if ( ret )
++        failwith_oss_xc("xc_domain_query_disable_migrate");
++
++    if ( migration_disabled )
++    {
++        xg_err("d%d is flagged as not being mobile\n", domid);
++        exit(1);
++    }
++}
++
++#define GENERATION_ID_ADDRESS "hvmloader/generation-id-address"
++
++int emu_stub_xc_domain_save(int fd, void* data,
++                        int flags, int hvm)
++{
++    int r;
++    struct save_callbacks callbacks =
++        {
++            .suspend = emu_suspend_callback,
++            .switch_qemu_logdirty = switch_qemu_logdirty,
++            .data = data,
++            .precopy_policy = xenguest_precopy_policy,
++        };
++
++    migration_safety_checks();
++
++    r = xc_domain_save(xch, fd, domid,
++                       flags, &callbacks, hvm, 0, -1);
++    if (r)
++        failwith_oss_xc("xc_domain_save");
++
++    return 0;
++}
++
++int stub_xc_domain_save(int fd, int max_iters, int max_factors,
++                        int flags, int hvm)
++{
++    int r;
++    struct save_callbacks callbacks =
++        {
++            .suspend = suspend_callback,
++            .switch_qemu_logdirty = switch_qemu_logdirty,
++            .data = NULL,
++        };
++
++    migration_safety_checks();
++
++    r = xc_domain_save(xch, fd, domid,
++                       flags, &callbacks, hvm, 0, -1);
++    if (r)
++        failwith_oss_xc("xc_domain_save");
++
++    return 0;
++}
++
++/* this is the slow version of resume for uncooperative domain,
++ * the fast version is available in close source xc */
++int stub_xc_domain_resume_slow(void)
++{
++    int r;
++
++    /* hard code fast to 0, we only want to expose the slow version here */
++    r = xc_domain_resume(xch, domid, 0);
++    if (r)
++        failwith_oss_xc("xc_domain_resume");
++    return 0;
++}
++
++static int set_genid(void)
++{
++    uint64_t paddr = 0;
++    void *vaddr;
++    char *genid_val_str;
++    char *end;
++    uint64_t genid[2];
++    int rc = -1;
++
++    xc_get_hvm_param(xch, domid, HVM_PARAM_VM_GENERATION_ID_ADDR, &paddr);
++    if (paddr == 0)
++        return 0;
++
++    genid_val_str = xenstore_gets("platform/generation-id");
++    if ( !genid_val_str )
++        return 0;
++
++    errno = 0;
++    genid[0] = strtoull(genid_val_str, &end, 0);
++    genid[1] = 0;
++    if ( end && end[0] == ':' )
++        genid[1] = strtoull(end+1, NULL, 0);
++
++    if ( errno )
++    {
++        xg_err("strtoull of '%s' failed: %s\n", genid_val_str, strerror(errno));
++        goto out;
++    }
++    else if ( genid[0] == 0 || genid[1] == 0 )
++    {
++        xg_err("'%s' is not a valid generation id\n", genid_val_str);
++        goto out;
++    }
++
++    vaddr = xc_map_foreign_range(xch, domid, XC_PAGE_SIZE,
++                                 PROT_READ | PROT_WRITE,
++                                 paddr >> XC_PAGE_SHIFT);
++    if (vaddr == NULL) {
++        xg_err("Failed to map VM generation ID page: %s\n", strerror(errno));
++        goto out;
++    }
++    memcpy(vaddr + (paddr & ~XC_PAGE_MASK), genid, 2 * sizeof(*genid));
++    munmap(vaddr, XC_PAGE_SIZE);
++
++    /*
++     * FIXME: Inject ACPI Notify event.
++     */
++
++    xg_info("Wrote generation ID %"PRId64":%"PRId64" at 0x%"PRIx64"\n",
++         genid[0], genid[1], paddr);
++    rc = 0;
++
++ out:
++    free(genid_val_str);
++    return rc;
++}
++
++int stub_xc_domain_restore(int fd, int store_evtchn, int console_evtchn,
++                           int hvm,
++                           unsigned long *store_mfn, unsigned long *console_mfn)
++{
++    int r = 0;
++    struct flags f = {};
++
++    get_flags(&f);
++
++    if ( hvm )
++    {
++        /*
++         * We have to do this even in the domain restore case as XenServers
++         * prior to 6.0.2 did not create a viridian save record.
++         */
++        if (f.viridian)
++            hvm_set_viridian_features(&f);
++
++        xc_set_hvm_param(xch, domid, HVM_PARAM_HPET_ENABLED, f.hpet);
++        if ( f.cores_per_socket > 0 )
++            r = xc_domain_set_cores_per_socket(xch, domid, f.cores_per_socket);
++
++        if ( r )
++            failwith_oss_xc("xc_domain_set_cores_per_socket");
++    }
++
++    configure_vcpus(&f);
++
++    r = xc_domain_restore(xch, fd, domid,
++                          store_evtchn, store_mfn, 0,
++                          console_evtchn, console_mfn, 0,
++                          hvm, f.pae, 0, 0, NULL, -1);
++    if ( r )
++        failwith_oss_xc("xc_domain_restore");
++    /*
++     * The legacy -> migration v2 code in XenServer 6.5 didn't combine the
++     * out-of-band HVM_PARAM_PAE_ENABLED into the converted stream, and
++     * xenguest didn't set it, as the v2 restore code was expected to.
++     *
++     * This causes xc_cpuid_apply_policy() to hide the PAE bit from the domain
++     * cpuid policy, which went unnoticed (and without incident, despite being
++     * a guest-visible change) until Xen-4.5 became stricter with its checks
++     * for when a guest writes to %cr4.
++     *
++     * The correct value is still available out-of-band, so clobber the result
++     * from the stream, in case the stream is from XenServer 6.5 and is a VM
++     * which hasn't rebooted and has a bad HVM PARAM in the v2 stream.
++     */
++    if ( hvm )
++        xc_set_hvm_param(xch, domid, HVM_PARAM_PAE_ENABLED, f.pae);
++
++    r = construct_cpuid_policy(&f, hvm);
++    if ( r )
++        failwith_oss_xc("construct_cpuid_policy");
++
++    free_flags(&f);
++
++    if ( hvm )
++    {
++        r = set_genid();
++        if (r)
++            exit(1);
++    }
++
++    return 0;
++}
++
++/*
++ * Local variables:
++ * mode: C
++ * c-file-style: "BSD"
++ * c-basic-offset: 4
++ * tab-width: 4
++ * indent-tabs-mode: nil
++ * End:
++ */
+diff --git a/tools/xenguest/xg_emu.c b/tools/xenguest/xg_emu.c
+new file mode 100644
+index 0000000..ff1c53c
+--- /dev/null
++++ b/tools/xenguest/xg_emu.c
+@@ -0,0 +1,443 @@
++#include <xenctrl.h>
++#include <xenguest.h>
++#include <xenstore.h>
++#include <libgen.h>
++#include <sys/stat.h>
++#include <semaphore.h>
++#include <time.h>
++#include <string.h>
++#include <libempserver.h>
++#include "xg_internal.h"
++#include INCLUDE_JSON_H
++
++static sem_t sem_stopped;
++static int live_stage = XGS_POLICY_CONTINUE_PRECOPY;
++static int pv_mode = false;
++
++static struct emu_client progress_cli = { .num = -1 };
++static int last_iter = 0;
++static uint64_t last_sent = 0;
++static int stream_fd = -1;
++
++static int arg_store_port = -1;
++static int arg_console_port = -1;
++
++/* timeout in seconds */
++#define COMMAND_TIMEOUT (60*2)
++
++/* Called for mid-iteration progress update */
++void send_emu_progress(unsigned long done, unsigned long total)
++{
++    struct timespec curtime;
++    static struct timespec lastprog = { 0 };
++
++    clock_gettime(CLOCK_MONOTONIC, &curtime);
++
++    if ( progress_cli.num >= 0 )
++    {
++        if ( done == 0 || done == total )
++        {
++            lastprog = curtime;
++        }
++        else if ( ts_delta_us(&curtime, &lastprog) > 1UL * 500 * 1000 )
++        {
++            /* Don't send dirty_conut, is out of date */
++            emp_send_event_migrate_progress(progress_cli, last_sent + done, -1, last_iter);
++            lastprog = curtime;
++        }
++    }
++}
++
++static void do_cmd_progress(emp_call_args *args)
++{
++    progress_cli = args->cli;
++    xg_info("setting progress_cli to %d", progress_cli.num);
++    emp_send_return(args->cli, NULL);
++}
++
++static int running = 1;
++
++static void do_cmd_quit(emp_call_args *args)
++{
++    emp_send_return(args->cli, NULL);
++    running = 0;
++}
++
++static void abort_all(void)
++{
++    live_stage = XGS_POLICY_ABORT;
++    /* post to sem, incase we are waiting */
++    sem_post(&sem_stopped);
++}
++
++static void do_abort(emp_call_args *args)
++{
++    xg_err("Received abort command!");
++    abort_all();
++    emp_send_return(args->cli, NULL);
++}
++
++static void do_ignore(emp_call_args *args)
++{
++    emp_send_return(args->cli, NULL);
++}
++
++static void do_migrate_init(emp_call_args *args)
++{
++    stream_fd = args->fd;
++    emp_send_return(args->cli, NULL);
++    sem_init(&sem_stopped, 0, 0);
++}
++
++int emu_suspend_callback(void *data)
++{
++    int r;
++
++    xg_info("waiting for suspend");
++    r = sem_wait(&sem_stopped);
++    if ( live_stage == XGS_POLICY_ABORT )
++    {
++       xg_info("Ignoring libxc suspend request due to abort");
++       return 0;
++    }
++
++    xg_info("suspend was received");
++    return 1;
++}
++
++/* Monitor process */
++int xenguest_precopy_policy(struct precopy_stats stats, void *user)
++{
++    int stop_decision = live_stage;
++    int r = 0;
++
++    if ( stats.dirty_count >= 0 )
++    {
++        struct emu_client *cli = (struct emu_client *) user;
++        last_sent = stats.total_written;
++        last_iter = stats.iteration;
++
++        xg_info("Checking live policy.  %ld / %d for %d",
++                stats.dirty_count, stats.total_written, stats.iteration);
++        r = emp_send_event_migrate_progress(*cli, stats.total_written,
++                                            stats.dirty_count,
++                                            stats.iteration);
++    }
++
++    if ( stop_decision )
++         xg_info("passing down stop message");
++    else if ( stats.dirty_count == 0 )
++    {
++         xg_info("No dirty pages, finishing migration");
++         stop_decision = XGS_POLICY_STOP_AND_COPY;
++    }
++
++    return stop_decision;
++}
++
++static void do_migrate_live(emp_call_args *args)
++{
++    /* unlock the global lock and go ahead */
++    emp_unlock();
++
++    emp_send_return(args->cli, NULL);
++
++    emu_stub_xc_domain_save(stream_fd, (void*) &args->cli, XCFLAGS_LIVE, !pv_mode);
++    xg_info("Finished, send complete");
++    if ( progress_cli.num >= 0 )
++        emp_send_event_migrate_completed(progress_cli, migration_success);
++    else
++        xg_info("No cli watching");
++
++}
++
++static void do_migrate_nonlive(emp_call_args *args)
++{
++    /* unlock the global lock and go ahead */
++    emp_unlock();
++
++    emp_send_return(args->cli, NULL);
++
++    emu_stub_xc_domain_save(stream_fd, (void*) &args->cli, 0, !pv_mode);
++    xg_info("Finished, send complete");
++    emp_send_event_migrate_completed(args->cli, migration_success);
++
++    if ( progress_cli.num >= 0 )
++        emp_send_event_migrate_completed(progress_cli, migration_success);
++    else
++        xg_info("No cli watching");
++}
++
++static void do_migrate_paused(emp_call_args *args)
++{
++    xg_info("Received paused message");
++    emp_send_return(args->cli, NULL);
++    sem_post(&sem_stopped);
++}
++
++static void do_migrate_pause(emp_call_args *args)
++{
++    xg_info("Received pause message");
++    emp_send_return(args->cli, NULL);
++    live_stage = XGS_POLICY_STOP_AND_COPY;
++}
++
++static void do_cmd_restore(emp_call_args *args)
++{
++    unsigned long store_mfn = 0, console_mfn = 0;
++    char buf[64];
++
++    if ( domid == -1 || stream_fd == -1
++        || arg_store_port == -1 || arg_console_port == -1)
++    {
++        xg_err("xenguest: missing command line options\n");
++        emp_send_error(args->cli, "Missing options");
++        return;
++    }
++    emp_unlock();
++
++    emp_send_return(args->cli, NULL);
++
++    stub_xc_domain_restore(stream_fd, arg_store_port, arg_console_port, !pv_mode,
++                           &store_mfn, &console_mfn);
++
++    xg_info("Restore complete, send result");
++    snprintf(buf, sizeof(buf), "%lu %lu", store_mfn, console_mfn);
++
++    if (progress_cli.num >= 0)
++       emp_send_event_migrate_completed_result(progress_cli, buf);
++    if (progress_cli.num != args->cli.num)
++       emp_send_event_migrate_completed_result(args->cli, buf);
++    xg_info("All done");
++}
++
++enum arg_type
++{
++    int_type,
++    str_type,
++    bool_type,
++};
++
++struct arg_list
++{
++    char *name;
++    enum arg_type atype;
++    union
++    {
++       int *a_int;
++       char **a_str;
++    };
++};
++
++const static struct arg_list setable_args[] = {
++    {"store_port",   int_type,  .a_int = &arg_store_port},
++    {"console_port", int_type,  .a_int = &arg_console_port},
++    {"pv",           bool_type, .a_int = &pv_mode},
++    {NULL,           -1,        .a_int = NULL}
++};
++
++void do_cmd_set_args(emp_call_args *args)
++{
++    json_object *jobj = args->cmd_args;
++    int ival;
++    char *str_end;
++    const char *val;
++    int bad = 0;
++    int i;
++
++    if ( jobj == NULL )
++    {
++        xg_err("set_args called without any args");
++        emp_send_error(args->cli, "No Args");
++        return;
++    }
++
++    json_object_object_foreach(jobj, s_key, jval)
++    {
++        if ( json_object_get_type(jval) != json_type_string )
++        {
++            xg_err("expecting only string arguments.  (%s)", s_key);
++            bad = 1;
++            continue;
++        }
++        val = json_object_get_string(jval);
++
++        for (i = 0; setable_args[i].name != NULL; i++)
++        {
++            if ( strcmp(setable_args[i].name, s_key) == 0 )
++            {
++                xg_err("yes");
++                switch (setable_args[i].atype)
++                {
++                case int_type:
++                    ival = strtol(val, &str_end, 10);
++                    if ( *str_end != '\0' )
++                    {
++                        xg_err("Bad args %s = %s", s_key, val);
++                        bad = 1;
++                    }
++                    else
++                        *(setable_args[i].a_int) = ival;
++                    break;
++
++                case str_type:
++                    *(setable_args[i].a_str) = strdup(val);
++                    break;
++
++                case bool_type:
++                    if (strcmp(val, "true") == 0)
++                        *(setable_args[i].a_int) = 1;
++                    else if (strcmp(val, "false") == 0)
++                        *(setable_args[i].a_int) = 0;
++                    else
++                    {
++                        xg_err("Bad args %s = %s", s_key, val);
++                        bad = 1;
++                    }
++                    break;
++                }
++                break;
++            }
++        }
++        if ( setable_args[i].name == NULL )
++        {
++            xg_err("Unknown arg: %s", s_key);
++            bad = 1;
++        }
++    }
++    if ( bad )
++        emp_send_error(args->cli, "Bad Args");
++    else
++        emp_send_return(args->cli, NULL);
++}
++
++struct command_actions actions[] = {
++    {cmd_track_dirty,      &do_ignore, 0 },
++    {cmd_migrate_abort,    &do_abort, 0 },
++    {cmd_migrate_init,     &do_migrate_init, 0 },
++    {cmd_migrate_live,     &do_migrate_live, 1 },
++    {cmd_migrate_pause,    &do_migrate_pause, 0 },
++    {cmd_migrate_paused,   &do_migrate_paused, 0 },
++    {cmd_migrate_progress, &do_cmd_progress,  0 },
++    {cmd_migrate_nonlive,  &do_migrate_nonlive, 1},
++    {cmd_restore,          &do_cmd_restore, 1 },
++    {cmd_set_args,         &do_cmd_set_args, 0},
++    {cmd_quit,             &do_cmd_quit,      0 }
++};
++
++static void emp_log(enum emp_log_level level, const char *msg)
++{
++    if ( level == emp_level_err )
++        xg_err("libempserver: %s", msg);
++    else if ( level == emp_level_warn || level == emp_level_info )
++        xg_info("libempserver: %s", msg);
++    else if ( (opt_flags & XCFLAGS_DEBUG) )
++        xg_info("libempserver:debug: %s", msg);
++}
++
++#define EMU_HOME     "/var/xen/xenguest"
++#define CONTROL_PATH "%s/%d/control"
++
++void emp_do_listen(void)
++{
++    struct emp_sock_inf *cs_inf;
++    int rc;
++    char *fname;
++    char *path;
++    int r;
++    struct timespec act_time;
++
++    emp_set_log_cb(emp_log);
++
++    r = mkdir(EMU_HOME, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
++    if ( r != 0 && errno != EEXIST )
++    {
++        xg_err("Couldn't create directory, %d", errno);
++        return;
++    }
++
++    r = asprintf(&fname, CONTROL_PATH, EMU_HOME, domid);
++    if ( r < 0 )
++    {
++        xg_err("no memory (fname)");
++        return;
++    }
++
++    path = strdup(fname);
++    if ( path == NULL )
++    {
++        xg_err("no memory (path)");
++        free(fname);
++        return;
++    }
++
++    r = mkdir(dirname(path), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
++    free(path);
++    if ( r != 0 && errno != EEXIST )
++    {
++        xg_err("could not make directory, %d", errno);
++        free(fname);
++        return;
++    }
++
++    r = emp_sock_init(fname, &cs_inf, actions);
++    free(fname);
++    if ( r )
++    {
++        xg_err("control socket failed");
++        return;
++    }
++
++    clock_gettime(CLOCK_MONOTONIC, &act_time);
++
++    printf("Ready\n");
++
++    while ( running )
++    {
++        fd_set          rfds;
++        fd_set          wfds;
++        fd_set          xfds;
++        int             nfds;
++        int             num_clients;
++        struct timeval  tv;
++
++        FD_ZERO(&rfds);
++        FD_ZERO(&wfds);
++        FD_ZERO(&xfds);
++        tv.tv_sec = 30;
++        tv.tv_usec = 0;
++
++        nfds = emp_select_fdset(cs_inf, &rfds, &num_clients);
++        nfds++;
++        rc = select(nfds, &rfds, &wfds, &xfds, &tv);
++
++        if ( rc == 0 && num_clients == 0 )
++        {
++           struct timespec cur_time;
++           uint64_t timediff;
++           clock_gettime(CLOCK_MONOTONIC, &cur_time);
++
++           timediff = ts_delta_us(&cur_time, &act_time);
++           if ( timediff > (COMMAND_TIMEOUT * 1000000) )
++           {
++               xg_err("Control timeout");
++               abort_all();
++               break;
++           }
++        }
++        else
++           clock_gettime(CLOCK_MONOTONIC, &act_time);
++
++        if ( rc < 0 && errno != EINTR )
++            break;
++
++        if ( rc > 0 )
++        {
++            rc = emp_select_fdread(cs_inf, &rfds, rc);
++            if ( rc > 0 )
++                xg_info("Warning: there were unclaimed fds");
++        }
++    }
++    /* wait for any threads to finish */
++    emp_sock_close(&cs_inf);
++}
+diff --git a/tools/xenguest/xg_internal.h b/tools/xenguest/xg_internal.h
+new file mode 100644
+index 0000000..6e82072
+--- /dev/null
++++ b/tools/xenguest/xg_internal.h
+@@ -0,0 +1,99 @@
++#ifndef __XG_INTERNAL_H__
++#define __XG_INTERNAL_H__
++
++#include <inttypes.h>
++#include <sys/time.h>
++
++#define __printf(f, v) __attribute__((format(__printf__, f, v)))
++
++enum xenguest_mode {
++    XG_MODE_SAVE,
++    XG_MODE_HVM_SAVE,
++    XG_MODE_RESTORE,
++    XG_MODE_HVM_RESTORE,
++    XG_MODE_RESUME_SLOW,
++    XG_MODE_LINUX_BUILD,
++    XG_MODE_HVM_BUILD,
++    XG_MODE_TEST,
++    XG_MODE_LISTEN,
++    XG_MODE__END__,
++};
++
++void xg_err(const char *msg, ...) __printf(1, 2);
++void xg_info(const char *msg, ...) __printf(1, 2);
++
++typedef struct xs_handle xs_handle;
++
++extern xc_interface *xch;
++extern xs_handle *xsh;
++extern int domid;
++extern bool force;
++extern int opt_flags;
++
++/* Read and write /local/domain/$domid/ relative paths. */
++char *xenstore_getsv(const char *fmt, va_list ap);
++char *xenstore_gets(const char *fmt, ...)  __printf(1, 2);
++uint64_t xenstore_get(const char *fmt, ...) __printf(1, 2);
++int xenstore_putsv(const char *key, const char *fmt, ...) __printf(2, 3);
++int xenstore_puts(const char *key, const char *val);
++
++int stub_xc_linux_build(int c_mem_max_mib, int mem_start_mib,
++                        const char *image_name, const char *ramdisk_name,
++                        const char *cmdline, const char *features,
++                        int flags, int store_evtchn, int store_domid,
++                        int console_evtchn, int console_domid,
++                        unsigned long *store_mfn, unsigned long *console_mfn,
++                        char *protocol);
++int stub_xc_hvm_build(int mem_max_mib, int mem_start_mib, const char *image_name,
++                      int store_evtchn, int store_domid, int console_evtchn,
++                      int console_domid, unsigned long *store_mfn, unsigned long *console_mfn);
++int stub_xc_domain_save(int fd, int max_iters, int max_factors,
++                        int flags, int hvm);
++int emu_stub_xc_domain_save(int fd, void *data,
++                            int flags, int hvm);
++
++int stub_xc_domain_restore(int fd, int store_evtchn, int console_evtchn,
++                           int hvm,
++                           unsigned long *store_mfn, unsigned long *console_mfn);
++int stub_xc_domain_resume_slow(void);
++
++int suspend_callback(void *data);
++int emu_suspend_callback(void *data);
++
++void setup_legacy_conversion(int opt_fd, enum xenguest_mode mode);
++void cleanup_legacy_conversion(void);
++
++extern char *xs_domain_path;
++extern char *pci_passthrough_sbdf_list;
++
++/* Calcluate the difference between two timevals, in microseconds. */
++static inline uint64_t tv_delta_us(const struct timeval *new,
++                                   const struct timeval *old)
++{
++    return (((new->tv_sec - old->tv_sec)*1000000) +
++            (new->tv_usec - old->tv_usec));
++}
++
++/* Calcluate the difference between two timevals, in microseconds. */
++static inline uint64_t ts_delta_us(const struct timespec *new,
++                                   const struct timespec *old)
++{
++    return (((new->tv_sec - old->tv_sec)*1000000) +
++            ((new->tv_nsec - old->tv_nsec)/1000));
++}
++
++int xenguest_precopy_policy(struct precopy_stats stats, void *user);
++void emp_do_listen(void);
++void send_emu_progress(unsigned long done, unsigned long total);
++
++#endif
++
++/*
++ * Local variables:
++ * mode: C
++ * c-file-style: "BSD"
++ * c-basic-offset: 4
++ * tab-width: 4
++ * indent-tabs-mode: nil
++ * End:
++ */

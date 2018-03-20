@@ -1,0 +1,71 @@
+From 1f9938e9d7f71475d840ff0dc31e7c594fd745ff Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Sun, 17 Dec 2017 16:20:50 +0000
+Subject: [PATCH] x86/amd: Try to set lfence as being Dispatch Serialising
+
+This property is required for the AMD's recommended mitigation for Branch
+Target Injection, but Xen needs to cope with being unable to detect or modify
+the MSR.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/xen/arch/x86/cpu/amd.c b/xen/arch/x86/cpu/amd.c
+index d65ac71..58d2090 100644
+--- a/xen/arch/x86/cpu/amd.c
++++ b/xen/arch/x86/cpu/amd.c
+@@ -559,6 +559,36 @@ static void init_amd(struct cpuinfo_x86 *c)
+ 			wrmsr_amd_safe(0xc001100d, l, h & ~1);
+ 	}
+ 
++	/*
++	 * Attempt to set lfence to be Dispatch Serialising.  This MSR almost
++	 * certainly isn't virtualised (and Xen at least will leak the real
++	 * value in but silently discard writes), as well as being per-core
++	 * rather than per-thread, so do a full safe read/write/readback cycle
++	 * in the worst case.
++	 */
++	if (c->x86 == 0x0f || c->x86 == 0x11)
++		/* Always dispatch serialising on this hardare. */
++		__set_bit(X86_FEATURE_LFENCE_DISPATCH, c->x86_capability);
++	else if (c->x86 == 0x10 || c->x86 >= 0x12) {
++		if (rdmsr_safe(0xC0011029, value))
++			/* Unable to read.  Assume the safer default. */
++			__clear_bit(X86_FEATURE_LFENCE_DISPATCH,
++				    c->x86_capability);
++		else if (value & 2)
++			/* Already dispatch serialising. */
++			__set_bit(X86_FEATURE_LFENCE_DISPATCH,
++				  c->x86_capability);
++		else if (wrmsr_safe(0xC0011029, value | 2) ||
++			 rdmsr_safe(0xC0011029, value) || !(value & 2))
++			/* Attempt to set failed.  Assume the safer default */
++			__clear_bit(X86_FEATURE_LFENCE_DISPATCH,
++				    c->x86_capability);
++		else
++			/* Successfully enabled! */
++			__set_bit(X86_FEATURE_LFENCE_DISPATCH,
++				  c->x86_capability);
++	}
++
+ 	switch(c->x86)
+ 	{
+ 	case 0xf ... 0x17:
+diff --git a/xen/include/asm-x86/cpufeature.h b/xen/include/asm-x86/cpufeature.h
+index f81c9b7..62feef1 100644
+--- a/xen/include/asm-x86/cpufeature.h
++++ b/xen/include/asm-x86/cpufeature.h
+@@ -26,6 +26,7 @@
+ #define X86_FEATURE_CLFLUSH_MONITOR	((FSCAPINTS+0)*32+ 7) /* clflush reqd with monitor */
+ #define X86_FEATURE_APERFMPERF		((FSCAPINTS+0)*32+ 8) /* APERFMPERF */
+ #define X86_FEATURE_MSR_PLATFORM_INFO	((FSCAPINTS+0)*32+ 9) /* PLATFORM_INFO MSR present */
++#define X86_FEATURE_LFENCE_DISPATCH	((FSCAPINTS+0)*32+10) /* lfence set as Dispatch Serialising */
+ 
+ #define cpufeat_word(idx)	((idx) / 32)
+ #define cpufeat_bit(idx)	((idx) % 32)
+@@ -92,6 +93,7 @@
+ #define cpu_has_hle		boot_cpu_has(X86_FEATURE_HLE)
+ #define cpu_has_rtm		boot_cpu_has(X86_FEATURE_RTM)
+ #define cpu_has_pdcm		boot_cpu_has(X86_FEATURE_PDCM)
++#define cpu_has_lfence_dispatch boot_cpu_has(X86_FEATURE_LFENCE_DISPATCH)
+ 
+ enum _cache_type {
+     CACHE_TYPE_NULL = 0,

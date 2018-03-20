@@ -1,0 +1,18 @@
+XenServer doesn't use xen.efi, because the efi code is built into xen.gz and
+used via grub.efi's multiboot2 interface.  However, the interim EFI patches
+don't allow xen.efi to compile cleanly, cauing build failures with EFI-capable
+toolchains.
+
+diff --git a/xen/arch/x86/Makefile b/xen/arch/x86/Makefile
+index e3c4f3d..c82b467 100644
+--- a/xen/arch/x86/Makefile
++++ b/xen/arch/x86/Makefile
+@@ -71,7 +71,7 @@ obj-y += xstate.o
+ 
+ x86_emulate.o: x86_emulate/x86_emulate.c x86_emulate/x86_emulate.h
+ 
+-efi-y := $(shell if [ ! -r $(BASEDIR)/include/xen/compile.h -o \
++#efi-y := $(shell if [ ! -r $(BASEDIR)/include/xen/compile.h -o \
+                       -O $(BASEDIR)/include/xen/compile.h ]; then \
+                          echo '$(TARGET).efi'; fi)
+ 

@@ -1,0 +1,94 @@
+From 5efcebc66de0c34b071fea5c84e7d379541929af Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:24 -0400
+Subject: [PATCH] xsm: clean up unregistration
+
+The only possible value of original_ops was &dummy_xsm_ops, and
+unregister_xsm was never used.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+diff --git a/xen/include/xsm/xsm.h b/xen/include/xsm/xsm.h
+index 0d525ec..4b8843d 100644
+--- a/xen/include/xsm/xsm.h
++++ b/xen/include/xsm/xsm.h
+@@ -750,7 +750,6 @@ extern bool has_xsm_magic(paddr_t);
+ #endif
+ 
+ extern int register_xsm(struct xsm_operations *ops);
+-extern int unregister_xsm(struct xsm_operations *ops);
+ 
+ extern struct xsm_operations dummy_xsm_ops;
+ extern void xsm_fixup_ops(struct xsm_operations *ops);
+diff --git a/xen/xsm/flask/flask_op.c b/xen/xsm/flask/flask_op.c
+index 3ad4bdc..719c2d7 100644
+--- a/xen/xsm/flask/flask_op.c
++++ b/xen/xsm/flask/flask_op.c
+@@ -58,8 +58,6 @@ static int flask_security_make_bools(void);
+ 
+ extern int ss_initialized;
+ 
+-extern struct xsm_operations *original_ops;
+-
+ static void __init parse_flask_param(char *s)
+ {
+     if ( !strcmp(s, "enforcing") )
+@@ -243,7 +241,7 @@ static int flask_disable(void)
+     flask_disabled = 1;
+ 
+     /* Reset xsm_ops to the original module. */
+-    xsm_ops = original_ops;
++    xsm_ops = &dummy_xsm_ops;
+ 
+     return 0;
+ }
+diff --git a/xen/xsm/flask/hooks.c b/xen/xsm/flask/hooks.c
+index d632b0e..2692a6f 100644
+--- a/xen/xsm/flask/hooks.c
++++ b/xen/xsm/flask/hooks.c
+@@ -35,8 +35,6 @@
+ #include <objsec.h>
+ #include <conditional.h>
+ 
+-struct xsm_operations *original_ops = NULL;
+-
+ static u32 domain_sid(struct domain *dom)
+ {
+     struct domain_security_struct *dsec = dom->ssid;
+@@ -1842,7 +1840,6 @@ __init void flask_init(void)
+ 
+     avc_init();
+ 
+-    original_ops = xsm_ops;
+     if ( register_xsm(&flask_ops) )
+         panic("Flask: Unable to register with XSM");
+ 
+diff --git a/xen/xsm/xsm_core.c b/xen/xsm/xsm_core.c
+index 78d881b..8df1a3c 100644
+--- a/xen/xsm/xsm_core.c
++++ b/xen/xsm/xsm_core.c
+@@ -144,22 +144,6 @@ int __init register_xsm(struct xsm_operations *ops)
+     return 0;
+ }
+ 
+-
+-int unregister_xsm(struct xsm_operations *ops)
+-{
+-    if ( ops != xsm_ops )
+-    {
+-        printk("%s: trying to unregister "
+-               "a security_opts structure that is not "
+-               "registered, failing.\n", __FUNCTION__);
+-        return -EINVAL;
+-    }
+-
+-    xsm_ops = &dummy_xsm_ops;
+-
+-    return 0;
+-}
+-
+ #endif
+ 
+ long do_xsm_op (XEN_GUEST_HANDLE_PARAM(xsm_op_t) op)

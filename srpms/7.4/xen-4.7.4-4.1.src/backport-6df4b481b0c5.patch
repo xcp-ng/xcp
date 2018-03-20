@@ -1,0 +1,91 @@
+From 6df4b481b0c52ef2d432c1b3d3657369be4c1ea3 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Tue, 3 Oct 2017 16:21:02 +0100
+Subject: [PATCH] x86/np2m: implement sharing of np2m between vCPUs
+
+At the moment, nested p2ms are not shared between vcpus even if they
+share the same base pointer.
+
+Modify p2m_get_nestedp2m() to allow sharing a np2m between multiple
+vcpus with the same np2m_base (L1 np2m_base value in VMCx12).
+
+If the current np2m doesn't match the current base pointer, first look
+for another nested p2m in the same domain with the same base pointer,
+before reclaiming one from the LRU.
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Signed-off-by: George Dunlap <george.dunlap@citrix.com>
+Acked-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Jun Nakajima <jun.nakajima@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 2602d47e4d..1bfe86b2d2 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -1202,6 +1202,7 @@ static void virtual_vmentry(struct cpu_user_regs *regs)
+ 
+     /* Setup virtual ETP for L2 guest*/
+     if ( nestedhvm_paging_mode_hap(v) )
++        /* This will setup the initial np2m for the nested vCPU */
+         __vmwrite(EPT_POINTER, get_shadow_eptp(v));
+     else
+         __vmwrite(EPT_POINTER, get_host_eptp(v));
+diff --git a/xen/arch/x86/mm/p2m.c b/xen/arch/x86/mm/p2m.c
+index 4d0e753b9d..42f10d297e 100644
+--- a/xen/arch/x86/mm/p2m.c
++++ b/xen/arch/x86/mm/p2m.c
+@@ -2139,6 +2139,7 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+     struct domain *d = v->domain;
+     struct p2m_domain *p2m;
+     uint64_t np2m_base = nhvm_vcpu_p2m_base(v);
++    unsigned int i;
+ 
+     /* Mask out low bits; this avoids collisions with P2M_BASE_EADDR */
+     np2m_base &= ~(0xfffull);
+@@ -2152,19 +2153,19 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+     if ( p2m ) 
+     {
+         p2m_lock(p2m);
+-        if ( p2m->np2m_base == np2m_base || p2m->np2m_base == P2M_BASE_EADDR )
++        if ( p2m->np2m_base == np2m_base )
+         {
+             /* Check if np2m was flushed just before the lock */
+-            if ( p2m->np2m_base == P2M_BASE_EADDR ||
+-                 nv->np2m_generation != p2m->np2m_generation )
++            if ( nv->np2m_generation != p2m->np2m_generation )
+                 nvcpu_flush(v);
++            /* np2m is up-to-date */
+             p2m->np2m_base = np2m_base;
+             assign_np2m(v, p2m);
+             nestedp2m_unlock(d);
+ 
+             return p2m;
+         }
+-        else
++        else if ( p2m->np2m_base != P2M_BASE_EADDR )
+         {
+             /* vCPU is switching from some other valid np2m */
+             cpumask_clear_cpu(v->processor, p2m->dirty_cpumask);
+@@ -2172,6 +2173,23 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+         p2m_unlock(p2m);
+     }
+ 
++    /* Share a np2m if possible */
++    for ( i = 0; i < MAX_NESTEDP2M; i++ )
++    {
++        p2m = d->arch.nested_p2m[i];
++        p2m_lock(p2m);
++        if ( p2m->np2m_base == np2m_base )
++        {
++            nvcpu_flush(v);
++            p2m->np2m_base = np2m_base;
++            assign_np2m(v, p2m);
++            nestedp2m_unlock(d);
++
++            return p2m;
++        }
++        p2m_unlock(p2m);
++    }
++
+     /* All p2m's are or were in use. Take the least recent used one,
+      * flush it and reuse. */
+     p2m = p2m_getlru_nestedp2m(d, NULL);

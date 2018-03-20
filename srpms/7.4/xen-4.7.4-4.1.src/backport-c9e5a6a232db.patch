@@ -1,0 +1,176 @@
+From c9e5a6a232dbe2ceba2762221a32e3bb008adf2f Mon Sep 17 00:00:00 2001
+From: Doug Goldstein <cardoe@cardoe.com>
+Date: Wed, 8 Jun 2016 14:06:59 +0200
+Subject: [PATCH] build: convert crash_debug to Kconfig
+
+Convert the crash_debug option to Kconfig as CONFIG_CRASH_DEBUG. This
+was previously togglable on the command line so this adds a message for
+users enabling it from the command line to tell them to enable it from
+make menuconfig.
+
+Signed-off-by: Doug Goldstein <cardoe@cardoe.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+diff --git a/INSTALL b/INSTALL
+index 95fa94d..2974b9b 100644
+--- a/INSTALL
++++ b/INSTALL
+@@ -231,7 +231,6 @@ verbose=y
+ perfc=y
+ perfc_arrays=y
+ lock_profile=y
+-crash_debug=y
+ frame_pointer=y
+ lto=y
+ 
+diff --git a/docs/misc/crashdb.txt b/docs/misc/crashdb.txt
+index b41a538..9733666 100644
+--- a/docs/misc/crashdb.txt
++++ b/docs/misc/crashdb.txt
+@@ -5,7 +5,7 @@ Xen has a simple gdb stub for doing post-mortem debugging i.e. once
+ you've crashed it, you get to poke around and find out why.  There's
+ also a special key handler for making it crash, which is handy.
+ 
+-You need to have crash_debug=y set when compiling , and you also need
++You need to have CRASH_DEBUG=y set when compiling, and you also need
+ to enable it on the Xen command line, eg by gdb=com1.
+ 
+ If you need to have a serial port shared between gdb and the console,
+@@ -19,7 +19,7 @@ if you have a simple null modem connection between the test box and
+ the workstation, and aren't using a H/L split console:
+ 
+   * Set debug=y in Config.mk
+-  * Set crash_debug=y in xen/Rules.mk
++  * Set CRASH_DEBUG=y with `make -C xen menuconfig`
+   * Make the changes in the attached patch, and build.
+   * Arrange to pass gdb=com1 as a hypervisor command line argument
+     (I already have com1=38400,8n1 console=com1,vga sync_console)
+diff --git a/xen/Kconfig.debug b/xen/Kconfig.debug
+index 796af0c..8eeb13f 100644
+--- a/xen/Kconfig.debug
++++ b/xen/Kconfig.debug
+@@ -11,4 +11,15 @@ config DEBUG
+ 
+ 	  You probably want to say 'N' here.
+ 
++if DEBUG || EXPERT = "y"
++
++config CRASH_DEBUG
++	bool "Crash Debugging Support"
++	depends on X86
++	---help---
++	  If you want to attach gdb to Xen to debug Xen if it crashes
++	  then say Y.
++
++endif # DEBUG || EXPERT
++
+ endmenu
+diff --git a/xen/Rules.mk b/xen/Rules.mk
+index 94e2fe4..49cc69d 100644
+--- a/xen/Rules.mk
++++ b/xen/Rules.mk
+@@ -7,7 +7,6 @@ verbose       ?= n
+ perfc         ?= n
+ perfc_arrays  ?= n
+ lock_profile  ?= n
+-crash_debug   ?= n
+ frame_pointer ?= n
+ lto           ?= n
+ 
+@@ -25,6 +24,9 @@ ifeq ($(perfc_arrays),y)
+ perfc := y
+ endif
+ 
++ifneq ($(origin crash_debug),undefined)
++$(error "You must use 'make menuconfig' to enable/disable crash_debug now.")
++endif
+ ifeq ($(origin debug),command line)
+ $(warning "You must use 'make menuconfig' to enable/disable debug now.")
+ endif
+@@ -59,7 +61,6 @@ CFLAGS += -Wa,--strip-local-absolute
+ endif
+ 
+ CFLAGS-$(verbose)       += -DVERBOSE
+-CFLAGS-$(crash_debug)   += -DCRASH_DEBUG
+ CFLAGS-$(perfc)         += -DPERF_COUNTERS
+ CFLAGS-$(perfc_arrays)  += -DPERF_ARRAYS
+ CFLAGS-$(lock_profile)  += -DLOCK_PROFILE
+diff --git a/xen/arch/x86/Makefile b/xen/arch/x86/Makefile
+index 6b8f0cd..9159184 100644
+--- a/xen/arch/x86/Makefile
++++ b/xen/arch/x86/Makefile
+@@ -27,6 +27,7 @@ obj-y += domain_page.o
+ obj-y += e820.o
+ obj-y += extable.o
+ obj-y += flushtlb.o
++obj-$(CONFIG_CRASH_DEBUG) += gdbstub.o
+ obj-y += i387.o
+ obj-y += i8259.o
+ obj-y += io_apic.o
+@@ -66,8 +67,6 @@ obj-y += hpet.o
+ obj-y += vm_event.o
+ obj-y += xstate.o
+ 
+-obj-$(crash_debug) += gdbstub.o
+-
+ x86_emulate.o: x86_emulate/x86_emulate.c x86_emulate/x86_emulate.h
+ 
+ #efi-y := $(shell if [ ! -r $(BASEDIR)/include/xen/compile.h -o \
+diff --git a/xen/arch/x86/x86_64/Makefile b/xen/arch/x86/x86_64/Makefile
+index 5b54c16..d8815e7 100644
+--- a/xen/arch/x86/x86_64/Makefile
++++ b/xen/arch/x86/x86_64/Makefile
+@@ -14,4 +14,4 @@ obj-y += cpu_idle.o
+ obj-y += cpufreq.o
+ obj-bin-$(CONFIG_KEXEC) += kexec_reloc.o
+ 
+-obj-$(crash_debug)   += gdbstub.o
++obj-$(CONFIG_CRASH_DEBUG)   += gdbstub.o
+diff --git a/xen/common/Makefile b/xen/common/Makefile
+index 2a83261..a4bd4d6 100644
+--- a/xen/common/Makefile
++++ b/xen/common/Makefile
+@@ -8,6 +8,7 @@ obj-y += domain.o
+ obj-y += event_2l.o
+ obj-y += event_channel.o
+ obj-y += event_fifo.o
++obj-$(CONFIG_CRASH_DEBUG) += gdbstub.o
+ obj-y += grant_table.o
+ obj-y += guestcopy.o
+ obj-bin-y += gunzip.init.o
+@@ -63,7 +64,6 @@ obj-y += xmalloc_tlsf.o
+ obj-bin-$(CONFIG_X86) += $(foreach n,decompress bunzip2 unxz unlzma unlzo unlz4 earlycpio,$(n).init.o)
+ 
+ obj-$(perfc)       += perfc.o
+-obj-$(crash_debug) += gdbstub.o
+ 
+ obj-$(CONFIG_COMPAT) += $(addprefix compat/,domain.o kernel.o memory.o multicall.o xlat.o)
+ 
+diff --git a/xen/include/asm-x86/debugger.h b/xen/include/asm-x86/debugger.h
+index 33f4700..271cbaa 100644
+--- a/xen/include/asm-x86/debugger.h
++++ b/xen/include/asm-x86/debugger.h
+@@ -39,7 +39,7 @@
+ #define DEBUGGER_trap_fatal(_v, _r) \
+     if ( debugger_trap_fatal(_v, _r) ) return;
+ 
+-#if defined(CRASH_DEBUG)
++#ifdef CONFIG_CRASH_DEBUG
+ 
+ #include <xen/gdbstub.h>
+ 
+diff --git a/xen/include/xen/gdbstub.h b/xen/include/xen/gdbstub.h
+index ab710da..a5e6714 100644
+--- a/xen/include/xen/gdbstub.h
++++ b/xen/include/xen/gdbstub.h
+@@ -23,7 +23,7 @@
+ #include <asm/atomic.h>
+ #include <asm/page.h>
+ 
+-#ifdef CRASH_DEBUG
++#ifdef CONFIG_CRASH_DEBUG
+ 
+ struct gdb_context {
+     int                 serhnd;           /* handle on our serial line */

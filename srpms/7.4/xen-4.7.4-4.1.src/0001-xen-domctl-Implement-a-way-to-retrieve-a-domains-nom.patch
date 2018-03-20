@@ -1,0 +1,161 @@
+From 125ba3505176ee007d83539542885c4fbee45793 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Fri, 15 Jul 2016 19:26:36 +0100
+Subject: [PATCH] xen/domctl: Implement a way to retrieve a domains nomigrate
+ setting
+
+xc_domain_disable_migrate() has existed for a long time, but there has never
+been a way to query a domains nomigrate setting.
+
+Rename XEN_DOMCTL_disable_migrate to XEN_DOMCTL_set_disable_migrate to be more
+specific, and implement a companion XEN_DOMCTL_query_disable_migrate.
+
+Add a get_misc_info access vector to match the existing set_misc_info.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/tools/flask/policy/modules/dom0.te b/tools/flask/policy/modules/dom0.te
+index 2d982d9..4c8b1ce 100644
+--- a/tools/flask/policy/modules/dom0.te
++++ b/tools/flask/policy/modules/dom0.te
+@@ -34,7 +34,7 @@ allow dom0_t dom0_t:domain {
+ 	setvcpucontext max_vcpus setaffinity getaffinity getscheduler
+ 	getdomaininfo getvcpuinfo getvcpucontext setdomainmaxmem setdomainhandle
+ 	setdebugging hypercall settime setaddrsize getaddrsize trigger
+-	getpodtarget setpodtarget set_misc_info set_virq_handler
++	getpodtarget setpodtarget set_misc_info get_misc_info set_virq_handler
+ };
+ allow dom0_t dom0_t:domain2 {
+ 	set_cpuid gettsc settsc setscheduler set_max_evtchn set_vnumainfo
+diff --git a/tools/libxc/include/xenctrl.h b/tools/libxc/include/xenctrl.h
+index 89affda..455d0af 100644
+--- a/tools/libxc/include/xenctrl.h
++++ b/tools/libxc/include/xenctrl.h
+@@ -1303,6 +1303,8 @@ int xc_domain_get_tsc_info(xc_interface *xch,
+                            uint32_t *incarnation);
+ 
+ int xc_domain_disable_migrate(xc_interface *xch, uint32_t domid);
++int xc_domain_query_disable_migrate(xc_interface *xch, uint32_t domid,
++                                    bool *migration_disabled);
+ 
+ int xc_domain_maximum_gpfn(xc_interface *xch, domid_t domid, xen_pfn_t *gpfns);
+ 
+diff --git a/tools/libxc/xc_domain.c b/tools/libxc/xc_domain.c
+index 8d5bc8f..dd25b94 100644
+--- a/tools/libxc/xc_domain.c
++++ b/tools/libxc/xc_domain.c
+@@ -778,12 +778,27 @@ int xc_domain_set_time_offset(xc_interface *xch,
+ int xc_domain_disable_migrate(xc_interface *xch, uint32_t domid)
+ {
+     DECLARE_DOMCTL;
+-    domctl.cmd = XEN_DOMCTL_disable_migrate;
++    domctl.cmd = XEN_DOMCTL_set_disable_migrate;
+     domctl.domain = (domid_t)domid;
+     domctl.u.disable_migrate.disable = 1;
+     return do_domctl(xch, &domctl);
+ }
+ 
++int xc_domain_query_disable_migrate(xc_interface *xch, uint32_t domid,
++                                    bool *migration_disabled)
++{
++    int ret;
++    DECLARE_DOMCTL;
++    domctl.cmd = XEN_DOMCTL_query_disable_migrate;
++    domctl.domain = (domid_t)domid;
++    ret = do_domctl(xch, &domctl);
++
++    if ( ret == 0 )
++        *migration_disabled = domctl.u.disable_migrate.disable;
++
++    return ret;
++}
++
+ int xc_domain_set_tsc_info(xc_interface *xch,
+                            uint32_t domid,
+                            uint32_t tsc_mode,
+diff --git a/xen/common/domctl.c b/xen/common/domctl.c
+index 37efbaa..6ae70c1 100644
+--- a/xen/common/domctl.c
++++ b/xen/common/domctl.c
+@@ -1140,10 +1140,15 @@ long do_domctl(XEN_GUEST_HANDLE_PARAM(xen_domctl_t) u_domctl)
+         copyback = 1;
+         break;
+ 
+-    case XEN_DOMCTL_disable_migrate:
++    case XEN_DOMCTL_set_disable_migrate:
+         d->disable_migrate = op->u.disable_migrate.disable;
+         break;
+ 
++    case XEN_DOMCTL_query_disable_migrate:
++        op->u.disable_migrate.disable = d->disable_migrate;
++        copyback = 1;
++        break;
++
+ #ifdef CONFIG_HAS_MEM_ACCESS
+     case XEN_DOMCTL_set_access_required:
+         if ( unlikely(current->domain == d) ) /* no domain_pause() */
+diff --git a/xen/include/public/domctl.h b/xen/include/public/domctl.h
+index 594ddb9..9e83a1b 100644
+--- a/xen/include/public/domctl.h
++++ b/xen/include/public/domctl.h
+@@ -756,7 +756,7 @@ typedef struct xen_domctl_hvmcontext_partial {
+ } xen_domctl_hvmcontext_partial_t;
+ DEFINE_XEN_GUEST_HANDLE(xen_domctl_hvmcontext_partial_t);
+ 
+-/* XEN_DOMCTL_disable_migrate */
++/* XEN_DOMCTL_{set,query}_disable_migrate */
+ typedef struct xen_domctl_disable_migrate {
+     uint32_t disable; /* IN: 1: disable migration and restore */
+ } xen_domctl_disable_migrate_t;
+@@ -1193,7 +1193,7 @@ struct xen_domctl {
+ #define XEN_DOMCTL_gethvmcontext_partial         55
+ #define XEN_DOMCTL_vm_event_op                   56
+ #define XEN_DOMCTL_mem_sharing_op                57
+-#define XEN_DOMCTL_disable_migrate               58
++#define XEN_DOMCTL_set_disable_migrate           58
+ #define XEN_DOMCTL_gettscinfo                    59
+ #define XEN_DOMCTL_settscinfo                    60
+ #define XEN_DOMCTL_getpageframeinfo3             61
+@@ -1214,6 +1214,7 @@ struct xen_domctl {
+ #define XEN_DOMCTL_monitor_op                    77
+ #define XEN_DOMCTL_psr_cat_op                    78
+ #define XEN_DOMCTL_soft_reset                    79
++#define XEN_DOMCTL_query_disable_migrate         80
+ #define XEN_DOMCTL_gdbsx_guestmemio            1000
+ #define XEN_DOMCTL_gdbsx_pausevcpu             1001
+ #define XEN_DOMCTL_gdbsx_unpausevcpu           1002
+diff --git a/xen/xsm/flask/hooks.c b/xen/xsm/flask/hooks.c
+index ec6f5b4..82bd692 100644
+--- a/xen/xsm/flask/hooks.c
++++ b/xen/xsm/flask/hooks.c
+@@ -712,10 +712,13 @@ static int flask_domctl(struct domain *d, int cmd)
+         return current_has_perm(d, SECCLASS_DOMAIN, DOMAIN__SETDEBUGGING);
+ 
+     case XEN_DOMCTL_subscribe:
+-    case XEN_DOMCTL_disable_migrate:
++    case XEN_DOMCTL_set_disable_migrate:
+     case XEN_DOMCTL_suppress_spurious_page_faults:
+         return current_has_perm(d, SECCLASS_DOMAIN, DOMAIN__SET_MISC_INFO);
+ 
++    case XEN_DOMCTL_query_disable_migrate:
++        return current_has_perm(d, SECCLASS_DOMAIN, DOMAIN__GET_MISC_INFO);
++
+     case XEN_DOMCTL_set_virq_handler:
+         return current_has_perm(d, SECCLASS_DOMAIN, DOMAIN__SET_VIRQ_HANDLER);
+ 
+diff --git a/xen/xsm/flask/policy/access_vectors b/xen/xsm/flask/policy/access_vectors
+index 49c9a9e..f5d661d 100644
+--- a/xen/xsm/flask/policy/access_vectors
++++ b/xen/xsm/flask/policy/access_vectors
+@@ -176,9 +176,11 @@ class domain
+     getpodtarget
+ # XENMEM_set_pod_target
+     setpodtarget
+-# XEN_DOMCTL_subscribe, XEN_DOMCTL_disable_migrate,
++# XEN_DOMCTL_subscribe, XEN_DOMCTL_get_disable_migrate,
+ # XEN_DOMCTL_suppress_spurious_page_faults
+     set_misc_info
++# XEN_DOMCTL_query_disable_migrate
++    get_misc_info
+ # XEN_DOMCTL_set_virq_handler
+     set_virq_handler
+ }

@@ -1,0 +1,37 @@
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 3c50284..3366a96 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -6328,6 +6328,18 @@ long do_hvm_op(unsigned long op, XEN_GUEST_HANDLE_PARAM(void) arg)
+             gdprintk(XENLOG_INFO, "Legacy windows driver quirks enabled. "
+                      "(HVMOP_set_driver_version)\n");
+             goto legacy_win_complete;
++
++        case HVMOP_process_dying:
++            /*
++             * Reduced to functional NOP, but must return success for certain
++             * versions of the legacy drivers.
++             *
++             * Xen-4.5 introduced the HVMOP_op_mask which truncates this op
++             * into HVMOP_set_pci_intx_level.  As HVMOP_set_pci_intx_level is
++             * ineligible for continuations, we can still distinguish legacy
++             * drivers.
++             */
++            goto legacy_win_complete;
+         }
+     }
+ 
+diff --git a/xen/include/public/hvm/hvm_op.h b/xen/include/public/hvm/hvm_op.h
+index b55750e..5353998 100644
+--- a/xen/include/public/hvm/hvm_op.h
++++ b/xen/include/public/hvm/hvm_op.h
+@@ -487,6 +487,9 @@ struct xen_hvm_altp2m_op {
+ typedef struct xen_hvm_altp2m_op xen_hvm_altp2m_op_t;
+ DEFINE_XEN_GUEST_HANDLE(xen_hvm_altp2m_op_t);
+ 
++/* Legacy NOP: Hint from PV drivers for process destruction. */
++#define HVMOP_process_dying        0x102
++
+ #define HVMOP_set_driver_version 0x103
+ struct xen_hvm_set_driver_version {
+     uint32_t build;

@@ -1,0 +1,165 @@
+From b2294302f0db7876fd1f95287c46b5e64d4bfe37 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Thu, 16 Nov 2017 16:09:44 +0000
+Subject: [PATCH] x86/boot: Report details of speculative mitigations
+
+Nothing very interesting at the moment, but the logic will grow as new
+mitigations are added.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/xen/arch/x86/Makefile b/xen/arch/x86/Makefile
+index e093c41..804775f 100644
+--- a/xen/arch/x86/Makefile
++++ b/xen/arch/x86/Makefile
+@@ -56,6 +56,7 @@ obj-y += setup.o
+ obj-y += shutdown.o
+ obj-y += smp.o
+ obj-y += smpboot.o
++obj-y += spec_ctrl.o
+ obj-y += srat.o
+ obj-y += string.o
+ obj-y += sysctl.o
+diff --git a/xen/arch/x86/setup.c b/xen/arch/x86/setup.c
+index 9071ac4..66cba94 100644
+--- a/xen/arch/x86/setup.c
++++ b/xen/arch/x86/setup.c
+@@ -52,6 +52,7 @@
+ #include <asm/alternative.h>
+ #include <asm/mc146818rtc.h>
+ #include <asm/cpuid.h>
++#include <asm/spec_ctrl.h>
+ 
+ /* opt_nosmp: If true, secondary processors are ignored. */
+ static bool_t __initdata opt_nosmp;
+@@ -1424,6 +1425,8 @@ void __init noreturn __start_xen(unsigned long mbi_p)
+     if ( cpu_has_fsgsbase )
+         set_in_cr4(X86_CR4_FSGSBASE);
+ 
++    init_speculation_mitigations();
++
+     init_idle_domain();
+ 
+     this_cpu(stubs.addr) = alloc_stub_page(smp_processor_id(),
+diff --git a/xen/arch/x86/spec_ctrl.c b/xen/arch/x86/spec_ctrl.c
+new file mode 100644
+index 0000000..21e7cb2
+--- /dev/null
++++ b/xen/arch/x86/spec_ctrl.c
+@@ -0,0 +1,76 @@
++/******************************************************************************
++ * arch/x86/spec_ctrl.c
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Copyright (c) 2017 Citrix Systems Ltd.
++ */
++#include <xen/init.h>
++#include <xen/lib.h>
++#include <xen/kconfig.h>
++
++#include <asm/processor.h>
++#include <asm/spec_ctrl.h>
++
++enum ind_thunk {
++    THUNK_DEFAULT, /* Decide which thunk to use at boot time. */
++    THUNK_NONE,    /* Missing compiler support for thunks. */
++
++    THUNK_RETPOLINE,
++};
++
++static void __init print_details(enum ind_thunk thunk)
++{
++    printk(XENLOG_DEBUG "Speculative mitigation facilities:\n");
++
++    /* Compiled-in support which pertains to BTI mitigations. */
++    if ( IS_ENABLED(CONFIG_INDIRECT_THUNK) )
++        printk(XENLOG_DEBUG "  Compiled-in support: INDIRECT_THUNK\n");
++
++    printk(XENLOG_INFO
++           "BTI mitigations: Thunk %s\n",
++           thunk == THUNK_NONE      ? "N/A" :
++           thunk == THUNK_RETPOLINE ? "RETPOLINE" : "?");
++}
++
++void __init init_speculation_mitigations(void)
++{
++    enum ind_thunk thunk = THUNK_DEFAULT;
++
++    /*
++     * Supplimentary minor adjustments.  Without compiler support, there are
++     * no thunks.
++     */
++    if ( !IS_ENABLED(CONFIG_INDIRECT_THUNK) )
++        thunk = THUNK_NONE;
++
++    /*
++     * If there are still no thunk preferences, the compiled default is
++     * actually retpoline, and it is better than nothing.
++     */
++    if ( thunk == THUNK_DEFAULT )
++        thunk = THUNK_RETPOLINE;
++
++    print_details(thunk);
++}
++
++/*
++ * Local variables:
++ * mode: C
++ * c-file-style: "BSD"
++ * c-basic-offset: 4
++ * tab-width: 4
++ * indent-tabs-mode: nil
++ * End:
++ */
+diff --git a/xen/include/asm-x86/spec_ctrl.h b/xen/include/asm-x86/spec_ctrl.h
+new file mode 100644
+index 0000000..d0b44f6
+--- /dev/null
++++ b/xen/include/asm-x86/spec_ctrl.h
+@@ -0,0 +1,35 @@
++/******************************************************************************
++ * include/asm-x86/spec_ctrl.h
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Copyright (c) 2017 Citrix Systems Ltd.
++ */
++
++#ifndef __X86_SPEC_CTRL_H__
++#define __X86_SPEC_CTRL_H__
++
++void init_speculation_mitigations(void);
++
++#endif /* !__X86_SPEC_CTRL_H__ */
++
++/*
++ * Local variables:
++ * mode: C
++ * c-file-style: "BSD"
++ * c-basic-offset: 4
++ * tab-width: 4
++ * indent-tabs-mode: nil
++ * End:
++ */

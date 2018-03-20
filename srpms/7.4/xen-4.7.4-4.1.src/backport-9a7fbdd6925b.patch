@@ -1,0 +1,31 @@
+From 9a7fbdd6925bd6323941ee8a08b3884aa0cef6fe Mon Sep 17 00:00:00 2001
+From: Paul Durrant <paul.durrant@citrix.com>
+Date: Mon, 27 Mar 2017 11:51:22 +0100
+Subject: [PATCH] tools/libxenforeignmemory: bind restrict operation to new
+ version
+
+Commit 5823d6eb "add a call to restrict the handle" added a new function
+to the foreignmemory API. This API is considered stable and so the new
+function should be bound to a new version.
+
+This patch creates version 1.1 of the API, dependent on version 1.0, and
+binds the restrict call to version 1.1. Thus version 1.0 is as it was
+before the new function was added.
+
+Signed-off-by: Paul Durrant <paul.durrant@citrix.com>
+Acked-by: Wei Liu <wei.liu2@citrix.com>
+diff --git a/tools/libs/foreignmemory/libxenforeignmemory.map b/tools/libs/foreignmemory/libxenforeignmemory.map
+index 5c9806c..41a8899 100644
+--- a/tools/libs/foreignmemory/libxenforeignmemory.map
++++ b/tools/libs/foreignmemory/libxenforeignmemory.map
+@@ -4,6 +4,9 @@ VERS_1.0 {
+ 		xenforeignmemory_close;
+ 		xenforeignmemory_map;
+ 		xenforeignmemory_unmap;
+-		xenforeignmemory_restrict;
+ 	local: *; /* Do not expose anything by default */
+ };
++VERS_1.1 {
++	global:
++		xenforeignmemory_restrict;
++} VERS_1.0;

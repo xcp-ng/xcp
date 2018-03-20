@@ -1,0 +1,307 @@
+From 45aa978766834cd1bf4cb47955c156574ea9618c Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:17 -0400
+Subject: [PATCH] flask: remove unused secondary context in ocontext
+
+This field was originally used in Linux for a default message code for
+network interfaces.  It has never been used in Xen, so remove it.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+diff --git a/xen/xsm/flask/ss/policydb.c b/xen/xsm/flask/ss/policydb.c
+index eebfe9c..00b5390 100644
+--- a/xen/xsm/flask/ss/policydb.c
++++ b/xen/xsm/flask/ss/policydb.c
+@@ -638,8 +638,7 @@ static int (*destroy_f[SYM_NUM]) (void *key, void *datum, void *datap) =
+ 
+ static void ocontext_destroy(struct ocontext *c, int i)
+ {
+-    context_destroy(&c->context[0]);
+-    context_destroy(&c->context[1]);
++    context_destroy(&c->context);
+     if ( i == OCON_ISID || i == OCON_DTREE )
+         xfree(c->u.name);
+     xfree(c);
+@@ -747,14 +746,14 @@ int policydb_load_isids(struct policydb *p, struct sidtab *s)
+     head = p->ocontexts[OCON_ISID];
+     for ( c = head; c; c = c->next )
+     {
+-        if ( !c->context[0].user )
++        if ( !c->context.user )
+         {
+             printk(KERN_ERR "Flask:  SID %s was never "
+                    "defined.\n", c->u.name);
+             rc = -EINVAL;
+             goto out;
+         }
+-        if ( sidtab_insert(s, c->sid[0], &c->context[0]) )
++        if ( sidtab_insert(s, c->sid, &c->context) )
+         {
+             printk(KERN_ERR "Flask:  unable to load initial "
+                    "SID %s.\n", c->u.name);
+@@ -2015,8 +2014,8 @@ int policydb_read(struct policydb *p, void *fp)
+                 rc = next_entry(buf, fp, sizeof(u32));
+                 if ( rc < 0 )
+                     goto bad;
+-                c->sid[0] = le32_to_cpu(buf[0]);
+-                rc = context_read_and_validate(&c->context[0], p, fp);
++                c->sid = le32_to_cpu(buf[0]);
++                rc = context_read_and_validate(&c->context, p, fp);
+                 if ( rc )
+                     goto bad;
+                 break;
+@@ -2031,7 +2030,7 @@ int policydb_read(struct policydb *p, void *fp)
+                 if ( rc < 0 )
+                     goto bad;
+                 c->u.pirq = le32_to_cpu(buf[0]);
+-                rc = context_read_and_validate(&c->context[0], p, fp);
++                rc = context_read_and_validate(&c->context, p, fp);
+                 if ( rc )
+                     goto bad;
+                 break;
+@@ -2047,7 +2046,7 @@ int policydb_read(struct policydb *p, void *fp)
+                     goto bad;
+                 c->u.ioport.low_ioport = le32_to_cpu(buf[0]);
+                 c->u.ioport.high_ioport = le32_to_cpu(buf[1]);
+-                rc = context_read_and_validate(&c->context[0], p, fp);
++                rc = context_read_and_validate(&c->context, p, fp);
+                 if ( rc )
+                     goto bad;
+                 break;
+@@ -2075,7 +2074,7 @@ int policydb_read(struct policydb *p, void *fp)
+                     c->u.iomem.low_iomem = le32_to_cpu(buf[0]);
+                     c->u.iomem.high_iomem = le32_to_cpu(buf[1]);
+                 }
+-                rc = context_read_and_validate(&c->context[0], p, fp);
++                rc = context_read_and_validate(&c->context, p, fp);
+                 if ( rc )
+                     goto bad;
+                 break;
+@@ -2090,7 +2089,7 @@ int policydb_read(struct policydb *p, void *fp)
+                 if ( rc < 0 )
+                     goto bad;
+                 c->u.device = le32_to_cpu(buf[0]);
+-                rc = context_read_and_validate(&c->context[0], p, fp);
++                rc = context_read_and_validate(&c->context, p, fp);
+                 if ( rc )
+                     goto bad;
+                 break;
+@@ -2113,7 +2112,7 @@ int policydb_read(struct policydb *p, void *fp)
+                 if ( rc < 0 )
+                     goto bad;
+                 c->u.name[len] = 0;
+-                rc = context_read_and_validate(&c->context[0], p, fp);
++                rc = context_read_and_validate(&c->context, p, fp);
+                 if ( rc )
+                     goto bad;
+                 break;
+diff --git a/xen/xsm/flask/ss/policydb.h b/xen/xsm/flask/ss/policydb.h
+index 30be71a..f158ce3 100644
+--- a/xen/xsm/flask/ss/policydb.h
++++ b/xen/xsm/flask/ss/policydb.h
+@@ -158,8 +158,8 @@ struct ocontext {
+                 u64 high_iomem;
+         } iomem;
+     } u;
+-    struct context context[2];    /* security context(s) */
+-    u32 sid[2];    /* SID(s) */
++    struct context context;
++    u32 sid;
+     struct ocontext *next;
+ };
+ 
+diff --git a/xen/xsm/flask/ss/services.c b/xen/xsm/flask/ss/services.c
+index 9da358b..c590440 100644
+--- a/xen/xsm/flask/ss/services.c
++++ b/xen/xsm/flask/ss/services.c
+@@ -1488,13 +1488,13 @@ int security_irq_sid(int pirq, u32 *out_sid)
+ 
+     if ( c )
+     {
+-        if ( !c->sid[0] )
++        if ( !c->sid )
+         {
+-            rc = sidtab_context_to_sid(&sidtab, &c->context[0], &c->sid[0]);
++            rc = sidtab_context_to_sid(&sidtab, &c->context, &c->sid);
+             if ( rc )
+                 goto out;
+         }
+-        *out_sid = c->sid[0];
++        *out_sid = c->sid;
+     }
+     else
+     {
+@@ -1528,13 +1528,13 @@ int security_iomem_sid(unsigned long mfn, u32 *out_sid)
+ 
+     if ( c )
+     {
+-        if ( !c->sid[0] )
++        if ( !c->sid )
+         {
+-            rc = sidtab_context_to_sid(&sidtab, &c->context[0], &c->sid[0]);
++            rc = sidtab_context_to_sid(&sidtab, &c->context, &c->sid);
+             if ( rc )
+                 goto out;
+         }
+-        *out_sid = c->sid[0];
++        *out_sid = c->sid;
+     }
+     else
+     {
+@@ -1559,9 +1559,9 @@ int security_iterate_iomem_sids(unsigned long start, unsigned long end,
+         c = c->next;
+ 
+     while (c && c->u.iomem.low_iomem <= end) {
+-        if (!c->sid[0])
++        if (!c->sid)
+         {
+-            rc = sidtab_context_to_sid(&sidtab, &c->context[0], &c->sid[0]);
++            rc = sidtab_context_to_sid(&sidtab, &c->context, &c->sid);
+             if ( rc )
+                 goto out;
+         }
+@@ -1574,11 +1574,11 @@ int security_iterate_iomem_sids(unsigned long start, unsigned long end,
+         }
+         if (end <= c->u.iomem.high_iomem) {
+             /* iteration ends in the middle of this range */
+-            rc = fn(data, c->sid[0], start, end);
++            rc = fn(data, c->sid, start, end);
+             goto out;
+         }
+ 
+-        rc = fn(data, c->sid[0], start, c->u.iomem.high_iomem);
++        rc = fn(data, c->sid, start, c->u.iomem.high_iomem);
+         if (rc)
+             goto out;
+         start = c->u.iomem.high_iomem + 1;
+@@ -1616,13 +1616,13 @@ int security_ioport_sid(u32 ioport, u32 *out_sid)
+ 
+     if ( c )
+     {
+-        if ( !c->sid[0] )
++        if ( !c->sid )
+         {
+-            rc = sidtab_context_to_sid(&sidtab, &c->context[0], &c->sid[0]);
++            rc = sidtab_context_to_sid(&sidtab, &c->context, &c->sid);
+             if ( rc )
+                 goto out;
+         }
+-        *out_sid = c->sid[0];
++        *out_sid = c->sid;
+     }
+     else
+     {
+@@ -1647,9 +1647,9 @@ int security_iterate_ioport_sids(u32 start, u32 end,
+         c = c->next;
+ 
+     while (c && c->u.ioport.low_ioport <= end) {
+-        if (!c->sid[0])
++        if (!c->sid)
+         {
+-            rc = sidtab_context_to_sid(&sidtab, &c->context[0], &c->sid[0]);
++            rc = sidtab_context_to_sid(&sidtab, &c->context, &c->sid);
+             if ( rc )
+                 goto out;
+         }
+@@ -1662,11 +1662,11 @@ int security_iterate_ioport_sids(u32 start, u32 end,
+         }
+         if (end <= c->u.ioport.high_ioport) {
+             /* iteration ends in the middle of this range */
+-            rc = fn(data, c->sid[0], start, end);
++            rc = fn(data, c->sid, start, end);
+             goto out;
+         }
+ 
+-        rc = fn(data, c->sid[0], start, c->u.ioport.high_ioport);
++        rc = fn(data, c->sid, start, c->u.ioport.high_ioport);
+         if (rc)
+             goto out;
+         start = c->u.ioport.high_ioport + 1;
+@@ -1703,13 +1703,13 @@ int security_device_sid(u32 device, u32 *out_sid)
+ 
+     if ( c )
+     {
+-        if ( !c->sid[0] )
++        if ( !c->sid )
+         {
+-            rc = sidtab_context_to_sid(&sidtab, &c->context[0], &c->sid[0]);
++            rc = sidtab_context_to_sid(&sidtab, &c->context, &c->sid);
+             if ( rc )
+                 goto out;
+         }
+-        *out_sid = c->sid[0];
++        *out_sid = c->sid;
+     }
+     else
+     {
+@@ -1849,13 +1849,13 @@ int security_devicetree_sid(const char *path, u32 *out_sid)
+ 
+     if ( c )
+     {
+-        if ( !c->sid[0] )
++        if ( !c->sid )
+         {
+-            rc = sidtab_context_to_sid(&sidtab, &c->context[0], &c->sid[0]);
++            rc = sidtab_context_to_sid(&sidtab, &c->context, &c->sid);
+             if ( rc )
+                 goto out;
+         }
+-        *out_sid = c->sid[0];
++        *out_sid = c->sid;
+     }
+     else
+     {
+@@ -2081,7 +2081,7 @@ int security_ocontext_add( u32 ocon, unsigned long low, unsigned long high
+ 
+     if ( (add = xzalloc(struct ocontext)) == NULL )
+         return -ENOMEM;
+-    add->sid[0] = sid;
++    add->sid = sid;
+ 
+     POLICY_WRLOCK;
+     switch( ocon )
+@@ -2099,7 +2099,7 @@ int security_ocontext_add( u32 ocon, unsigned long low, unsigned long high
+         {
+             if ( c->u.pirq == add->u.pirq )
+             {
+-                if ( c->sid[0] == sid )
++                if ( c->sid == sid )
+                     break;
+                 printk("%s: Duplicate pirq %d\n", __FUNCTION__, add->u.pirq);
+                 ret = -EEXIST;
+@@ -2130,7 +2130,7 @@ int security_ocontext_add( u32 ocon, unsigned long low, unsigned long high
+         if (c && c->u.ioport.low_ioport <= high)
+         {
+             if (c->u.ioport.low_ioport == low &&
+-                c->u.ioport.high_ioport == high && c->sid[0] == sid)
++                c->u.ioport.high_ioport == high && c->sid == sid)
+                 break;
+ 
+             printk("%s: IO Port overlap with entry %#x - %#x\n",
+@@ -2164,7 +2164,7 @@ int security_ocontext_add( u32 ocon, unsigned long low, unsigned long high
+         if (c && c->u.iomem.low_iomem <= high)
+         {
+             if (c->u.iomem.low_iomem == low &&
+-                c->u.iomem.high_iomem == high && c->sid[0] == sid)
++                c->u.iomem.high_iomem == high && c->sid == sid)
+                 break;
+ 
+             printk("%s: IO Memory overlap with entry %#"PRIx64" - %#"PRIx64"\n",
+@@ -2195,7 +2195,7 @@ int security_ocontext_add( u32 ocon, unsigned long low, unsigned long high
+         {
+             if ( c->u.device == add->u.device )
+             {
+-                if ( c->sid[0] == sid )
++                if ( c->sid == sid )
+                     break;
+ 
+                 printk("%s: Duplicate PCI Device %#x\n", __FUNCTION__,
+@@ -2359,7 +2359,7 @@ int security_devicetree_setlabel(char *path, u32 sid)
+             xfree(path);
+             return -ENOMEM;
+         }
+-        add->sid[0] = sid;
++        add->sid = sid;
+         add->u.name = path;
+     }
+     else

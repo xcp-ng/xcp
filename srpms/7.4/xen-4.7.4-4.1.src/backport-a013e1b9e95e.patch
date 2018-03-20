@@ -1,0 +1,52 @@
+From a013e1b9e95e9f30db180e97ef9ee41e800c6d39 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Fri, 3 Mar 2017 11:58:47 +0100
+Subject: [PATCH 1/2] x86/vvmx: check vmcs address in vmread/vmwrite
+
+If nested vmcs's address is invalid, virtual_vmcs_enter() will fail
+during vmread/vmwrite:
+
+(XEN) Xen BUG at .../git/upstream/xen/xen/include/asm/hvm/vmx/vmx.h:333
+(XEN) ----[ Xen-4.9-unstable  x86_64  debug=y   Tainted:    H ]----
+(XEN) Xen call trace:
+(XEN)    [<ffff82d0801f925e>] vmcs.c#arch/x86/hvm/vmx/vmcs.o.unlikely+0x28/0x19a
+(XEN)    [<ffff82d0801f60e3>] virtual_vmcs_vmwrite_safe+0x16/0x52
+(XEN)    [<ffff82d080202cb2>] nvmx_handle_vmwrite+0x70/0xfe
+(XEN)    [<ffff82d0801fe98a>] vmx_vmexit_handler+0x1379/0x1c49
+(XEN)    [<ffff82d08020427c>] vmx_asm_vmexit_handler+0x3c/0x120
+
+Fix this by emulating VMfailInvalid if the address is invalid.
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 775a6bd..7df9d47 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -1762,6 +1762,12 @@ int nvmx_handle_vmread(struct cpu_user_regs *regs)
+     if ( rc != X86EMUL_OKAY )
+         return rc;
+ 
++    if ( vcpu_nestedhvm(v).nv_vvmcxaddr == INVALID_PADDR )
++    {
++        vmfail_invalid(regs);
++        return X86EMUL_OKAY;
++    }
++
+     rc = get_vvmcs_safe(v, reg_read(regs, decode.reg2), &value);
+     if ( rc != VMX_INSN_SUCCEED )
+     {
+@@ -1797,6 +1803,12 @@ int nvmx_handle_vmwrite(struct cpu_user_regs *regs)
+              != X86EMUL_OKAY )
+         return X86EMUL_EXCEPTION;
+ 
++    if ( vcpu_nestedhvm(v).nv_vvmcxaddr == INVALID_PADDR )
++    {
++        vmfail_invalid(regs);
++        return X86EMUL_OKAY;
++    }
++
+     vmcs_encoding = reg_read(regs, decode.reg2);
+     err = set_vvmcs_safe(v, vmcs_encoding, operand);
+     if ( err != VMX_INSN_SUCCEED )

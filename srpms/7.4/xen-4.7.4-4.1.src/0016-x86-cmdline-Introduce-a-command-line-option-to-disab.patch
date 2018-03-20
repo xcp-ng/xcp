@@ -1,0 +1,132 @@
+From 262334117a0590db3b3ae74d3a89923078fd6670 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Fri, 3 Nov 2017 16:12:13 +0000
+Subject: [PATCH] x86/cmdline: Introduce a command line option to disable
+ IBRS/IBPB, STIBP and IBPB
+
+Instead of gaining yet another top level boolean, introduce a more generic
+cpuid= option.  Also introduce a helper function to parse a generic boolean
+value.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/docs/misc/xen-command-line.markdown b/docs/misc/xen-command-line.markdown
+index 6451406..aa6167b 100644
+--- a/docs/misc/xen-command-line.markdown
++++ b/docs/misc/xen-command-line.markdown
+@@ -418,6 +418,18 @@ choice of `dom0-kernel` is deprecated and not supported by all Dom0 kernels.
+   respectively.
+ * `verbose` option can be included as a string or also as `verbose=<integer>`
+ 
++### cpuid (x86)
++> `= List of comma separated booleans`
++
++This option allows for fine tuning of the facilities Xen will use, after
++accounting for hardware capabilities as enumerated via CPUID.
++
++Currently accepted:
++
++The Speculation Control hardware features `ibrsb`, `stibp`, `ibpb` are used by
++default if avaiable.  They can be ignored, e.g. `no-ibrsb`, at which point Xen
++won't use them itself, and won't offer them to guests.
++
+ ### cpuid\_mask\_cpu (AMD only)
+ > `= fam_0f_rev_c | fam_0f_rev_d | fam_0f_rev_e | fam_0f_rev_f | fam_0f_rev_g | fam_10_rev_b | fam_10_rev_c | fam_11_rev_b`
+ 
+diff --git a/xen/arch/x86/cpuid.c b/xen/arch/x86/cpuid.c
+index 3e85a63..452170e 100644
+--- a/xen/arch/x86/cpuid.c
++++ b/xen/arch/x86/cpuid.c
+@@ -13,6 +13,41 @@ static const uint32_t __initconst hvm_shadow_featuremask[] = INIT_HVM_SHADOW_FEA
+ static const uint32_t __initconst hvm_hap_featuremask[] = INIT_HVM_HAP_FEATURES;
+ static const uint32_t __initconst deep_features[] = INIT_DEEP_FEATURES;
+ 
++static int __init parse_xen_cpuid(const char *s)
++{
++    const char *ss;
++    int val, rc = 0;
++
++    do {
++        ss = strchr(s, ',');
++        if ( !ss )
++            ss = strchr(s, '\0');
++
++        if ( (val = parse_boolean("ibpb", s, ss)) >= 0 )
++        {
++            if ( !val )
++                setup_clear_cpu_cap(X86_FEATURE_IBPB);
++        }
++        else if ( (val = parse_boolean("ibrsb", s, ss)) >= 0 )
++        {
++            if ( !val )
++                setup_clear_cpu_cap(X86_FEATURE_IBRSB);
++        }
++        else if ( (val = parse_boolean("stibp", s, ss)) >= 0 )
++        {
++            if ( !val )
++                setup_clear_cpu_cap(X86_FEATURE_STIBP);
++        }
++        else
++            rc = -EINVAL;
++
++        s = ss + 1;
++    } while ( *ss );
++
++    return rc;
++}
++custom_param("cpuid", parse_xen_cpuid);
++
+ uint32_t __read_mostly raw_featureset[FSCAPINTS];
+ uint32_t __read_mostly pv_featureset[FSCAPINTS];
+ uint32_t __read_mostly hvm_featureset[FSCAPINTS];
+diff --git a/xen/common/kernel.c b/xen/common/kernel.c
+index 3409e0e..ab03513 100644
+--- a/xen/common/kernel.c
++++ b/xen/common/kernel.c
+@@ -168,6 +168,29 @@ int __init parse_bool(const char *s)
+     return -1;
+ }
+ 
++int parse_boolean(const char *name, const char *s, const char *e)
++{
++    size_t slen, nlen;
++    int val = !!strncmp(s, "no-", 3);
++
++    if ( !val )
++        s += 3;
++
++    slen = e ? ({ ASSERT(e >= s); e - s; }) : strlen(s);
++    nlen = strlen(name);
++
++    /* Does s now start with name? */
++    if ( slen < nlen || strncmp(s, name, nlen) )
++        return -1;
++
++    switch ( s[nlen] )
++    {
++    case '\0': return val;
++    case '=':  return parse_bool(&s[nlen + 1]);
++    default:   return -1;
++    }
++}
++
+ /**
+  *      print_tainted - return a string to represent the kernel taint state.
+  *
+diff --git a/xen/include/xen/lib.h b/xen/include/xen/lib.h
+index 0c036ed..a87e08a 100644
+--- a/xen/include/xen/lib.h
++++ b/xen/include/xen/lib.h
+@@ -62,6 +62,13 @@ struct domain;
+ void cmdline_parse(const char *cmdline);
+ int parse_bool(const char *s);
+ 
++/**
++ * Given a specific name, parses a string of the form:
++ *   [no-]$NAME[=...]
++ * returning 0 or 1 for a recognised boolean, or -1 for an error.
++ */
++int parse_boolean(const char *name, const char *s, const char *e);
++
+ /*#define DEBUG_TRACE_DUMP*/
+ #ifdef DEBUG_TRACE_DUMP
+ extern void debugtrace_dump(void);

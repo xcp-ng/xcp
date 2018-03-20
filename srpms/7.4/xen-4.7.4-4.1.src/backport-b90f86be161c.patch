@@ -1,0 +1,209 @@
+From 481d48d9482ea384d57334b65ea44244382a7227 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Sat, 25 Nov 2017 15:17:14 +0000
+Subject: [PATCH] x86: Avoid corruption on migrate for vcpus using CPUID
+ Faulting
+
+Xen 4.8 and later virtualises CPUID Faulting support for guests.  However, the
+value of MSR_MISC_FEATURES_ENABLES is omitted from the vcpu state, meaning
+that the current cpuid faulting setting is lost on migrate/suspend/resume.
+
+Instead of following the MSR status quo, take the opportunity to make the
+logic more generic, and in particular, trivial to extend for future MSRs.
+
+This is done by discarding the notion of optional MSRs, and requiring the
+toolstack to be prepared to move all of the MSRs, although only a subset will
+typically need to move.
+
+This allows for the use of guest_{rd,wr}msr() alone to evaluate whether an MSR
+needs moving.  This is a benefit because it means there is a single piece of
+logic responsible for evaluating whether a guest can use an MSR, and which
+values are acceptable.
+
+One small adjustment to guest_wrmsr() is required to cope with being called in
+toolstack context.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Release-acked-by: Julien Grall <julien.grall@linaro.org>
+diff --git a/xen/arch/x86/domctl.c b/xen/arch/x86/domctl.c
+index ef7f9da..fd0a9ce 100644
+--- a/xen/arch/x86/domctl.c
++++ b/xen/arch/x86/domctl.c
+@@ -1226,7 +1226,10 @@ long arch_do_domctl(
+         struct xen_domctl_vcpu_msrs *vmsrs = &domctl->u.vcpu_msrs;
+         struct xen_domctl_vcpu_msr msr;
+         struct vcpu *v;
+-        uint32_t nr_msrs = 0;
++        static const uint32_t msrs_to_send[] = {
++            MSR_INTEL_MISC_FEATURES_ENABLES,
++        };
++        uint32_t nr_msrs = ARRAY_SIZE(msrs_to_send);
+ 
+         ret = -ESRCH;
+         if ( (vmsrs->vcpu >= d->max_vcpus) ||
+@@ -1251,14 +1254,49 @@ long arch_do_domctl(
+                 vmsrs->msr_count = nr_msrs;
+             else
+             {
++                unsigned int j;
++
+                 i = 0;
+ 
+                 vcpu_pause(v);
+ 
+-                if ( boot_cpu_has(X86_FEATURE_DBEXT) )
++                for ( j = 0; j < ARRAY_SIZE(msrs_to_send); ++j )
+                 {
+-                    unsigned int j;
++                    uint64_t val;
++                    int rc = guest_rdmsr(v, msrs_to_send[j], &val);
++
++                    /*
++                     * It is the programmers responsibility to ensure that
++                     * msrs_to_send[] contain generally-read/write MSRs.
++                     * X86EMUL_EXCEPTION here implies a missing feature, and
++                     * that the guest doesn't have access to the MSR.
++                     */
++                    if ( rc == X86EMUL_EXCEPTION )
++                        continue;
++
++                    if ( rc != X86EMUL_OKAY )
++                    {
++                        ASSERT_UNREACHABLE();
++                        ret = -ENXIO;
++                        break;
++                    }
++
++                    if ( !val )
++                        continue; /* Skip empty MSRs. */
++
++                    if ( i < vmsrs->msr_count && !ret )
++                    {
++                        msr.index = msrs_to_send[j];
++                        msr.reserved = 0;
++                        msr.value = val;
++                        if ( copy_to_guest_offset(vmsrs->msrs, i, &msr, 1) )
++                            ret = -EFAULT;
++                    }
++                    ++i;
++                }
+ 
++                if ( boot_cpu_has(X86_FEATURE_DBEXT) )
++                {
+                     if ( v->arch.pv_vcpu.dr_mask[0] )
+                     {
+                         if ( i < vmsrs->msr_count && !ret )
+@@ -1315,6 +1353,11 @@ long arch_do_domctl(
+ 
+                 switch ( msr.index )
+                 {
++                case MSR_INTEL_MISC_FEATURES_ENABLES:
++                    if ( guest_wrmsr(v, msr.index, msr.value) != X86EMUL_OKAY )
++                        break;
++                    continue;
++
+                 case MSR_AMD64_DR0_ADDRESS_MASK:
+                     if ( !boot_cpu_has(X86_FEATURE_DBEXT) ||
+                          (msr.value >> 32) )
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 4419a32..ab7e380 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -1379,7 +1379,10 @@ static int hvm_load_cpu_xsave_states(struct domain *d, hvm_domain_context_t *h)
+ }
+ 
+ #define HVM_CPU_MSR_SIZE(cnt) offsetof(struct hvm_msr, msr[cnt])
+-static unsigned int __read_mostly msr_count_max;
++static const uint32_t msrs_to_send[] = {
++    MSR_INTEL_MISC_FEATURES_ENABLES,
++};
++static unsigned int __read_mostly msr_count_max = ARRAY_SIZE(msrs_to_send);
+ 
+ static int hvm_save_cpu_msrs(struct domain *d, hvm_domain_context_t *h)
+ {
+@@ -1397,6 +1400,33 @@ static int hvm_save_cpu_msrs(struct domain *d, hvm_domain_context_t *h)
+         ctxt = (struct hvm_msr *)&h->data[h->cur];
+         ctxt->count = 0;
+ 
++        for ( i = 0; i < ARRAY_SIZE(msrs_to_send); ++i )
++        {
++            uint64_t val;
++            int rc = guest_rdmsr(v, msrs_to_send[i], &val);
++
++            /*
++             * It is the programmers responsibility to ensure that
++             * msrs_to_send[] contain generally-read/write MSRs.
++             * X86EMUL_EXCEPTION here implies a missing feature, and that the
++             * guest doesn't have access to the MSR.
++             */
++            if ( rc == X86EMUL_EXCEPTION )
++                continue;
++
++            if ( rc != X86EMUL_OKAY )
++            {
++                ASSERT_UNREACHABLE();
++                return -ENXIO;
++            }
++
++            if ( !val )
++                continue; /* Skip empty MSRs. */
++
++            ctxt->msr[ctxt->count].index = msrs_to_send[i];
++            ctxt->msr[ctxt->count++].val = val;
++        }
++
+         if ( hvm_funcs.save_msr )
+             hvm_funcs.save_msr(v, ctxt);
+ 
+@@ -1483,6 +1513,15 @@ static int hvm_load_cpu_msrs(struct domain *d, hvm_domain_context_t *h)
+     {
+         switch ( ctxt->msr[i].index )
+         {
++            int rc;
++
++        case MSR_INTEL_MISC_FEATURES_ENABLES:
++            rc = guest_wrmsr(v, ctxt->msr[i].index, ctxt->msr[i].val);
++
++            if ( rc != X86EMUL_OKAY )
++                err = -ENXIO;
++            break;
++
+         default:
+             if ( !ctxt->msr[i]._rsvd )
+                 err = -ENXIO;
+diff --git a/xen/arch/x86/msr.c b/xen/arch/x86/msr.c
+index baba44f..31983ed 100644
+--- a/xen/arch/x86/msr.c
++++ b/xen/arch/x86/msr.c
+@@ -150,6 +150,7 @@ int guest_rdmsr(const struct vcpu *v, uint32_t msr, uint64_t *val)
+ 
+ int guest_wrmsr(struct vcpu *v, uint32_t msr, uint64_t val)
+ {
++    const struct vcpu *curr = current;
+     struct domain *d = v->domain;
+     struct msr_domain_policy *dp = d->arch.msr;
+     struct msr_vcpu_policy *vp = v->arch.msr;
+@@ -176,7 +177,7 @@ int guest_wrmsr(struct vcpu *v, uint32_t msr, uint64_t val)
+         vp->misc_features_enables.cpuid_faulting =
+             val & MSR_MISC_FEATURES_CPUID_FAULTING;
+ 
+-        if ( is_hvm_domain(d) && cpu_has_cpuid_faulting &&
++        if ( v == curr && is_hvm_domain(d) && cpu_has_cpuid_faulting &&
+              (old_cpuid_faulting ^ vp->misc_features_enables.cpuid_faulting) )
+             ctxt_switch_levelling(v);
+         break;
+diff --git a/xen/include/asm-x86/msr.h b/xen/include/asm-x86/msr.h
+index 229fd21..4ea46a7 100644
+--- a/xen/include/asm-x86/msr.h
++++ b/xen/include/asm-x86/msr.h
+@@ -204,6 +204,9 @@ int init_vcpu_msr_policy(struct vcpu *v);
+  * not (yet) handled by it and must be processed by legacy handlers. Such
+  * behaviour is needed for transition period until all rd/wrmsr are handled
+  * by the new MSR infrastructure.
++ *
++ * These functions are also used by the migration logic, so need to cope with
++ * being used outside of v's context.
+  */
+ int guest_rdmsr(const struct vcpu *v, uint32_t msr, uint64_t *val);
+ int guest_wrmsr(struct vcpu *v, uint32_t msr, uint64_t val);

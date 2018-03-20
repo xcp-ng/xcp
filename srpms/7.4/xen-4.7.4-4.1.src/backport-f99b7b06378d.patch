@@ -1,0 +1,107 @@
+From f99b7b06378d7cebf6ed0ace1633deabfd58760d Mon Sep 17 00:00:00 2001
+From: Jennifer Herbert <Jennifer.Herbert@citrix.com>
+Date: Mon, 25 Sep 2017 19:55:33 +0100
+Subject: [PATCH] Tidy libxc xc_domain_save
+
+Tidy up libxc's xc_domain_save, removing unused paramaters
+max_iters and max_factor, making matching changes to libxl.
+
+Signed-off-by: Joshua Otto <jtotto@uwaterloo.ca>
+Signed-off-by: Jennifer Herbert <Jennifer.Herbert@citrix.com>
+Reviewed-by: Paul Durrant <paul.durrant@citrix.com>
+Acked-by: Wei Liu <wei.liu2@citrix.com>
+diff --git a/tools/libxc/include/xenguest.h b/tools/libxc/include/xenguest.h
+index 40902ee..82eee93 100644
+--- a/tools/libxc/include/xenguest.h
++++ b/tools/libxc/include/xenguest.h
+@@ -100,8 +100,8 @@ typedef enum {
+  *        doesn't use checkpointing
+  * @return 0 on success, -1 on failure
+  */
+-int xc_domain_save(xc_interface *xch, int io_fd, uint32_t dom, uint32_t max_iters,
+-                   uint32_t max_factor, uint32_t flags /* XCFLAGS_xxx */,
++int xc_domain_save(xc_interface *xch, int io_fd, uint32_t dom,
++                   uint32_t flags /* XCFLAGS_xxx */,
+                    struct save_callbacks* callbacks, int hvm,
+                    xc_migration_stream_t stream_type, int recv_fd);
+ 
+diff --git a/tools/libxc/xc_nomigrate.c b/tools/libxc/xc_nomigrate.c
+index 15c838f..2af64e4 100644
+--- a/tools/libxc/xc_nomigrate.c
++++ b/tools/libxc/xc_nomigrate.c
+@@ -20,8 +20,7 @@
+ #include <xenctrl.h>
+ #include <xenguest.h>
+ 
+-int xc_domain_save(xc_interface *xch, int io_fd, uint32_t dom, uint32_t max_iters,
+-                   uint32_t max_factor, uint32_t flags,
++int xc_domain_save(xc_interface *xch, int io_fd, uint32_t dom, uint32_t flags,
+                    struct save_callbacks* callbacks, int hvm,
+                    xc_migration_stream_t stream_type, int recv_fd)
+ {
+diff --git a/tools/libxc/xc_sr_save.c b/tools/libxc/xc_sr_save.c
+index f98c827..acf2059 100644
+--- a/tools/libxc/xc_sr_save.c
++++ b/tools/libxc/xc_sr_save.c
+@@ -916,9 +916,8 @@ static int save(struct xc_sr_context *ctx, uint16_t guest_type)
+ };
+ 
+ int xc_domain_save(xc_interface *xch, int io_fd, uint32_t dom,
+-                   uint32_t max_iters, uint32_t max_factor, uint32_t flags,
+-                   struct save_callbacks* callbacks, int hvm,
+-                   xc_migration_stream_t stream_type, int recv_fd)
++                   uint32_t flags, struct save_callbacks* callbacks,
++                   int hvm, xc_migration_stream_t stream_type, int recv_fd)
+ {
+     struct xc_sr_context ctx =
+         {
+@@ -955,8 +954,7 @@ int xc_domain_save(xc_interface *xch, int io_fd, uint32_t dom,
+     if ( ctx.save.checkpointed == XC_MIG_STREAM_COLO )
+         assert(callbacks->wait_checkpoint);
+ 
+-    DPRINTF("fd %d, dom %u, max_iters %u, max_factor %u, flags %u, hvm %d",
+-            io_fd, dom, max_iters, max_factor, flags, hvm);
++    DPRINTF("fd %d, dom %u, flags %u, hvm %d", io_fd, dom, flags, hvm);
+ 
+     if ( xc_domain_getinfo(xch, dom, 1, &ctx.dominfo) != 1 )
+     {
+diff --git a/tools/libxl/libxl_save_callout.c b/tools/libxl/libxl_save_callout.c
+index 2e6267d..c506de3 100644
+--- a/tools/libxl/libxl_save_callout.c
++++ b/tools/libxl/libxl_save_callout.c
+@@ -89,8 +89,8 @@ void libxl__xc_domain_save(libxl__egc *egc, libxl__domain_save_state *dss,
+         libxl__srm_callout_enumcallbacks_save(&shs->callbacks.save.a);
+ 
+     const unsigned long argnums[] = {
+-        dss->domid, 0, 0, dss->xcflags, dss->hvm,
+-        cbflags, dss->checkpointed_stream,
++        dss->domid, dss->xcflags, dss->hvm, cbflags,
++        dss->checkpointed_stream,
+     };
+ 
+     shs->ao = ao;
+diff --git a/tools/libxl/libxl_save_helper.c b/tools/libxl/libxl_save_helper.c
+index d3def6b..4b11f43 100644
+--- a/tools/libxl/libxl_save_helper.c
++++ b/tools/libxl/libxl_save_helper.c
+@@ -251,8 +251,6 @@ int main(int argc, char **argv)
+         io_fd =                             atoi(NEXTARG);
+         recv_fd =                           atoi(NEXTARG);
+         uint32_t dom =                      strtoul(NEXTARG,0,10);
+-        uint32_t max_iters =                strtoul(NEXTARG,0,10);
+-        uint32_t max_factor =               strtoul(NEXTARG,0,10);
+         uint32_t flags =                    strtoul(NEXTARG,0,10);
+         int hvm =                           atoi(NEXTARG);
+         unsigned cbflags =                  strtoul(NEXTARG,0,10);
+@@ -264,9 +262,8 @@ int main(int argc, char **argv)
+         startup("save");
+         setup_signals(save_signal_handler);
+ 
+-        r = xc_domain_save(xch, io_fd, dom, max_iters, max_factor, flags,
+-                           &helper_save_callbacks, hvm, stream_type,
+-                           recv_fd);
++        r = xc_domain_save(xch, io_fd, dom, flags, &helper_save_callbacks,
++                           hvm, stream_type, recv_fd);
+         complete(r);
+ 
+     } else if (!strcmp(mode,"--restore-domain")) {

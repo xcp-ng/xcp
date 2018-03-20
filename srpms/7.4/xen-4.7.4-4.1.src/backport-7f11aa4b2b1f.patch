@@ -1,0 +1,59 @@
+From 7f11aa4b2b1ff6f47da772aa4e532a891dc13c70 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Thu, 23 Feb 2017 09:33:26 +0000
+Subject: [PATCH 2/3] x86/vmx: optimize vmx_read/write_guest_msr()
+
+Replace linear scan with vmx_find_msr().  This way the time complexity
+of searching for required MSR reduces from linear to logarithmic.
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/xen/arch/x86/hvm/vmx/vmcs.c b/xen/arch/x86/hvm/vmx/vmcs.c
+index 663a418..572869b 100644
+--- a/xen/arch/x86/hvm/vmx/vmcs.c
++++ b/xen/arch/x86/hvm/vmx/vmcs.c
+@@ -1361,17 +1361,12 @@ struct vmx_msr_entry *vmx_find_msr(u32 msr, int type)
+ 
+ int vmx_read_guest_msr(u32 msr, u64 *val)
+ {
+-    struct vcpu *curr = current;
+-    unsigned int i, msr_count = curr->arch.hvm_vmx.msr_count;
+-    const struct vmx_msr_entry *msr_area = curr->arch.hvm_vmx.msr_area;
++    struct vmx_msr_entry *ent;
+ 
+-    for ( i = 0; i < msr_count; i++ )
++    if ( (ent = vmx_find_msr(msr, VMX_GUEST_MSR)) != NULL )
+     {
+-        if ( msr_area[i].index == msr )
+-        {
+-            *val = msr_area[i].data;
+-            return 0;
+-        }
++        *val = ent->data;
++        return 0;
+     }
+ 
+     return -ESRCH;
+@@ -1379,17 +1374,12 @@ int vmx_read_guest_msr(u32 msr, u64 *val)
+ 
+ int vmx_write_guest_msr(u32 msr, u64 val)
+ {
+-    struct vcpu *curr = current;
+-    unsigned int i, msr_count = curr->arch.hvm_vmx.msr_count;
+-    struct vmx_msr_entry *msr_area = curr->arch.hvm_vmx.msr_area;
++    struct vmx_msr_entry *ent;
+ 
+-    for ( i = 0; i < msr_count; i++ )
++    if ( (ent = vmx_find_msr(msr, VMX_GUEST_MSR)) != NULL )
+     {
+-        if ( msr_area[i].index == msr )
+-        {
+-            msr_area[i].data = val;
+-            return 0;
+-        }
++        ent->data = val;
++        return 0;
+     }
+ 
+     return -ESRCH;

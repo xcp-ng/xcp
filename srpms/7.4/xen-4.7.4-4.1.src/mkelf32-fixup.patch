@@ -1,0 +1,13 @@
+diff --git a/xen/arch/x86/Makefile b/xen/arch/x86/Makefile
+index cc8f8d1..cb64c24 100644
+--- a/xen/arch/x86/Makefile
++++ b/xen/arch/x86/Makefile
+@@ -91,7 +91,7 @@ endif
+ 
+ $(TARGET): $(TARGET)-syms $(efi-y) boot/mkelf32
+ 	./boot/mkelf32 $(notes_phdrs) $(TARGET)-syms $(TARGET) 0x100000 \
+-	`$(NM) -nr $(TARGET)-syms | head -n 1 | sed -e 's/^\([^ ]*\).*/0x\1/'`
++	`$(NM) $(TARGET)-syms | grep " _end$$" | sed -e 's/^\([^ ]*\).*/0x\1/'`
+ 
+ .PHONY: tests
+ tests:

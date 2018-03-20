@@ -1,0 +1,26 @@
+From 241a006291b0b7c00096b7bd646ac6a045028258 Mon Sep 17 00:00:00 2001
+From: Haozhong Zhang <haozhong.zhang@intel.com>
+Date: Tue, 20 Dec 2016 09:51:45 +0100
+Subject: [PATCH] vvmx: fix the wrong address width in c/s 08fac63
+
+c/s 08fac63 misused v->domain-arch.paging.gfn_bits as the width of
+guest physical address and missed adding PAGE_SHIFT to it when
+checking vmxon operand.
+
+Signed-off-by: Haozhong Zhang <haozhong.zhang@intel.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 48c3544..f370d79 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -1390,7 +1390,8 @@ int nvmx_handle_vmxon(struct cpu_user_regs *regs)
+         return X86EMUL_OKAY;
+     }
+ 
+-    if ( (gpa & ~PAGE_MASK) || (gpa >> v->domain->arch.paging.gfn_bits) )
++    if ( (gpa & ~PAGE_MASK) ||
++         (gpa >> (v->domain->arch.paging.gfn_bits + PAGE_SHIFT)) )
+     {
+         vmreturn(regs, VMFAIL_INVALID);
+         return X86EMUL_OKAY;

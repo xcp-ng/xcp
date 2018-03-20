@@ -1,0 +1,313 @@
+From d72fd26d5f17adfae2f02ba28399924adc8fb518 Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:12 -0400
+Subject: [PATCH] flask/policy: move user definitions and constraints into
+ modules
+
+This also renames the example users created by vm_role.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+diff --git a/docs/misc/xsm-flask.txt b/docs/misc/xsm-flask.txt
+index d3015ca..2f42585 100644
+--- a/docs/misc/xsm-flask.txt
++++ b/docs/misc/xsm-flask.txt
+@@ -147,9 +147,11 @@ it relies on the SELinux compiler "checkpolicy"; run
+ 	make -C tools/flask/policy
+ 
+ to compile the example policy included with Xen. The policy is generated from
+-definition files under this directory. When creating or modifying security
+-policy, most modifications will be made to the xen type enforcement (.te) file
+-tools/flask/policy/policy/modules/xen/xen.te or the macro definitions in xen.if.
++definition files under this directory. Most changes to security policy will
++involve creating or modifying modules found in tools/flask/policy/modules/.  The
++modules.conf file there defines what modules are enabled and has short
++descriptions of each module.
++
+ The XSM policy file needs to be copied to /boot and loaded as a module by grub.
+ The exact position of the module does not matter as long as it is after the Xen
+ kernel; it is normally placed either just above the dom0 kernel or at the end.
+@@ -210,17 +212,16 @@ Type transitions are also used to compute the labels of event channels.
+ Users and roles
+ ---------------
+ 
+-Users are defined in tools/flask/policy/policy/users. The example policy defines
+-two users (customer_1 and customer_2) in addition to the system user system_u.
+-Users are visible in the labels of domains and associated objects (event
+-channels); in the example policy, "customer_1:vm_r:domU_t" is a valid label for
+-the customer_1 user.
++The default user and role used for domains is system_u and system_r.  Users are
++visible in the labels of domains and associated objects (event channels); when
++the vm_role module is enabled, "user_1:vm_r:domU_t" is a valid label for a
++domain created by the user_1 user.
+ 
+-Access control rules involving users and roles are defined in the policy
+-constraints file (tools/flask/policy/policy/constraints). The example policy
+-provides constraints that prevent different users from communicating using
+-grants or event channels, while still allowing communication with the system_u
+-user where dom0 resides.
++Access control rules involving users and roles are defined in a module's
++constraints file (for example, vm_rule.cons). The vm_role module defines one
++role (vm_r) and three users (user_1 .. user_3), along with constraints that
++prevent different users from communicating using grants or event channels, while
++still allowing communication with the system_u user where dom0 resides.
+ 
+ Resource Policy
+ ---------------
+@@ -268,10 +269,9 @@ declare_domain and create_domain interfaces:
+ Existing SELinux tools such as audit2allow can be applied to these denials, e.g.
+ xl dmesg | audit2allow
+ 
+-The generated allow rules can then be fed back into the policy by
+-adding them to xen.te, although manual review is advised and will
+-often lead to adding parameterized rules to the interfaces in xen.if
+-to address the general case.
++The generated allow rules can then be fed back into the policy by adding them to
++a module, although manual review is advised and will often lead to adding
++parameterized rules to the interfaces in xen.if to address the general case.
+ 
+ 
+ Device Labeling in Policy
+diff --git a/tools/flask/policy/Makefile b/tools/flask/policy/Makefile
+index b2c2d06..693eb10 100644
+--- a/tools/flask/policy/Makefile
++++ b/tools/flask/policy/Makefile
+@@ -54,7 +54,6 @@ AVS += $(POLDIR)/access_vectors
+ M4SUPPORT := $(wildcard $(POLDIR)/support/*.spt)
+ MLSSUPPORT := $(POLDIR)/mls
+ USERS := $(POLDIR)/users
+-CONSTRAINTS := $(POLDIR)/constraints
+ ISID_DEFS := $(POLDIR)/initial_sids
+ DEV_OCONS := $(POLDIR)/device_contexts
+ 
+@@ -90,8 +89,12 @@ MODENABLED := on
+ # extract settings from modules.conf
+ ENABLED_LIST := $(shell awk '/^[ \t]*[a-z]/{ if ($$3 == "$(MODENABLED)") print $$1 }' $(MOD_CONF) 2> /dev/null)
+ 
++# Modules must provide a .te file, although it could be empty
+ ALL_MODULES := $(foreach mod,$(ENABLED_LIST),$(MODDIR)/$(mod).te)
++
++# Modules may also provide interfaces and constraint definitions
+ ALL_INTERFACES := $(wildcard $(ALL_MODULES:.te=.if))
++ALL_CONSTRAINTS := $(wildcard $(ALL_MODULES:.te=.cons))
+ 
+ # The order of these files is important
+ POLICY_SECTIONS := $(SECCLASS) $(ISID_DECLS) $(AVS)
+@@ -99,7 +102,9 @@ POLICY_SECTIONS += $(M4SUPPORT) $(MLSSUPPORT)
+ POLICY_SECTIONS += $(ALL_INTERFACES)
+ POLICY_SECTIONS += $(GLOBALTUN)
+ POLICY_SECTIONS += $(ALL_MODULES)
+-POLICY_SECTIONS += $(USERS) $(CONSTRAINTS) $(ISID_DEFS) $(DEV_OCONS)
++POLICY_SECTIONS += $(USERS)
++POLICY_SECTIONS += $(ALL_CONSTRAINTS)
++POLICY_SECTIONS += $(ISID_DEFS) $(DEV_OCONS)
+ 
+ all: $(POLICY_FILENAME)
+ 
+diff --git a/tools/flask/policy/modules/all_system_role.te b/tools/flask/policy/modules/all_system_role.te
+index 74f870f..3018540 100644
+--- a/tools/flask/policy/modules/all_system_role.te
++++ b/tools/flask/policy/modules/all_system_role.te
+@@ -1,8 +1,3 @@
+ # Allow all domains to use system_r so that systems that are not using the
+ # user/role separation feature will work properly.
+ role system_r types domain_type;
+-
+-# The vm role is used as part of user separation.  Allow all domain types to use
+-# this role except dom0.
+-role vm_r;
+-role vm_r types { domain_type -dom0_t };
+diff --git a/tools/flask/policy/modules/modules.conf b/tools/flask/policy/modules/modules.conf
+index d875dbf..9aac6a0 100644
+--- a/tools/flask/policy/modules/modules.conf
++++ b/tools/flask/policy/modules/modules.conf
+@@ -34,6 +34,13 @@ nomigrate = on
+ nic_dev = on
+ 
+ # This allows any domain type to be created using the system_r role.  When it is
+-# disabled, domains not using the default types (dom0_t and domU_t) must use
+-# another role (such as vm_r) from the vm_role module.
++# disabled, domains not using the default types (dom0_t, domU_t, dm_dom_t) must
++# use another role (such as vm_r from the vm_role module below).
+ all_system_role = on
++
++# Example users, roles, and constraints for user-based separation.
++# 
++# The three users defined here can set up grant/event channel communication
++# (vchan, device frontend/backend) between their own VMs, but cannot set up a
++# channel to a VM under a different user.
++vm_role = on
+diff --git a/tools/flask/policy/modules/vm_role.cons b/tools/flask/policy/modules/vm_role.cons
+new file mode 100644
+index 0000000..3847ec1
+--- /dev/null
++++ b/tools/flask/policy/modules/vm_role.cons
+@@ -0,0 +1,40 @@
++#
++# Constraints are defined by:
++#
++# constrain class_set perm_set expression ;
++#
++# expression : ( expression ) 
++#	     | not expression
++#	     | expression and expression
++#	     | expression or expression
++#	     | u1 op u2
++#	     | r1 role_op r2
++#	     | t1 op t2
++#	     | u1 op names
++#	     | u2 op names
++#	     | r1 op names
++#	     | r2 op names
++#	     | t1 op names
++#	     | t2 op names
++#
++# op : == | != 
++# role_op : == | != | eq | dom | domby | incomp
++#
++# names : name | { name_list }
++# name_list : name | name_list name
++#
++
++
++# Prevent event channels and grants between different users.  This could be
++# further limited to only restricting those domains using the vm_r role.
++constrain event bind (
++	u1 == system_u or
++	u2 == system_u or
++	u1 == u2
++);
++
++constrain grant { map_read map_write copy } (
++	u1 == system_u or
++	u2 == system_u or
++	u1 == u2
++);
+diff --git a/tools/flask/policy/modules/vm_role.te b/tools/flask/policy/modules/vm_role.te
+new file mode 100644
+index 0000000..f816de1
+--- /dev/null
++++ b/tools/flask/policy/modules/vm_role.te
+@@ -0,0 +1,16 @@
++# The vm role is used as part of user separation.  Allow all domain types to use
++# this role except dom0.
++role vm_r;
++role vm_r types { domain_type -dom0_t };
++
++# Define some users that must use this role (full type "user_1:vm_r:domU_t").
++gen_user(user_1,, vm_r, s0, s0)
++gen_user(user_2,, vm_r, s0, s0)
++gen_user(user_3,, vm_r, s0, s0)
++
++# Alternate: define and use a macro to generate 1000 users
++define(`def_vm_users',`gen_user(user_$1,, vm_r, s0, s0)
++ifelse(`$1',`$2',,`def_vm_users(incr($1),$2)')dnl
++')
++
++# def_vm_users(0,999)
+diff --git a/tools/flask/policy/modules/xen.te b/tools/flask/policy/modules/xen.te
+index f374dc5..b52edc2 100644
+--- a/tools/flask/policy/modules/xen.te
++++ b/tools/flask/policy/modules/xen.te
+@@ -71,14 +71,17 @@ neverallow * ~event_type:event { create send status };
+ 
+ ################################################################################
+ #
+-# Roles
++# Users and Roles
+ #
+ ################################################################################
+ 
+ # The object role (object_r) is used for devices, resources, and event channels;
+ # it does not need to be defined here and should not be used for domains.
+ 
+-# The system role is used for utility domains and pseudo-domains.  If roles are
+-# not being used for separation, all domains can use the system role.
++# The system user and role are used for utility domains and pseudo-domains.  In
++# systems where users and roles are not being used for separation, all domains
++# can use the system user and role.
++gen_user(system_u,, system_r, s0, s0 - mls_systemhigh)
++
+ role system_r;
+ role system_r types { xen_type dom0_t };
+diff --git a/tools/flask/policy/policy/constraints b/tools/flask/policy/policy/constraints
+deleted file mode 100644
+index 765ed4d..0000000
+--- a/tools/flask/policy/policy/constraints
++++ /dev/null
+@@ -1,40 +0,0 @@
+-
+-#
+-# Define the constraints
+-#
+-# constrain class_set perm_set expression ;
+-#
+-# expression : ( expression ) 
+-#	     | not expression
+-#	     | expression and expression
+-#	     | expression or expression
+-#	     | u1 op u2
+-#	     | r1 role_op r2
+-#	     | t1 op t2
+-#	     | u1 op names
+-#	     | u2 op names
+-#	     | r1 op names
+-#	     | r2 op names
+-#	     | t1 op names
+-#	     | t2 op names
+-#
+-# op : == | != 
+-# role_op : == | != | eq | dom | domby | incomp
+-#
+-# names : name | { name_list }
+-# name_list : name | name_list name
+-#
+-
+-# Prevent event channels and grants between different customers
+-
+-constrain event bind (
+-	u1 == system_u or
+-	u2 == system_u or
+-	u1 == u2
+-);
+-
+-constrain grant { map_read map_write copy } (
+-	u1 == system_u or
+-	u2 == system_u or
+-	u1 == u2
+-);
+diff --git a/tools/flask/policy/policy/support/misc_macros.spt b/tools/flask/policy/policy/support/misc_macros.spt
+index 2b27955..344f5c4 100644
+--- a/tools/flask/policy/policy/support/misc_macros.spt
++++ b/tools/flask/policy/policy/support/misc_macros.spt
+@@ -49,9 +49,11 @@ define(`refpolicyerr',`errprint(__file__:__line__: Error: `$1'__endline__)')
+ #
+ # gen_user(username, prefix, role_set, mls_defaultlevel, mls_range)
+ #
+-define(`gen_user',`dnl
++define(`gen_user',`define(`gen_all_users', gen_all_users `dnl
+ user $1 roles { $3 }`'ifdef(`enable_mls', ` level $4 range $5')`';
+-')
++')')
++
++define(`gen_all_users',`')
+ 
+ ########################################
+ #
+diff --git a/tools/flask/policy/policy/users b/tools/flask/policy/policy/users
+index 35ed8a9..af6acbd 100644
+--- a/tools/flask/policy/policy/users
++++ b/tools/flask/policy/policy/users
+@@ -1,11 +1 @@
+-##################################
+-#
+-# System User configuration.
+-#
+-
+-# system_u is the user identity for system domains and objects
+-gen_user(system_u,, system_r, s0, s0 - mls_systemhigh)
+-
+-# Other users are defined using the vm role
+-gen_user(customer_1,, vm_r, s0, s0)
+-gen_user(customer_2,, vm_r, s0, s0)
++gen_all_users()

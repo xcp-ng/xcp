@@ -1,0 +1,190 @@
+From d18224766fa2e6e0746e8c9e759a8e0cc8c87129 Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:18 -0400
+Subject: [PATCH] flask: remove unused AVC callback functions
+
+These callbacks are not used in Xen.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+diff --git a/xen/xsm/flask/avc.c b/xen/xsm/flask/avc.c
+index 7764379..a3e6108 100644
+--- a/xen/xsm/flask/avc.c
++++ b/xen/xsm/flask/avc.c
+@@ -86,18 +86,6 @@ struct avc_cache {
+     u32            latest_notif;    /* latest revocation notification */
+ };
+ 
+-struct avc_callback_node {
+-    int (*callback) (u32 event, u32 ssid, u32 tsid,
+-                     u16 tclass, u32 perms,
+-                     u32 *out_retained);
+-    u32 events;
+-    u32 ssid;
+-    u32 tsid;
+-    u16 tclass;
+-    u32 perms;
+-    struct avc_callback_node *next;
+-};
+-
+ /* Exported via Flask hypercall */
+ unsigned int avc_cache_threshold = AVC_DEF_CACHE_THRESHOLD;
+ 
+@@ -106,7 +94,6 @@ DEFINE_PER_CPU(struct avc_cache_stats, avc_cache_stats);
+ #endif
+ 
+ static struct avc_cache avc_cache;
+-static struct avc_callback_node *avc_callbacks;
+ 
+ static DEFINE_RCU_READ_LOCK(avc_rcu_lock);
+ 
+@@ -616,46 +603,6 @@ void avc_audit(u32 ssid, u32 tsid, u16 tclass, u32 requested,
+ }
+ 
+ /**
+- * avc_add_callback - Register a callback for security events.
+- * @callback: callback function
+- * @events: security events
+- * @ssid: source security identifier or %SECSID_WILD
+- * @tsid: target security identifier or %SECSID_WILD
+- * @tclass: target security class
+- * @perms: permissions
+- *
+- * Register a callback function for events in the set @events
+- * related to the SID pair (@ssid, @tsid) and
+- * and the permissions @perms, interpreting
+- * @perms based on @tclass.  Returns %0 on success or
+- * -%ENOMEM if insufficient memory exists to add the callback.
+- */
+-int avc_add_callback(int (*callback)(u32 event, u32 ssid, u32 tsid, u16 tclass,
+-                                     u32 perms, u32 *out_retained), u32 events, u32 ssid, u32 tsid,
+-                     u16 tclass, u32 perms)
+-{
+-    struct avc_callback_node *c;
+-    int rc = 0;
+-
+-    c = xmalloc(struct avc_callback_node);
+-    if ( !c )
+-    {
+-        rc = -ENOMEM;
+-        goto out;
+-    }
+-
+-    c->callback = callback;
+-    c->events = events;
+-    c->ssid = ssid;
+-    c->tsid = tsid;
+-    c->perms = perms;
+-    c->next = avc_callbacks;
+-    avc_callbacks = c;
+- out:
+-    return rc;
+-}
+-
+-/**
+  * avc_update_node Update an AVC entry
+  * @event : Updating event
+  * @perms : Permission mask bits
+@@ -666,7 +613,7 @@ int avc_add_callback(int (*callback)(u32 event, u32 ssid, u32 tsid, u16 tclass,
+  * otherwise, this function update the AVC entry. The original AVC-entry object
+  * will release later by RCU.
+  */
+-static int avc_update_node(u32 event, u32 perms, u32 ssid, u32 tsid, u16 tclass,
++static int avc_update_node(u32 perms, u32 ssid, u32 tsid, u16 tclass,
+                            u32 seqno)
+ {
+     int hvalue, rc = 0;
+@@ -715,28 +662,7 @@ static int avc_update_node(u32 event, u32 perms, u32 ssid, u32 tsid, u16 tclass,
+ 
+     avc_node_populate(node, ssid, tsid, tclass, &orig->ae.avd);
+ 
+-    switch ( event )
+-    {
+-    case AVC_CALLBACK_GRANT:
+-        node->ae.avd.allowed |= perms;
+-        break;
+-    case AVC_CALLBACK_TRY_REVOKE:
+-    case AVC_CALLBACK_REVOKE:
+-        node->ae.avd.allowed &= ~perms;
+-        break;
+-    case AVC_CALLBACK_AUDITALLOW_ENABLE:
+-        node->ae.avd.auditallow |= perms;
+-        break;
+-    case AVC_CALLBACK_AUDITALLOW_DISABLE:
+-        node->ae.avd.auditallow &= ~perms;
+-        break;
+-    case AVC_CALLBACK_AUDITDENY_ENABLE:
+-        node->ae.avd.auditdeny |= perms;
+-        break;
+-    case AVC_CALLBACK_AUDITDENY_DISABLE:
+-        node->ae.avd.auditdeny &= ~perms;
+-        break;
+-    }
++    node->ae.avd.allowed |= perms;
+     avc_node_replace(node, orig);
+  out_unlock:
+     spin_unlock_irqrestore(lock, flag);
+@@ -750,8 +676,7 @@ static int avc_update_node(u32 event, u32 perms, u32 ssid, u32 tsid, u16 tclass,
+  */
+ int avc_ss_reset(u32 seqno)
+ {
+-    struct avc_callback_node *c;
+-    int i, rc = 0, tmprc;
++    int i, rc = 0;
+     unsigned long flag;
+     struct avc_node *node;
+     struct hlist_head *head;
+@@ -771,19 +696,6 @@ int avc_ss_reset(u32 seqno)
+         spin_unlock_irqrestore(lock, flag);
+     }
+     
+-    for ( c = avc_callbacks; c; c = c->next )
+-    {
+-        if ( c->events & AVC_CALLBACK_RESET )
+-        {
+-            tmprc = c->callback(AVC_CALLBACK_RESET,
+-                                0, 0, 0, 0, NULL);
+-            /* save the first error encountered for the return
+-               value and continue processing the callbacks */
+-            if ( !rc )
+-                rc = tmprc;
+-        }
+-    }
+-
+     avc_latest_notif_update(seqno, 0);
+     return rc;
+ }
+@@ -845,8 +757,7 @@ int avc_has_perm_noaudit(u32 ssid, u32 tsid, u16 tclass, u32 requested,
+     if ( denied )
+     {
+         if ( !flask_enforcing || (avd->flags & AVD_FLAGS_PERMISSIVE) )
+-            avc_update_node(AVC_CALLBACK_GRANT,requested,
+-                            ssid,tsid,tclass,avd->seqno);
++            avc_update_node(requested, ssid,tsid,tclass,avd->seqno);
+         else
+             rc = -EACCES;
+     }
+diff --git a/xen/xsm/flask/include/avc.h b/xen/xsm/flask/include/avc.h
+index 729856e..c153c8e 100644
+--- a/xen/xsm/flask/include/avc.h
++++ b/xen/xsm/flask/include/avc.h
+@@ -90,19 +90,6 @@ int avc_has_perm_noaudit(u32 ssid, u32 tsid, u16 tclass, u32 requested,
+ int avc_has_perm(u32 ssid, u32 tsid, u16 tclass, u32 requested,
+                                              struct avc_audit_data *auditdata);
+ 
+-#define AVC_CALLBACK_GRANT        1
+-#define AVC_CALLBACK_TRY_REVOKE        2
+-#define AVC_CALLBACK_REVOKE        4
+-#define AVC_CALLBACK_RESET        8
+-#define AVC_CALLBACK_AUDITALLOW_ENABLE    16
+-#define AVC_CALLBACK_AUDITALLOW_DISABLE    32
+-#define AVC_CALLBACK_AUDITDENY_ENABLE    64
+-#define AVC_CALLBACK_AUDITDENY_DISABLE    128
+-
+-int avc_add_callback(int (*callback)(u32 event, u32 ssid, u32 tsid,
+-                        u16 tclass, u32 perms, u32 *out_retained), u32 events, 
+-                                    u32 ssid, u32 tsid, u16 tclass, u32 perms);
+-
+ /* Exported to selinuxfs */
+ struct xen_flask_hash_stats;
+ int avc_get_hash_stats(struct xen_flask_hash_stats *arg);

@@ -1,0 +1,16 @@
+diff --git a/tools/flask/policy/policy/initial_sids b/tools/flask/policy/policy/initial_sids
+index 6b7b7ef..1f4c99f 100644
+--- a/tools/flask/policy/policy/initial_sids
++++ b/tools/flask/policy/policy/initial_sids
+@@ -6,7 +6,10 @@ sid xen gen_context(system_u:system_r:xen_t,s0)
+ sid dom0 gen_context(system_u:system_r:dom0_t,s0)
+ sid domxen gen_context(system_u:system_r:domxen_t,s0)
+ sid domio gen_context(system_u:system_r:domio_t,s0)
+-sid unlabeled gen_context(system_u:system_r:unlabeled_t,s0)
++## till we get toolstack inplace, every unlabled domain
++# will be treated as domU_t type.
++#sid unlabeled gen_context(system_u:system_r:unlabeled_t,s0)
++sid unlabeled gen_context(system_u:system_r:domU_t,s0)
+ sid security gen_context(system_u:system_r:security_t,s0)
+ sid irq gen_context(system_u:object_r:irq_t,s0)
+ sid iomem gen_context(system_u:object_r:iomem_t,s0)

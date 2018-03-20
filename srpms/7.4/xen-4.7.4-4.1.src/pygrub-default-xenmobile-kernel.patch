@@ -1,0 +1,16 @@
+diff --git a/tools/pygrub/src/pygrub b/tools/pygrub/src/pygrub
+index c681880..89e39be 100644
+--- a/tools/pygrub/src/pygrub
++++ b/tools/pygrub/src/pygrub
+@@ -957,6 +957,11 @@ if __name__ == "__main__":
+     if list_entries:
+         sys.exit(0)
+ 
++    # XenMobile controller has a broken bootloader config, fix it up
++    if chosencfg["kernel"] and not fs.file_exists(chosencfg["kernel"]) \
++            and fs.file_exists("/kernel-xenserver"):
++        chosencfg["kernel"] = "/kernel-xenserver"
++
+     # Did looping through partitions find us a kernel?
+     if fs is None:
+         raise RuntimeError, "Unable to find partition containing kernel"

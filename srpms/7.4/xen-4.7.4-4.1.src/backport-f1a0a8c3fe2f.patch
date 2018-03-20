@@ -1,0 +1,40 @@
+From f1a0a8c3fe2fb37c77ec1fe43618feef412427b5 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Thu, 16 Nov 2017 21:10:00 +0000
+Subject: [PATCH] tools/libxc: Fix restoration of PV MSRs after migrate
+
+There are two bugs in process_vcpu_msrs() which clearly demonstrate that I
+didn't test this bit of Migration v2 very well when writing it...
+
+vcpu->msrsz is always expected to be a multiple of xen_domctl_vcpu_msr_t
+records in a spec-compliant stream, so the modulo yields 0 for the msr_count,
+rather than the actual number sent in the stream.
+
+Passing 0 for the msr_count causes the hypercall to exit early, and hides the
+fact that the guest handle is inserted into the wrong field in the domctl
+union.
+
+The reason that these bugs have gone unnoticed for so long is that the only
+MSRs passed like this for PV guests are the AMD DBGEXT MSRs, which only exist
+in fairly modern hardware, and whose use doesn't appear to be implemented in
+any contemporary PV guests.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Release-acked-by: Julien Grall <julien.grall@linaro.org>
+diff --git a/tools/libxc/xc_sr_restore_x86_pv.c b/tools/libxc/xc_sr_restore_x86_pv.c
+index 50e25c1..ed0fd0e 100644
+--- a/tools/libxc/xc_sr_restore_x86_pv.c
++++ b/tools/libxc/xc_sr_restore_x86_pv.c
+@@ -455,8 +455,8 @@ static int process_vcpu_msrs(struct xc_sr_context *ctx,
+     domctl.cmd = XEN_DOMCTL_set_vcpu_msrs;
+     domctl.domain = ctx->domid;
+     domctl.u.vcpu_msrs.vcpu = vcpuid;
+-    domctl.u.vcpu_msrs.msr_count = vcpu->msrsz % sizeof(xen_domctl_vcpu_msr_t);
+-    set_xen_guest_handle(domctl.u.vcpuextstate.buffer, buffer);
++    domctl.u.vcpu_msrs.msr_count = vcpu->msrsz / sizeof(xen_domctl_vcpu_msr_t);
++    set_xen_guest_handle(domctl.u.vcpu_msrs.msrs, buffer);
+ 
+     memcpy(buffer, vcpu->msr, vcpu->msrsz);
+ 

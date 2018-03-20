@@ -1,0 +1,58 @@
+From 12b3174d945b1e30132605d8464aa63ab7217010 Mon Sep 17 00:00:00 2001
+From: Wei Liu <wei.liu2@citrix.com>
+Date: Thu, 1 Sep 2016 14:58:28 +0100
+Subject: [PATCH] xen: replace TEST_COVERAGE with CONFIG_GCOV
+
+The sole purpose of TEST_COVERAGE macro is to guard the availability of
+gcov sysctl. Now we have a proper CONFIG_GCOV, use it.
+
+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
+Acked-by: Jan Beulich <jbeulich@suse.com>
+---
+ xen/Rules.mk           | 2 +-
+ xen/common/sysctl.c    | 2 +-
+ xen/include/xen/gcov.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/xen/Rules.mk b/xen/Rules.mk
+index 696aaa8..a9fda71 100644
+--- a/xen/Rules.mk
++++ b/xen/Rules.mk
+@@ -116,7 +116,7 @@ subdir-all := $(subdir-y) $(subdir-n)
+ $(filter %.init.o,$(obj-y) $(obj-bin-y) $(extra-y)): CFLAGS += -DINIT_SECTIONS_ONLY
+ 
+ ifeq ($(CONFIG_GCOV),y)
+-$(filter-out %.init.o $(nogcov-y),$(obj-y) $(obj-bin-y) $(extra-y)): CFLAGS += -fprofile-arcs -ftest-coverage -DTEST_COVERAGE
++$(filter-out %.init.o $(nogcov-y),$(obj-y) $(obj-bin-y) $(extra-y)): CFLAGS += -fprofile-arcs -ftest-coverage
+ endif
+ 
+ ifeq ($(lto),y)
+diff --git a/xen/common/sysctl.c b/xen/common/sysctl.c
+index 55f2077..8aea6ef 100644
+--- a/xen/common/sysctl.c
++++ b/xen/common/sysctl.c
+@@ -396,7 +396,7 @@ long do_sysctl(XEN_GUEST_HANDLE_PARAM(xen_sysctl_t) u_sysctl)
+     }
+     break;
+ 
+-#ifdef TEST_COVERAGE
++#ifdef CONFIG_GCOV
+     case XEN_SYSCTL_coverage_op:
+         ret = sysctl_coverage_op(&op->u.coverage_op);
+         break;
+diff --git a/xen/include/xen/gcov.h b/xen/include/xen/gcov.h
+index 27c5c37..a7d4a35 100644
+--- a/xen/include/xen/gcov.h
++++ b/xen/include/xen/gcov.h
+@@ -86,7 +86,7 @@ struct gcov_info
+ /**
+  * Sysctl operations for coverage
+  */
+-#ifdef TEST_COVERAGE
++#ifdef CONFIG_GCOV
+ int sysctl_coverage_op(xen_sysctl_coverage_op_t *op);
+ #endif
+ 
+-- 
+2.1.4
+

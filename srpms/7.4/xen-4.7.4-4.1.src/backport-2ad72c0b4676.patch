@@ -1,0 +1,30 @@
+From 2ad72c0b4676d62cc72447882306c3df51a6a0f1 Mon Sep 17 00:00:00 2001
+From: Anshul Makkar <anshul.makkar@citrix.com>
+Date: Thu, 14 Jul 2016 15:46:12 +0100
+Subject: [PATCH] XSM-Policy: allow source domain access to setpodtarget and
+ getpodtarget for ballooning.
+
+Access to setpodtarget and getpodtarget is required by dom0 to set the balloon
+targets for domU. The patch gives source domain (dom0) access to set
+this target for domU and resolve the following permission denied erro
+message during ballooning :
+avc:  denied  { setpodtarget } for domid=0 target=9
+scontext=system_u:system_r:dom0_t
+tcontext=system_u:system_r:domU_t tclass=domain
+
+Signed-off-by: Anshul Makkar <anshul.makkar@citrix.com>
+Acked-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+diff --git a/tools/flask/policy/modules/xen.if b/tools/flask/policy/modules/xen.if
+index 8c43c28..dbefa1e 100644
+--- a/tools/flask/policy/modules/xen.if
++++ b/tools/flask/policy/modules/xen.if
+@@ -83,7 +83,8 @@ define(`create_domain_build_label', `
+ define(`manage_domain', `
+ 	allow $1 $2:domain { getdomaininfo getvcpuinfo getaffinity
+ 			getaddrsize pause unpause trigger shutdown destroy
+-			setaffinity setdomainmaxmem getscheduler resume };
++			setaffinity setdomainmaxmem getscheduler resume
++			setpodtarget getpodtarget };
+     allow $1 $2:domain2 set_vnumainfo;
+ ')
+ 

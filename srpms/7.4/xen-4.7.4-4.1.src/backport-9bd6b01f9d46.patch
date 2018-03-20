@@ -1,0 +1,57 @@
+From adb35bd4526762f11ecb250ef70aa50086b1686e Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Mon, 9 Jan 2017 13:42:02 +0000
+Subject: [PATCH] x86/hvm: Conditionally leave CPUID Faulting active in HVM
+ context
+
+If the hardware supports faulting, and the guest has chosen to use it, leave
+faulting active in HVM context.
+
+It is more efficient to have hardware convert CPUID to a #GP fault (which we
+don't intercept), than to take a VMExit and have Xen re-inject a #GP fault.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/cpu/intel.c b/xen/arch/x86/cpu/intel.c
+index dc887ae..3c293c1 100644
+--- a/xen/arch/x86/cpu/intel.c
++++ b/xen/arch/x86/cpu/intel.c
+@@ -179,8 +179,9 @@ static void intel_ctxt_switch_levelling(const struct vcpu *next)
+ 		 * generating the maximum full cpuid policy into Xen, at which
+ 		 * this problem will disappear.
+ 		 */
+-		set_cpuid_faulting(nextd && is_pv_domain(nextd) &&
+-				   !is_control_domain(nextd));
++		set_cpuid_faulting(nextd && !is_control_domain(nextd) &&
++				   (is_pv_domain(nextd) ||
++				    next->arch.cpuid_faulting));
+ 		return;
+ 	}
+ 
+diff --git a/xen/arch/x86/hvm/vmx/vmx.c b/xen/arch/x86/hvm/vmx/vmx.c
+index 1fbb3d0..1ed4083 100644
+--- a/xen/arch/x86/hvm/vmx/vmx.c
++++ b/xen/arch/x86/hvm/vmx/vmx.c
+@@ -2942,11 +2942,19 @@ static int vmx_msr_write_intercept(unsigned int msr, uint64_t msr_content)
+         break;
+ 
+     case MSR_INTEL_MISC_FEATURES_ENABLES:
++    {
++        bool old_cpuid_faulting = v->arch.cpuid_faulting;
++
+         if ( msr_content & ~MSR_MISC_FEATURES_CPUID_FAULTING )
+             goto gp_fault;
+-        v->arch.cpuid_faulting =
+-            !!(msr_content & MSR_MISC_FEATURES_CPUID_FAULTING);
++
++        v->arch.cpuid_faulting = msr_content & MSR_MISC_FEATURES_CPUID_FAULTING;
++
++        if ( cpu_has_cpuid_faulting &&
++             (old_cpuid_faulting ^ v->arch.cpuid_faulting) )
++            ctxt_switch_levelling(v);
+         break;
++    }
+ 
+     default:
+         if ( passive_domain_do_wrmsr(msr, msr_content) )

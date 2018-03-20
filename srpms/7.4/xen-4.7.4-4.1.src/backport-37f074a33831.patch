@@ -1,0 +1,177 @@
+From b3a38be7e0f737878b2c2f36bbf972f0fa82ab88 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Mon, 25 Sep 2017 10:56:13 +0200
+Subject: [PATCH] x86/msr: introduce guest_rdmsr()
+
+The new function is responsible for handling RDMSR from both HVM and PV
+guests. Currently it handles only 2 MSRs:
+
+    MSR_INTEL_PLATFORM_INFO
+    MSR_INTEL_MISC_FEATURES_ENABLES
+
+It has a different behaviour compared to the old MSR handlers: if MSR
+is being handled by guest_rdmsr() then RDMSR will either succeed (if
+a guest is allowed to access it based on its MSR policy) or produce
+a GP fault. A guest will never see a H/W value of some MSR unknown to
+this function.
+
+guest_rdmsr() unifies and replaces the handling code from
+vmx_msr_read_intercept() and priv_op_read_msr().
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+
+This (along with the prep work in init_domain_msr_policy()) also fixes
+a bug where Dom0 could probe and find CPUID faulting, even though it
+couldn't actually use it.
+
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index ee6a0a4..ffb84d9 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -3726,11 +3726,20 @@ int hvm_msr_read_intercept(unsigned int msr, uint64_t *msr_content)
+     uint64_t *var_range_base, *fixed_range_base;
+     bool_t mtrr;
+     unsigned int edx, index;
+-    int ret = X86EMUL_OKAY;
++    int ret;
+ 
+     var_range_base = (uint64_t *)v->arch.hvm_vcpu.mtrr.var_ranges;
+     fixed_range_base = (uint64_t *)v->arch.hvm_vcpu.mtrr.fixed_ranges;
+ 
++    if ( (ret = guest_rdmsr(v, msr, msr_content)) != X86EMUL_UNHANDLEABLE )
++    {
++        if ( ret == X86EMUL_EXCEPTION )
++            hvm_inject_hw_exception(TRAP_gp_fault, 0);
++
++        return ret;
++    }
++
++    ret = X86EMUL_OKAY;
+     hvm_cpuid(1, NULL, NULL, NULL, &edx);
+     mtrr = !!(edx & cpufeat_mask(X86_FEATURE_MTRR));
+ 
+diff --git a/xen/arch/x86/hvm/vmx/vmx.c b/xen/arch/x86/hvm/vmx/vmx.c
+index b1ae4a9..d81fdec 100644
+--- a/xen/arch/x86/hvm/vmx/vmx.c
++++ b/xen/arch/x86/hvm/vmx/vmx.c
+@@ -2781,16 +2781,6 @@ static int vmx_msr_read_intercept(unsigned int msr, uint64_t *msr_content)
+             goto gp_fault;
+         break;
+ 
+-    case MSR_INTEL_PLATFORM_INFO:
+-        *msr_content = MSR_PLATFORM_INFO_CPUID_FAULTING;
+-        break;
+-
+-    case MSR_INTEL_MISC_FEATURES_ENABLES:
+-        *msr_content = 0;
+-        if ( current->arch.msr->misc_features_enables.cpuid_faulting )
+-            *msr_content |= MSR_MISC_FEATURES_CPUID_FAULTING;
+-        break;
+-
+     default:
+         if ( passive_domain_do_rdmsr(msr, msr_content) )
+             goto done;
+diff --git a/xen/arch/x86/msr.c b/xen/arch/x86/msr.c
+index b5ad97d..5e925d7 100644
+--- a/xen/arch/x86/msr.c
++++ b/xen/arch/x86/msr.c
+@@ -117,6 +117,37 @@ int init_vcpu_msr_policy(struct vcpu *v)
+     return 0;
+ }
+ 
++int guest_rdmsr(const struct vcpu *v, uint32_t msr, uint64_t *val)
++{
++    const struct msr_domain_policy *dp = v->domain->arch.msr;
++    const struct msr_vcpu_policy *vp = v->arch.msr;
++
++    switch ( msr )
++    {
++    case MSR_INTEL_PLATFORM_INFO:
++        if ( !dp->plaform_info.available )
++            goto gp_fault;
++        *val = (uint64_t)dp->plaform_info.cpuid_faulting <<
++               _MSR_PLATFORM_INFO_CPUID_FAULTING;
++        break;
++
++    case MSR_INTEL_MISC_FEATURES_ENABLES:
++        if ( !vp->misc_features_enables.available )
++            goto gp_fault;
++        *val = (uint64_t)vp->misc_features_enables.cpuid_faulting <<
++               _MSR_MISC_FEATURES_CPUID_FAULTING;
++        break;
++
++    default:
++        return X86EMUL_UNHANDLEABLE;
++    }
++
++    return X86EMUL_OKAY;
++
++ gp_fault:
++    return X86EMUL_EXCEPTION;
++}
++
+ /*
+  * Local variables:
+  * mode: C
+diff --git a/xen/arch/x86/traps.c b/xen/arch/x86/traps.c
+index 86814c4..d0211d8 100644
+--- a/xen/arch/x86/traps.c
++++ b/xen/arch/x86/traps.c
+@@ -2947,6 +2947,12 @@ static int emulate_privileged_op(struct cpu_user_regs *regs)
+         break;
+ 
+     case 0x32: /* RDMSR */
++        rc = guest_rdmsr(current, regs->_ecx, &val);
++        if ( rc == X86EMUL_OKAY )
++            goto rdmsr_writeback;
++        else if ( rc != X86EMUL_UNHANDLEABLE )
++            goto fail;
++
+         vpmu_msr = 0;
+         switch ( regs->_ecx )
+         {
+@@ -3020,23 +3026,6 @@ static int emulate_privileged_op(struct cpu_user_regs *regs)
+             regs->eax = regs->edx = 0;
+             break;
+ 
+-        case MSR_INTEL_PLATFORM_INFO:
+-            if ( !boot_cpu_has(X86_FEATURE_MSR_PLATFORM_INFO) )
+-                goto fail;
+-            regs->eax = regs->edx = 0;
+-            if ( this_cpu(cpuid_faulting_enabled) )
+-                regs->eax = MSR_PLATFORM_INFO_CPUID_FAULTING;
+-            break;
+-
+-        case MSR_INTEL_MISC_FEATURES_ENABLES:
+-            if ( boot_cpu_data.x86_vendor != X86_VENDOR_INTEL ||
+-                 rdmsr_safe(MSR_INTEL_MISC_FEATURES_ENABLES, val) )
+-                goto fail;
+-            regs->eax = regs->edx = 0;
+-            if ( current->arch.msr->misc_features_enables.cpuid_faulting )
+-                regs->eax |= MSR_MISC_FEATURES_CPUID_FAULTING;
+-            break;
+-
+         case MSR_P6_PERFCTR(0)...MSR_P6_PERFCTR(7):
+         case MSR_P6_EVNTSEL(0)...MSR_P6_EVNTSEL(3):
+         case MSR_CORE_PERF_FIXED_CTR0...MSR_CORE_PERF_FIXED_CTR2:
+diff --git a/xen/include/asm-x86/msr.h b/xen/include/asm-x86/msr.h
+index 3197d78..5cf175a 100644
+--- a/xen/include/asm-x86/msr.h
++++ b/xen/include/asm-x86/msr.h
+@@ -199,6 +199,14 @@ void init_guest_msr_policy(void);
+ int init_domain_msr_policy(struct domain *d);
+ int init_vcpu_msr_policy(struct vcpu *v);
+ 
++/*
++ * Below functions can return X86EMUL_UNHANDLEABLE which means that MSR is
++ * not (yet) handled by it and must be processed by legacy handlers. Such
++ * behaviour is needed for transition period until all rd/wrmsr are handled
++ * by the new MSR infrastructure.
++ */
++int guest_rdmsr(const struct vcpu *v, uint32_t msr, uint64_t *val);
++
+ #endif /* !__ASSEMBLY__ */
+ 
+ #endif /* __ASM_MSR_H */

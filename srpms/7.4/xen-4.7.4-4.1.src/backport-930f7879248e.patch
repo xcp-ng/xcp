@@ -1,0 +1,42 @@
+From 930f7879248edc05d9cb812e692eee6eb3b70eac Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Wed, 19 Jul 2017 10:28:03 +0100
+Subject: [PATCH] x86/vvmx: Fix handing of the MSR_BITMAP field with VMCS
+ shadowing
+
+Currently, the following sequence of actions:
+
+ * VMPTRLD (creates a mapping, likely pointing at gfn 0 for an empty vmcs)
+ * VMWRITE CPU_BASED_VM_EXEC_CONTROL (completed by hardware)
+ * VMWRITE MSR_BITMAP (completed by hardware)
+ * VMLAUNCH
+
+results in an L2 guest running with ACTIVATE_MSR_BITMAP set, but Xen using a
+stale mapping (likely gfn 0) when reading the interception bitmap.  The
+MSR_BITMAP field needs unconditionally intercepting even with VMCS shadowing,
+so Xen's mapping of the bitmap can be updated.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 1771b236b3..5b762440c1 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -99,13 +99,15 @@ int nvmx_vcpu_initialise(struct vcpu *v)
+         clear_page(vw);
+ 
+         /*
+-         * For the following 4 encodings, we need to handle them in VMM.
++         * For the following 6 encodings, we need to handle them in VMM.
+          * Let them vmexit as usual.
+          */
+         set_bit(IO_BITMAP_A, vw);
+         set_bit(VMCS_HIGH(IO_BITMAP_A), vw);
+         set_bit(IO_BITMAP_B, vw);
+         set_bit(VMCS_HIGH(IO_BITMAP_B), vw);
++        set_bit(MSR_BITMAP, vw);
++        set_bit(VMCS_HIGH(MSR_BITMAP), vw);
+ 
+         unmap_domain_page(vw);
+     }

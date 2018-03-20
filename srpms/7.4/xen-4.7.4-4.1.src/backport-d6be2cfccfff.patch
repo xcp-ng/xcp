@@ -1,0 +1,24 @@
+From d6be2cfccfffd6d5ff1da68277ec3ab13e595368 Mon Sep 17 00:00:00 2001
+From: Wei Liu <wei.liu2@citrix.com>
+Date: Tue, 6 Sep 2016 12:02:29 +0100
+Subject: [PATCH] xen: make clear gcov support limitation in Kconfig
+
+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
+Acked-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/xen/Kconfig.debug b/xen/Kconfig.debug
+index 603229c..f4154f5 100644
+--- a/xen/Kconfig.debug
++++ b/xen/Kconfig.debug
+@@ -33,6 +33,12 @@ config GCOV
+ 	---help---
+ 	  Enable gcov (a test coverage program in GCC) support.
+ 
++	  Currently the data structure and hypercall interface are tied
++	  to GCC 3.4 gcov format. You need to have a version of GCC
++	  that is compatible with that format to make gcov work.
++
++	  If unsure, say N here.
++
+ config PERF_COUNTERS
+ 	bool "Performance Counters"
+ 	---help---

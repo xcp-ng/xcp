@@ -1,0 +1,265 @@
+From 84a701db1028d45f7f8b5c435290c420c84611e2 Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Fri, 16 Sep 2016 09:02:05 -0400
+Subject: [PATCH] livepach: Add .livepatch.hooks functions and test-case
+
+Add hook functions which run during patch apply and patch revert.
+Hook functions are used by livepatch payloads to manipulate data
+structures during patching, etc.
+
+One use case is the XSA91. As Martin mentions it:
+"If we have shadow variables, we also need an unload hook to garbage
+collect all the variables introduced by a hotpatch to prevent memory
+leaks.  Potentially, we also want to pre-reserve memory for static or
+existing dynamic objects in the load-hook instead of on the fly.
+
+For testing and debugging, various applications are possible.
+
+In general, the hooks provide flexibility when having to deal with
+unforeseen cases, but their application should be rarely required (<
+10%)."
+
+Furthermore include a test-case for it.
+
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+Signed-off-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+
+diff --git a/docs/misc/livepatch.markdown b/docs/misc/livepatch.markdown
+index 89c1050..e0fc5e4 100644
+--- a/docs/misc/livepatch.markdown
++++ b/docs/misc/livepatch.markdown
+@@ -340,6 +340,13 @@ When reverting a patch, the hypervisor iterates over each `livepatch_func`
+ and the core code copies the data from the undo buffer (private internal copy)
+ to `old_addr`.
+ 
++It optionally may contain the address of functions to be called right before
++being applied and after being reverted:
++
++ * `.livepatch.hooks.load` - an array of function pointers.
++ * `.livepatch.hooks.unload` - an array of function pointers.
++
++
+ ### Example of .livepatch.funcs
+ 
+ A simple example of what a payload file can be:
+@@ -377,6 +384,22 @@ struct livepatch_func livepatch_hello_world = {
+ 
+ Code must be compiled with -fPIC.
+ 
++### .livepatch.hooks.load and .livepatch.hooks.unload
++
++This section contains an array of function pointers to be executed
++before payload is being applied (.livepatch.funcs) or after reverting
++the payload. This is useful to prepare data structures that need to
++be modified patching.
++
++Each entry in this array is eight bytes.
++
++The type definition of the function are as follow:
++
++<pre>
++typedef void (*livepatch_loadcall_t)(void);  
++typedef void (*livepatch_unloadcall_t)(void);   
++</pre>
++
+ ### .livepatch.depends and .note.gnu.build-id
+ 
+ To support dependencies checking and safe loading (to load the
+diff --git a/xen/arch/x86/test/xen_hello_world.c b/xen/arch/x86/test/xen_hello_world.c
+index 422bdf1..cb5e27a 100644
+--- a/xen/arch/x86/test/xen_hello_world.c
++++ b/xen/arch/x86/test/xen_hello_world.c
+@@ -4,14 +4,48 @@
+  */
+ 
+ #include "config.h"
++#include <xen/lib.h>
+ #include <xen/types.h>
+ #include <xen/version.h>
+ #include <xen/livepatch.h>
++#include <xen/livepatch_payload.h>
+ 
+ #include <public/sysctl.h>
+ 
+ static char hello_world_patch_this_fnc[] = "xen_extra_version";
+ extern const char *xen_hello_world(void);
++static unsigned int cnt;
++
++static void apply_hook(void)
++{
++    printk(KERN_DEBUG "Hook executing.\n");
++}
++
++static void revert_hook(void)
++{
++    printk(KERN_DEBUG "Hook unloaded.\n");
++}
++
++static void  hi_func(void)
++{
++    printk(KERN_DEBUG "%s: Hi! (called %u times)\n", __func__, ++cnt);
++};
++
++static void check_fnc(void)
++{
++    printk(KERN_DEBUG "%s: Hi func called %u times\n", __func__, cnt);
++    BUG_ON(cnt == 0 || cnt > 2);
++}
++
++LIVEPATCH_LOAD_HOOK(apply_hook);
++LIVEPATCH_UNLOAD_HOOK(revert_hook);
++
++/* Imbalance here. Two load and three unload. */
++
++LIVEPATCH_LOAD_HOOK(hi_func);
++LIVEPATCH_UNLOAD_HOOK(hi_func);
++
++LIVEPATCH_UNLOAD_HOOK(check_fnc);
+ 
+ struct livepatch_func __section(".livepatch.funcs") livepatch_xen_hello_world = {
+     .version = LIVEPATCH_PAYLOAD_VERSION,
+diff --git a/xen/common/livepatch.c b/xen/common/livepatch.c
+index f5e490f..00de07e 100644
+--- a/xen/common/livepatch.c
++++ b/xen/common/livepatch.c
+@@ -23,6 +23,7 @@
+ #include <xen/wait.h>
+ #include <xen/livepatch_elf.h>
+ #include <xen/livepatch.h>
++#include <xen/livepatch_payload.h>
+ 
+ #include <asm/event.h>
+ 
+@@ -70,7 +71,11 @@ struct payload {
+     unsigned int nsyms;                  /* Nr of entries in .strtab and symbols. */
+     struct livepatch_build_id id;        /* ELFNOTE_DESC(.note.gnu.build-id) of the payload. */
+     struct livepatch_build_id dep;       /* ELFNOTE_DESC(.livepatch.depends). */
+-    char name[XEN_LIVEPATCH_NAME_SIZE]; /* Name of it. */
++    livepatch_loadcall_t *const *load_funcs;   /* The array of funcs to call after */
++    livepatch_unloadcall_t *const *unload_funcs;/* load and unload of the payload. */
++    unsigned int n_load_funcs;           /* Nr of the funcs to load and execute. */
++    unsigned int n_unload_funcs;         /* Nr of funcs to call durung unload. */
++    char name[XEN_LIVEPATCH_NAME_SIZE];  /* Name of it. */
+ };
+ 
+ /* Defines an outstanding patching action. */
+@@ -515,6 +520,25 @@ static int prepare_payload(struct payload *payload,
+         }
+     }
+ 
++    sec = livepatch_elf_sec_by_name(elf, ".livepatch.hooks.load");
++    if ( sec )
++    {
++        if ( sec->sec->sh_size % sizeof(*payload->load_funcs) )
++            return -EINVAL;
++
++        payload->load_funcs = sec->load_addr;
++        payload->n_load_funcs = sec->sec->sh_size / sizeof(*payload->load_funcs);
++    }
++
++    sec = livepatch_elf_sec_by_name(elf, ".livepatch.hooks.unload");
++    if ( sec )
++    {
++        if ( sec->sec->sh_size % sizeof(*payload->unload_funcs) )
++            return -EINVAL;
++
++        payload->unload_funcs = sec->load_addr;
++        payload->n_unload_funcs = sec->sec->sh_size / sizeof(*payload->unload_funcs);
++    }
+     sec = livepatch_elf_sec_by_name(elf, ELF_BUILD_ID_NOTE);
+     if ( sec )
+     {
+@@ -996,6 +1020,18 @@ static int apply_payload(struct payload *data)
+ 
+     arch_livepatch_quiesce();
+ 
++    /*
++     * Since we are running with IRQs disabled and the hooks may call common
++     * code - which expects certain spinlocks to run with IRQs enabled - we
++     * temporarily disable the spin locks IRQ state checks.
++     */
++    spin_debug_disable();
++    for ( i = 0; i < data->n_load_funcs; i++ )
++        data->load_funcs[i]();
++    spin_debug_enable();
++
++    ASSERT(!local_irq_is_enabled());
++
+     for ( i = 0; i < data->nfuncs; i++ )
+         arch_livepatch_apply_jmp(&data->funcs[i]);
+ 
+@@ -1022,6 +1058,18 @@ static int revert_payload(struct payload *data)
+     for ( i = 0; i < data->nfuncs; i++ )
+         arch_livepatch_revert_jmp(&data->funcs[i]);
+ 
++    /*
++     * Since we are running with IRQs disabled and the hooks may call common
++     * code - which expects certain spinlocks to run with IRQs enabled - we
++     * temporarily disable the spin locks IRQ state checks.
++     */
++    spin_debug_disable();
++    for ( i = 0; i < data->n_unload_funcs; i++ )
++        data->unload_funcs[i]();
++    spin_debug_enable();
++
++    ASSERT(!local_irq_is_enabled());
++
+     arch_livepatch_revive();
+ 
+     /*
+diff --git a/xen/include/xen/livepatch_payload.h b/xen/include/xen/livepatch_payload.h
+new file mode 100644
+index 0000000..8f38cc2
+--- /dev/null
++++ b/xen/include/xen/livepatch_payload.h
+@@ -0,0 +1,49 @@
++/*
++ * Copyright (C) 2016 Citrix Systems R&D Ltd.
++ */
++
++#ifndef __XEN_LIVEPATCH_PAYLOAD_H__
++#define __XEN_LIVEPATCH_PAYLOAD_H__
++
++/*
++ * The following definitions are to be used in patches. They are taken
++ * from kpatch.
++ */
++typedef void livepatch_loadcall_t(void);
++typedef void livepatch_unloadcall_t(void);
++
++/*
++ * LIVEPATCH_LOAD_HOOK macro
++ *
++ * Declares a function pointer to be allocated in a new
++ * .livepatch.hook.load section.  This livepatch_load_data symbol is later
++ * stripped by create-diff-object so that it can be declared in multiple
++ * objects that are later linked together, avoiding global symbol
++ * collision.  Since multiple hooks can be registered, the
++ * .livepatch.hook.load section is a table of functions that will be
++ * executed in series by the livepatch infrastructure at patch load time.
++ */
++#define LIVEPATCH_LOAD_HOOK(_fn) \
++    livepatch_loadcall_t *__attribute__((weak)) \
++        const livepatch_load_data_##_fn __section(".livepatch.hooks.load") = _fn;
++
++/*
++ * LIVEPATCH_UNLOAD_HOOK macro
++ *
++ * Same as LOAD hook with s/load/unload/
++ */
++#define LIVEPATCH_UNLOAD_HOOK(_fn) \
++     livepatch_unloadcall_t *__attribute__((weak)) \
++        const livepatch_unload_data_##_fn __section(".livepatch.hooks.unload") = _fn;
++
++#endif /* __XEN_LIVEPATCH_PAYLOAD_H__ */
++
++/*
++ * Local variables:
++ * mode: C
++ * c-file-style: "BSD"
++ * c-basic-offset: 4
++ * tab-width: 4
++ * indent-tabs-mode: nil
++ * End:
++ */

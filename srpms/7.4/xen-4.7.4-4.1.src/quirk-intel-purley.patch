@@ -1,0 +1,40 @@
+Use ACPI reboot method for Intel PURLEY
+
+When EFI rebooting on the Intel PURLEY platform, it gets a page fault in
+the EFI runtime instead of rebooting.  The faulting address is not in
+the EFI memory map at all.  Quirk this hardware to use the ACPI reboot
+method instead.
+
+dmidecode info:
+
+BIOS Information
+    Vendor: Intel Corporation
+    Version: PLYDCRB1.86B.0119.R05.1701181843
+    Release Date: 01/18/2017
+System Information
+    Manufacturer: Intel Corporation
+    Product Name: PURLEY
+    Version: E63448-400
+
+
+
+diff --git a/xen/arch/x86/shutdown.c b/xen/arch/x86/shutdown.c
+index 583dbae..4c011a6 100644
+--- a/xen/arch/x86/shutdown.c
++++ b/xen/arch/x86/shutdown.c
+@@ -241,6 +241,15 @@ static struct dmi_system_id __initdata reboot_dmi_table[] = {
+             DMI_MATCH(DMI_PRODUCT_NAME, "OptiPlex 9020"),
+         },
+     },
++    {    /* Handle problems with rebooting on Intel PURLEY. */
++        .callback = override_reboot,
++        .driver_data = (void *)(long)BOOT_ACPI,
++        .ident = "Intel PURLEY",
++        .matches = {
++            DMI_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
++            DMI_MATCH(DMI_PRODUCT_NAME, "PURLEY"),
++        },
++    },
+     {    /* Handle problems with rebooting on Dell 2400's */
+         .callback = override_reboot,
+         .driver_data = (void *)(long)BOOT_KBD,

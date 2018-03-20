@@ -1,0 +1,237 @@
+From e04b562377b3a50e48eb691145c3b95c19a78658 Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Thu, 14 Jul 2016 10:18:46 -0400
+Subject: [PATCH] xsm: rework policy_buffer globals
+
+This makes the buffers function parameters instead of globals, in
+preparation for adding alternate locations for the policy.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/xen/include/xsm/xsm.h b/xen/include/xsm/xsm.h
+index 4b8843d..e83dca2 100644
+--- a/xen/include/xsm/xsm.h
++++ b/xen/include/xsm/xsm.h
+@@ -43,9 +43,6 @@ enum xsm_default {
+ };
+ typedef enum xsm_default xsm_default_t;
+ 
+-extern char *policy_buffer;
+-extern u32 policy_size;
+-
+ struct xsm_operations {
+     void (*security_domaininfo) (struct domain *d,
+                                         struct xen_domctl_getdomaininfo *info);
+@@ -740,12 +737,14 @@ extern int xsm_multiboot_init(unsigned long *module_map,
+                               void *(*bootstrap_map)(const module_t *));
+ extern int xsm_multiboot_policy_init(unsigned long *module_map,
+                                      const multiboot_info_t *mbi,
+-                                     void *(*bootstrap_map)(const module_t *));
++                                     void *(*bootstrap_map)(const module_t *),
++                                     void **policy_buffer,
++                                     size_t *policy_size);
+ #endif
+ 
+ #ifdef CONFIG_HAS_DEVICE_TREE
+ extern int xsm_dt_init(void);
+-extern int xsm_dt_policy_init(void);
++extern int xsm_dt_policy_init(void **policy_buffer, size_t *policy_size);
+ extern bool has_xsm_magic(paddr_t);
+ #endif
+ 
+@@ -755,9 +754,9 @@ extern struct xsm_operations dummy_xsm_ops;
+ extern void xsm_fixup_ops(struct xsm_operations *ops);
+ 
+ #ifdef CONFIG_FLASK
+-extern void flask_init(void);
++extern void flask_init(const void *policy_buffer, size_t policy_size);
+ #else
+-static inline void flask_init(void)
++static inline void flask_init(const void *policy_buffer, size_t policy_size)
+ {
+ }
+ #endif
+diff --git a/xen/xsm/flask/hooks.c b/xen/xsm/flask/hooks.c
+index 2692a6f..ec6f5b4 100644
+--- a/xen/xsm/flask/hooks.c
++++ b/xen/xsm/flask/hooks.c
+@@ -1815,7 +1815,7 @@ static struct xsm_operations flask_ops = {
+     .xen_version = flask_xen_version,
+ };
+ 
+-__init void flask_init(void)
++void __init flask_init(const void *policy_buffer, size_t policy_size)
+ {
+     int ret = -ENOENT;
+ 
+diff --git a/xen/xsm/flask/include/security.h b/xen/xsm/flask/include/security.h
+index 1da020d..ec8b442 100644
+--- a/xen/xsm/flask/include/security.h
++++ b/xen/xsm/flask/include/security.h
+@@ -52,7 +52,7 @@ enum flask_bootparam_t {
+ extern enum flask_bootparam_t flask_bootparam;
+ extern int flask_mls_enabled;
+ 
+-int security_load_policy(void * data, size_t len);
++int security_load_policy(const void *data, size_t len);
+ 
+ struct av_decision {
+     u32 allowed;
+diff --git a/xen/xsm/flask/ss/policydb.h b/xen/xsm/flask/ss/policydb.h
+index 238a042..d3b409a 100644
+--- a/xen/xsm/flask/ss/policydb.h
++++ b/xen/xsm/flask/ss/policydb.h
+@@ -277,7 +277,7 @@ extern int policydb_read(struct policydb *p, void *fp);
+ #define TARGET_XEN_OLD 0
+ 
+ struct policy_file {
+-    char *data;
++    const char *data;
+     size_t len;
+ };
+ 
+diff --git a/xen/xsm/flask/ss/services.c b/xen/xsm/flask/ss/services.c
+index 86f94c9..b2c5c44 100644
+--- a/xen/xsm/flask/ss/services.c
++++ b/xen/xsm/flask/ss/services.c
+@@ -1353,7 +1353,7 @@ static int security_preserve_bools(struct policydb *p);
+  * This function will flush the access vector cache after
+  * loading the new policy.
+  */
+-int security_load_policy(void *data, size_t len)
++int security_load_policy(const void *data, size_t len)
+ {
+     struct policydb oldpolicydb, newpolicydb;
+     struct sidtab oldsidtab, newsidtab;
+diff --git a/xen/xsm/xsm_core.c b/xen/xsm/xsm_core.c
+index 8df1a3c..3d132be 100644
+--- a/xen/xsm/xsm_core.c
++++ b/xen/xsm/xsm_core.c
+@@ -36,7 +36,7 @@ static inline int verify(struct xsm_operations *ops)
+     return 0;
+ }
+ 
+-static int __init xsm_core_init(void)
++static int __init xsm_core_init(const void *policy_buffer, size_t policy_size)
+ {
+     if ( verify(&dummy_xsm_ops) )
+     {
+@@ -46,7 +46,7 @@ static int __init xsm_core_init(void)
+     }
+ 
+     xsm_ops = &dummy_xsm_ops;
+-    flask_init();
++    flask_init(policy_buffer, policy_size);
+ 
+     return 0;
+ }
+@@ -57,12 +57,15 @@ int __init xsm_multiboot_init(unsigned long *module_map,
+                               void *(*bootstrap_map)(const module_t *))
+ {
+     int ret = 0;
++    void *policy_buffer = NULL;
++    size_t policy_size = 0;
+ 
+     printk("XSM Framework v" XSM_FRAMEWORK_VERSION " initialized\n");
+ 
+     if ( XSM_MAGIC )
+     {
+-        ret = xsm_multiboot_policy_init(module_map, mbi, bootstrap_map);
++        ret = xsm_multiboot_policy_init(module_map, mbi, bootstrap_map,
++                                        &policy_buffer, &policy_size);
+         if ( ret )
+         {
+             bootstrap_map(NULL);
+@@ -71,7 +74,7 @@ int __init xsm_multiboot_init(unsigned long *module_map,
+         }
+     }
+ 
+-    ret = xsm_core_init();
++    ret = xsm_core_init(policy_buffer, policy_size);
+     bootstrap_map(NULL);
+ 
+     return 0;
+@@ -82,12 +85,14 @@ int __init xsm_multiboot_init(unsigned long *module_map,
+ int __init xsm_dt_init(void)
+ {
+     int ret = 0;
++    void *policy_buffer = NULL;
++    size_t policy_size = 0;
+ 
+     printk("XSM Framework v" XSM_FRAMEWORK_VERSION " initialized\n");
+ 
+     if ( XSM_MAGIC )
+     {
+-        ret = xsm_dt_policy_init();
++        ret = xsm_dt_policy_init(&policy_buffer, &policy_size);
+         if ( ret )
+         {
+             printk("%s: Error initializing policy (rc = %d).\n",
+@@ -96,7 +101,7 @@ int __init xsm_dt_init(void)
+         }
+     }
+ 
+-    ret = xsm_core_init();
++    ret = xsm_core_init(policy_buffer, policy_size);
+ 
+     xfree(policy_buffer);
+ 
+diff --git a/xen/xsm/xsm_policy.c b/xen/xsm/xsm_policy.c
+index bde8015..16e70f0 100644
+--- a/xen/xsm/xsm_policy.c
++++ b/xen/xsm/xsm_policy.c
+@@ -28,13 +28,12 @@
+ # include <xen/device_tree.h>
+ #endif
+ 
+-char *__initdata policy_buffer = NULL;
+-u32 __initdata policy_size = 0;
+-
+ #ifdef CONFIG_MULTIBOOT
+ int __init xsm_multiboot_policy_init(unsigned long *module_map,
+                                      const multiboot_info_t *mbi,
+-                                     void *(*bootstrap_map)(const module_t *))
++                                     void *(*bootstrap_map)(const module_t *),
++                                     void **policy_buffer,
++                                     size_t *policy_size)
+ {
+     int i;
+     module_t *mod = (module_t *)__va(mbi->mods_addr);
+@@ -56,8 +55,8 @@ int __init xsm_multiboot_policy_init(unsigned long *module_map,
+ 
+         if ( (xsm_magic_t)(*_policy_start) == XSM_MAGIC )
+         {
+-            policy_buffer = (char *)_policy_start;
+-            policy_size = _policy_len;
++            *policy_buffer = _policy_start;
++            *policy_size = _policy_len;
+ 
+             printk("Policy len %#lx, start at %p.\n",
+                    _policy_len,_policy_start);
+@@ -75,7 +74,7 @@ int __init xsm_multiboot_policy_init(unsigned long *module_map,
+ #endif
+ 
+ #ifdef CONFIG_HAS_DEVICE_TREE
+-int __init xsm_dt_policy_init(void)
++int __init xsm_dt_policy_init(void **policy_buffer, size_t *policy_size)
+ {
+     struct bootmodule *mod = boot_module_find_by_kind(BOOTMOD_XSM);
+     paddr_t paddr, len;
+@@ -95,12 +94,12 @@ int __init xsm_dt_policy_init(void)
+     printk("xsm: Policy len = 0x%"PRIpaddr" start at 0x%"PRIpaddr"\n",
+            len, paddr);
+ 
+-    policy_buffer = xmalloc_bytes(len);
+-    if ( !policy_buffer )
++    *policy_buffer = xmalloc_bytes(len);
++    if ( !*policy_buffer )
+         return -ENOMEM;
+ 
+-    copy_from_paddr(policy_buffer, paddr, len);
+-    policy_size = len;
++    copy_from_paddr(*policy_buffer, paddr, len);
++    *policy_size = len;
+ 
+     return 0;
+ }

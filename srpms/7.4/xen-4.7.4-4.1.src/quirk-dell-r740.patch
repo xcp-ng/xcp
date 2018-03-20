@@ -1,0 +1,96 @@
+x86: Use ACPI reboot method for Dell PowerEdge R740
+
+When EFI booting the Dell PowerEdge R740, it consistently wanders into the
+weeds and gets an invalid opcode in the EFI ResetSystem call.
+Quirk this hardware to use the ACPI reboot method instead.
+
+Example stack trace:
+
+----[ Xen-4.11-unstable  x86_64  debug=n   Not tainted ]----
+CPU:    0
+RIP:    e008:[<0000000000000017>] 0000000000000017
+RFLAGS: 0000000000010202   CONTEXT: hypervisor
+rax: 0000000066eb2ff0   rbx: ffff83005f627c20   rcx: 000000006c54e100
+rdx: 0000000000000000   rsi: 0000000000000065   rdi: 000000107355f000
+rbp: ffff83005f627c70   rsp: ffff83005f627b48   r8:  ffff83005f627b90
+r9:  0000000000000000   r10: ffff83005f627c88   r11: 0000000000000000
+r12: 0000000000000000   r13: 0000000000000cf9   r14: 0000000000000065
+r15: ffff830000000000   cr0: 0000000080050033   cr4: 00000000003526e0
+cr3: 000000107355f000   cr2: ffffc90000cff000
+fsb: 0000000000000000   gsb: ffff88019f600000   gss: 0000000000000000
+ds: 0000   es: 0000   fs: 0000   gs: 0000   ss: e010   cs: e008
+Xen code around <0000000000000017> (0000000000000017):
+ f0 d8 dd 00 f0 54 ff 00 <f0> 50 dd 00 f0 d8 dd 00 f0 a5 fe 00 f0 87 e9 00
+Xen stack trace from rsp=ffff83005f627b48:
+   ffff83005f627b50 ffffffffffffffda 000000006c547aaa ffff82d000000001
+   ffff83005f627bec 000000107355f000 000000006c546fb8 ffff83107ffe3240
+   0000000000000000 0000000000000000 8000000000000002 0000000000000000
+   000000006c546b95 000000006c54c700 ffff83005f627bdc ffff83005f627be8
+   000000005f616000 ffff83005f627c20 0000000000000000 0000000000000cf9
+   ffff820080350001 000000000000000b ffff82d080351eda 0000000000000000
+   0000000000000000 0000000000000000 0000000000000000 000000005f616000
+   0000000000000000 ffff82d08095ff60 ffff82d08095ff60 000000f100000000
+   ffff82d080296097 000000000000e008 0000000000000000 ffff83005f627c88
+   0000000000000000 00000000fffffffe ffff82d0802959d2 ffff82d0802959d2
+   000000008095f300 000000005f627c9c 00000000000000f8 0000000000000000
+   00000000000000f8 ffff82d080932c00 0000000000000000 ffff82d08095f7c8
+   ffff82d080932c00 0000000000000000 0000000000000000 ffff82d080295a9b
+   ffff83005f627d98 ffff82d0802361f3 ffff82d080932c00 0000000080000000
+   ffff83005f627d98 ffff82d080279a19 ffff82d08095f02c ffff82d080000000
+   0000000000000000 00000000000000fb 0000000000000000 00000071484e54f6
+   ffff831073542098 ffff82d08093ac78 ffff831072befd30 0000000000000000
+   0000000000000000 0000000000000000 0000000000000000 0000000000000000
+   0000000000000000 ffff82d08034f185 ffff82d080949460 0000000000000000
+   ffff82d08095f270 0000000000000008 ffff83107357ae20 0000007146ce4bd3
+Xen call trace:
+   [<0000000000000017>] 0000000000000017
+   [<ffff82d080351eda>] efi_reset_system+0x5a/0x90
+   [<ffff82d080296097>] smp_send_stop+0x97/0xa0
+   [<ffff82d0802959d2>] machine_restart+0x212/0x2d0
+   [<ffff82d0802959d2>] machine_restart+0x212/0x2d0
+   [<ffff82d080295a9b>] shutdown.c#__machine_restart+0xb/0x10
+   [<ffff82d0802361f3>] smp_call_function_interrupt+0x53/0x80
+   [<ffff82d080279a19>] do_IRQ+0x259/0x660
+   [<ffff82d08034f185>] common_interrupt+0x85/0x90
+   [<ffff82d0802c6152>] mwait-idle.c#mwait_idle+0x242/0x390
+   [<ffff82d08026b446>] domain.c#idle_loop+0x86/0xc0
+
+
+****************************************
+Panic on CPU 0:
+FATAL TRAP: vector = 6 (invalid opcode)
+****************************************
+
+dmidecode info:
+
+BIOS Information:
+    Vendor: Dell Inc.
+    Version: 1.2.11
+    Release Date: 10/19/2017
+    BIOS Revision: 1.2
+System Information:
+    Manufacturer: Dell Inc.
+    Product Name: PowerEdge R740
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+
+diff --git a/xen/arch/x86/shutdown.c b/xen/arch/x86/shutdown.c
+index 4c011a6..2ae3431 100644
+--- a/xen/arch/x86/shutdown.c
++++ b/xen/arch/x86/shutdown.c
+@@ -484,6 +484,15 @@ static struct dmi_system_id __initdata reboot_dmi_table[] = {
+             DMI_MATCH(DMI_PRODUCT_NAME, "Latitude E6520"),
+         },
+     },
++    {    /* Handle problems with rebooting on Dell PowerEdge R740. */
++        .callback = override_reboot,
++        .driver_data = (void *)(long)BOOT_ACPI,
++        .ident = "Dell PowerEdge R740",
++        .matches = {
++            DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++            DMI_MATCH(DMI_PRODUCT_NAME, "PowerEdge R740"),
++        },
++    },
+     { }
+ };
+ 

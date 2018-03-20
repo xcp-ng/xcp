@@ -1,0 +1,47 @@
+From 5a9915684010b3f6adcfcdd43d16cc091eeb91f2 Mon Sep 17 00:00:00 2001
+From: Jan Beulich <jbeulich@suse.com>
+Date: Tue, 12 Dec 2017 15:04:00 +0100
+Subject: [PATCH] x86/shadow: fix refcount overflow check
+
+Commit c385d27079 ("x86 shadow: for multi-page shadows, explicitly track
+the first page") reduced the refcount width to 25, without adjusting the
+overflow check. Eliminate the disconnect by using a manifest constant.
+
+Interestingly, up to commit 047782fa01 ("Out-of-sync L1 shadows: OOS
+snapshot") the refcount was 27 bits wide, yet the check was already
+using 26.
+
+This is XSA-249.
+
+Signed-off-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: George Dunlap <george.dunlap@citrix.com>
+Reviewed-by: Tim Deegan <tim@xen.org>
+master commit: 54e2292e8df7a1a7b041192be9d6d797b6d00869
+master date: 2017-12-12 14:29:13 +0100
+diff --git a/xen/arch/x86/mm/shadow/private.h b/xen/arch/x86/mm/shadow/private.h
+index 46f5079..e7b4fbe 100644
+--- a/xen/arch/x86/mm/shadow/private.h
++++ b/xen/arch/x86/mm/shadow/private.h
+@@ -532,7 +532,7 @@ static inline int sh_get_ref(struct domain *d, mfn_t smfn, paddr_t entry_pa)
+     x = sp->u.sh.count;
+     nx = x + 1;
+ 
+-    if ( unlikely(nx >= 1U<<26) )
++    if ( unlikely(nx >= (1U << PAGE_SH_REFCOUNT_WIDTH)) )
+     {
+         SHADOW_PRINTK("shadow ref overflow, gmfn=%lx smfn=%lx\n",
+                        __backpointer(sp), mfn_x(smfn));
+diff --git a/xen/include/asm-x86/mm.h b/xen/include/asm-x86/mm.h
+index 905c797..7c184d5 100644
+--- a/xen/include/asm-x86/mm.h
++++ b/xen/include/asm-x86/mm.h
+@@ -83,7 +83,8 @@ struct page_info
+             unsigned long type:5;   /* What kind of shadow is this? */
+             unsigned long pinned:1; /* Is the shadow pinned? */
+             unsigned long head:1;   /* Is this the first page of the shadow? */
+-            unsigned long count:25; /* Reference count */
++#define PAGE_SH_REFCOUNT_WIDTH 25
++            unsigned long count:PAGE_SH_REFCOUNT_WIDTH; /* Reference count */
+         } sh;
+ 
+         /* Page is on a free list: ((count_info & PGC_count_mask) == 0). */

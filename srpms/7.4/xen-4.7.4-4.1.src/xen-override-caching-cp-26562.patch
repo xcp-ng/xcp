@@ -1,0 +1,14 @@
+diff --git a/xen/arch/x86/hvm/mtrr.c b/xen/arch/x86/hvm/mtrr.c
+index 3c51244..d0126b4 100644
+--- a/xen/arch/x86/hvm/mtrr.c
++++ b/xen/arch/x86/hvm/mtrr.c
+@@ -811,7 +811,8 @@ int epte_get_entry_emt(struct domain *d, unsigned long gfn, mfn_t mfn,
+         return MTRR_TYPE_UNCACHABLE;
+     }
+ 
+-    if ( !need_iommu(d) && !cache_flush_permitted(d) )
++    if ( (!need_iommu(d) && !cache_flush_permitted(d)) ||
++         is_xen_heap_mfn(mfn_x(mfn)) )
+     {
+         *ipat = 1;
+         return MTRR_TYPE_WRBACK;

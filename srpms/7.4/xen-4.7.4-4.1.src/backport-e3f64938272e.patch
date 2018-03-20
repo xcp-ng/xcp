@@ -1,0 +1,58 @@
+From e3f64938272e272dc75b060b1cbbba6562fc18d7 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Fri, 3 Mar 2017 11:59:22 +0100
+Subject: [PATCH 2/2] x86/vvmx: add vmcs id check into vmptrld emulation
+
+If a guest will do vmptrld with an incorrect vmcs id:
+
+(XEN) Xen BUG at .../git/upstream/xen/xen/include/asm/hvm/vmx/vmx.h:333
+(XEN) ----[ Xen-4.9-unstable  x86_64  debug=y   Tainted:    H ]----
+(XEN) Xen call trace:
+(XEN)    [<ffff82d0801f925e>] vmcs.c#arch/x86/hvm/vmx/vmcs.o.unlikely+0x28/0x19a
+(XEN)    [<ffff82d0801f602c>] virtual_vmcs_vmread+0x11/0x2c
+(XEN)    [<ffff82d0802002cc>] vvmx.c#_map_io_bitmap+0x86/0x88
+(XEN)    [<ffff82d080202399>] nvmx_handle_vmptrld+0xf0/0x1fb
+(XEN)    [<ffff82d0801fe93c>] vmx_vmexit_handler+0x132b/0x1c49
+(XEN)    [<ffff82d080203e6c>] vmx_asm_vmexit_handler+0x3c/0x120
+
+Fix this by adding appropriate checks for vmcs id during vmptrld
+emulation.
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 7df9d47..57fd6a7 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -1648,6 +1648,18 @@ int nvmx_handle_vmptrld(struct cpu_user_regs *regs)
+         {
+             if ( writable )
+             {
++                struct vmcs_struct *vvmcs = vvmcx;
++
++                if ( ((vvmcs->vmcs_revision_id ^ vmx_basic_msr) &
++                                         VMX_BASIC_REVISION_MASK) ||
++                     (!cpu_has_vmx_vmcs_shadowing &&
++                      (vvmcs->vmcs_revision_id & ~VMX_BASIC_REVISION_MASK)) )
++                {
++                    hvm_unmap_guest_frame(vvmcx, 1);
++                    vmfail(regs, VMX_INSN_VMPTRLD_INCORRECT_VMCS_ID);
++
++                    return X86EMUL_OKAY;
++                }
+                 nvcpu->nv_vvmcx = vvmcx;
+                 nvcpu->nv_vvmcxaddr = gpa;
+                 v->arch.hvm_vmx.vmcs_shadow_maddr =
+diff --git a/xen/include/asm-x86/hvm/vmx/vmcs.h b/xen/include/asm-x86/hvm/vmx/vmcs.h
+index 44eb079..750a3b2 100644
+--- a/xen/include/asm-x86/hvm/vmx/vmcs.h
++++ b/xen/include/asm-x86/hvm/vmx/vmcs.h
+@@ -581,6 +581,7 @@ enum vmx_insn_errno
+     VMX_INSN_INVALID_CONTROL_STATE         = 7,
+     VMX_INSN_INVALID_HOST_STATE            = 8,
+     VMX_INSN_VMPTRLD_INVALID_PHYADDR       = 9,
++    VMX_INSN_VMPTRLD_INCORRECT_VMCS_ID     = 11,
+     VMX_INSN_UNSUPPORTED_VMCS_COMPONENT    = 12,
+     VMX_INSN_VMXON_IN_VMX_ROOT             = 15,
+     VMX_INSN_FAIL_INVALID                  = ~0,

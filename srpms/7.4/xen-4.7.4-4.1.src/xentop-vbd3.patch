@@ -1,0 +1,156 @@
+From 03a1b077182ca3a625cea5a42fcacbcb73b0af84 Mon Sep 17 00:00:00 2001
+From: Pritha Srivastava <pritha.srivastava@citrix.com>
+Date: Thu, 11 Feb 2016 10:04:44 +0000
+Subject: [PATCH] CA-150812: Xentop doesn't display VBD3 data
+
+Modified libxenstat so that metrics from Tapdisk3 are shown when xentop is called.
+
+Signed-off-by: Jorge Martin jorge.martin@citrix.com
+Signed-off-by: Pritha Srivastava <pritha.srivastava@citrix.com>
+diff --git a/tools/xenstat/libxenstat/src/xenstat_linux.c b/tools/xenstat/libxenstat/src/xenstat_linux.c
+index 189b1bd..16aa32c 100644
+--- a/tools/xenstat/libxenstat/src/xenstat_linux.c
++++ b/tools/xenstat/libxenstat/src/xenstat_linux.c
+@@ -24,6 +24,7 @@
+ #include <dirent.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -382,6 +383,39 @@ void xenstat_uninit_networks(xenstat_handle * handle)
+ 		fclose(priv->procnetdev);
+ }
+ 
++static int read_attributes_vbd3(char *vbd3_path, xenstat_vbd *vbd)
++{
++	FILE *fp;
++	struct vbd3_stats vbd3_stats;
++
++	fp = fopen(vbd3_path, "rb");
++
++	if (fp == NULL)
++	{
++		return -1;
++	}
++
++	if (fread(&vbd3_stats, sizeof(struct vbd3_stats), 1, fp) != 1) {
++		fclose(fp);
++		return -1;
++	}
++
++	if (vbd3_stats.version != 1) {
++		fclose(fp);
++		return -1;
++	}
++
++	vbd->oo_reqs = vbd3_stats.oo_reqs;
++	vbd->rd_reqs = vbd3_stats.read_reqs_submitted;
++	vbd->rd_sects = vbd3_stats.read_sectors;
++	vbd->wr_reqs = vbd3_stats.write_reqs_submitted;
++	vbd->wr_sects = vbd3_stats.write_sectors;
++
++	fclose(fp);
++
++	return 0;
++}
++
+ static int read_attributes_vbd(const char *vbd_directory, const char *what, char *ret, int cap)
+ {
+ 	static char file_name[80];
+@@ -430,7 +464,7 @@ int xenstat_collect_vbds(xenstat_node * node)
+ 		int ret;
+ 		char buf[256];
+ 
+-		ret = sscanf(dp->d_name, "%3s-%u-%u", buf, &domid, &vbd.dev);
++		ret = sscanf(dp->d_name, "%255[^-]-%u-%u", buf, &domid, &vbd.dev);
+ 		if (ret != 3)
+ 			continue;
+ 		if (!(strstr(buf, "vbd")) && !(strstr(buf, "tap")))
+@@ -440,6 +474,8 @@ int xenstat_collect_vbds(xenstat_node * node)
+ 			vbd.back_type = 1;
+ 		else if (strcmp(buf,"tap") == 0)
+ 			vbd.back_type = 2;
++		else if (strcmp(buf,"vbd3") == 0)
++			vbd.back_type = 3;
+ 		else
+ 			vbd.back_type = 0;
+ 
+@@ -471,6 +507,38 @@ int xenstat_collect_vbds(xenstat_node * node)
+ 				vbd.error = 1;
+ 			}
+ 		}
++		else if (vbd.back_type == 3)
++		{
++
++			char *td3_pid;
++			char *path;
++
++			vbd.back_type = 3;
++			vbd.error = 0;
++
++			if (asprintf(&path, "/local/domain/0/backend/vbd3/%u/%u/kthread-pid", domid, vbd.dev) < 0)
++				continue;
++
++			td3_pid = xs_read(node->handle->xshandle, XBT_NULL, path, NULL);
++
++			if (td3_pid == NULL) {
++				free(path);
++				continue;
++			}
++
++			free(path);
++
++			if (asprintf(&path, "/dev/shm/td3-%s/vbd-%u-%u", td3_pid, domid, vbd.dev) < 0) {
++				free(td3_pid);
++				continue;
++			}
++
++			if (read_attributes_vbd3(path, &vbd) < 0)
++				vbd.error = 1;
++
++			free(td3_pid);
++			free(path);
++		}
+ 		else
+ 		{
+ 			vbd.error = 1;
+diff --git a/tools/xenstat/libxenstat/src/xenstat_priv.h b/tools/xenstat/libxenstat/src/xenstat_priv.h
+index ebfcd0f..2068311 100644
+--- a/tools/xenstat/libxenstat/src/xenstat_priv.h
++++ b/tools/xenstat/libxenstat/src/xenstat_priv.h
+@@ -106,6 +106,21 @@ struct xenstat_vbd {
+ 	unsigned long long wr_sects;
+ };
+ 
++struct vbd3_stats {
++	uint32_t version;
++	uint64_t oo_reqs;
++	uint64_t read_reqs_submitted;
++	uint64_t read_reqs_completed;
++	uint64_t read_sectors;
++	uint64_t read_total_ticks;
++	uint64_t write_reqs_submitted;
++	uint64_t write_reqs_completed;
++	uint64_t write_sectors;
++	uint64_t write_total_ticks;
++	uint64_t io_errors;
++	uint64_t flags;
++};
++
+ extern int xenstat_collect_networks(xenstat_node * node);
+ extern void xenstat_uninit_networks(xenstat_handle * handle);
+ extern int xenstat_collect_vbds(xenstat_node * node);
+diff --git a/tools/xenstat/xentop/xentop.c b/tools/xenstat/xentop/xentop.c
+index e46ff7f..6c38df8 100644
+--- a/tools/xenstat/xentop/xentop.c
++++ b/tools/xenstat/xentop/xentop.c
+@@ -1144,6 +1144,7 @@ void do_vbd(xenstat_domain *domain)
+ 		"Unidentified",           /* number 0 */
+ 		"BlkBack",           /* number 1 */
+ 		"BlkTap",            /* number 2 */
++		"Tapdisk3"           /* number 3 */
+ 	};
+ 	
+ 	num_vbds = xenstat_domain_num_vbds(domain);

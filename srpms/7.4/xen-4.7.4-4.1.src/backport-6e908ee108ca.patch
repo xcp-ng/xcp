@@ -1,0 +1,80 @@
+From 6e908ee108caec78f95e639b8ef43ac5dd1d5e45 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Fri, 10 Jun 2016 15:47:15 +0100
+Subject: [PATCH] xen/x86: Always print processor information at boot
+
+It is generally useful information, which isn't directly available in the
+hypervisor console log.
+
+To get an appropriate string in this_cpu->c_vendor, drop the notion of
+gcv_host_late.  All relevent information is available even during early
+detection, and even Linux (as the ancestor of this code) as dropped the
+distinction.
+
+A sample log now looks like:
+
+  (XEN) Domain heap initialised
+  (XEN) CPU Vendor: Intel, Family 6, Model 71, Stepping 1 (raw 00040671)
+  (XEN) found SMP MP-table at 000fd6c0
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/xen/arch/x86/cpu/common.c b/xen/arch/x86/cpu/common.c
+index 760543b..2c47589 100644
+--- a/xen/arch/x86/cpu/common.c
++++ b/xen/arch/x86/cpu/common.c
+@@ -166,8 +166,7 @@ int get_cpu_vendor(const char v[], enum get_cpu_vendor mode)
+ 			if (!strcmp(v,cpu_devs[i]->c_ident[0]) ||
+ 			    (cpu_devs[i]->c_ident[1] && 
+ 			     !strcmp(v,cpu_devs[i]->c_ident[1]))) {
+-				if (mode == gcv_host_late)
+-					this_cpu = cpu_devs[i];
++				this_cpu = cpu_devs[i];
+ 				return i;
+ 			}
+ 		}
+@@ -220,7 +219,7 @@ static void __init early_cpu_detect(void)
+ 	      (int *)&c->x86_vendor_id[8],
+ 	      (int *)&c->x86_vendor_id[4]);
+ 
+-	c->x86_vendor = get_cpu_vendor(c->x86_vendor_id, gcv_host_early);
++	c->x86_vendor = get_cpu_vendor(c->x86_vendor_id, gcv_host);
+ 
+ 	cpuid(0x00000001, &eax, &ebx, &ecx, &edx);
+ 	c->x86 = (eax >> 8) & 15;
+@@ -238,6 +237,10 @@ static void __init early_cpu_detect(void)
+ 	c->x86_capability[cpufeat_word(X86_FEATURE_FPU)] = edx;
+ 	c->x86_capability[cpufeat_word(X86_FEATURE_SSE3)] = ecx;
+ 
++	printk(XENLOG_INFO
++	       "CPU Vendor: %s, Family %u, Model %u, Stepping %u (raw %08x)\n",
++	       this_cpu->c_vendor, c->x86, c->x86_model, c->x86_mask, eax);
++
+ 	eax = cpuid_eax(0x80000000);
+ 	if ((eax >> 16) == 0x8000 && eax >= 0x80000008) {
+ 		eax = cpuid_eax(0x80000008);
+@@ -263,7 +266,7 @@ static void generic_identify(struct cpuinfo_x86 *c)
+ 	      (int *)&c->x86_vendor_id[8],
+ 	      (int *)&c->x86_vendor_id[4]);
+ 
+-	c->x86_vendor = get_cpu_vendor(c->x86_vendor_id, gcv_host_late);
++	c->x86_vendor = get_cpu_vendor(c->x86_vendor_id, gcv_host);
+ 	/* Initialize the standard set of capabilities */
+ 	/* Note that the vendor-specific code below might override */
+ 
+diff --git a/xen/include/asm-x86/processor.h b/xen/include/asm-x86/processor.h
+index ddaaf2de..318c92c 100644
+--- a/xen/include/asm-x86/processor.h
++++ b/xen/include/asm-x86/processor.h
+@@ -618,9 +618,8 @@ int microcode_update(XEN_GUEST_HANDLE_PARAM(const_void), unsigned long len);
+ int microcode_resume_cpu(unsigned int cpu);
+ 
+ enum get_cpu_vendor {
+-   gcv_host_early,
+-   gcv_host_late,
+-   gcv_guest
++    gcv_host,
++    gcv_guest,
+ };
+ 
+ int get_cpu_vendor(const char vendor_id[], enum get_cpu_vendor);

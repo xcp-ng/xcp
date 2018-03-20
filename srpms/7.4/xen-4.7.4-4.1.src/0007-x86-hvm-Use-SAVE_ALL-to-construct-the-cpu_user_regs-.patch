@@ -1,0 +1,77 @@
+From 7614d01cc390eefc1c70ebc404be65913503f3d9 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Thu, 17 Aug 2017 15:23:21 +0100
+Subject: [PATCH] x86/hvm: Use SAVE_ALL to construct the cpu_user_regs frame
+ after VMExit
+
+No practical change.
+
+One side effect in debug builds is that %rbp is inverted in the manner
+expected by the stack unwinder to indicate a interrupt frame.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+diff --git a/xen/arch/x86/hvm/svm/entry.S b/xen/arch/x86/hvm/svm/entry.S
+index 759c184..64f0dcd 100644
+--- a/xen/arch/x86/hvm/svm/entry.S
++++ b/xen/arch/x86/hvm/svm/entry.S
+@@ -97,24 +97,10 @@ UNLIKELY_END(svm_trace)
+ 
+         VMRUN
+ 
+-        GET_CURRENT(ax)
+-        push %rdi
+-        push %rsi
+-        push %rdx
+-        push %rcx
+-        mov  VCPU_svm_vmcb(%rax),%rcx
+-        push %rax
+-        push %r8
+-        push %r9
+-        push %r10
+-        push %r11
+-        push %rbx
+-        mov  %rax,%rbx
+-        push %rbp
+-        push %r12
+-        push %r13
+-        push %r14
+-        push %r15
++        SAVE_ALL
++
++        GET_CURRENT(bx)
++        mov  VCPU_svm_vmcb(%rbx),%rcx
+ 
+         movb $0,VCPU_svm_vmcb_in_sync(%rbx)
+         mov  VMCB_rax(%rcx),%rax
+diff --git a/xen/arch/x86/hvm/vmx/entry.S b/xen/arch/x86/hvm/vmx/entry.S
+index 3d98ee2..cc6188e 100644
+--- a/xen/arch/x86/hvm/vmx/entry.S
++++ b/xen/arch/x86/hvm/vmx/entry.S
+@@ -29,23 +29,10 @@
+ #define VMLAUNCH     .byte 0x0f,0x01,0xc2
+ 
+ ENTRY(vmx_asm_vmexit_handler)
+-        push %rdi
+-        push %rsi
+-        push %rdx
+-        push %rcx
+-        push %rax
++        SAVE_ALL
++
+         mov  %cr2,%rax
+-        push %r8
+-        push %r9
+-        push %r10
+-        push %r11
+-        push %rbx
+         GET_CURRENT(bx)
+-        push %rbp
+-        push %r12
+-        push %r13
+-        push %r14
+-        push %r15
+ 
+         movb $1,VCPU_vmx_launched(%rbx)
+         mov  %rax,VCPU_hvm_guest_cr2(%rbx)

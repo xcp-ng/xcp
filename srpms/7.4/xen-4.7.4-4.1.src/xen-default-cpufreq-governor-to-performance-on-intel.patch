@@ -1,0 +1,33 @@
+Change the default cpufreq governor from ondemand to performance on Intel
+hosts.
+
+It is unlikely there will be a power consumption regression because Intel CPU
+also support c-states for saving power which are still enabled.
+
+AMD processors don't fully implement c-states so we have to leave cpu
+frequency scaling enabled on these processors.
+
+diff --git a/xen/arch/x86/cpu/intel.c b/xen/arch/x86/cpu/intel.c
+index 7487686..1d1666e 100644
+--- a/xen/arch/x86/cpu/intel.c
++++ b/xen/arch/x86/cpu/intel.c
+@@ -13,6 +13,7 @@
+ #include <mach_apic.h>
+ #include <asm/hvm/support.h>
+ #include <asm/setup.h>
++#include <acpi/cpufreq/cpufreq.h>
+ 
+ #include "cpu.h"
+ 
+@@ -331,6 +332,11 @@ static void __devinit init_intel(struct cpuinfo_x86 *c)
+ 	     ( c->cpuid_level >= 0x00000006 ) &&
+ 	     ( cpuid_eax(0x00000006) & (1u<<2) ) )
+ 		__set_bit(X86_FEATURE_ARAT, c->x86_capability);
++
++	/* Default to performance cpufreq governor */
++	if (!cpufreq_opt_governor)
++		cpufreq_opt_governor = &cpufreq_gov_performance;
++
+ }
+ 
+ static const struct cpu_dev intel_cpu_dev = {

@@ -1,0 +1,80 @@
+From e2b3f4b219cc7a39a02644c886af45d4f0cdabdc Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Wed, 13 Nov 2013 17:07:10 +0000
+Subject: [PATCH 3/3] x86/hpet: Post cleanup
+
+These changes are ones which were able to be pulled out of the previous patch.
+They are all misc cleanup without functional implications
+
+* Shift HPET_EVT_* definitions up now that USED has moved out
+
+* Shuffle struct hpet_event_channel
+** Reflow horizontally and comment current use
+** Promote 'shift' to unsigned.  It is the constant 32 but can be more easily
+   optimised.
+** Move 'flags' up to fill 4 byte hole
+** Move 'cpumask' and 'lock' into second cache line as they are diried from
+   other cpus
+
+* The new locking requirements guarentee that interrupts are disabled in
+  hpet_set_counter.  Leave an ASSERT() just in case.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+CC: Keir Fraser <keir@xen.org>
+CC: Jan Beulich <JBeulich@suse.com>
+Reviewed-by: Tim Deegan <tim@xen.org>
+diff --git a/xen/arch/x86/hpet.c b/xen/arch/x86/hpet.c
+index 441a3cf..b441eb2 100644
+--- a/xen/arch/x86/hpet.c
++++ b/xen/arch/x86/hpet.c
+@@ -19,22 +19,22 @@
+ #define MAX_DELTA_NS MILLISECS(10*1000)
+ #define MIN_DELTA_NS MICROSECS(20)
+ 
+-#define HPET_EVT_DISABLE_BIT 1
++#define HPET_EVT_DISABLE_BIT 0
+ #define HPET_EVT_DISABLE    (1 << HPET_EVT_DISABLE_BIT)
+-#define HPET_EVT_LEGACY_BIT  2
++#define HPET_EVT_LEGACY_BIT  1
+ #define HPET_EVT_LEGACY     (1 << HPET_EVT_LEGACY_BIT)
+ 
+ struct hpet_event_channel
+ {
+-    unsigned long mult;
+-    int           shift;
+-    s_time_t      next_event;
+-    cpumask_var_t cpumask;
+-    spinlock_t    lock;
+-    unsigned int idx;   /* physical channel idx */
+-    unsigned int cpu;   /* msi target */
+-    struct msi_desc msi;/* msi state */
+-    unsigned int flags; /* HPET_EVT_x */
++    unsigned long   mult;       /* tick <-> time conversion */
++    unsigned int    shift;      /* tick <-> time conversion */
++    unsigned int    flags;      /* HPET_EVT_x */
++    s_time_t        next_event; /* expected time of next interrupt */
++    unsigned int    idx;        /* HPET counter index */
++    unsigned int    cpu;        /* owner of channel (or -1) */
++    struct msi_desc msi;        /* msi state */
++    cpumask_var_t   cpumask;    /* cpus wishing to be woken */
++    spinlock_t      lock;
+ } __cacheline_aligned;
+ static struct hpet_event_channel *__read_mostly hpet_events;
+ 
+@@ -107,14 +107,13 @@ static inline unsigned long ns2ticks(unsigned long nsec, int shift,
+ static int hpet_set_counter(struct hpet_event_channel *ch, unsigned long delta)
+ {
+     uint32_t cnt, cmp;
+-    unsigned long flags;
+ 
+-    local_irq_save(flags);
++    ASSERT(!local_irq_is_enabled());
++
+     cnt = hpet_read32(HPET_COUNTER);
+     cmp = cnt + delta;
+     hpet_write32(cmp, HPET_Tn_CMP(ch->idx));
+     cmp = hpet_read32(HPET_COUNTER);
+-    local_irq_restore(flags);
+ 
+     /* Are we within two ticks of the deadline passing? Then we may miss. */
+     return ((cmp + 2 - cnt) > delta) ? -ETIME : 0;

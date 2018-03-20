@@ -1,0 +1,14 @@
+diff --git a/xen/include/asm-x86/p2m.h b/xen/include/asm-x86/p2m.h
+index fa46dd9..caac5c1 100644
+--- a/xen/include/asm-x86/p2m.h
++++ b/xen/include/asm-x86/p2m.h
+@@ -174,7 +174,8 @@ typedef unsigned int p2m_query_t;
+ 
+ #define p2m_is_any_ram(_t)  (p2m_to_mask(_t) &                   \
+                              (P2M_RAM_TYPES | P2M_GRANT_TYPES |  \
+-                              p2m_to_mask(p2m_map_foreign)))
++                              p2m_to_mask(p2m_map_foreign) |     \
++                              p2m_to_mask(p2m_mmio_write_dm)) )
+ 
+ #define p2m_allows_invalid_mfn(t) (p2m_to_mask(t) & P2M_INVALID_MFN_TYPES)
+ 

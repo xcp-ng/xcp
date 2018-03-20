@@ -1,0 +1,131 @@
+diff --git a/tools/ocaml/libs/xc/xenctrl.ml b/tools/ocaml/libs/xc/xenctrl.ml
+index c545fa4..6983d7c 100644
+--- a/tools/ocaml/libs/xc/xenctrl.ml
++++ b/tools/ocaml/libs/xc/xenctrl.ml
+@@ -263,6 +263,10 @@ external version_capabilities: handle -> string =
+ 
+ type featureset_index = Featureset_raw | Featureset_host | Featureset_pv | Featureset_hvm
+ external get_cpu_featureset : handle -> featureset_index -> int64 array = "stub_xc_get_cpu_featureset"
++external get_featureset : handle -> featureset_index -> int64 array = "stub_xc_get_cpu_featureset"
++
++external upgrade_oldstyle_featuremask: handle -> int64 array -> bool -> int64 array = "stub_upgrade_oldstyle_featuremask"
++external oldstyle_featuremask: handle -> int64 array = "stub_oldstyle_featuremask"
+ 
+ external watchdog : handle -> int -> int32 -> int
+   = "stub_xc_watchdog"
+diff --git a/tools/ocaml/libs/xc/xenctrl.mli b/tools/ocaml/libs/xc/xenctrl.mli
+index 3439df9..451982b 100644
+--- a/tools/ocaml/libs/xc/xenctrl.mli
++++ b/tools/ocaml/libs/xc/xenctrl.mli
+@@ -166,6 +166,10 @@ external version_capabilities : handle -> string
+ 
+ type featureset_index = Featureset_raw | Featureset_host | Featureset_pv | Featureset_hvm
+ external get_cpu_featureset : handle -> featureset_index -> int64 array = "stub_xc_get_cpu_featureset"
++external get_featureset : handle -> featureset_index -> int64 array = "stub_xc_get_cpu_featureset"
++
++external upgrade_oldstyle_featuremask: handle -> int64 array -> bool -> int64 array = "stub_upgrade_oldstyle_featuremask"
++external oldstyle_featuremask: handle -> int64 array = "stub_oldstyle_featuremask"
+ 
+ type core_magic = Magic_hvm | Magic_pv
+ type core_header = {
+diff --git a/tools/ocaml/libs/xc/xenctrl_stubs.c b/tools/ocaml/libs/xc/xenctrl_stubs.c
+index fd6df91..ab35803 100644
+--- a/tools/ocaml/libs/xc/xenctrl_stubs.c
++++ b/tools/ocaml/libs/xc/xenctrl_stubs.c
+@@ -1289,6 +1289,96 @@ CAMLprim value stub_xc_get_cpu_featureset(value xch, value idx)
+ 	CAMLreturn(bitmap_val);
+ }
+ 
++CAMLprim value stub_upgrade_oldstyle_featuremask(
++	value xch, value oldmask, value is_hvm)
++{
++	CAMLparam3(xch, oldmask, is_hvm);
++	CAMLlocal1(featureset);
++	uint32_t fs[4];
++	unsigned int i;
++
++	struct cached_mask {
++		uint32_t mask[4];
++		bool initialised;
++	};
++
++	/*
++	 * Safe, because of the global ocaml lock.  We cache the first 4 words
++	 * of the host pv and hvm featuresets.
++	 */
++	static struct cached_mask cache[2];
++	struct cached_mask *cached = &cache[!!Bool_val(is_hvm)];
++
++	if ( !cached->initialised )
++	{
++		int idx = Bool_val(is_hvm) ?
++			XEN_SYSCTL_cpu_featureset_hvm : XEN_SYSCTL_cpu_featureset_pv;
++		uint32_t len = 4;
++
++		int ret = xc_get_cpu_featureset(_H(xch), idx, &len, cached->mask);
++
++		if ( ret && errno != ENOBUFS )
++			failwith_xc(_H(xch));
++		cached->initialised = true;
++	}
++
++	/*
++	 * Oldsytle masks were in the order (1c, 1d, e1c, e1d)
++	 * Newstyle featuresets are (1d, 1c, e1d, e1c)
++	 */
++	fs[0] = Int64_val(Field(oldmask, 1));
++	fs[1] = Int64_val(Field(oldmask, 0));
++	fs[2] = Int64_val(Field(oldmask, 3));
++	fs[3] = Int64_val(Field(oldmask, 2));
++
++	/*
++	 * Oldstyle masks also had a semi-random set of features, some of
++	 * which are not interesting.  Mask them out to avoid false failures
++	 * when performing feature checks.
++	 */
++	for ( i = 0; i < 4; ++i )
++		fs[i] &= cached->mask[i];
++
++	featureset = caml_alloc(4, 0);
++	for ( i = 0; i < 4; ++i )
++		Store_field(featureset, i, caml_copy_int64(fs[i]));
++
++	CAMLreturn(featureset);
++}
++
++CAMLprim value stub_oldstyle_featuremask(value xch)
++{
++	CAMLparam1(xch);
++	CAMLlocal1(oldmask);
++
++	/* Safe, because of the global ocaml lock. */
++	static uint32_t fs[4];
++	static bool have_fs;
++
++	if (!have_fs)
++	{
++		unsigned int len = 4;
++		int ret = xc_get_cpu_featureset(
++			_H(xch), XEN_SYSCTL_cpu_featureset_raw, &len, fs);
++
++		if (ret && (errno != ENOBUFS))
++			failwith_xc(_H(xch));
++		have_fs = true;
++	}
++
++	/*
++	 * Newstyle featuresets are (1d, 1c, e1d, e1c)
++	 * Oldsytle masks were in the order (1c, 1d, e1c, e1d)
++	 */
++	oldmask = caml_alloc(4, 0);
++	Store_field(oldmask, 0, caml_copy_int64(fs[1]));
++	Store_field(oldmask, 1, caml_copy_int64(fs[0]));
++	Store_field(oldmask, 2, caml_copy_int64(fs[3]));
++	Store_field(oldmask, 3, caml_copy_int64(fs[2]));
++
++	CAMLreturn(oldmask);
++}
++
+ CAMLprim value stub_xc_watchdog(value xch, value domid, value timeout)
+ {
+ 	CAMLparam3(xch, domid, timeout);

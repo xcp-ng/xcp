@@ -1,0 +1,28 @@
+diff --git a/tools/flask/policy/modules/dom0.te b/tools/flask/policy/modules/dom0.te
+index 2d982d9..ce8fd5a 100644
+--- a/tools/flask/policy/modules/dom0.te
++++ b/tools/flask/policy/modules/dom0.te
+@@ -38,7 +38,8 @@ allow dom0_t dom0_t:domain {
+ };
+ allow dom0_t dom0_t:domain2 {
+ 	set_cpuid gettsc settsc setscheduler set_max_evtchn set_vnumainfo
+-	get_vnumainfo psr_cmt_op psr_cat_op
++	get_vnumainfo psr_cmt_op psr_cat_op get_runstate_info
++	setcorespersocket
+ };
+ allow dom0_t dom0_t:resource { add remove };
+ 
+diff --git a/tools/flask/policy/modules/xen.if b/tools/flask/policy/modules/xen.if
+index 8c43c28..34e291a 100644
+--- a/tools/flask/policy/modules/xen.if
++++ b/tools/flask/policy/modules/xen.if
+@@ -52,7 +52,8 @@ define(`create_domain_common', `
+ 			settime setdomainhandle };
+ 	allow $1 $2:domain2 { set_cpuid settsc setscheduler setclaim
+ 			set_max_evtchn set_vnumainfo get_vnumainfo cacheflush
+-			psr_cmt_op psr_cat_op soft_reset };
++			psr_cmt_op psr_cat_op soft_reset get_runstate_info
++			setcorespersocket };
+ 	allow $1 $2:security check_context;
+ 	allow $1 $2:shadow enable;
+ 	allow $1 $2:mmu { map_read map_write adjust memorymap physmap pinpage mmuext_op updatemp };

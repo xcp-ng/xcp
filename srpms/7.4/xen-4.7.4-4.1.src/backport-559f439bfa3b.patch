@@ -1,0 +1,376 @@
+From 559f439bfa3bf931414534ec0c46e5e8a21fa3ba Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:19 -0400
+Subject: [PATCH] flask: remove xen_flask_userlist operation
+
+This operation has no known users, and is primarily useful when an MLS
+policy is in use (which has never been shipped with Xen).  In addition,
+the information it provides does not actually depend on hypervisor
+state (only on the XSM policy), so an application that needs it could
+compute the results without needing to involve the hypervisor.
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Acked-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+diff --git a/tools/flask/policy/modules/dom0.te b/tools/flask/policy/modules/dom0.te
+index d228b24..2d982d9 100644
+--- a/tools/flask/policy/modules/dom0.te
++++ b/tools/flask/policy/modules/dom0.te
+@@ -47,7 +47,7 @@ allow dom0_t dom0_t:resource { add remove };
+ # that does not have its own security server to make access decisions based on
+ # Xen's security policy.
+ allow dom0_t security_t:security {
+-	compute_av compute_create compute_member compute_relabel compute_user
++	compute_av compute_create compute_member compute_relabel
+ };
+ 
+ # Allow string/SID conversions (for "xl list -Z" and similar)
+diff --git a/xen/include/public/xen-compat.h b/xen/include/public/xen-compat.h
+index 590de76..dd8a5c0 100644
+--- a/xen/include/public/xen-compat.h
++++ b/xen/include/public/xen-compat.h
+@@ -27,7 +27,7 @@
+ #ifndef __XEN_PUBLIC_XEN_COMPAT_H__
+ #define __XEN_PUBLIC_XEN_COMPAT_H__
+ 
+-#define __XEN_LATEST_INTERFACE_VERSION__ 0x00040700
++#define __XEN_LATEST_INTERFACE_VERSION__ 0x00040800
+ 
+ #if defined(__XEN__) || defined(__XEN_TOOLS__)
+ /* Xen is built with matching headers and implements the latest interface. */
+diff --git a/xen/include/public/xsm/flask_op.h b/xen/include/public/xsm/flask_op.h
+index c76359c..970ec07 100644
+--- a/xen/include/public/xsm/flask_op.h
++++ b/xen/include/public/xsm/flask_op.h
+@@ -70,6 +70,7 @@ struct xen_flask_transition {
+     uint32_t newsid;
+ };
+ 
++#if __XEN_INTERFACE_VERSION__ < 0x00040800
+ struct xen_flask_userlist {
+     /* IN: starting SID for list */
+     uint32_t start_sid;
+@@ -83,6 +84,7 @@ struct xen_flask_userlist {
+         XEN_GUEST_HANDLE(uint32) sids;
+     } u;
+ };
++#endif
+ 
+ struct xen_flask_boolean {
+     /* IN/OUT: numeric identifier for boolean [GET/SET]
+@@ -167,7 +169,7 @@ struct xen_flask_op {
+ #define FLASK_ACCESS            6
+ #define FLASK_CREATE            7
+ #define FLASK_RELABEL           8
+-#define FLASK_USER              9
++#define FLASK_USER              9  /* No longer implemented */
+ #define FLASK_POLICYVERS        10
+ #define FLASK_GETBOOL           11
+ #define FLASK_SETBOOL           12
+@@ -193,7 +195,9 @@ struct xen_flask_op {
+         struct xen_flask_access access;
+         /* FLASK_CREATE, FLASK_RELABEL, FLASK_MEMBER */
+         struct xen_flask_transition transition;
++#if __XEN_INTERFACE_VERSION__ < 0x00040800
+         struct xen_flask_userlist userlist;
++#endif
+         /* FLASK_GETBOOL, FLASK_SETBOOL */
+         struct xen_flask_boolean boolean;
+         struct xen_flask_setavc_threshold setavc_threshold;
+diff --git a/xen/include/xlat.lst b/xen/include/xlat.lst
+index 23befb3..801a1c1 100644
+--- a/xen/include/xlat.lst
++++ b/xen/include/xlat.lst
+@@ -129,4 +129,3 @@
+ ?	flask_setenforce		xsm/flask_op.h
+ !	flask_sid_context		xsm/flask_op.h
+ ?	flask_transition		xsm/flask_op.h
+-!	flask_userlist			xsm/flask_op.h
+diff --git a/xen/xsm/flask/flask_op.c b/xen/xsm/flask/flask_op.c
+index ea903a7..3ad4bdc 100644
+--- a/xen/xsm/flask/flask_op.c
++++ b/xen/xsm/flask/flask_op.c
+@@ -86,43 +86,6 @@ static int domain_has_security(struct domain *d, u32 perms)
+                         perms, NULL);
+ }
+ 
+-#endif /* COMPAT */
+-
+-static int flask_security_user(struct xen_flask_userlist *arg)
+-{
+-    char *user;
+-    u32 *sids;
+-    u32 nsids;
+-    int rv;
+-
+-    rv = domain_has_security(current->domain, SECURITY__COMPUTE_USER);
+-    if ( rv )
+-        return rv;
+-
+-    user = safe_copy_string_from_guest(arg->u.user, arg->size, PAGE_SIZE);
+-    if ( IS_ERR(user) )
+-        return PTR_ERR(user);
+-
+-    rv = security_get_user_sids(arg->start_sid, user, &sids, &nsids);
+-    if ( rv < 0 )
+-        goto out;
+-
+-    if ( nsids * sizeof(sids[0]) > arg->size )
+-        nsids = arg->size / sizeof(sids[0]);
+-
+-    arg->size = nsids;
+-
+-    if ( _copy_to_guest(arg->u.sids, sids, nsids) )
+-        rv = -EFAULT;
+-
+-    xfree(sids);
+- out:
+-    xfree(user);
+-    return rv;
+-}
+-
+-#ifndef COMPAT
+-
+ static int flask_security_relabel(struct xen_flask_transition *arg)
+ {
+     int rv;
+@@ -714,10 +677,6 @@ ret_t do_flask_op(XEN_GUEST_HANDLE_PARAM(xsm_op_t) u_flask_op)
+         rv = flask_security_relabel(&op.u.transition);
+         break;
+ 
+-    case FLASK_USER:
+-        rv = flask_security_user(&op.u.userlist);
+-        break;
+-
+     case FLASK_POLICYVERS:
+         rv = POLICYDB_VERSION_MAX;
+         break;
+@@ -831,7 +790,6 @@ CHECK_flask_transition;
+ #define flask_security_load compat_security_load
+ 
+ #define xen_flask_userlist compat_flask_userlist
+-#define flask_security_user compat_security_user
+ 
+ #define xen_flask_sid_context compat_flask_sid_context
+ #define flask_security_context compat_security_context
+diff --git a/xen/xsm/flask/include/security.h b/xen/xsm/flask/include/security.h
+index 34bbe62..2b00177 100644
+--- a/xen/xsm/flask/include/security.h
++++ b/xen/xsm/flask/include/security.h
+@@ -78,8 +78,6 @@ int security_sid_to_context(u32 sid, char **scontext, u32 *scontext_len);
+ 
+ int security_context_to_sid(char *scontext, u32 scontext_len, u32 *out_sid);
+ 
+-int security_get_user_sids(u32 callsid, char *username, u32 **sids, u32 *nel);
+-
+ int security_irq_sid(int pirq, u32 *out_sid);
+ 
+ int security_iomem_sid(unsigned long, u32 *out_sid);
+diff --git a/xen/xsm/flask/policy/access_vectors b/xen/xsm/flask/policy/access_vectors
+index 7e69ede..49c9a9e 100644
+--- a/xen/xsm/flask/policy/access_vectors
++++ b/xen/xsm/flask/policy/access_vectors
+@@ -484,8 +484,6 @@ class security
+     load_policy
+ # use the security server to compute an object relabel
+     compute_relabel
+-# use the security server to list the SIDs reachable by a given user
+-    compute_user
+ # allow switching between enforcing and permissive mode
+     setenforce
+ # allow changing policy booleans
+diff --git a/xen/xsm/flask/ss/mls.c b/xen/xsm/flask/ss/mls.c
+index bbe7a49..f2fa560 100644
+--- a/xen/xsm/flask/ss/mls.c
++++ b/xen/xsm/flask/ss/mls.c
+@@ -396,55 +396,6 @@ static inline int mls_range_set(struct context *context,
+     return rc;
+ }
+ 
+-int mls_setup_user_range(struct context *fromcon, struct user_datum *user,
+-                                                        struct context *usercon)
+-{
+-    if ( flask_mls_enabled )
+-    {
+-        struct mls_level *fromcon_sen = &(fromcon->range.level[0]);
+-        struct mls_level *fromcon_clr = &(fromcon->range.level[1]);
+-        struct mls_level *user_low = &(user->range.level[0]);
+-        struct mls_level *user_clr = &(user->range.level[1]);
+-        struct mls_level *user_def = &(user->dfltlevel);
+-        struct mls_level *usercon_sen = &(usercon->range.level[0]);
+-        struct mls_level *usercon_clr = &(usercon->range.level[1]);
+-
+-        /* Honor the user's default level if we can */
+-        if ( mls_level_between(user_def, fromcon_sen, fromcon_clr) )
+-        {
+-            *usercon_sen = *user_def;
+-        }
+-        else if ( mls_level_between(fromcon_sen, user_def, user_clr) )
+-        {
+-            *usercon_sen = *fromcon_sen;
+-        }
+-        else if ( mls_level_between(fromcon_clr, user_low, user_def) )
+-        {
+-            *usercon_sen = *user_low;
+-        }
+-        else
+-            return -EINVAL;
+-
+-        /* Lower the clearance of available contexts
+-           if the clearance of "fromcon" is lower than
+-           that of the user's default clearance (but
+-           only if the "fromcon" clearance dominates
+-           the user's computed sensitivity level) */
+-        if ( mls_level_dom(user_clr, fromcon_clr) )
+-        {
+-            *usercon_clr = *fromcon_clr;
+-        }
+-        else if ( mls_level_dom(fromcon_clr, user_clr) )
+-        {
+-            *usercon_clr = *user_clr;
+-        }
+-        else
+-            return -EINVAL;
+-    }
+-
+-    return 0;
+-}
+-
+ /*
+  * Convert the MLS fields in the security context
+  * structure `c' from the values specified in the
+diff --git a/xen/xsm/flask/ss/mls.h b/xen/xsm/flask/ss/mls.h
+index b3a015e..39572bd 100644
+--- a/xen/xsm/flask/ss/mls.h
++++ b/xen/xsm/flask/ss/mls.h
+@@ -32,8 +32,5 @@ int mls_convert_context(struct policydb *oldp, struct policydb *newp,
+ int mls_compute_sid(struct context *scontext, struct context *tcontext,
+                         u16 tclass, u32 specified, struct context *newcontext);
+ 
+-int mls_setup_user_range(struct context *fromcon, struct user_datum *user,
+-                                                     struct context *usercon);
+-
+ #endif    /* _SS_MLS_H */
+ 
+diff --git a/xen/xsm/flask/ss/services.c b/xen/xsm/flask/ss/services.c
+index c590440..6a07fc0 100644
+--- a/xen/xsm/flask/ss/services.c
++++ b/xen/xsm/flask/ss/services.c
+@@ -1721,117 +1721,6 @@ out:
+     return rc;
+ }
+ 
+-#define SIDS_NEL 25
+-
+-/**
+- * security_get_user_sids - Obtain reachable SIDs for a user.
+- * @fromsid: starting SID
+- * @username: username
+- * @sids: array of reachable SIDs for user
+- * @nel: number of elements in @sids
+- *
+- * Generate the set of SIDs for legal security contexts
+- * for a given user that can be reached by @fromsid.
+- * Set *@sids to point to a dynamically allocated
+- * array containing the set of SIDs.  Set *@nel to the
+- * number of elements in the array.
+- */
+-
+-int security_get_user_sids(u32 fromsid, char *username, u32 **sids, u32 *nel)
+-{
+-    struct context *fromcon, usercon;
+-    u32 *mysids, *mysids2, sid;
+-    u32 mynel = 0, maxnel = SIDS_NEL;
+-    struct user_datum *user;
+-    struct role_datum *role;
+-    struct av_decision avd;
+-    struct ebitmap_node *rnode, *tnode;
+-    int rc = 0, i, j;
+-
+-    if ( !ss_initialized )
+-    {
+-        *sids = NULL;
+-        *nel = 0;
+-        goto out;
+-    }
+-
+-    POLICY_RDLOCK;
+-
+-    fromcon = sidtab_search(&sidtab, fromsid);
+-    if ( !fromcon )
+-    {
+-        rc = -EINVAL;
+-        goto out_unlock;
+-    }
+-
+-    user = hashtab_search(policydb.p_users.table, username);
+-    if ( !user )
+-    {
+-        rc = -EINVAL;
+-        goto out_unlock;
+-    }
+-    usercon.user = user->value;
+-
+-    mysids = xzalloc_array(u32, maxnel);
+-    if ( !mysids )
+-    {
+-        rc = -ENOMEM;
+-        goto out_unlock;
+-    }
+-
+-    ebitmap_for_each_positive_bit(&user->roles, rnode, i)
+-    {
+-        role = policydb.role_val_to_struct[i];
+-        usercon.role = i+1;
+-        ebitmap_for_each_positive_bit(&role->types, tnode, j) {
+-            usercon.type = j+1;
+-
+-            if ( mls_setup_user_range(fromcon, user, &usercon) )
+-                continue;
+-
+-            rc = context_struct_compute_av(fromcon, &usercon,
+-                               SECCLASS_DOMAIN,
+-                               DOMAIN__TRANSITION,
+-                               &avd);
+-            if ( rc ||  !(avd.allowed & DOMAIN__TRANSITION) )
+-                continue;
+-            rc = sidtab_context_to_sid(&sidtab, &usercon, &sid);
+-            if ( rc )
+-            {
+-                xfree(mysids);
+-                goto out_unlock;
+-            }
+-            if ( mynel < maxnel )
+-            {
+-                mysids[mynel++] = sid;
+-            }
+-            else
+-            {
+-                maxnel += SIDS_NEL;
+-                mysids2 = xzalloc_array(u32, maxnel);
+-                if ( !mysids2 )
+-                {
+-                    rc = -ENOMEM;
+-                    xfree(mysids);
+-                    goto out_unlock;
+-                }
+-                memcpy(mysids2, mysids, mynel * sizeof(*mysids2));
+-                xfree(mysids);
+-                mysids = mysids2;
+-                mysids[mynel++] = sid;
+-            }
+-        }
+-    }
+-
+-    *sids = mysids;
+-    *nel = mynel;
+-
+-out_unlock:
+-    POLICY_RDUNLOCK;
+-out:
+-    return rc;
+-}
+-
+ int security_devicetree_sid(const char *path, u32 *out_sid)
+ {
+     struct ocontext *c;

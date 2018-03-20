@@ -1,0 +1,73 @@
+From cf23c69fdd48e27b09e79e0404b6fc8dcbcdcd70 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Tue, 3 Oct 2017 16:21:03 +0100
+Subject: [PATCH] x86/np2m: refactor p2m_get_nestedp2m_locked()
+
+Remove some code duplication.
+
+Suggested-by: George Dunlap <george.dunlap@citrix.com>
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Reviewed-by: George Dunlap <george.dunlap@citrix.com>
+Acked-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Jun Nakajima <jun.nakajima@intel.com>
+diff --git a/xen/arch/x86/mm/p2m.c b/xen/arch/x86/mm/p2m.c
+index 42f10d297e..e342a3b05a 100644
+--- a/xen/arch/x86/mm/p2m.c
++++ b/xen/arch/x86/mm/p2m.c
+@@ -2140,6 +2140,7 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+     struct p2m_domain *p2m;
+     uint64_t np2m_base = nhvm_vcpu_p2m_base(v);
+     unsigned int i;
++    bool needs_flush = true;
+ 
+     /* Mask out low bits; this avoids collisions with P2M_BASE_EADDR */
+     np2m_base &= ~(0xfffull);
+@@ -2156,14 +2157,10 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+         if ( p2m->np2m_base == np2m_base )
+         {
+             /* Check if np2m was flushed just before the lock */
+-            if ( nv->np2m_generation != p2m->np2m_generation )
+-                nvcpu_flush(v);
++            if ( nv->np2m_generation == p2m->np2m_generation )
++                needs_flush = false;
+             /* np2m is up-to-date */
+-            p2m->np2m_base = np2m_base;
+-            assign_np2m(v, p2m);
+-            nestedp2m_unlock(d);
+-
+-            return p2m;
++            goto found;
+         }
+         else if ( p2m->np2m_base != P2M_BASE_EADDR )
+         {
+@@ -2178,15 +2175,10 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+     {
+         p2m = d->arch.nested_p2m[i];
+         p2m_lock(p2m);
++
+         if ( p2m->np2m_base == np2m_base )
+-        {
+-            nvcpu_flush(v);
+-            p2m->np2m_base = np2m_base;
+-            assign_np2m(v, p2m);
+-            nestedp2m_unlock(d);
++            goto found;
+ 
+-            return p2m;
+-        }
+         p2m_unlock(p2m);
+     }
+ 
+@@ -2195,8 +2187,11 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+     p2m = p2m_getlru_nestedp2m(d, NULL);
+     p2m_flush_table(p2m);
+     p2m_lock(p2m);
++
++ found:
++    if ( needs_flush )
++        nvcpu_flush(v);
+     p2m->np2m_base = np2m_base;
+-    nvcpu_flush(v);
+     assign_np2m(v, p2m);
+     nestedp2m_unlock(d);
+ 

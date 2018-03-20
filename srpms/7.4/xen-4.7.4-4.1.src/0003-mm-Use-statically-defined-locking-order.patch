@@ -1,0 +1,130 @@
+From 002ecfbe633bfb29a5f18f9831ec58a7571ed2ee Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Fri, 6 May 2016 15:11:11 +0100
+Subject: [PATCH 3/5] mm: Use statically defined locking order
+
+Instead of using a locking order based on line numbers which doesn't
+play nicely with live patching, statically define the locking order.
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+diff --git a/xen/arch/x86/mm/mm-locks.h b/xen/arch/x86/mm/mm-locks.h
+index 086c8bb..d783f2d 100644
+--- a/xen/arch/x86/mm/mm-locks.h
++++ b/xen/arch/x86/mm/mm-locks.h
+@@ -46,8 +46,10 @@ static inline int mm_locked_by_me(mm_lock_t *l)
+     return (l->lock.recurse_cpu == current->processor);
+ }
+ 
+-/* If you see this crash, the numbers printed are lines in this file 
+- * where the offending locks are declared. */
++/*
++ * If you see this crash, the numbers printed are order levels defined
++ * in this file.
++ */
+ #define __check_lock_level(l)                           \
+ do {                                                    \
+     if ( unlikely(__get_lock_level() > (l)) )           \
+@@ -152,12 +154,12 @@ static inline void mm_read_unlock(mm_rwlock_t *l)
+ /* This wrapper uses the line number to express the locking order below */
+ #define declare_mm_lock(name)                                                 \
+     static inline void mm_lock_##name(mm_lock_t *l, const char *func, int rec)\
+-    { _mm_lock(l, func, __LINE__, rec); }
++    { _mm_lock(l, func, MM_LOCK_ORDER_##name, rec); }
+ #define declare_mm_rwlock(name)                                               \
+     static inline void mm_write_lock_##name(mm_rwlock_t *l, const char *func) \
+-    { _mm_write_lock(l, func, __LINE__); }                                    \
++    { _mm_write_lock(l, func, MM_LOCK_ORDER_##name); }                                    \
+     static inline void mm_read_lock_##name(mm_rwlock_t *l)                    \
+-    { _mm_read_lock(l, __LINE__); }
++    { _mm_read_lock(l, MM_LOCK_ORDER_##name); }
+ /* These capture the name of the calling function */
+ #define mm_lock(name, l) mm_lock_##name(l, __func__, 0)
+ #define mm_lock_recursive(name, l) mm_lock_##name(l, __func__, 1)
+@@ -169,10 +171,10 @@ static inline void mm_read_unlock(mm_rwlock_t *l)
+  * to ordering constraints. */
+ #define declare_mm_order_constraint(name)                                   \
+     static inline void mm_enforce_order_lock_pre_##name(void)               \
+-    { _mm_enforce_order_lock_pre(__LINE__); }                               \
++    { _mm_enforce_order_lock_pre(MM_LOCK_ORDER_##name); }                               \
+     static inline void mm_enforce_order_lock_post_##name(                   \
+                         int *unlock_level, unsigned short *recurse_count)   \
+-    { _mm_enforce_order_lock_post(__LINE__, unlock_level, recurse_count); } \
++    { _mm_enforce_order_lock_post(MM_LOCK_ORDER_##name, unlock_level, recurse_count); } \
+ 
+ static inline void mm_unlock(mm_lock_t *l)
+ {
+@@ -201,8 +203,8 @@ static inline void mm_enforce_order_unlock(int unlock_level,
+ 
+ /************************************************************************
+  *                                                                      *
+- * To avoid deadlocks, these locks _MUST_ be taken in the order they're *
+- * declared in this file.  The locking functions will enforce this.     *
++ * To avoid deadlocks, these locks _MUST_ be taken in the order listed  *
++ * below.  The locking functions will enforce this.                     *
+  *                                                                      *
+  ************************************************************************/
+ 
+@@ -214,6 +216,7 @@ static inline void mm_enforce_order_unlock(int unlock_level,
+  * - setting the "cr3" field of any p2m table to a non-P2M_BASE_EAADR value.
+  *   (i.e. assigning a p2m table to be the shadow of that cr3 */
+ 
++#define MM_LOCK_ORDER_nestedp2m               8
+ declare_mm_lock(nestedp2m)
+ #define nestedp2m_lock(d)   mm_lock(nestedp2m, &(d)->arch.nested_p2m_lock)
+ #define nestedp2m_unlock(d) mm_unlock(&(d)->arch.nested_p2m_lock)
+@@ -240,6 +243,7 @@ declare_mm_lock(nestedp2m)
+  * the altp2mlist lock in the middle.
+  */
+ 
++#define MM_LOCK_ORDER_p2m                    16
+ declare_mm_rwlock(p2m);
+ 
+ /* Alternate P2M list lock (per-domain)
+@@ -250,6 +254,7 @@ declare_mm_rwlock(p2m);
+  * in the target domain must be paused.
+  */
+ 
++#define MM_LOCK_ORDER_altp2mlist             24
+ declare_mm_lock(altp2mlist)
+ #define altp2m_list_lock(d)   mm_lock(altp2mlist, &(d)->arch.altp2m_list_lock)
+ #define altp2m_list_unlock(d) mm_unlock(&(d)->arch.altp2m_list_lock)
+@@ -264,6 +269,7 @@ declare_mm_lock(altp2mlist)
+  * up a gfn and later mutate it.
+  */
+ 
++#define MM_LOCK_ORDER_altp2m                 32
+ declare_mm_rwlock(altp2m);
+ #define p2m_lock(p)                             \
+     do {                                        \
+@@ -296,6 +302,7 @@ declare_mm_rwlock(altp2m);
+  *
+  * The lock is recursive because during share we lock two pages. */
+ 
++#define MM_LOCK_ORDER_per_page_sharing       40
+ declare_mm_order_constraint(per_page_sharing)
+ #define page_sharing_mm_pre_lock()   mm_enforce_order_lock_pre_per_page_sharing()
+ #define page_sharing_mm_post_lock(l, r) \
+@@ -307,6 +314,7 @@ declare_mm_order_constraint(per_page_sharing)
+  * Protects private PoD data structs: entry and cache
+  * counts, page lists, sweep parameters. */
+ 
++#define MM_LOCK_ORDER_pod                    48
+ declare_mm_lock(pod)
+ #define pod_lock(p)           mm_lock(pod, &(p)->pod.lock)
+ #define pod_unlock(p)         mm_unlock(&(p)->pod.lock)
+@@ -319,6 +327,7 @@ declare_mm_lock(pod)
+  * the ordering which we enforce here.
+  * The lock is not recursive. */
+ 
++#define MM_LOCK_ORDER_page_alloc             56
+ declare_mm_order_constraint(page_alloc)
+ #define page_alloc_mm_pre_lock()   mm_enforce_order_lock_pre_page_alloc()
+ #define page_alloc_mm_post_lock(l) mm_enforce_order_lock_post_page_alloc(&(l), NULL)
+@@ -339,6 +348,7 @@ declare_mm_order_constraint(page_alloc)
+  * It also protects the log-dirty bitmap from concurrent accesses (and
+  * teardowns, etc). */
+ 
++#define MM_LOCK_ORDER_paging                 64
+ declare_mm_lock(paging)
+ #define paging_lock(d)         mm_lock(paging, &(d)->arch.paging.lock)
+ #define paging_lock_recursive(d) \

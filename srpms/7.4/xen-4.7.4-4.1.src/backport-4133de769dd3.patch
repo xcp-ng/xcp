@@ -1,0 +1,32 @@
+From 4133de769dd38548e813ccc3f66d6c11e86e7329 Mon Sep 17 00:00:00 2001
+From: Jan Beulich <jbeulich@suse.com>
+Date: Tue, 12 Dec 2017 15:03:00 +0100
+Subject: [PATCH] x86: don't wrongly trigger linear page table assertion (2)
+
+_put_final_page_type(), when free_page_type() has exited early to allow
+for preemption, should not update the time stamp, as the page continues
+to retain the typ which is in the process of being unvalidated. I can't
+see why the time stamp update was put on that path in the first place
+(albeit it may well have been me who had put it there years ago).
+
+This is part of XSA-240.
+
+Signed-off-by: Jan Beulich <jbeulich@suse.com>
+Tested-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: George Dunlap <george.dunlap.com>
+master commit: e40b0219a8c77741ae48989efb520f4a762a5be3
+master date: 2017-12-12 14:27:34 +0100
+diff --git a/xen/arch/x86/mm.c b/xen/arch/x86/mm.c
+index 7e7d9f2..7f82412 100644
+--- a/xen/arch/x86/mm.c
++++ b/xen/arch/x86/mm.c
+@@ -2559,9 +2559,6 @@ static int _put_final_page_type(struct page_info *page, unsigned long type,
+     {
+         ASSERT((page->u.inuse.type_info &
+                 (PGT_count_mask|PGT_validated|PGT_partial)) == 1);
+-        if ( !(shadow_mode_enabled(page_get_owner(page)) &&
+-               (page->count_info & PGC_page_table)) )
+-            page_set_tlbflush_timestamp(page);
+         wmb();
+         page->u.inuse.type_info |= PGT_validated;
+     }

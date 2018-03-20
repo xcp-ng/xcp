@@ -1,0 +1,193 @@
+From e2aba42bff72c8720a19ec10ceeef82087e2fede Mon Sep 17 00:00:00 2001
+From: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Date: Mon, 20 Jun 2016 10:04:13 -0400
+Subject: [PATCH] flask/policy: remove unused support for binary modules
+
+Signed-off-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+Reviewed-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Reviewed-by: Doug Goldstein <cardoe@cardoe.com>
+diff --git a/tools/flask/policy/policy/support/loadable_module.spt b/tools/flask/policy/policy/support/loadable_module.spt
+deleted file mode 100644
+index de48b3b..0000000
+--- a/tools/flask/policy/policy/support/loadable_module.spt
++++ /dev/null
+@@ -1,166 +0,0 @@
+-########################################
+-#
+-# Macros for switching between source policy
+-# and loadable policy module support
+-#
+-
+-##############################
+-#
+-# For adding the module statement
+-#
+-define(`policy_module',`
+-	ifdef(`self_contained_policy',`',`
+-		module $1 $2;
+-
+-		require {
+-			role system_r;
+-			all_kernel_class_perms
+-		}
+-	')
+-')
+-
+-##############################
+-#
+-# For use in interfaces, to optionally insert a require block
+-#
+-define(`gen_require',`
+-	ifdef(`self_contained_policy',`',`
+-		define(`in_gen_require_block')
+-		require {
+-			$1
+-		}
+-		undefine(`in_gen_require_block')
+-	')
+-')
+-
+-##############################
+-#
+-# In the future interfaces should be in loadable modules
+-#
+-# template(name,rules)
+-#
+-define(`template',`
+-	`define(`$1',`
+-##### begin $1(dollarsstar)
+-		$2
+-##### end $1(dollarsstar)
+-	'')
+-')
+-
+-# helper function, since m4 wont expand macros
+-# if a line is a comment (#):
+-define(`policy_m4_comment',`dnl
+-##### $2 depth: $1
+-')dnl
+-
+-##############################
+-#
+-# In the future interfaces should be in loadable modules
+-#
+-# interface(name,rules)
+-#
+-define(`interface',`
+-	`define(`$1',`
+-
+-	define(`policy_temp',incr(policy_call_depth))
+-	pushdef(`policy_call_depth',policy_temp)
+-	undefine(`policy_temp')
+-
+-	policy_m4_comment(policy_call_depth,begin `$1'(dollarsstar))
+-
+-	$2
+-
+-	define(`policy_temp',decr(policy_call_depth))
+-	pushdef(`policy_call_depth',policy_temp)
+-	undefine(`policy_temp')
+-
+-	policy_m4_comment(policy_call_depth,end `$1'(dollarsstar))
+-
+-	'')
+-')
+-
+-define(`policy_call_depth',0)
+-
+-##############################
+-#
+-# Optional policy handling
+-#
+-define(`optional_policy',`
+-	ifdef(`self_contained_policy',`
+-		ifdef(`$1',`$2',`$3')
+-	',`
+-		optional {
+-			$2
+-		ifelse(`$3',`',`',`
+-		} else {
+-			$3
+-		')
+-		}
+-	')
+-')
+-
+-##############################
+-#
+-# Determine if we should use the default
+-# tunable value as specified by the policy
+-# or if the override value should be used
+-#
+-define(`dflt_or_overr',`ifdef(`$1',$1,$2)')
+-
+-##############################
+-#
+-# Extract booleans out of an expression.
+-# This needs to be reworked so expressions
+-# with parentheses can work.
+-
+-define(`delcare_required_symbols',`
+-ifelse(regexp($1, `\w'), -1, `', `dnl
+-bool regexp($1, `\(\w+\)', `\1');
+-delcare_required_symbols(regexp($1, `\w+\(.*\)', `\1'))dnl
+-') dnl
+-')
+-
+-##############################
+-#
+-# Tunable declaration
+-#
+-define(`gen_tunable',`
+-	ifdef(`self_contained_policy',`
+-		bool $1 dflt_or_overr(`$1'_conf,$2);
+-	',`
+-		# loadable module tunable
+-		# declaration will go here
+-		# instead of bool when
+-		# loadable modules support
+-		# tunables
+-		bool $1 dflt_or_overr(`$1'_conf,$2);
+-	')
+-')
+-
+-##############################
+-#
+-# Tunable policy handling
+-#
+-define(`tunable_policy',`
+-	ifdef(`self_contained_policy',`
+-		if (`$1') {
+-			$2
+-		} else {
+-			$3
+-		}
+-	',`
+-		# structure for tunables
+-		# will go here instead of a
+-		# conditional when loadable
+-		# modules support tunables
+-		gen_require(`
+-			delcare_required_symbols(`$1')
+-		')
+-
+-		if (`$1') {
+-			$2
+-		} else {
+-			$3
+-		}
+-	')
+-')
+diff --git a/tools/flask/policy/policy/support/misc_macros.spt b/tools/flask/policy/policy/support/misc_macros.spt
+index 344f5c4..3116db9 100644
+--- a/tools/flask/policy/policy/support/misc_macros.spt
++++ b/tools/flask/policy/policy/support/misc_macros.spt
+@@ -61,6 +61,8 @@ define(`gen_all_users',`')
+ #
+ define(`gen_context',`$1`'ifdef(`enable_mls',`:$2')`'')
+ 
++define(`dflt_or_overr',`ifdef(`$1',$1,$2)')
++
+ ########################################
+ #
+ # gen_bool(name,default_value)

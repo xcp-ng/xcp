@@ -1,0 +1,47 @@
+From a9ad03b3a0ac005e8bcd88702f2f1c1e86ff6b67 Mon Sep 17 00:00:00 2001
+From: Haozhong Zhang <haozhong.zhang@intel.com>
+Date: Thu, 15 Dec 2016 11:12:06 +0100
+Subject: [PATCH] vvmx: check the operand of L1 vmxon
+
+Check whether the operand of L1 vmxon is a valid VMXON region address
+and whether the VMXON region at that address contains a valid revision
+ID.
+
+Signed-off-by: Haozhong Zhang <haozhong.zhang@intel.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 86bb691..48c3544 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -1375,6 +1375,7 @@ int nvmx_handle_vmxon(struct cpu_user_regs *regs)
+     struct nestedvcpu *nvcpu = &vcpu_nestedhvm(v);
+     struct vmx_inst_decoded decode;
+     unsigned long gpa = 0;
++    uint32_t nvmcs_revid;
+     int rc;
+ 
+     rc = decode_vmx_inst(regs, &decode, &gpa, 1);
+@@ -1389,6 +1390,21 @@ int nvmx_handle_vmxon(struct cpu_user_regs *regs)
+         return X86EMUL_OKAY;
+     }
+ 
++    if ( (gpa & ~PAGE_MASK) || (gpa >> v->domain->arch.paging.gfn_bits) )
++    {
++        vmreturn(regs, VMFAIL_INVALID);
++        return X86EMUL_OKAY;
++    }
++
++    rc = hvm_copy_from_guest_phys(&nvmcs_revid, gpa, sizeof(nvmcs_revid));
++    if ( rc != HVMCOPY_okay ||
++         (nvmcs_revid & ~VMX_BASIC_REVISION_MASK) ||
++         ((nvmcs_revid ^ vmx_basic_msr) & VMX_BASIC_REVISION_MASK) )
++    {
++        vmreturn(regs, VMFAIL_INVALID);
++        return X86EMUL_OKAY;
++    }
++
+     nvmx->vmxon_region_pa = gpa;
+ 
+     /*

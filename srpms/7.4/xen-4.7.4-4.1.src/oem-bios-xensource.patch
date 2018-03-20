@@ -1,0 +1,122 @@
+Some cosmetic tweaks to the BIOS that are all that's left of the
+original OEM customization (including SMBIOS passthrough via Xen).
+
+diff --git a/tools/firmware/rombios/rombios.c b/tools/firmware/rombios/rombios.c
+index 58ace9b..a0fdfcb 100644
+--- a/tools/firmware/rombios/rombios.c
++++ b/tools/firmware/rombios/rombios.c
+@@ -2022,28 +2022,9 @@ void s3_resume_panic()
+ void
+ print_bios_banner()
+ {
+-  printf(BX_APPNAME" BIOS - build: %s\n%s\nOptions: ",
+-    BIOS_BUILD_DATE, bios_cvs_version_string);
+-  printf(
+-#if BX_APM
+-  "apmbios "
+-#endif
+-#if BX_PCIBIOS
+-  "pcibios "
+-#endif
+-#if BX_ELTORITO_BOOT
+-  "eltorito "
+-#endif
+-#if BX_ROMBIOS32
+-  "rombios32 "
+-#endif
+-#if BX_TCGBIOS
+-  "TCG-enabled "
+-#endif
+-#if BX_PMM
+-  "PMM "
+-#endif
+-  "\n\n");
++  int i = 0;
++  for (; i < BX_SMP_PROCESSORS; i++)
++    printf("Processor %d: Xen(R) Virtual CPU\n", i+1);
+ }
+ 
+ //--------------------------------------------------------------------------
+@@ -2202,7 +2183,7 @@ print_boot_device(type, desc)
+   /* NIC appears as type 0x80 */
+   if (type == IPL_TYPE_BEV) type = 0x4;
+   if (type == 0 || type > 0x4) BX_PANIC("Bad drive type\n");
+-  printf("Booting from %s", drivetypes[type]);
++  printf("Boot device: %s", drivetypes[type]);
+   /* print product string if BEV */
+   if (type == 4 && desc != 0) {
+     /* first 32 bytes are significant */
+@@ -2211,7 +2192,6 @@ print_boot_device(type, desc)
+     description[32] = 0;
+     printf(" [%S]", ss, description);
+   }
+-  printf("...\n");
+ }
+ 
+ //--------------------------------------------------------------------------
+@@ -2224,13 +2204,13 @@ print_boot_failure(type, reason)
+ {
+   if (type == 0 || type > 0x3) BX_PANIC("Bad drive type\n");
+ 
+-  printf("Boot from %s failed", drivetypes[type]);
++  printf(" - failure", drivetypes[type]);
+   if (type < 4) {
+     /* Report the reason too */
+     if (reason==0)
+-      printf(": not a bootable disk");
++      printf(": disk not bootable");
+     else
+-      printf(": could not read the boot disk");
++      printf(": could not read boot disk");
+   }
+   printf("\n\n");
+ }
+@@ -2243,7 +2223,7 @@ print_boot_failure(type, reason)
+ print_cdromboot_failure( code )
+   Bit16u code;
+ {
+-  bios_printf(BIOS_PRINTF_SCREEN | BIOS_PRINTF_INFO, "CDROM boot failure code : %04x\n",code);
++  //bios_printf(BIOS_PRINTF_SCREEN | BIOS_PRINTF_INFO, "CDROM boot failure code : %04x\n",code);
+ 
+   return;
+ }
+@@ -2851,23 +2831,21 @@ void ata_detect( )
+ 
+       switch (type) {
+         case ATA_TYPE_ATA:
+-          printf("ata%d %s: ",channel,slave?" slave":"master");
+-          i=0; while(c=read_byte(get_SS(),model+i++)) printf("%c",c);
++          printf("XS Virtual IDE Controller      Hard Drive");
+ 	  if (sizeinmb < (1UL<<16))
+-            printf(" ATA-%d Hard-Disk (%4u MBytes)\n", version, (Bit16u)sizeinmb);
++            printf(" (%uMB)\n", sizeinmb);
+ 	  else
+-            printf(" ATA-%d Hard-Disk (%4u GBytes)\n", version, (Bit16u)(sizeinmb>>10));
++            printf(" (%uGB)\n", sizeinmb>>10);
+           break;
+         case ATA_TYPE_ATAPI:
+-          printf("ata%d %s: ",channel,slave?" slave":"master");
+-          i=0; while(c=read_byte(get_SS(),model+i++)) printf("%c",c);
++          printf("XS Virtual ATAPI-");
+           if(read_byte(ebda_seg,&EbdaData->ata.devices[device].device)==ATA_DEVICE_CDROM)
+-            printf(" ATAPI-%d CD-Rom/DVD-Rom\n",version);
++            printf("%d             CD-Rom/DVD-Rom\n",version);
+           else
+-            printf(" ATAPI-%d Device\n",version);
++            printf("%d             Device\n",version);
+           break;
+         case ATA_TYPE_UNKNOWN:
+-          printf("ata%d %s: Unknown device\n",channel,slave?" slave":"master");
++          printf("Unknown device\n");
+           break;
+         }
+       }
+@@ -8357,6 +8335,8 @@ ASM_END
+   default: return;
+   }
+ 
++  printf(" - success.\n");
++
+   /* Debugging info */
+   BX_INFO("Booting from %x:%x\n", bootseg, bootip);
+ 

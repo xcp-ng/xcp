@@ -1,0 +1,61 @@
+From b43b690179ff031d4cc7864d579bc69aadc3d398 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Mon, 13 Feb 2017 14:21:08 +0000
+Subject: [PATCH] x86/vmx: introduce VMX_INSN_SUCCEED
+
+The new value corresponds to VMsucceed status of VMX instructions.
+This will replace usage of literal zeroes in related functions.
+
+Update vmfail(), vmread_safe() and vmwrite_safe().
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 4d2ad61..e4acaa9 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -495,6 +495,9 @@ static void vmfail_invalid(struct cpu_user_regs *regs)
+ 
+ static void vmfail(struct cpu_user_regs *regs, enum vmx_insn_errno errno)
+ {
++    if ( errno == VMX_INSN_SUCCEED )
++        return;
++
+     if ( vcpu_nestedhvm(current).nv_vvmcxaddr != INVALID_PADDR &&
+          errno != VMX_INSN_FAIL_INVALID )
+         vmfail_valid(regs, errno);
+diff --git a/xen/include/asm-x86/hvm/vmx/vmcs.h b/xen/include/asm-x86/hvm/vmx/vmcs.h
+index 85f43b5..9754754 100644
+--- a/xen/include/asm-x86/hvm/vmx/vmcs.h
++++ b/xen/include/asm-x86/hvm/vmx/vmcs.h
+@@ -573,6 +573,7 @@ enum vmcs_field {
+ /* VM Instruction error numbers */
+ enum vmx_insn_errno
+ {
++    VMX_INSN_SUCCEED                       = 0,
+     VMX_INSN_VMCLEAR_INVALID_PHYADDR       = 2,
+     VMX_INSN_VMLAUNCH_NONCLEAR_VMCS        = 4,
+     VMX_INSN_VMRESUME_NONLAUNCHED_VMCS     = 5,
+diff --git a/xen/include/asm-x86/hvm/vmx/vmx.h b/xen/include/asm-x86/hvm/vmx/vmx.h
+index a913727..43914b8 100644
+--- a/xen/include/asm-x86/hvm/vmx/vmx.h
++++ b/xen/include/asm-x86/hvm/vmx/vmx.h
+@@ -404,7 +404,7 @@ static always_inline void __vmwrite(unsigned long field, unsigned long value)
+ static inline enum vmx_insn_errno vmread_safe(unsigned long field,
+                                               unsigned long *value)
+ {
+-    unsigned long ret = 0;
++    unsigned long ret = VMX_INSN_SUCCEED;
+     bool_t fail_invalid, fail_valid;
+ 
+     asm volatile ( GAS_VMX_OP("vmread %[field], %[value]\n\t",
+@@ -427,7 +427,7 @@ static inline enum vmx_insn_errno vmread_safe(unsigned long field,
+ static inline enum vmx_insn_errno vmwrite_safe(unsigned long field,
+                                                unsigned long value)
+ {
+-    unsigned long ret = 0;
++    unsigned long ret = VMX_INSN_SUCCEED;
+     bool_t fail_invalid, fail_valid;
+ 
+     asm volatile ( GAS_VMX_OP("vmwrite %[value], %[field]\n\t",

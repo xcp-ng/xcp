@@ -1,0 +1,214 @@
+commit 1a4ae2e79b67d6c345e46a9cb76174ee1eb2fc21
+Author: Andrew Cooper <andrew.cooper3@citrix.com>
+Date:   Tue Jul 2 18:47:25 2013 +0100
+
+    tools/xenconsoled: Log guest serial consoles
+
+    The ability to log guest consoles can now be controlled using xenstore keys
+    under /local/logconsole.
+
+    Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+
+    --
+    This has been used extensivly in the XenServer automated testing
+    infrastructure for many years, and interest has been expressed in having the
+    functionality upstream.
+
+diff --git a/docs/misc/xenstore-paths.markdown b/docs/misc/xenstore-paths.markdown
+index d94ea9d..fa9561d 100644
+--- a/docs/misc/xenstore-paths.markdown
++++ b/docs/misc/xenstore-paths.markdown
+@@ -385,6 +385,21 @@ The time which the guest was started in SECONDS.MICROSECONDS format
+ 
+ The guest's virtual time offset from UTC in seconds.
+ 
++## Logging paths
++
++### /local/logconsole/$DOMID = PATH [n,INTERNAL]
++
++Write a path to this key to enable console logging for the specified domain.
++Writing an empty string or removing the node causes logging to stop.
++Rewriting the path causes the daemon to close and reopen the file, which can
++be uses to rotate the log file.
++
++### /local/logconsole/@ = PATH [n,INTERNAL]
++
++Wildcard logging path, for domains without a `/local/logconsole/$DOMID` path.
++The path must contain "%d" which shall be substituted with the domid, and must
++not contain any other "%" characters.
++
+ ## Platform-Level paths
+ 
+ ### libxl Specific Paths
+diff --git a/tools/console/daemon/io.c b/tools/console/daemon/io.c
+index ac08b5b..6e4e7b4 100644
+--- a/tools/console/daemon/io.c
++++ b/tools/console/daemon/io.c
+@@ -107,8 +107,12 @@ struct domain {
+ 	struct xencons_interface *interface;
+ 	int event_count;
+ 	long long next_period;
++	FILE *logfile;
+ };
+ 
++static void update_logconsole(struct domain *);
++static char *wildcard_logfile = NULL;
++
+ static struct domain *dom_head;
+ 
+ static int write_all(int fd, const char* buf, size_t len)
+@@ -162,6 +166,7 @@ static void buffer_append(struct domain *dom)
+ 	struct buffer *buffer = &dom->buffer;
+ 	XENCONS_RING_IDX cons, prod, size;
+ 	struct xencons_interface *intf = dom->interface;
++	size_t begin;
+ 
+ 	cons = intf->out_cons;
+ 	prod = intf->out_prod;
+@@ -180,9 +185,15 @@ static void buffer_append(struct domain *dom)
+ 		}
+ 	}
+ 
++	begin = buffer->size;
+ 	while (cons != prod)
+ 		buffer->data[buffer->size++] = intf->out[
+ 			MASK_XENCONS_IDX(cons++, intf->out)];
++	if (dom->logfile && buffer->size != begin) {
++		fwrite(&buffer->data[begin], buffer->size - begin, 1,
++		       dom->logfile);
++		fflush(dom->logfile);
++	}
+ 
+ 	xen_mb();
+ 	intf->out_cons = cons;
+@@ -689,6 +700,9 @@ static struct domain *create_domain(int domid)
+ 	if (!watch_domain(dom, true))
+ 		goto out;
+ 
++	dom->logfile = NULL;
++	update_logconsole(dom);
++
+ 	dom->next = dom_head;
+ 	dom_head = dom;
+ 
+@@ -720,6 +734,9 @@ static void remove_domain(struct domain *dom)
+ 	for (pp = &dom_head; *pp; pp = &(*pp)->next) {
+ 		if (dom == *pp) {
+ 			*pp = dom->next;
++			if (dom->logfile)
++				fclose(dom->logfile);
++			dom->logfile = NULL;
+ 			free(dom);
+ 			break;
+ 		}
+@@ -779,6 +796,38 @@ static void enum_domains(void)
+ 	}
+ }
+ 
++static void update_logconsole(struct domain *dom)
++{
++	char *fname = NULL, *path = NULL;
++	FILE *oldfile;
++
++	oldfile = dom->logfile;
++
++	if (asprintf(&path, "/local/logconsole/%d", dom->domid) == -1)
++		goto out;
++
++	fname = xs_read(xs, XBT_NULL, path, NULL);
++	if (!fname && wildcard_logfile)
++		if (asprintf(&fname, wildcard_logfile, dom->domid) == -1)
++			goto out;
++	if (!fname || !fname[0])
++		goto out;
++
++	dom->logfile = fopen(fname, "a");
++	if (!dom->logfile)
++		dolog(LOG_ERR, "fopen('%s', 'a') failed: %d (%s)",
++		      fname, errno, strerror(errno));
++
++ out:
++	if (oldfile && dom->logfile == oldfile) {
++		dom->logfile = NULL;
++		fclose(oldfile);
++	}
++	free(fname);
++	free(path);
++	return;
++}
++
+ static int ring_free_bytes(struct domain *dom)
+ {
+ 	struct xencons_interface *intf = dom->interface;
+@@ -902,6 +951,30 @@ static void handle_xs(void)
+ 		   been removed, so dom may be NULL here. */
+ 		if (dom && dom->is_dead == false)
+ 			domain_create_ring(dom);
++	} else if (!strcmp(vec[XS_WATCH_TOKEN], "logconsole")) {
++		if (sscanf(vec[XS_WATCH_PATH], "/local/logconsole/%u",
++			   &domid) == 1) {
++			dom = lookup_domain(domid);
++			if (dom && dom->is_dead == false)
++				update_logconsole(dom);
++		} else if (!strcmp(vec[XS_WATCH_PATH],
++				   "/local/logconsole/@")) {
++			char *wildcard, *tmp;
++			free(wildcard_logfile);
++			wildcard_logfile = NULL;
++			wildcard = xs_read(xs, XBT_NULL,
++					   "/local/logconsole/@", NULL);
++			/* Sanitise string, as it gets used by asprintf().  It
++			 * should contain exactly one "%d" and no futher "%"s */
++			if(wildcard) {
++				tmp = strchr(wildcard, '%');
++				if(tmp && tmp[1] == 'd' &&
++				   strchr(&tmp[1], '%') == NULL)
++					wildcard_logfile = wildcard;
++				else
++					free(wildcard);
++			}
++		}
+ 	}
+ 
+ 	free(vec);
+@@ -1213,6 +1286,16 @@ void handle_io(void)
+ 	log_hv_evtchn = -1;
+ }
+ 
++void watch_logconsole(void)
++{
++      bool success;
++
++      success = xs_watch(xs, "/local/logconsole", "logconsole");
++      if (!success)
++              dolog(LOG_ERR, "logconsole watch failed");
++      wildcard_logfile = xs_read(xs, XBT_NULL, "/local/logconsole/@", NULL);
++}
++
+ /*
+  * Local variables:
+  *  c-file-style: "linux"
+diff --git a/tools/console/daemon/io.h b/tools/console/daemon/io.h
+index f658bfc..96e08b4 100644
+--- a/tools/console/daemon/io.h
++++ b/tools/console/daemon/io.h
+@@ -22,5 +22,6 @@
+ #define CONSOLED_IO_H
+ 
+ void handle_io(void);
++void watch_logconsole(void);
+ 
+ #endif
+diff --git a/tools/console/daemon/main.c b/tools/console/daemon/main.c
+index 11de5c9..8f62f19 100644
+--- a/tools/console/daemon/main.c
++++ b/tools/console/daemon/main.c
+@@ -199,6 +199,8 @@ int main(int argc, char **argv)
+ 	if (!xen_setup())
+ 		exit(1);
+ 
++	watch_logconsole();
++
+ 	handle_io();
+ 
+ 	closelog();

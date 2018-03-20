@@ -1,0 +1,21 @@
+Reduce performance impact of debug builds of Xen
+
+* Don't artificially wrap the TLB clock every 1024 iterations
+
+diff --git a/xen/arch/x86/flushtlb.c b/xen/arch/x86/flushtlb.c
+index 5d5d79c..e334df8 100644
+--- a/xen/arch/x86/flushtlb.c
++++ b/xen/arch/x86/flushtlb.c
+@@ -13,12 +13,7 @@
+ #include <asm/flushtlb.h>
+ #include <asm/page.h>
+ 
+-/* Debug builds: Wrap frequently to stress-test the wrap logic. */
+-#ifdef NDEBUG
+ #define WRAP_MASK (0xFFFFFFFFU)
+-#else
+-#define WRAP_MASK (0x000003FFU)
+-#endif
+ 
+ u32 tlbflush_clock = 1U;
+ DEFINE_PER_CPU(u32, tlbflush_time);

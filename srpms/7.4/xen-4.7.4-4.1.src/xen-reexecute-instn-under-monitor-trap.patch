@@ -1,0 +1,528 @@
+From a641a74d0ad6ceea3cd10ad36f9cdebc47d99c61 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Mihai=20Don=C8=9Bu?= <mdontu@bitdefender.com>
+Date: Thu, 17 Sep 2015 20:33:36 +0300
+Subject: [PATCH 6/6] xen: Generic instruction re-execution mechanism for
+ execute faults
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The Xen emulator is incapable of handling some instructions, which
+leads to the injection of an Invalid Opcode exception (#UD) inside
+the guest once an unsupported instruction is encountered.
+A new mechanism has been added which is able to generically re-execute
+instructions, by temporarily granting permissions inside the EPT and
+re-executing the instruction with all other vcpus paused and with the
+monitor trap flag set. The mechanism is re-entrant, meaning that is
+capable of handling different violations caused by the same instruction.
+Usually, a security appliance will decide when and what instructions
+must be re-executed this way (instructions that lie in non-executable
+pages and instructions that cause the setting of Accessed and/or Dirty
+flags inside page tables are two examples).
+
+Additionally, we have changed MAX_NESTEDP2M from 10 to 8, because the
+sizeo of arch_domain got bigger than PAGE_SIZE and broke the build
+in alloc_domain_struct().
+
+Signed-off-by: Andrei Lutas <vlutas@bitdefender.com>
+Signed-off-by: Mihai Donțu <mdontu@bitdefender.com>
+Signed-off-by: Anshul Makkar <anshul.makkar@citrix.com>
+diff --git a/xen/arch/x86/domain.c b/xen/arch/x86/domain.c
+index 78b8b6e..73a6b9b 100644
+--- a/xen/arch/x86/domain.c
++++ b/xen/arch/x86/domain.c
+@@ -408,6 +408,7 @@ int vcpu_initialise(struct vcpu *v)
+     int rc;
+ 
+     v->arch.flags = TF_kernel_mode;
++    v->arch.in_host = 1;
+ 
+     rc = mapcache_vcpu_init(v);
+     if ( rc )
+diff --git a/xen/arch/x86/hvm/vm_event.c b/xen/arch/x86/hvm/vm_event.c
+index bd104e4..3a2c8f8 100644
+--- a/xen/arch/x86/hvm/vm_event.c
++++ b/xen/arch/x86/hvm/vm_event.c
+@@ -23,6 +23,7 @@
+ #include <xen/sched.h>
+ #include <xen/vm_event.h>
+ #include <asm/hvm/support.h>
++#include <asm/p2m.h>
+ #include <asm/vm_event.h>
+ 
+ static void hvm_vm_event_set_registers(const struct vcpu *v)
+@@ -79,8 +80,13 @@ void hvm_vm_event_do_resume(struct vcpu *v)
+                   VM_EVENT_FLAG_EMULATE_NOWRITE )
+             kind = EMUL_KIND_NOWRITE;
+ 
+-        hvm_mem_access_emulate_one(kind, TRAP_invalid_op,
+-                                   HVM_DELIVER_NO_ERROR_CODE);
++        if ( opt_introspection_extn &&
++             kind == EMUL_KIND_NORMAL && v->arch.vm_event->insn_fetch )
++            vmx_start_reexecute_instruction(v, v->arch.vm_event->gpa,
++                                            XENMEM_access_x);
++        else
++            hvm_mem_access_emulate_one(kind, TRAP_invalid_op,
++                                       HVM_DELIVER_NO_ERROR_CODE);
+ 
+         v->arch.vm_event->emulate_flags = 0;
+     }
+diff --git a/xen/arch/x86/hvm/vmx/vmx.c b/xen/arch/x86/hvm/vmx/vmx.c
+index bc7a7eb..964f0bf 100644
+--- a/xen/arch/x86/hvm/vmx/vmx.c
++++ b/xen/arch/x86/hvm/vmx/vmx.c
+@@ -2138,6 +2138,21 @@ static bool_t vmx_vcpu_emulate_ve(struct vcpu *v)
+     return rc;
+ }
+ 
++static bool_t vmx_exited_by_nested_pagefault(void)
++{
++    unsigned long exit_qualification, exit_reason;
++
++    __vmread(VM_EXIT_REASON, &exit_reason);
++    ASSERT(exit_reason == EXIT_REASON_EPT_VIOLATION);
++
++    __vmread(EXIT_QUALIFICATION, &exit_qualification);
++
++    if ( (exit_qualification & EPT_GLA_FAULT) == 0 )
++        return 0;
++
++    return 1;
++}
++
+ static int vmx_set_mode(struct vcpu *v, int mode)
+ {
+     unsigned long attr;
+@@ -2241,6 +2256,7 @@ static struct hvm_function_table __initdata vmx_function_table = {
+     .altp2m_vcpu_update_vmfunc_ve = vmx_vcpu_update_vmfunc_ve,
+     .altp2m_vcpu_emulate_ve = vmx_vcpu_emulate_ve,
+     .altp2m_vcpu_emulate_vmfunc = vmx_vcpu_emulate_vmfunc,
++    .exited_by_nested_pagefault = vmx_exited_by_nested_pagefault,
+     .tsc_scaling = {
+         .max_ratio = VMX_TSC_MULTIPLIER_MAX,
+         .setup     = vmx_setup_tsc_scaling,
+@@ -3359,12 +3375,62 @@ static int vmx_handle_apic_write(void)
+     return vlapic_apicv_write(current, exit_qualification & 0xfff);
+ }
+ 
++static int vmx_stop_reexecute_instruction(struct vcpu *v)
++{
++    int ret = 0, i;
++    struct vcpu *a;
++
++    if ( 0 == v->arch.rexec_level )
++        return 0;
++
++    /* Step 1: Restore original EPT access rights for each GPA. */
++    for ( i = v->arch.rexec_level - 1; i >= 0; i-- )
++    {
++        if ( 0 != p2m_set_mem_access(v->domain,
++                                     _gfn(v->arch.rexec_context[i].gpa >> PAGE_SHIFT),
++                                     1, 0, MEMOP_CMD_MASK, v->arch.rexec_context[i].old_access, 0) )
++        {
++            ret = -1;
++            return ret;
++        }
++
++        v->arch.rexec_context[i].gpa = 0;
++        v->arch.hvm_vcpu.single_step = v->arch.rexec_context[i].old_single_step;
++    }
++
++    spin_lock(&v->domain->arch.rexec_lock);
++
++    /* Step 2: Reset the nesting level to zero. */
++    v->arch.rexec_level = 0;
++
++    /* Step 3: Resume all other VCPUs. */
++    for_each_vcpu ( v->domain, a )
++    {
++        if ( a == v )
++            continue;
++
++        /* Unpause the VCPU. */
++        vcpu_unpause(a);
++    }
++
++    /* Step 4: Remove the MONITOR trap flag.
++     * - this is already done when handling the exit. */
++
++    /* Step 5: We're done! */
++
++    spin_unlock(&v->domain->arch.rexec_lock);
++
++    return ret;
++}
++
+ void vmx_vmexit_handler(struct cpu_user_regs *regs)
+ {
+     unsigned long exit_qualification, exit_reason, idtv_info, intr_info = 0;
+     unsigned int vector = 0, mode;
+     struct vcpu *v = current;
+ 
++    v->arch.in_host = 1;
++
+     __vmread(GUEST_RIP,    &regs->rip);
+     __vmread(GUEST_RSP,    &regs->rsp);
+     __vmread(GUEST_RFLAGS, &regs->rflags);
+@@ -3895,6 +3961,8 @@ void vmx_vmexit_handler(struct cpu_user_regs *regs)
+     case EXIT_REASON_MONITOR_TRAP_FLAG:
+         v->arch.hvm_vmx.exec_control &= ~CPU_BASED_MONITOR_TRAP_FLAG;
+         vmx_update_cpu_exec_control(v);
++        if ( opt_introspection_extn )
++            vmx_stop_reexecute_instruction(v);
+         if ( v->arch.hvm_vcpu.single_step )
+         {
+             hvm_event_breakpoint(regs->eip, HVM_EVENT_SINGLESTEP_BREAKPOINT);
+@@ -4120,6 +4188,8 @@ bool vmx_vmenter_helper(const struct cpu_user_regs *regs)
+     if ( unlikely(curr->arch.hvm_vmx.lbr_fixup_enabled) )
+         lbr_fixup();
+ 
++    curr->arch.in_host = 0;
++
+     HVMTRACE_ND(VMENTRY, 0, 1/*cycles*/, 0, 0, 0, 0, 0, 0, 0);
+ 
+     __vmwrite(GUEST_RIP,    regs->rip);
+diff --git a/xen/arch/x86/mm/p2m.c b/xen/arch/x86/mm/p2m.c
+index 91ed5db..1c1ec8e 100644
+--- a/xen/arch/x86/mm/p2m.c
++++ b/xen/arch/x86/mm/p2m.c
+@@ -27,6 +27,7 @@
+ #include <xen/iommu.h>
+ #include <xen/vm_event.h>
+ #include <xen/event.h>
++#include <xen/hypercall.h>
+ #include <public/vm_event.h>
+ #include <asm/domain.h>
+ #include <asm/page.h>
+@@ -39,6 +40,7 @@
+ #include <asm/hvm/svm/amd-iommu-proto.h>
+ #include <asm/vm_event.h>
+ #include <xsm/xsm.h>
++#include <asm/hvm/hvm.h>
+ 
+ #include "mm-locks.h"
+ 
+@@ -1638,6 +1640,201 @@ void p2m_altp2m_check(struct vcpu *v, uint16_t idx)
+         p2m_switch_vcpu_altp2m_by_id(v, idx);
+ }
+ 
++static void p2m_set_ad_bits(struct vcpu *v, struct p2m_domain *p2m,
++                            paddr_t ga)
++{
++    struct hvm_hw_cpu ctxt;
++    uint32_t pfec = 0;
++    const struct paging_mode *pg_mode = v->arch.paging.mode;
++
++    hvm_funcs.save_cpu_ctxt(v, &ctxt);
++
++    if ( guest_cpu_user_regs()->eip == v->arch.sse_pg_dirty.eip
++         && ga == v->arch.sse_pg_dirty.gla )
++    {
++        pfec = 2;
++        pg_mode->p2m_ga_to_gfn(v, p2m, ctxt.cr3, ga, &pfec, NULL);
++    }
++    else
++        pg_mode->p2m_ga_to_gfn(v, p2m, ctxt.cr3, ga, &pfec, NULL);
++
++    v->arch.sse_pg_dirty.eip = guest_cpu_user_regs()->eip;
++    v->arch.sse_pg_dirty.gla = ga;
++}
++
++int vmx_start_reexecute_instruction(struct vcpu *v,
++                                    unsigned long gpa,
++                                    xenmem_access_t required_access)
++{
++    /* NOTE: Some required_accesses may be invalid. For example, one
++     * cannot grant only write access on a given page; read/write
++     * access must be granted instead. These inconsistencies are NOT
++     * checked here. The caller must ensure that "required_access" is
++     * an allowed combination. */
++
++    int ret = 0, i, found = 0, r = 0, w = 0, x = 0, level = 0, leave = 0;
++    xenmem_access_t old_access, new_access;
++    struct vcpu *a;
++
++    spin_lock(&v->domain->arch.rexec_lock);
++
++    level = v->arch.rexec_level;
++
++    /* Step 1: Make sure someone else didn't get to start an
++     * instruction re-execution */
++    for_each_vcpu ( v->domain, a )
++    {
++        /* We're interested in pausing all the VCPUs except self/v. */
++        if ( a == v )
++            continue;
++
++        /* Check if "a" started an instruction re-execution. If so,
++         * return success, as we'll re-execute our instruction later. */
++        if ( 0 != a->arch.rexec_level )
++        {
++            /* We should be paused. */
++            ret = 0;
++            leave = 1;
++            goto release_and_exit;
++        }
++    }
++
++    /* Step 2: Make sure we're not exceeding the max re-execution depth. */
++    if ( level >= REEXECUTION_MAX_DEPTH )
++    {
++        ret = -1;
++        leave = 1;
++        goto release_and_exit;
++    }
++
++    /* Step 2: Pause all the VCPUs, except self. Note that we have to do
++     * this only if we're at nesting level 0; if we're at a higher level
++     * of nested re-exec, the vcpus are already paused. */
++    if ( 0 == level )
++    {
++        for_each_vcpu ( v->domain, a )
++        {
++            /* We're interested in pausing all the VCPUs except self/v. */
++            if ( a == v )
++                continue;
++
++            /* Pause, NO SYNC! We're gonna do our own syncing. */
++            vcpu_pause_nosync(a);
++        }
++
++        /* Step 3: Wait for all the paused VCPUs to actually leave the VMX
++         * non-root realm and enter VMX root. */
++        for_each_vcpu ( v->domain, a )
++        {
++            /* We're interested in pausing all the VCPUs except self/v. */
++            if ( a == v )
++                continue;
++
++            /* Pause, synced. */
++            while ( !a->arch.in_host )
++                cpu_relax();
++        }
++    }
++
++    /* Update the rexecution nexting level. */
++    v->arch.rexec_level++;
++
++release_and_exit:
++    spin_unlock(&v->domain->arch.rexec_lock);
++
++    /* If we've got errors so far, return. */
++    if ( leave )
++        return ret;
++
++    /* Step 4: Save the current gpa & old access rights. Also, check if this
++     * is a "double-fault" on the exact same GPA, in which case, we will
++     * promote the rights of this particular GPA, and try again. */
++    for ( i = 0; i < level; i++ )
++    {
++        if ( (v->arch.rexec_context[i].gpa >> PAGE_SHIFT) ==
++             (gpa >> PAGE_SHIFT) )
++        {
++            /* This GPA is already in the queue. */
++            found = 1;
++
++            switch (v->arch.rexec_context[i].cur_access) {
++                case XENMEM_access_r: r = 1; break;
++                case XENMEM_access_w: w = 1; break;
++                case XENMEM_access_x: x = 1; break;
++                case XENMEM_access_rx: r = x = 1; break;
++                case XENMEM_access_wx: w = x = 1;  break;
++                case XENMEM_access_rw: r = w = 1; break;
++                case XENMEM_access_rwx: r = w = x = 1; break;
++                default: break; /* We don't care about any other case. */
++            }
++        }
++    }
++
++    /* Get the current EPT access rights. They will be restored when we're done.
++     * Note that the restoration is done in reverse-order, in order to ensure
++     * that the original access rights are restore correctly. Otherwise, we may
++     * restore whatever access rights were modified by another re-execution
++     * request, and that would be bad. */
++    if ( 0 != p2m_get_mem_access(v->domain, _gfn(gpa >> PAGE_SHIFT), &old_access) )
++        return -1;
++
++    v->arch.rexec_context[level].gpa = gpa;
++    v->arch.rexec_context[level].old_access = old_access;
++    v->arch.rexec_context[level].old_single_step = v->arch.hvm_vcpu.single_step;
++
++    /* Step 5: Make the GPA with the required access, so we can re-execute
++     * the instruction. */
++    switch ( required_access )
++    {
++        case XENMEM_access_r: r = 1; break;
++        case XENMEM_access_w: w = 1; break;
++        case XENMEM_access_x: x = 1; break;
++        case XENMEM_access_rx: r = x = 1; break;
++        case XENMEM_access_wx: w = x = 1;  break;
++        case XENMEM_access_rw: r = w = 1; break;
++        case XENMEM_access_rwx: r = w = x = 1; break;
++        default: break; /* We don't care about any other case. */
++    }
++
++    /* Now transform our RWX values in a XENMEM_access_* constant. */
++    if ( 0 == r && 0 == w && 0 == x )
++        new_access = XENMEM_access_n;
++    else if ( 0 == r && 0 == w && 1 == x )
++        new_access = XENMEM_access_x;
++    else if ( 0 == r && 1 == w && 0 == x )
++        new_access = XENMEM_access_w;
++    else if ( 0 == r && 1 == w && 1 == x )
++        new_access = XENMEM_access_wx;
++    else if ( 1 == r && 0 == w && 0 == x )
++        new_access = XENMEM_access_r;
++    else if ( 1 == r && 0 == w && 1 == x )
++        new_access = XENMEM_access_rx;
++    else if ( 1 == r && 1 == w && 0 == x )
++        new_access = XENMEM_access_rw;
++    else if ( 1 == r && 1 == w && 1 == x )
++        new_access = XENMEM_access_rwx;
++    else
++        new_access = required_access; /* Should never get here. */
++
++    /* And save the current access rights. */
++    v->arch.rexec_context[level].cur_access = new_access;
++
++    /* Apply the changes inside the EPT. */
++    if ( 0 != p2m_set_mem_access(v->domain, _gfn(gpa >> PAGE_SHIFT),
++                                 1, 0, MEMOP_CMD_MASK, new_access, 0) )
++        return -1;
++
++    /* Step 6: Reconfigure the VMCS, so it suits our needs. We want a
++     * VM-exit to be generated after the instruction has been
++     * successfully re-executed. */
++    if ( 0 == level )
++        v->arch.hvm_vcpu.single_step = 1;
++
++    /* Step 8: We should be done! */
++
++    return ret;
++}
++
+ bool_t p2m_mem_access_check(paddr_t gpa, unsigned long gla,
+                             struct npfec npfec,
+                             vm_event_request_t **req_ptr)
+@@ -1709,12 +1906,28 @@ bool_t p2m_mem_access_check(paddr_t gpa, unsigned long gla,
+         }
+     }
+ 
++    if ( opt_introspection_extn &&
++         vm_event_check_ring(&d->vm_event->monitor) &&
++         hvm_funcs.exited_by_nested_pagefault &&
++         !hvm_funcs.exited_by_nested_pagefault() ) /* don't send a mem_event */
++    {
++        v->arch.vm_event->emulate_flags = 0;
++        if ( gpa == 0 )
++            p2m_set_ad_bits(v, p2m, gla);
++        else
++            vmx_start_reexecute_instruction(v, gpa, XENMEM_access_rw);
++        return 1;
++    }
++
+     *req_ptr = NULL;
+     req = xzalloc(vm_event_request_t);
+     if ( req )
+     {
+         *req_ptr = req;
+ 
++        v->arch.vm_event->insn_fetch = npfec.insn_fetch;
++        v->arch.vm_event->gpa = gpa;
++
+         /* Send request to mem event */
+         req->reason = VM_EVENT_REASON_MEM_ACCESS;
+         req->u.mem_access.gfn = gfn;
+diff --git a/xen/common/domain.c b/xen/common/domain.c
+index 3e90f5f..a85aec0 100644
+--- a/xen/common/domain.c
++++ b/xen/common/domain.c
+@@ -272,6 +272,8 @@ struct domain *domain_create(domid_t domid, unsigned int domcr_flags,
+ 
+     TRACE_1D(TRC_DOM0_DOM_ADD, d->domain_id);
+ 
++    spin_lock_init(&d->arch.rexec_lock);
++
+     lock_profile_register_struct(LOCKPROF_TYPE_PERDOM, d, domid, "Domain");
+ 
+     if ( (err = xsm_alloc_security_domain(d)) != 0 )
+diff --git a/xen/include/asm-x86/domain.h b/xen/include/asm-x86/domain.h
+index 3258bc4..5cd9db6 100644
+--- a/xen/include/asm-x86/domain.h
++++ b/xen/include/asm-x86/domain.h
+@@ -416,6 +416,8 @@ struct arch_domain
+ 
+     /* Emulated devices enabled bitmap. */
+     uint32_t emulation_flags;
++
++    spinlock_t rexec_lock;
+ } __cacheline_aligned;
+ 
+ #define has_vlapic(d)      (!!((d)->arch.emulation_flags & XEN_X86_EMU_LAPIC))
+@@ -576,6 +578,25 @@ struct arch_vcpu
+     /* A secondary copy of the vcpu time info. */
+     XEN_GUEST_HANDLE(vcpu_time_info_t) time_info_guest;
+ 
++    struct {
++        unsigned long eip;
++        unsigned long gla;
++    } sse_pg_dirty;
++
++#define REEXECUTION_MAX_DEPTH 8
++    struct rexec_context_t {
++        unsigned long gpa;
++        xenmem_access_t old_access;
++        xenmem_access_t cur_access;
++        bool_t old_single_step;
++    } rexec_context[REEXECUTION_MAX_DEPTH];
++
++    int rexec_level;
++
++    /* Will be true when the vcpu is in VMX root,
++     * false when it is not. */
++    bool_t in_host;
++
+     struct arch_vm_event *vm_event;
+ 
+     struct msr_vcpu_policy *msr;
+diff --git a/xen/include/asm-x86/hvm/hvm.h b/xen/include/asm-x86/hvm/hvm.h
+index 3379042..5ef93cc 100644
+--- a/xen/include/asm-x86/hvm/hvm.h
++++ b/xen/include/asm-x86/hvm/hvm.h
+@@ -222,6 +222,8 @@ struct hvm_function_table {
+     bool_t (*altp2m_vcpu_emulate_ve)(struct vcpu *v);
+     int (*altp2m_vcpu_emulate_vmfunc)(struct cpu_user_regs *regs);
+ 
++    bool_t (*exited_by_nested_pagefault)(void);
++
+     /*
+      * Parameters and callbacks for hardware-assisted TSC scaling,
+      * which are valid only when the hardware feature is available.
+diff --git a/xen/include/asm-x86/p2m.h b/xen/include/asm-x86/p2m.h
+index efcf21b..29ec473 100644
+--- a/xen/include/asm-x86/p2m.h
++++ b/xen/include/asm-x86/p2m.h
+@@ -851,6 +851,10 @@ static inline unsigned int p2m_get_iommu_flags(p2m_type_t p2mt)
+     return flags;
+ }
+ 
++int vmx_start_reexecute_instruction(struct vcpu *v,
++                                    unsigned long gpa,
++                                    xenmem_access_t required_access);
++
+ #endif /* _XEN_P2M_H */
+ 
+ /*
+diff --git a/xen/include/asm-x86/vm_event.h b/xen/include/asm-x86/vm_event.h
+index 11833a7..5618b7c 100644
+--- a/xen/include/asm-x86/vm_event.h
++++ b/xen/include/asm-x86/vm_event.h
+@@ -28,6 +28,8 @@
+  */
+ struct arch_vm_event {
+     uint32_t emulate_flags;
++    unsigned long gpa;
++    bool_t insn_fetch;
+     struct vm_event_emul_read_data emul_read_data;
+     struct monitor_write_data write_data;
+     struct vm_event_regs_x86 gprs;

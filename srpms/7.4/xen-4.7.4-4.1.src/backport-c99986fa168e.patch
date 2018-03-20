@@ -1,0 +1,44 @@
+From c99986fa168ef79b1ea6c071f57017e40b367383 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Fri, 15 Jul 2016 13:12:01 +0000
+Subject: [PATCH] x86/pv: Support do_set_segment_base() for compat guests
+
+set_segment_base is the only hypercall exists in only one of the two modes
+guests might run in; all other hypercalls are either implemented, or
+unimplemented in both modes.
+
+Remove this split, by allowing do_set_segment_base() to be called in the
+compat hypercall path.  This change will simplify the verification logic in a
+later change.
+
+No behavioural change from a guests point of view.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Jan Beulich <JBeulich@suse.com>
+diff --git a/xen/arch/x86/x86_64/compat/entry.S b/xen/arch/x86/x86_64/compat/entry.S
+index 794bb44..904101d 100644
+--- a/xen/arch/x86/x86_64/compat/entry.S
++++ b/xen/arch/x86/x86_64/compat/entry.S
+@@ -460,7 +460,7 @@ ENTRY(compat_hypercall_table)
+         .quad compat_update_va_mapping_otherdomain
+         .quad compat_iret
+         .quad compat_vcpu_op
+-        .quad compat_ni_hypercall       /* 25 */
++        .quad do_set_segment_base       /* 25 */
+         .quad compat_mmuext_op
+         .quad compat_xsm_op
+         .quad compat_nmi_op
+diff --git a/xen/arch/x86/x86_64/mm.c b/xen/arch/x86/x86_64/mm.c
+index 6c39246..d561423 100644
+--- a/xen/arch/x86/x86_64/mm.c
++++ b/xen/arch/x86/x86_64/mm.c
+@@ -1031,6 +1031,9 @@ long do_set_segment_base(unsigned int which, unsigned long base)
+     struct vcpu *v = current;
+     long ret = 0;
+ 
++    if ( is_pv_32bit_vcpu(v) )
++        return -ENOSYS; /* x86/64 only. */
++
+     switch ( which )
+     {
+     case SEGBASE_FS:

@@ -1,0 +1,32 @@
+From ae0211de3c93ec5e9cd7ef9e97da9b08559d73f3 Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Mon, 5 Sep 2016 09:17:14 +0100
+Subject: [PATCH 1/6] tools/livepatch: Show the correct expected state before
+ action
+
+Somewhat confusingly, before the action has been executed the patch is
+expected to be in the "allowed" state, not the "expected" state.  The
+check for this was correct but the subsequent error message was not.
+Fix the error message to show this state correctly.
+
+Before:
+    $ xen-livepatch unload test
+    test: in wrong state (APPLIED), expected (unknown)
+After:
+    $ xen-livepatch unload test
+    test: in wrong state (APPLIED), expected (CHECKED)
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+diff --git a/tools/misc/xen-livepatch.c b/tools/misc/xen-livepatch.c
+index 28f339a..7e101dc 100644
+--- a/tools/misc/xen-livepatch.c
++++ b/tools/misc/xen-livepatch.c
+@@ -306,7 +306,7 @@ int action_func(int argc, char *argv[], unsigned int idx)
+     {
+         printf("%s: in wrong state (%s), expected (%s)\n",
+                name, state2str(status.state),
+-               state2str(action_options[idx].expected));
++               state2str(action_options[idx].allow));
+         return -1;
+     }
+ 

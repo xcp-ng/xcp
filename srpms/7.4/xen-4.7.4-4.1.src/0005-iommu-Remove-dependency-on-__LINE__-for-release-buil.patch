@@ -1,0 +1,45 @@
+From e6f482e4d0bd7177120f127b9a51a16da15822c2 Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Fri, 6 May 2016 15:24:24 +0100
+Subject: [PATCH 5/5] iommu: Remove dependency on __LINE__ for release builds
+
+When using live patching, use of __LINE__ can generate spurious changes in
+functions due to embedded line numbers.  For release builds, remove the
+use of these line numbers in IOMMU_WAIT_OP() and print the current text
+address instead.
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+diff --git a/xen/drivers/passthrough/vtd/dmar.h b/xen/drivers/passthrough/vtd/dmar.h
+index 601f889..5e24208 100644
+--- a/xen/drivers/passthrough/vtd/dmar.h
++++ b/xen/drivers/passthrough/vtd/dmar.h
+@@ -108,6 +108,19 @@ struct acpi_atsr_unit *acpi_find_matched_atsr_unit(const struct pci_dev *);
+ 
+ #define DMAR_OPERATION_TIMEOUT MILLISECS(1000)
+ 
++#if defined(NDEBUG) && defined(CONFIG_LIVEPATCH)
++#define iommu_wait_op_panic()                                              \
++    do {                                                                   \
++        panic("%pS: DMAR hardware is malfunctional", current_text_addr()); \
++    } while (0)
++#else
++#define iommu_wait_op_panic()                                              \
++    do {                                                                   \
++        panic("%s:%d:%s: DMAR hardware is malfunctional",                  \
++              __FILE__, __LINE__, __func__);                               \
++    } while (0)
++#endif
++
+ #define IOMMU_WAIT_OP(iommu, offset, op, cond, sts) \
+ do {                                                \
+     s_time_t start_time = NOW();                    \
+@@ -117,8 +130,7 @@ do {                                                \
+             break;                                  \
+         if ( NOW() > start_time + DMAR_OPERATION_TIMEOUT ) {    \
+             if ( !kexecing )                                    \
+-                panic("%s:%d:%s: DMAR hardware is malfunctional",\
+-                      __FILE__, __LINE__, __func__);            \
++                iommu_wait_op_panic();                          \
+             else                                                \
+                 break;                                          \
+         }                                                       \

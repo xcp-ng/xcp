@@ -1,0 +1,43 @@
+From afa537df091fe52a944df5865c3e34ff815569bc Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Fri, 6 May 2016 15:04:50 +0100
+Subject: [PATCH 2/5] sched: Remove dependency on __LINE__ for release builds
+
+When using live patching, use of __LINE__ can generate spurious changes in
+functions due to embedded line numbers.  For release builds, remove the
+use of these line numbers in domain_crash*() and print the current text
+address instead.
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+diff --git a/xen/include/xen/sched.h b/xen/include/xen/sched.h
+index 46c82e7..9170183 100644
+--- a/xen/include/xen/sched.h
++++ b/xen/include/xen/sched.h
+@@ -611,8 +611,17 @@ void vcpu_end_shutdown_deferral(struct vcpu *v);
+  * from any processor.
+  */
+ void __domain_crash(struct domain *d);
++
++#if defined(NDEBUG) && defined(CONFIG_LIVEPATCH)
++#define print_domain_crash(func) \
++    printk(#func " called from %pS\n", current_text_addr());
++#else
++#define print_domain_crash(func) \
++    printk(#func " called from %s:%d\n", __FILE__, __LINE__);
++#endif
++
+ #define domain_crash(d) do {                                              \
+-    printk("domain_crash called from %s:%d\n", __FILE__, __LINE__);       \
++    print_domain_crash(domain_crash);                                     \
+     __domain_crash(d);                                                    \
+ } while (0)
+ 
+@@ -622,7 +631,7 @@ void __domain_crash(struct domain *d);
+  */
+ void noreturn __domain_crash_synchronous(void);
+ #define domain_crash_synchronous() do {                                   \
+-    printk("domain_crash_sync called from %s:%d\n", __FILE__, __LINE__);  \
++    print_domain_crash(domain_crash_sync);                                \
+     __domain_crash_synchronous();                                         \
+ } while (0)
+ 

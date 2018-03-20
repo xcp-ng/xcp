@@ -1,0 +1,116 @@
+From cd579578aac496898a260ddcfac5cf51f3518dd4 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Tue, 3 Oct 2017 16:20:58 +0100
+Subject: [PATCH] x86/np2m: remove np2m_base from p2m_get_nestedp2m()
+
+Remove np2m_base parameter as it should always match the value of
+np2m_base in VMCx12.
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Reviewed-by: George Dunlap <george.dunlap@citrix.com>
+Acked-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Jun Nakajima <jun.nakajima@intel.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+diff --git a/xen/arch/x86/hvm/svm/nestedsvm.c b/xen/arch/x86/hvm/svm/nestedsvm.c
+index 9d2ac09f8f..e1d21e19fb 100644
+--- a/xen/arch/x86/hvm/svm/nestedsvm.c
++++ b/xen/arch/x86/hvm/svm/nestedsvm.c
+@@ -403,7 +403,11 @@ static void nestedsvm_vmcb_set_nestedp2m(struct vcpu *v,
+     ASSERT(v != NULL);
+     ASSERT(vvmcb != NULL);
+     ASSERT(n2vmcb != NULL);
+-    p2m = p2m_get_nestedp2m(v, vvmcb->_h_cr3);
++
++    /* This will allow nsvm_vcpu_hostcr3() to return correct np2m_base */
++    vcpu_nestedsvm(v).ns_vmcb_hostcr3 = vvmcb->_h_cr3;
++
++    p2m = p2m_get_nestedp2m(v);
+     n2vmcb->_h_cr3 = pagetable_get_paddr(p2m_get_pagetable(p2m));
+ }
+ 
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 9c4ef5d080..2901b5f1e7 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -1107,8 +1107,7 @@ static void load_shadow_guest_state(struct vcpu *v)
+ 
+ uint64_t get_shadow_eptp(struct vcpu *v)
+ {
+-    uint64_t np2m_base = nvmx_vcpu_eptp_base(v);
+-    struct p2m_domain *p2m = p2m_get_nestedp2m(v, np2m_base);
++    struct p2m_domain *p2m = p2m_get_nestedp2m(v);
+     struct ept_data *ept = &p2m->ept;
+ 
+     ept->asr = pagetable_get_pfn(p2m_get_pagetable(p2m));
+diff --git a/xen/arch/x86/mm/hap/nested_hap.c b/xen/arch/x86/mm/hap/nested_hap.c
+index d41bb09889..6afff627d5 100644
+--- a/xen/arch/x86/mm/hap/nested_hap.c
++++ b/xen/arch/x86/mm/hap/nested_hap.c
+@@ -214,7 +214,7 @@ nestedhvm_hap_nested_page_fault(struct vcpu *v, paddr_t *L2_gpa,
+     uint8_t p2ma_21 = p2m_access_rwx;
+ 
+     p2m = p2m_get_hostp2m(d); /* L0 p2m */
+-    nested_p2m = p2m_get_nestedp2m(v, nhvm_vcpu_p2m_base(v));
++    nested_p2m = p2m_get_nestedp2m(v);
+ 
+     /* walk the L1 P2M table */
+     rv = nestedhap_walk_L1_p2m(v, *L2_gpa, &L1_gpa, &page_order_21, &p2ma_21,
+diff --git a/xen/arch/x86/mm/p2m.c b/xen/arch/x86/mm/p2m.c
+index ba09d947c4..ca19efd48b 100644
+--- a/xen/arch/x86/mm/p2m.c
++++ b/xen/arch/x86/mm/p2m.c
+@@ -2124,11 +2124,12 @@ static void assign_np2m(struct vcpu *v, struct p2m_domain *p2m)
+ }
+ 
+ struct p2m_domain *
+-p2m_get_nestedp2m(struct vcpu *v, uint64_t np2m_base)
++p2m_get_nestedp2m(struct vcpu *v)
+ {
+     struct nestedvcpu *nv = &vcpu_nestedhvm(v);
+     struct domain *d = v->domain;
+     struct p2m_domain *p2m;
++    uint64_t np2m_base = nhvm_vcpu_p2m_base(v);
+ 
+     /* Mask out low bits; this avoids collisions with P2M_BASE_EADDR */
+     np2m_base &= ~(0xfffull);
+@@ -2176,7 +2177,7 @@ p2m_get_p2m(struct vcpu *v)
+     if (!nestedhvm_is_n2(v))
+         return p2m_get_hostp2m(v->domain);
+ 
+-    return p2m_get_nestedp2m(v, nhvm_vcpu_p2m_base(v));
++    return p2m_get_nestedp2m(v);
+ }
+ 
+ unsigned long paging_gva_to_gfn(struct vcpu *v,
+@@ -2191,13 +2192,12 @@ unsigned long paging_gva_to_gfn(struct vcpu *v,
+         unsigned long l2_gfn, l1_gfn;
+         struct p2m_domain *p2m;
+         const struct paging_mode *mode;
+-        uint64_t np2m_base = nhvm_vcpu_p2m_base(v);
+         uint8_t l1_p2ma;
+         unsigned int l1_page_order;
+         int rv;
+ 
+         /* translate l2 guest va into l2 guest gfn */
+-        p2m = p2m_get_nestedp2m(v, np2m_base);
++        p2m = p2m_get_nestedp2m(v);
+         mode = paging_get_nestedmode(v);
+         l2_gfn = mode->gva_to_gfn(v, p2m, va, pfec);
+ 
+diff --git a/xen/include/asm-x86/p2m.h b/xen/include/asm-x86/p2m.h
+index ff14d2e0cd..a9a843c41f 100644
+--- a/xen/include/asm-x86/p2m.h
++++ b/xen/include/asm-x86/p2m.h
+@@ -342,10 +342,9 @@ struct p2m_domain {
+ #define p2m_get_hostp2m(d)      ((d)->arch.p2m)
+ 
+ /*
+- * Assigns an np2m with the specified np2m_base to the specified vCPU
+- * and returns that np2m.
++ * Updates vCPU's n2pm to match its np2m_base in VMCx12 and returns that np2m.
+  */
+-struct p2m_domain *p2m_get_nestedp2m(struct vcpu *v, uint64_t np2m_base);
++struct p2m_domain *p2m_get_nestedp2m(struct vcpu *v);
+ 
+ /* If vcpu is in host mode then behaviour matches p2m_get_hostp2m().
+  * If vcpu is in guest mode then behaviour matches p2m_get_nestedp2m().

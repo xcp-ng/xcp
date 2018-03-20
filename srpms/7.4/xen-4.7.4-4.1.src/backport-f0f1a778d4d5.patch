@@ -1,0 +1,44 @@
+From f0f1a778d4d5ebe27b981531048fe9cf030386fa Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Wed, 19 Jul 2017 12:37:53 +0100
+Subject: [PATCH] x86/vvmx: Fix auditing of MSR_BITMAP parameter
+
+The MSR_BITMAP field is required to be page aligned.  Also switch gpa to be a
+uint64_t, as the MSR_BITMAP is strictly a 64bit VMCS field.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 5b762440c1..94a2e5be5c 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -766,14 +766,27 @@ static void __clear_current_vvmcs(struct vcpu *v)
+         __vmpclear(nvcpu->nv_n2vmcx_pa);
+ }
+ 
+-static bool_t __must_check _map_msr_bitmap(struct vcpu *v)
++/*
++ * Refreshes the MSR bitmap mapping for the current nested vcpu.  Returns true
++ * for a successful mapping, and returns false for MSR_BITMAP parameter errors
++ * or gfn mapping errors.
++ */
++static bool __must_check _map_msr_bitmap(struct vcpu *v)
+ {
+     struct nestedvmx *nvmx = &vcpu_2_nvmx(v);
+-    unsigned long gpa;
++    uint64_t gpa;
+ 
+     if ( nvmx->msrbitmap )
++    {
+         hvm_unmap_guest_frame(nvmx->msrbitmap, 1);
++        nvmx->msrbitmap = NULL;
++    }
++
+     gpa = get_vvmcs(v, MSR_BITMAP);
++
++    if ( !IS_ALIGNED(gpa, PAGE_SIZE) )
++        return false;
++
+     nvmx->msrbitmap = hvm_map_guest_frame_ro(gpa >> PAGE_SHIFT, 1);
+ 
+     return nvmx->msrbitmap != NULL;

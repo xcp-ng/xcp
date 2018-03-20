@@ -1,0 +1,326 @@
+From f760c5f6b534695cc113fb10766f0e4a78bc79bb Mon Sep 17 00:00:00 2001
+From: Razvan Cojocaru <rcojocaru@bitdefender.com>
+Date: Fri, 11 Nov 2016 15:43:19 +0200
+Subject: [PATCH] x86/vm_event: Added support for VM_EVENT_REASON_INTERRUPT
+
+Added support for a new event type, VM_EVENT_REASON_INTERRUPT,
+which is now fired in a one-shot manner when enabled via the new
+VM_EVENT_FLAG_GET_NEXT_INTERRUPT vm_event response flag.
+The patch also fixes the behaviour of the xc_hvm_inject_trap()
+hypercall, which would lead to non-architectural interrupts
+overwriting pending (specifically reinjected) architectural ones.
+
+Signed-off-by: Razvan Cojocaru <rcojocaru@bitdefender.com>
+diff --git a/xen/arch/x86/hvm/event.c b/xen/arch/x86/hvm/event.c
+index 8fdb6f5..45d36e9 100644
+--- a/xen/arch/x86/hvm/event.c
++++ b/xen/arch/x86/hvm/event.c
+@@ -118,6 +118,21 @@ int hvm_event_breakpoint(unsigned long rip,
+     return vm_event_monitor_traps(curr, 1, &req);
+ }
+ 
++void hvm_event_interrupt(unsigned int vector, unsigned int type,
++                         unsigned int err, uint64_t cr2)
++{
++    vm_event_request_t req = {
++        .reason = VM_EVENT_REASON_INTERRUPT,
++        .vcpu_id = current->vcpu_id,
++        .u.interrupt.x86.vector = vector,
++        .u.interrupt.x86.type = type,
++        .u.interrupt.x86.error_code = err,
++        .u.interrupt.x86.cr2 = cr2,
++    };
++
++    vm_event_monitor_traps(current, 1, &req);
++}
++
+ /*
+  * Local variables:
+  * mode: C
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 76734d0..dd6344d 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -469,6 +469,12 @@ void hvm_migrate_pirqs(struct vcpu *v)
+     spin_unlock(&d->event_lock);
+ }
+ 
++static bool_t hvm_get_pending_event(struct vcpu *v, struct hvm_trap *info)
++{
++    info->cr2 = v->arch.hvm_vcpu.guest_cr[2];
++    return hvm_funcs.get_pending_event(v, info);
++}
++
+ void hvm_do_resume(struct vcpu *v)
+ {
+     check_wakeup_from_wait();
+@@ -528,9 +534,23 @@ void hvm_do_resume(struct vcpu *v)
+     /* Inject pending hw/sw trap */
+     if ( v->arch.hvm_vcpu.inject_trap.vector != -1 )
+     {
+-        hvm_inject_trap(&v->arch.hvm_vcpu.inject_trap);
++        if ( !hvm_event_pending(v) )
++            hvm_inject_trap(&v->arch.hvm_vcpu.inject_trap);
++
+         v->arch.hvm_vcpu.inject_trap.vector = -1;
+     }
++
++    if ( unlikely(v->arch.vm_event) && v->arch.monitor.next_interrupt_enabled )
++    {
++        struct hvm_trap info;
++
++        if ( hvm_get_pending_event(v, &info) )
++        {
++            hvm_event_interrupt(info.vector, info.type, info.error_code,
++                                info.cr2);
++            v->arch.monitor.next_interrupt_enabled = 0;
++        }
++    }
+ }
+ 
+ static int hvm_print_line(
+diff --git a/xen/arch/x86/hvm/svm/svm.c b/xen/arch/x86/hvm/svm/svm.c
+index b0715e6..eb38530 100644
+--- a/xen/arch/x86/hvm/svm/svm.c
++++ b/xen/arch/x86/hvm/svm/svm.c
+@@ -2222,6 +2222,20 @@ static void svm_invlpg(struct vcpu *v, unsigned long vaddr)
+     svm_asid_g_invlpg(v, vaddr);
+ }
+ 
++static bool_t svm_get_pending_event(struct vcpu *v, struct hvm_trap *info)
++{
++    const struct vmcb_struct *vmcb = v->arch.hvm_svm.vmcb;
++
++    if ( vmcb->eventinj.fields.v )
++        return 0;
++
++    info->vector = vmcb->eventinj.fields.vector;
++    info->type = vmcb->eventinj.fields.type;
++    info->error_code = vmcb->eventinj.fields.errorcode;
++
++    return 1;
++}
++
+ static struct hvm_function_table __initdata svm_function_table = {
+     .name                 = "SVM",
+     .cpu_up_prepare       = svm_cpu_up_prepare,
+@@ -2252,6 +2266,7 @@ static struct hvm_function_table __initdata svm_function_table = {
+     .inject_trap          = svm_inject_trap,
+     .init_hypercall_page  = svm_init_hypercall_page,
+     .event_pending        = svm_event_pending,
++    .get_pending_event    = svm_get_pending_event,
+     .invlpg               = svm_invlpg,
+     .cpuid_intercept      = svm_cpuid_intercept,
+     .wbinvd_intercept     = svm_wbinvd_intercept,
+diff --git a/xen/arch/x86/hvm/vmx/vmx.c b/xen/arch/x86/hvm/vmx/vmx.c
+index 35ff6dc..c6718fb 100644
+--- a/xen/arch/x86/hvm/vmx/vmx.c
++++ b/xen/arch/x86/hvm/vmx/vmx.c
+@@ -2122,6 +2122,25 @@ static int vmx_set_mode(struct vcpu *v, int mode)
+     return 0;
+ }
+ 
++static bool_t vmx_get_pending_event(struct vcpu *v, struct hvm_trap *info)
++{
++    unsigned long intr_info, error_code;
++
++    vmx_vmcs_enter(v);
++    __vmread(VM_ENTRY_INTR_INFO, &intr_info);
++    __vmread(VM_ENTRY_EXCEPTION_ERROR_CODE, &error_code);
++    vmx_vmcs_exit(v);
++
++    if ( !(intr_info & INTR_INFO_VALID_MASK) )
++        return 0;
++
++    info->vector = MASK_EXTR(intr_info, INTR_INFO_VECTOR_MASK);
++    info->type = MASK_EXTR(intr_info, INTR_INFO_INTR_TYPE_MASK);
++    info->error_code = error_code;
++
++    return 1;
++}
++
+ static struct hvm_function_table __initdata vmx_function_table = {
+     .name                 = "VMX",
+     .cpu_up_prepare       = vmx_cpu_up_prepare,
+@@ -2151,6 +2170,7 @@ static struct hvm_function_table __initdata vmx_function_table = {
+     .inject_trap          = vmx_inject_trap,
+     .init_hypercall_page  = vmx_init_hypercall_page,
+     .event_pending        = vmx_event_pending,
++    .get_pending_event    = vmx_get_pending_event,
+     .invlpg               = vmx_invlpg,
+     .cpu_up               = vmx_cpu_up,
+     .cpu_down             = vmx_cpu_down,
+diff --git a/xen/arch/x86/vm_event.c b/xen/arch/x86/vm_event.c
+index a9d3861..c270508 100644
+--- a/xen/arch/x86/vm_event.c
++++ b/xen/arch/x86/vm_event.c
+@@ -122,6 +122,11 @@ void vm_event_set_registers(struct vcpu *v, vm_event_response_t *rsp)
+     v->arch.user_regs.eip = rsp->data.regs.x86.rip;
+ }
+ 
++void vm_event_monitor_next_interrupt(struct vcpu *v)
++{
++    v->arch.monitor.next_interrupt_enabled = 1;
++}
++
+ void vm_event_fill_regs(vm_event_request_t *req)
+ {
+     const struct cpu_user_regs *regs = guest_cpu_user_regs();
+diff --git a/xen/common/vm_event.c b/xen/common/vm_event.c
+index b8f2f45..c3a41db 100644
+--- a/xen/common/vm_event.c
++++ b/xen/common/vm_event.c
+@@ -432,6 +432,9 @@ void vm_event_resume(struct domain *d, struct vm_event_domain *ved)
+             if ( rsp.flags & VM_EVENT_FLAG_TOGGLE_SINGLESTEP )
+                 vm_event_toggle_singlestep(d, v);
+ 
++            if ( rsp.flags & VM_EVENT_FLAG_GET_NEXT_INTERRUPT )
++                vm_event_monitor_next_interrupt(v);
++
+             vm_event_vcpu_unpause(v);
+         }
+     }
+diff --git a/xen/include/asm-arm/vm_event.h b/xen/include/asm-arm/vm_event.h
+index 014d9ba..cc16811 100644
+--- a/xen/include/asm-arm/vm_event.h
++++ b/xen/include/asm-arm/vm_event.h
+@@ -68,4 +68,10 @@ static inline uint32_t vm_event_monitor_get_capabilities(struct domain *d)
+     return capabilities;
+ }
+ 
++static inline
++void vm_event_monitor_next_interrupt(struct vcpu *v)
++{
++    /* Not supported on ARM. */
++}
++
+ #endif /* __ASM_ARM_VM_EVENT_H__ */
+diff --git a/xen/include/asm-x86/domain.h b/xen/include/asm-x86/domain.h
+index 7c27f9e..a29ea84 100644
+--- a/xen/include/asm-x86/domain.h
++++ b/xen/include/asm-x86/domain.h
+@@ -570,6 +570,10 @@ struct arch_vcpu
+     XEN_GUEST_HANDLE(vcpu_time_info_t) time_info_guest;
+ 
+     struct arch_vm_event *vm_event;
++
++    struct {
++        uint8_t next_interrupt_enabled : 1;
++    } monitor;
+ };
+ 
+ smap_check_policy_t smap_policy_change(struct vcpu *v,
+diff --git a/xen/include/asm-x86/hvm/event.h b/xen/include/asm-x86/hvm/event.h
+index 03f7fee..8a5d02c 100644
+--- a/xen/include/asm-x86/hvm/event.h
++++ b/xen/include/asm-x86/hvm/event.h
+@@ -41,6 +41,8 @@ bool_t hvm_event_cr(unsigned int index, unsigned long value,
+ void hvm_event_msr(unsigned int msr, uint64_t value);
+ int hvm_event_breakpoint(unsigned long rip,
+                          enum hvm_event_breakpoint_type type);
++void hvm_event_interrupt(unsigned int vector, unsigned int type,
++                         unsigned int err, uint64_t cr2);
+ 
+ #endif /* __ASM_X86_HVM_EVENT_H__ */
+ 
+diff --git a/xen/include/asm-x86/hvm/hvm.h b/xen/include/asm-x86/hvm/hvm.h
+index 4ee4905..cc256b6 100644
+--- a/xen/include/asm-x86/hvm/hvm.h
++++ b/xen/include/asm-x86/hvm/hvm.h
+@@ -154,6 +154,7 @@ struct hvm_function_table {
+     void (*init_hypercall_page)(struct domain *d, void *hypercall_page);
+ 
+     int  (*event_pending)(struct vcpu *v);
++    bool_t (*get_pending_event)(struct vcpu *v, struct hvm_trap *info);
+     void (*invlpg)(struct vcpu *v, unsigned long vaddr);
+ 
+     int  (*cpu_up_prepare)(unsigned int cpu);
+diff --git a/xen/include/asm-x86/vm_event.h b/xen/include/asm-x86/vm_event.h
+index 0470240..9722ffd 100644
+--- a/xen/include/asm-x86/vm_event.h
++++ b/xen/include/asm-x86/vm_event.h
+@@ -58,7 +58,8 @@ static inline uint32_t vm_event_monitor_get_capabilities(struct domain *d)
+     capabilities = (1U << XEN_DOMCTL_MONITOR_EVENT_WRITE_CTRLREG) |
+                    (1U << XEN_DOMCTL_MONITOR_EVENT_MOV_TO_MSR) |
+                    (1U << XEN_DOMCTL_MONITOR_EVENT_SOFTWARE_BREAKPOINT) |
+-                   (1U << XEN_DOMCTL_MONITOR_EVENT_GUEST_REQUEST);
++                   (1U << XEN_DOMCTL_MONITOR_EVENT_GUEST_REQUEST) |
++                   (1U << XEN_DOMCTL_MONITOR_EVENT_INTERRUPT);
+ 
+     /* Since we know this is on VMX, we can just call the hvm func */
+     if ( hvm_is_singlestep_supported() )
+diff --git a/xen/include/public/domctl.h b/xen/include/public/domctl.h
+index a9146c8..d4c46e0 100644
+--- a/xen/include/public/domctl.h
++++ b/xen/include/public/domctl.h
+@@ -1083,6 +1083,7 @@ DEFINE_XEN_GUEST_HANDLE(xen_domctl_psr_cmt_op_t);
+ #define XEN_DOMCTL_MONITOR_EVENT_SINGLESTEP            2
+ #define XEN_DOMCTL_MONITOR_EVENT_SOFTWARE_BREAKPOINT   3
+ #define XEN_DOMCTL_MONITOR_EVENT_GUEST_REQUEST         4
++#define XEN_DOMCTL_MONITOR_EVENT_INTERRUPT             8
+ 
+ struct xen_domctl_monitor_op {
+     uint32_t op; /* XEN_DOMCTL_MONITOR_OP_* */
+diff --git a/xen/include/public/vm_event.h b/xen/include/public/vm_event.h
+index 9270d52..b7e394c 100644
+--- a/xen/include/public/vm_event.h
++++ b/xen/include/public/vm_event.h
+@@ -96,6 +96,11 @@
+  * Requires the vCPU to be paused already (synchronous events only).
+  */
+ #define VM_EVENT_FLAG_SET_REGISTERS      (1 << 8)
++/*
++ * Have a one-shot VM_EVENT_REASON_INTERRUPT event sent for the first
++ * interrupt pending after resuming the VCPU.
++ */
++#define VM_EVENT_FLAG_GET_NEXT_INTERRUPT (1 << 10)
+ 
+ /*
+  * Reasons for the vm event request
+@@ -119,6 +124,8 @@
+ #define VM_EVENT_REASON_SINGLESTEP              7
+ /* An event has been requested via HVMOP_guest_request_vm_event. */
+ #define VM_EVENT_REASON_GUEST_REQUEST           8
++/* An interrupt has been delivered. */
++#define VM_EVENT_REASON_INTERRUPT               12
+ 
+ /* Supported values for the vm_event_write_ctrlreg index. */
+ #define VM_EVENT_X86_CR0    0
+@@ -212,6 +219,14 @@ struct vm_event_mov_to_msr {
+     uint64_t value;
+ };
+ 
++struct vm_event_interrupt_x86 {
++    uint32_t vector;
++    uint32_t type;
++    uint32_t error_code;
++    uint32_t _pad;
++    uint64_t cr2;
++};
++
+ #define MEM_PAGING_DROP_PAGE       (1 << 0)
+ #define MEM_PAGING_EVICT_FAIL      (1 << 1)
+ 
+@@ -249,6 +264,9 @@ typedef struct vm_event_st {
+         struct vm_event_mov_to_msr            mov_to_msr;
+         struct vm_event_debug                 software_breakpoint;
+         struct vm_event_debug                 singlestep;
++        union {
++            struct vm_event_interrupt_x86     x86;
++        } interrupt;
+     } u;
+ 
+     union {
+diff --git a/xen/include/xen/vm_event.h b/xen/include/xen/vm_event.h
+index beda9fe..f44374a 100644
+--- a/xen/include/xen/vm_event.h
++++ b/xen/include/xen/vm_event.h
+@@ -83,6 +83,8 @@ int vm_event_monitor_traps(struct vcpu *v, uint8_t sync,
+ 
+ void vm_event_monitor_guest_request(void);
+ 
++void vm_event_monitor_next_interrupt(struct vcpu *v);
++
+ #endif /* __VM_EVENT_H__ */
+ 
+ 

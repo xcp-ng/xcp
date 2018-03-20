@@ -1,0 +1,201 @@
+From 7b6546e8314799053ce17241a493742912ad8809 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Tue, 3 Oct 2017 16:21:00 +0100
+Subject: [PATCH] x86/vvmx: make updating shadow EPTP value more efficient
+
+At the moment, the shadow EPTP value is written unconditionally in
+ept_handle_violation().
+
+Instead, write the value on vmentry to the guest; but only write it if
+the value needs updating.
+
+To detect this, add a flag to the nestedvcpu struct, stale_np2m, to
+indicate when such an action is necessary.  Set it when the nested p2m
+changes or when the np2m is flushed by an IPI, and clear it when we
+write the new value.
+
+Since an IPI invalidating the p2m may happen between
+nvmx_switch_guest() and vmx_vmenter, but we can't perform the vmwrite
+with interrupts disabled, check the flag just before entering the
+guest and restart the vmentry if it's set.
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Signed-off-by: George Dunlap <george.dunlap@citrix.com>
+Acked-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Jun Nakajima <jun.nakajima@intel.com>
+diff --git a/xen/arch/x86/hvm/nestedhvm.c b/xen/arch/x86/hvm/nestedhvm.c
+index caad525054..94b1dd2c82 100644
+--- a/xen/arch/x86/hvm/nestedhvm.c
++++ b/xen/arch/x86/hvm/nestedhvm.c
+@@ -57,6 +57,7 @@ nestedhvm_vcpu_reset(struct vcpu *v)
+     nv->nv_vvmcxaddr = VMCX_EADDR;
+     nv->nv_flushp2m = 0;
+     nv->nv_p2m = NULL;
++    nv->stale_np2m = false;
+ 
+     hvm_asid_flush_vcpu_asid(&nv->nv_n2asid);
+ 
+@@ -108,6 +109,7 @@ nestedhvm_flushtlb_ipi(void *info)
+      */
+     hvm_asid_flush_core();
+     vcpu_nestedhvm(v).nv_p2m = NULL;
++    vcpu_nestedhvm(v).stale_np2m = true;
+ }
+ 
+ void
+diff --git a/xen/arch/x86/hvm/vmx/entry.S b/xen/arch/x86/hvm/vmx/entry.S
+index 3d98ee2d87..c3012efb21 100644
+--- a/xen/arch/x86/hvm/vmx/entry.S
++++ b/xen/arch/x86/hvm/vmx/entry.S
+@@ -78,6 +78,8 @@ UNLIKELY_END(realmode)
+ 
+         mov  %rsp,%rdi
+         call vmx_vmenter_helper
++        test %al, %al
++        jz .Lvmx_vmentry_restart
+         mov  VCPU_hvm_guest_cr2(%rbx),%rax
+ 
+         pop  %r15
+@@ -116,6 +118,10 @@ ENTRY(vmx_asm_do_vmentry)
+         GET_CURRENT(bx)
+         jmp  .Lvmx_do_vmentry
+ 
++.Lvmx_vmentry_restart:
++        sti
++        jmp  .Lvmx_do_vmentry
++
+ .Lvmx_goto_emulator:
+         sti
+         mov  %rsp,%rdi
+diff --git a/xen/arch/x86/hvm/vmx/vmx.c b/xen/arch/x86/hvm/vmx/vmx.c
+index 87ca9cb7d1..73eea73f7a 100644
+--- a/xen/arch/x86/hvm/vmx/vmx.c
++++ b/xen/arch/x86/hvm/vmx/vmx.c
+@@ -3154,12 +3154,6 @@ static void ept_handle_violation(unsigned long qualification, paddr_t gpa)
+     case 0:         // Unhandled L1 EPT violation
+         break;
+     case 1:         // This violation is handled completly
+-        /*Current nested EPT maybe flushed by other vcpus, so need
+-         * to re-set its shadow EPTP pointer.
+-         */
+-        if ( nestedhvm_vcpu_in_guestmode(current) &&
+-                        nestedhvm_paging_mode_hap(current ) )
+-            __vmwrite(EPT_POINTER, get_shadow_eptp(current));
+         return;
+     case -1:        // This vioaltion should be injected to L1 VMM
+         vcpu_nestedhvm(current).nv_vmexit_pending = 1;
+@@ -4042,13 +4036,18 @@ static void lbr_fixup(void)
+         bdw_erratum_bdf14_fixup();
+ }
+ 
+-void vmx_vmenter_helper(const struct cpu_user_regs *regs)
++/* Returns false if the vmentry has to be restarted */
++bool vmx_vmenter_helper(const struct cpu_user_regs *regs)
+ {
+     struct vcpu *curr = current;
+     u32 new_asid, old_asid;
+     struct hvm_vcpu_asid *p_asid;
+     bool_t need_flush;
+ 
++    /* Shadow EPTP can't be updated here because irqs are disabled */
++     if ( nestedhvm_vcpu_in_guestmode(curr) && vcpu_nestedhvm(curr).stale_np2m )
++         return false;
++
+     if ( curr->domain->arch.hvm_domain.vmx.pi_do_resume )
+         curr->domain->arch.hvm_domain.vmx.pi_do_resume(curr);
+ 
+@@ -4109,6 +4108,8 @@ void vmx_vmenter_helper(const struct cpu_user_regs *regs)
+     __vmwrite(GUEST_RIP,    regs->rip);
+     __vmwrite(GUEST_RSP,    regs->rsp);
+     __vmwrite(GUEST_RFLAGS, regs->rflags | X86_EFLAGS_MBS);
++
++    return true;
+ }
+ 
+ /*
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 2901b5f1e7..12ab1d3a4b 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -1394,12 +1394,34 @@ static void virtual_vmexit(struct cpu_user_regs *regs)
+     vmsucceed(regs);
+ }
+ 
++static void nvmx_eptp_update(void)
++{
++    struct vcpu *curr = current;
++
++    if ( !nestedhvm_vcpu_in_guestmode(curr) ||
++          vcpu_nestedhvm(curr).nv_vmexit_pending ||
++         !vcpu_nestedhvm(curr).stale_np2m ||
++         !nestedhvm_paging_mode_hap(curr) )
++        return;
++
++    /*
++     * Interrupts are enabled here, so we need to clear stale_np2m
++     * before we do the vmwrite.  If we do it in the other order, an
++     * and IPI comes in changing the shadow eptp after the vmwrite,
++     * we'll complete the vmenter with a stale eptp value.
++     */
++    vcpu_nestedhvm(curr).stale_np2m = false;
++    __vmwrite(EPT_POINTER, get_shadow_eptp(curr));
++}
++
+ void nvmx_switch_guest(void)
+ {
+     struct vcpu *v = current;
+     struct nestedvcpu *nvcpu = &vcpu_nestedhvm(v);
+     struct cpu_user_regs *regs = guest_cpu_user_regs();
+ 
++    nvmx_eptp_update();
++
+     /*
+      * A pending IO emulation may still be not finished. In this case, no
+      * virtual vmswitch is allowed. Or else, the following IO emulation will
+diff --git a/xen/arch/x86/mm/p2m.c b/xen/arch/x86/mm/p2m.c
+index 76ea0e0a46..30717e6e3f 100644
+--- a/xen/arch/x86/mm/p2m.c
++++ b/xen/arch/x86/mm/p2m.c
+@@ -2123,6 +2123,12 @@ static void assign_np2m(struct vcpu *v, struct p2m_domain *p2m)
+     cpumask_set_cpu(v->processor, p2m->dirty_cpumask);
+ }
+ 
++static void nvcpu_flush(struct vcpu *v)
++{
++    hvm_asid_flush_vcpu(v);
++    vcpu_nestedhvm(v).stale_np2m = true;
++}
++
+ struct p2m_domain *
+ p2m_get_nestedp2m_locked(struct vcpu *v)
+ {
+@@ -2146,7 +2152,7 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+         if ( p2m->np2m_base == np2m_base || p2m->np2m_base == P2M_BASE_EADDR )
+         {
+             if ( p2m->np2m_base == P2M_BASE_EADDR )
+-                hvm_asid_flush_vcpu(v);
++                nvcpu_flush(v);
+             p2m->np2m_base = np2m_base;
+             assign_np2m(v, p2m);
+             nestedp2m_unlock(d);
+@@ -2162,7 +2168,7 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+     p2m_flush_table(p2m);
+     p2m_lock(p2m);
+     p2m->np2m_base = np2m_base;
+-    hvm_asid_flush_vcpu(v);
++    nvcpu_flush(v);
+     assign_np2m(v, p2m);
+     nestedp2m_unlock(d);
+ 
+diff --git a/xen/include/asm-x86/hvm/vcpu.h b/xen/include/asm-x86/hvm/vcpu.h
+index 8a4a92f4be..d2a29f2257 100644
+--- a/xen/include/asm-x86/hvm/vcpu.h
++++ b/xen/include/asm-x86/hvm/vcpu.h
+@@ -117,6 +117,7 @@ struct nestedvcpu {
+ 
+     bool_t nv_flushp2m; /* True, when p2m table must be flushed */
+     struct p2m_domain *nv_p2m; /* used p2m table for this vcpu */
++    bool stale_np2m; /* True when p2m_base in VMCx02 is no longer valid */
+ 
+     struct hvm_vcpu_asid nv_n2asid;
+ 

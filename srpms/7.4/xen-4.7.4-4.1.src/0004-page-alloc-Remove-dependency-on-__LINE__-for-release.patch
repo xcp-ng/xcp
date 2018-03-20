@@ -1,0 +1,43 @@
+page-alloc: Replace BOOT_BUG_ON with BUG_ON
+
+Replace uses of BOOT_BUG_ON() with BUG_ON() since it doesn't provide any
+benefit.
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+diff --git a/xen/common/page_alloc.c b/xen/common/page_alloc.c
+index fabfe0a..00e4cf1 100644
+--- a/xen/common/page_alloc.c
++++ b/xen/common/page_alloc.c
+@@ -206,12 +206,6 @@ struct scrub_region {
+ static struct scrub_region __initdata region[MAX_NUMNODES];
+ static unsigned long __initdata chunk_size;
+ 
+-static void __init boot_bug(int line)
+-{
+-    panic("Boot BUG at %s:%d", __FILE__, line);
+-}
+-#define BOOT_BUG_ON(p) if ( p ) boot_bug(__LINE__);
+-
+ static void __init bootmem_region_add(unsigned long s, unsigned long e)
+ {
+     unsigned int i;
+@@ -226,8 +220,8 @@ static void __init bootmem_region_add(unsigned long s, unsigned long e)
+         if ( s < bootmem_region_list[i].e )
+             break;
+ 
+-    BOOT_BUG_ON((i < nr_bootmem_regions) && (e > bootmem_region_list[i].s));
+-    BOOT_BUG_ON(nr_bootmem_regions ==
++    BUG_ON((i < nr_bootmem_regions) && (e > bootmem_region_list[i].s));
++    BUG_ON(nr_bootmem_regions ==
+                 (PAGE_SIZE / sizeof(struct bootmem_region)));
+ 
+     memmove(&bootmem_region_list[i+1], &bootmem_region_list[i],
+@@ -362,7 +356,7 @@ unsigned long __init alloc_boot_pages(
+         return pg;
+     }
+ 
+-    BOOT_BUG_ON(1);
++    BUG_ON(1);
+     return 0;
+ }
+ 

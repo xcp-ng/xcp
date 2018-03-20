@@ -1,0 +1,29 @@
+From 4c09689153c32a61ebf547391caecdfa55d1ae8b Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Tue, 20 Jun 2017 17:13:02 +0200
+Subject: [PATCH] rombios/ata: wait for BSY to clear after write
+
+After rombios transfers the data for a write, it checks the status and
+fails if BSY is set. qemu-trad doesn't set BSY for PIO writes, but QEMU
+upstream does, and this causes rombios to fail writes because they are
+marked as BSY. Instead, wait for BSY to clear after a write.
+
+INT 13 writes are probably rarely used these days, but they are used by
+GRUB 2 to write to its environment file which happens by default on
+Ubuntu.
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+Acked-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/tools/firmware/rombios/rombios.c b/tools/firmware/rombios/rombios.c
+index 58ace9b..51558ee 100644
+--- a/tools/firmware/rombios/rombios.c
++++ b/tools/firmware/rombios/rombios.c
+@@ -3226,7 +3226,7 @@ ASM_END
+     current++;
+     write_word(ebda_seg, &EbdaData->ata.trsfsectors,current);
+     count--;
+-    status = inb(iobase1 + ATA_CB_STAT);
++    status = await_ide(NOT_BSY, iobase1, IDE_TIMEOUT);
+     if (count == 0) {
+       if ( (status & (ATA_CB_STAT_BSY | ATA_CB_STAT_RDY | ATA_CB_STAT_DF | ATA_CB_STAT_DRQ | ATA_CB_STAT_ERR) )
+           != ATA_CB_STAT_RDY ) {

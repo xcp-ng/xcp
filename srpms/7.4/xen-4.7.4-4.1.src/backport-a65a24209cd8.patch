@@ -1,0 +1,213 @@
+From a65a24209cd81fa619097b09d7ede275f8a78bd2 Mon Sep 17 00:00:00 2001
+From: Sergey Dyasli <sergey.dyasli@citrix.com>
+Date: Tue, 3 Oct 2017 16:21:01 +0100
+Subject: [PATCH] x86/np2m: send flush IPIs only when a vcpu is actively using
+ an np2m
+
+Flush IPIs are sent to all cpus in an np2m's dirty_cpumask when
+updated.  This mask however is far too broad.  A pcpu's bit is set in
+the cpumask when a vcpu runs on that pcpu, but is only cleared when a
+flush happens.  This means that the IPI includes the current pcpu of
+vcpus that are not currently running, and also includes any pcpu that
+has ever had a vcpu use this p2m since the last flush (which in turn
+will cause spurious invalidations if a different vcpu is using an np2m).
+
+Avoid these IPIs by keeping closer track of where an np2m is being used,
+and when a vcpu needs to be flushed:
+
+- On schedule-out, clear v->processor in p2m->dirty_cpumask
+- Add a 'generation' counter to the p2m and nestedvcpu structs to
+  detect changes that would require re-loads on re-entry
+- On schedule-in or p2m change:
+  - Set v->processor in p2m->dirty_cpumask
+  - flush the vcpu's nested p2m pointer (and update nv->generation) if
+    the generation changed
+
+Signed-off-by: Sergey Dyasli <sergey.dyasli@citrix.com>
+Signed-off-by: George Dunlap <george.dunlap@citrix.com>
+Acked-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Jun Nakajima <jun.nakajima@intel.com>
+diff --git a/xen/arch/x86/domain.c b/xen/arch/x86/domain.c
+index 452748dd5b..d4f9fb10fd 100644
+--- a/xen/arch/x86/domain.c
++++ b/xen/arch/x86/domain.c
+@@ -2092,6 +2092,7 @@ void context_switch(struct vcpu *prev, struct vcpu *next)
+     {
+         _update_runstate_area(prev);
+         vpmu_switch_from(prev);
++        np2m_schedule(NP2M_SCHEDLE_OUT);
+     }
+ 
+     if ( is_hvm_domain(prevd) && !list_empty(&prev->arch.hvm_vcpu.tm_list) )
+@@ -2140,6 +2141,7 @@ void context_switch(struct vcpu *prev, struct vcpu *next)
+ 
+         /* Must be done with interrupts enabled */
+         vpmu_switch_to(next);
++        np2m_schedule(NP2M_SCHEDLE_IN);
+     }
+ 
+     /* Ensure that the vcpu has an up-to-date time base. */
+diff --git a/xen/arch/x86/hvm/nestedhvm.c b/xen/arch/x86/hvm/nestedhvm.c
+index 94b1dd2c82..fefb66f148 100644
+--- a/xen/arch/x86/hvm/nestedhvm.c
++++ b/xen/arch/x86/hvm/nestedhvm.c
+@@ -58,6 +58,7 @@ nestedhvm_vcpu_reset(struct vcpu *v)
+     nv->nv_flushp2m = 0;
+     nv->nv_p2m = NULL;
+     nv->stale_np2m = false;
++    nv->np2m_generation = 0;
+ 
+     hvm_asid_flush_vcpu_asid(&nv->nv_n2asid);
+ 
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 12ab1d3a4b..2602d47e4d 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -1356,6 +1356,9 @@ static void virtual_vmexit(struct cpu_user_regs *regs)
+          !(v->arch.hvm_vcpu.guest_efer & EFER_LMA) )
+         shadow_to_vvmcs_bulk(v, ARRAY_SIZE(gpdpte_fields), gpdpte_fields);
+ 
++    /* This will clear current pCPU bit in p2m->dirty_cpumask */
++    np2m_schedule(NP2M_SCHEDLE_OUT);
++
+     vmx_vmcs_switch(v->arch.hvm_vmx.vmcs_pa, nvcpu->nv_n1vmcx_pa);
+ 
+     nestedhvm_vcpu_exit_guestmode(v);
+diff --git a/xen/arch/x86/mm/p2m.c b/xen/arch/x86/mm/p2m.c
+index 30717e6e3f..4d0e753b9d 100644
+--- a/xen/arch/x86/mm/p2m.c
++++ b/xen/arch/x86/mm/p2m.c
+@@ -75,6 +75,7 @@ static int p2m_initialise(struct domain *d, struct p2m_domain *p2m)
+     p2m->p2m_class = p2m_host;
+ 
+     p2m->np2m_base = P2M_BASE_EADDR;
++    p2m->np2m_generation = 0;
+ 
+     for ( i = 0; i < ARRAY_SIZE(p2m->pod.mrp.list); ++i )
+         p2m->pod.mrp.list[i] = INVALID_GFN;
+@@ -2046,6 +2047,7 @@ p2m_flush_table_locked(struct p2m_domain *p2m)
+ 
+     /* This is no longer a valid nested p2m for any address space */
+     p2m->np2m_base = P2M_BASE_EADDR;
++    p2m->np2m_generation++;
+ 
+     /* Make sure nobody else is using this p2m table */
+     nestedhvm_vmcx_flushtlb(p2m);
+@@ -2120,6 +2122,7 @@ static void assign_np2m(struct vcpu *v, struct p2m_domain *p2m)
+ 
+     nv->nv_flushp2m = 0;
+     nv->nv_p2m = p2m;
++    nv->np2m_generation = p2m->np2m_generation;
+     cpumask_set_cpu(v->processor, p2m->dirty_cpumask);
+ }
+ 
+@@ -2151,7 +2154,9 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+         p2m_lock(p2m);
+         if ( p2m->np2m_base == np2m_base || p2m->np2m_base == P2M_BASE_EADDR )
+         {
+-            if ( p2m->np2m_base == P2M_BASE_EADDR )
++            /* Check if np2m was flushed just before the lock */
++            if ( p2m->np2m_base == P2M_BASE_EADDR ||
++                 nv->np2m_generation != p2m->np2m_generation )
+                 nvcpu_flush(v);
+             p2m->np2m_base = np2m_base;
+             assign_np2m(v, p2m);
+@@ -2159,6 +2164,11 @@ p2m_get_nestedp2m_locked(struct vcpu *v)
+ 
+             return p2m;
+         }
++        else
++        {
++            /* vCPU is switching from some other valid np2m */
++            cpumask_clear_cpu(v->processor, p2m->dirty_cpumask);
++        }
+         p2m_unlock(p2m);
+     }
+ 
+@@ -2192,6 +2202,50 @@ p2m_get_p2m(struct vcpu *v)
+     return p2m_get_nestedp2m(v);
+ }
+ 
++void np2m_schedule(int dir)
++{
++    struct vcpu *curr = current;
++    struct nestedvcpu *nv = &vcpu_nestedhvm(curr);
++    struct p2m_domain *p2m;
++
++    ASSERT(dir == NP2M_SCHEDLE_IN || dir == NP2M_SCHEDLE_OUT);
++
++    if ( !nestedhvm_enabled(curr->domain) ||
++         !nestedhvm_vcpu_in_guestmode(curr) ||
++         !nestedhvm_paging_mode_hap(curr) )
++        return;
++
++    p2m = nv->nv_p2m;
++    if ( p2m )
++    {
++        bool np2m_valid;
++
++        p2m_lock(p2m);
++        np2m_valid = p2m->np2m_base == nhvm_vcpu_p2m_base(curr) &&
++                     nv->np2m_generation == p2m->np2m_generation;
++        if ( dir == NP2M_SCHEDLE_OUT && np2m_valid )
++        {
++            /*
++             * The np2m is up to date but this vCPU will no longer use it,
++             * which means there are no reasons to send a flush IPI.
++             */
++            cpumask_clear_cpu(curr->processor, p2m->dirty_cpumask);
++        }
++        else if ( dir == NP2M_SCHEDLE_IN )
++        {
++            if ( !np2m_valid )
++            {
++                /* This vCPU's np2m was flushed while it was not runnable */
++                hvm_asid_flush_core();
++                vcpu_nestedhvm(curr).nv_p2m = NULL;
++            }
++            else
++                cpumask_set_cpu(curr->processor, p2m->dirty_cpumask);
++        }
++        p2m_unlock(p2m);
++    }
++}
++
+ unsigned long paging_gva_to_gfn(struct vcpu *v,
+                                 unsigned long va,
+                                 uint32_t *pfec)
+diff --git a/xen/include/asm-x86/hvm/vcpu.h b/xen/include/asm-x86/hvm/vcpu.h
+index d2a29f2257..e908b3513b 100644
+--- a/xen/include/asm-x86/hvm/vcpu.h
++++ b/xen/include/asm-x86/hvm/vcpu.h
+@@ -118,6 +118,7 @@ struct nestedvcpu {
+     bool_t nv_flushp2m; /* True, when p2m table must be flushed */
+     struct p2m_domain *nv_p2m; /* used p2m table for this vcpu */
+     bool stale_np2m; /* True when p2m_base in VMCx02 is no longer valid */
++    uint64_t np2m_generation;
+ 
+     struct hvm_vcpu_asid nv_n2asid;
+ 
+diff --git a/xen/include/asm-x86/p2m.h b/xen/include/asm-x86/p2m.h
+index f9f78b7d54..623be21115 100644
+--- a/xen/include/asm-x86/p2m.h
++++ b/xen/include/asm-x86/p2m.h
+@@ -208,6 +208,7 @@ struct p2m_domain {
+      * to set it to any other value. */
+ #define P2M_BASE_EADDR     (~0ULL)
+     uint64_t           np2m_base;
++    uint64_t           np2m_generation;
+ 
+     /* Nested p2ms: linked list of n2pms allocated to this domain. 
+      * The host p2m hasolds the head of the list and the np2ms are 
+@@ -353,6 +354,11 @@ struct p2m_domain *p2m_get_nestedp2m_locked(struct vcpu *v);
+  */
+ struct p2m_domain *p2m_get_p2m(struct vcpu *v);
+ 
++#define NP2M_SCHEDLE_IN  0
++#define NP2M_SCHEDLE_OUT 1
++
++void np2m_schedule(int dir);
++
+ static inline bool_t p2m_is_hostp2m(const struct p2m_domain *p2m)
+ {
+     return p2m->p2m_class == p2m_host;

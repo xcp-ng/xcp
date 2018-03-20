@@ -1,0 +1,45 @@
+From 8d309a9fa0cd9bdfa609ef235ff06ea550e1e6ef Mon Sep 17 00:00:00 2001
+From: Wei Liu <wei.liu2@citrix.com>
+Date: Wed, 5 Oct 2016 15:29:59 +0100
+Subject: [PATCH 8/9] gcov: provide the capability to select gcov format
+ automatically
+
+And make it the default in Kconfig.
+
+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
+Acked-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/xen/Kconfig.debug b/xen/Kconfig.debug
+index c9e60da..2398a79 100644
+--- a/xen/Kconfig.debug
++++ b/xen/Kconfig.debug
+@@ -38,10 +38,17 @@ config GCOV
+ choice
+ 	prompt "Specify Gcov format"
+ 	depends on GCOV
+-	default GCOV_FORMAT_5
++	default GCOV_FORMAT_AUTODETECT
+ 	---help---
+ 	  The gcov format is determined by gcc version.
+ 
++	  If unsure, choose "Autodetect".
++
++config GCOV_FORMAT_AUTODETECT
++	bool "Autodetect"
++	---help---
++	  Automatically select gcov format based on gcc version.
++
+ config GCOV_FORMAT_5
+ 	bool "GCC 5 format"
+ 	---help---
+diff --git a/xen/common/gcov/Makefile b/xen/common/gcov/Makefile
+index 6a304ab..1b61357 100644
+--- a/xen/common/gcov/Makefile
++++ b/xen/common/gcov/Makefile
+@@ -3,3 +3,7 @@ obj-$(CONFIG_GCOV_FORMAT_3_4) += gcc_3_4.o
+ obj-$(CONFIG_GCOV_FORMAT_4_7) += gcc_4_7.o
+ obj-$(CONFIG_GCOV_FORMAT_4_9) += gcc_4_9.o
+ obj-$(CONFIG_GCOV_FORMAT_5)   += gcc_5.o
++obj-$(CONFIG_GCOV_FORMAT_AUTODETECT) += $(call cc-ifversion,lt,0x040700, \
++						gcc_3_4.o, $(call cc-ifversion,lt,0x040900, \
++						gcc_4_7.o, $(call cc-ifversion,lt,0x050000, \
++						gcc_4_9.o, gcc_5.o)))

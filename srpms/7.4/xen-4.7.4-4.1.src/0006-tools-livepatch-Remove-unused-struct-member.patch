@@ -1,0 +1,18 @@
+From 739c9b222ae630544bc3519d1d6545d10402e156 Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Mon, 5 Sep 2016 13:52:09 +0100
+Subject: [PATCH 6/6] tools/livepatch: Remove unused struct member
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+diff --git a/tools/misc/xen-livepatch.c b/tools/misc/xen-livepatch.c
+index ef37d3d..2583675 100644
+--- a/tools/misc/xen-livepatch.c
++++ b/tools/misc/xen-livepatch.c
+@@ -236,7 +236,6 @@ struct {
+     const char *name;
+     const char *verb;
+     int (*function)(xc_interface *xch, char *name, uint32_t timeout);
+-    unsigned int executed; /* Has the function been called?. */
+ } action_options[] = {
+     {   .allow = LIVEPATCH_STATE_CHECKED,
+         .expected = LIVEPATCH_STATE_APPLIED,

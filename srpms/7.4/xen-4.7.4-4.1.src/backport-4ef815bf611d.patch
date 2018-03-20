@@ -1,0 +1,54 @@
+From 88757fde651e8181363e8bb348004c0f1ae647be Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Thu, 14 Jul 2016 16:34:52 +0100
+Subject: [PATCH] xen/flask: Rename cond_expr.bool to bool_val
+
+A subsequent change will introduce C99 bools, at which point 'bool'
+becomes a type, and ineligible as a variable name.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+diff --git a/xen/xsm/flask/ss/conditional.c b/xen/xsm/flask/ss/conditional.c
+index 098ddc0..3e58aea 100644
+--- a/xen/xsm/flask/ss/conditional.c
++++ b/xen/xsm/flask/ss/conditional.c
+@@ -40,7 +40,7 @@ static int cond_evaluate_expr(struct policydb *p, struct cond_expr *expr)
+                 if ( sp == (COND_EXPR_MAXDEPTH - 1) )
+                     return -1;
+                 sp++;
+-                s[sp] = p->bool_val_to_struct[cur->bool - 1]->state;
++                s[sp] = p->bool_val_to_struct[cur->bool_val - 1]->state;
+             break;
+             case COND_NOT:
+                 if ( sp < 0 )
+@@ -404,7 +404,7 @@ static int expr_isvalid(struct policydb *p, struct cond_expr *expr)
+         return 0;
+     }
+ 
+-    if ( expr->bool > p->p_bools.nprim )
++    if ( expr->bool_val > p->p_bools.nprim )
+     {
+         printk("Flask: conditional expressions uses unknown bool.\n");
+         return 0;
+@@ -444,7 +444,7 @@ static int cond_read_node(struct policydb *p, struct cond_node *node, void *fp)
+             goto err;
+ 
+         expr->expr_type = le32_to_cpu(buf[0]);
+-        expr->bool = le32_to_cpu(buf[1]);
++        expr->bool_val = le32_to_cpu(buf[1]);
+ 
+         if ( !expr_isvalid(p, expr) )
+         {
+diff --git a/xen/xsm/flask/ss/conditional.h b/xen/xsm/flask/ss/conditional.h
+index d389ecf..59ac6b4 100644
+--- a/xen/xsm/flask/ss/conditional.h
++++ b/xen/xsm/flask/ss/conditional.h
+@@ -30,7 +30,7 @@ struct cond_expr {
+ #define COND_NEQ    7 /* bool != bool */
+ #define COND_LAST    COND_NEQ
+     __u32 expr_type;
+-    __u32 bool;
++    __u32 bool_val;
+     struct cond_expr *next;
+ };
+ 

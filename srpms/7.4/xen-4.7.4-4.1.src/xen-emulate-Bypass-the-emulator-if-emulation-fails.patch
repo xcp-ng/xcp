@@ -1,0 +1,85 @@
+From 703cf0386ac0543426a6993cb413ca9127e87d84 Mon Sep 17 00:00:00 2001
+From: Razvan Cojocaru <rcojocaru@bitdefender.com>
+Date: Tue, 27 Sep 2016 11:01:17 +0300
+Subject: x86/emulate: Bypass the emulator if emulation fails
+
+If emulation fails in hvm_do_resume(), single-step instead.
+
+Signed-off-by: Razvan Cojocaru <rcojocaru@bitdefender.com>
+diff --git a/xen/arch/x86/hvm/emulate.c b/xen/arch/x86/hvm/emulate.c
+index 2baff6f..3fc811a 100644
+--- a/xen/arch/x86/hvm/emulate.c
++++ b/xen/arch/x86/hvm/emulate.c
+@@ -1904,8 +1904,8 @@ int hvm_emulate_one_mmio(unsigned long mfn, unsigned long gla)
+     return rc;
+ }
+ 
+-void hvm_mem_access_emulate_one(enum emul_kind kind, unsigned int trapnr,
+-    unsigned int errcode)
++int hvm_mem_access_emulate_one(enum emul_kind kind, unsigned int trapnr,
++    unsigned int errcode, bool_t treat_unhandleable)
+ {
+     struct hvm_emulate_ctxt ctx = {{ 0 }};
+     int rc;
+@@ -1933,10 +1933,11 @@ void hvm_mem_access_emulate_one(enum emul_kind kind, unsigned int trapnr,
+          * returning makes the current instruction cause a page fault again,
+          * consistent with X86EMUL_RETRY.
+          */
+-        return;
++        return rc;
+     case X86EMUL_UNHANDLEABLE:
+         hvm_dump_emulation_state(XENLOG_G_DEBUG "Mem event", &ctx);
+-        hvm_inject_hw_exception(trapnr, errcode);
++        if ( treat_unhandleable )
++            hvm_inject_hw_exception(trapnr, errcode);
+         break;
+     case X86EMUL_EXCEPTION:
+         if ( ctx.exn_pending )
+@@ -1945,6 +1946,8 @@ void hvm_mem_access_emulate_one(enum emul_kind kind, unsigned int trapnr,
+     }
+ 
+     hvm_emulate_writeback(&ctx);
++
++    return rc;
+ }
+ 
+ void hvm_emulate_prepare(
+diff --git a/xen/arch/x86/hvm/vm_event.c b/xen/arch/x86/hvm/vm_event.c
+index 3a2c8f8..d80b162 100644
+--- a/xen/arch/x86/hvm/vm_event.c
++++ b/xen/arch/x86/hvm/vm_event.c
+@@ -85,8 +85,15 @@ void hvm_vm_event_do_resume(struct vcpu *v)
+             vmx_start_reexecute_instruction(v, v->arch.vm_event->gpa,
+                                             XENMEM_access_x);
+         else
+-            hvm_mem_access_emulate_one(kind, TRAP_invalid_op,
+-                                       HVM_DELIVER_NO_ERROR_CODE);
++        {
++            int rc = hvm_mem_access_emulate_one(kind, TRAP_invalid_op,
++                                                HVM_DELIVER_NO_ERROR_CODE,
++                                                !opt_introspection_extn);
++
++            if ( opt_introspection_extn && rc == X86EMUL_UNHANDLEABLE )
++                vmx_start_reexecute_instruction(v, v->arch.vm_event->gpa,
++                                                XENMEM_access_rwx);
++        }
+ 
+         v->arch.vm_event->emulate_flags = 0;
+     }
+diff --git a/xen/include/asm-x86/hvm/emulate.h b/xen/include/asm-x86/hvm/emulate.h
+index d0d374b..720b5ff 100644
+--- a/xen/include/asm-x86/hvm/emulate.h
++++ b/xen/include/asm-x86/hvm/emulate.h
+@@ -47,9 +47,10 @@ int hvm_emulate_one(
+     struct hvm_emulate_ctxt *hvmemul_ctxt);
+ int hvm_emulate_one_no_write(
+     struct hvm_emulate_ctxt *hvmemul_ctxt);
+-void hvm_mem_access_emulate_one(enum emul_kind kind,
++int hvm_mem_access_emulate_one(enum emul_kind kind,
+     unsigned int trapnr,
+-    unsigned int errcode);
++    unsigned int errcode,
++    bool_t treat_unhandleable);
+ void hvm_emulate_prepare(
+     struct hvm_emulate_ctxt *hvmemul_ctxt,
+     struct cpu_user_regs *regs);

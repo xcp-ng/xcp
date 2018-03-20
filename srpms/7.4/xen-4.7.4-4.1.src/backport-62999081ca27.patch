@@ -1,0 +1,168 @@
+From 62999081ca27f1a6e3020f0b566fe5b660b19a60 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Tue, 18 Jul 2017 14:44:05 +0000
+Subject: [PATCH] x86/vmx: Introduce and use struct vmx_msr_bitmap
+
+This avoids opencoding the bitmap bases in accessor functions.  Introduce a
+build_assertions() function to check the structure layout against the manual
+definiton.  In addition, drop some stale comments and ASSERT() that callers
+pass an in-range MSR.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vmcs.c b/xen/arch/x86/hvm/vmx/vmcs.c
+index 0bb0338885..8d20cd21b5 100644
+--- a/xen/arch/x86/hvm/vmx/vmcs.c
++++ b/xen/arch/x86/hvm/vmx/vmcs.c
+@@ -806,7 +806,7 @@ static void vmx_set_host_env(struct vcpu *v)
+ void vmx_clear_msr_intercept(struct vcpu *v, unsigned int msr,
+                              enum vmx_msr_intercept_type type)
+ {
+-    unsigned long *msr_bitmap = v->arch.hvm_vmx.msr_bitmap;
++    struct vmx_msr_bitmap *msr_bitmap = v->arch.hvm_vmx.msr_bitmap;
+     struct domain *d = v->domain;
+ 
+     /* VMX MSR bitmap supported? */
+@@ -816,68 +816,51 @@ void vmx_clear_msr_intercept(struct vcpu *v, unsigned int msr,
+     if ( unlikely(monitored_msr(d, msr)) )
+         return;
+ 
+-    /*
+-     * See Intel PRM Vol. 3, 20.6.9 (MSR-Bitmap Address). Early manuals
+-     * have the write-low and read-high bitmap offsets the wrong way round.
+-     * We can control MSRs 0x00000000-0x00001fff and 0xc0000000-0xc0001fff.
+-     */
+     if ( msr <= 0x1fff )
+     {
+         if ( type & VMX_MSR_R )
+-            clear_bit(msr, msr_bitmap + 0x000/BYTES_PER_LONG); /* read-low */
++            clear_bit(msr, msr_bitmap->read_low);
+         if ( type & VMX_MSR_W )
+-            clear_bit(msr, msr_bitmap + 0x800/BYTES_PER_LONG); /* write-low */
++            clear_bit(msr, msr_bitmap->write_low);
+     }
+     else if ( (msr >= 0xc0000000) && (msr <= 0xc0001fff) )
+     {
+         msr &= 0x1fff;
+         if ( type & VMX_MSR_R )
+-            clear_bit(msr, msr_bitmap + 0x400/BYTES_PER_LONG); /* read-high */
++            clear_bit(msr, msr_bitmap->read_high);
+         if ( type & VMX_MSR_W )
+-            clear_bit(msr, msr_bitmap + 0xc00/BYTES_PER_LONG); /* write-high */
++            clear_bit(msr, msr_bitmap->write_high);
+     }
+     else
+-        HVM_DBG_LOG(DBG_LEVEL_MSR,
+-                   "msr %x is out of the control range"
+-                   "0x00000000-0x00001fff and 0xc0000000-0xc0001fff"
+-                   "RDMSR or WRMSR will cause a VM exit", msr); 
+-
++        ASSERT(!"MSR out of range for interception\n");
+ }
+ 
+ void vmx_set_msr_intercept(struct vcpu *v, unsigned int msr,
+                            enum vmx_msr_intercept_type type)
+ {
+-    unsigned long *msr_bitmap = v->arch.hvm_vmx.msr_bitmap;
++    struct vmx_msr_bitmap *msr_bitmap = v->arch.hvm_vmx.msr_bitmap;
+ 
+     /* VMX MSR bitmap supported? */
+     if ( msr_bitmap == NULL )
+         return;
+ 
+-    /*
+-     * See Intel PRM Vol. 3, 20.6.9 (MSR-Bitmap Address). Early manuals
+-     * have the write-low and read-high bitmap offsets the wrong way round.
+-     * We can control MSRs 0x00000000-0x00001fff and 0xc0000000-0xc0001fff.
+-     */
+     if ( msr <= 0x1fff )
+     {
+         if ( type & VMX_MSR_R )
+-            set_bit(msr, msr_bitmap + 0x000/BYTES_PER_LONG); /* read-low */
++            set_bit(msr, msr_bitmap->read_low);
+         if ( type & VMX_MSR_W )
+-            set_bit(msr, msr_bitmap + 0x800/BYTES_PER_LONG); /* write-low */
++            set_bit(msr, msr_bitmap->write_low);
+     }
+     else if ( (msr >= 0xc0000000) && (msr <= 0xc0001fff) )
+     {
+         msr &= 0x1fff;
+         if ( type & VMX_MSR_R )
+-            set_bit(msr, msr_bitmap + 0x400/BYTES_PER_LONG); /* read-high */
++            set_bit(msr, msr_bitmap->read_high);
+         if ( type & VMX_MSR_W )
+-            set_bit(msr, msr_bitmap + 0xc00/BYTES_PER_LONG); /* write-high */
++            set_bit(msr, msr_bitmap->write_high);
+     }
+     else
+-        HVM_DBG_LOG(DBG_LEVEL_MSR,
+-                   "msr %x is out of the control range"
+-                   "0x00000000-0x00001fff and 0xc0000000-0xc0001fff"
+-                   "RDMSR or WRMSR will cause a VM exit", msr); 
++        ASSERT(!"MSR out of range for interception\n");
+ }
+ 
+ /*
+@@ -1105,7 +1088,7 @@ static int construct_vmcs(struct vcpu *v)
+     /* MSR access bitmap. */
+     if ( cpu_has_vmx_msr_bitmap )
+     {
+-        unsigned long *msr_bitmap = alloc_xenheap_page();
++        struct vmx_msr_bitmap *msr_bitmap = alloc_xenheap_page();
+ 
+         if ( msr_bitmap == NULL )
+         {
+@@ -1987,6 +1970,21 @@ void __init setup_vmcs_dump(void)
+     register_keyhandler('v', vmcs_dump, "dump VT-x VMCSs", 1);
+ }
+ 
++static void __init __maybe_unused build_assertions(void)
++{
++    struct vmx_msr_bitmap bitmap;
++
++    /* Check vmx_msr_bitmap layoug against hardware expectations. */
++    BUILD_BUG_ON(sizeof(bitmap)            != PAGE_SIZE);
++    BUILD_BUG_ON(sizeof(bitmap.read_low)   != 1024);
++    BUILD_BUG_ON(sizeof(bitmap.read_high)  != 1024);
++    BUILD_BUG_ON(sizeof(bitmap.write_low)  != 1024);
++    BUILD_BUG_ON(sizeof(bitmap.write_high) != 1024);
++    BUILD_BUG_ON(offsetof(struct vmx_msr_bitmap, read_low)   != 0);
++    BUILD_BUG_ON(offsetof(struct vmx_msr_bitmap, read_high)  != 1024);
++    BUILD_BUG_ON(offsetof(struct vmx_msr_bitmap, write_low)  != 2048);
++    BUILD_BUG_ON(offsetof(struct vmx_msr_bitmap, write_high) != 3072);
++}
+ 
+ /*
+  * Local variables:
+diff --git a/xen/include/asm-x86/hvm/vmx/vmcs.h b/xen/include/asm-x86/hvm/vmx/vmcs.h
+index 25a10a590e..3f55faca0f 100644
+--- a/xen/include/asm-x86/hvm/vmx/vmcs.h
++++ b/xen/include/asm-x86/hvm/vmx/vmcs.h
+@@ -139,6 +139,18 @@ struct vmx_domain {
+     void (*pi_do_resume) (struct vcpu *v);
+ };
+ 
++/*
++ * Layout of the MSR bitmap, as interpreted by hardware:
++ *  - *_low  covers MSRs 0 to 0x1fff
++ *  - *_ligh covers MSRs 0xc0000000 to 0xc0001fff
++ */
++struct vmx_msr_bitmap {
++    unsigned long read_low  [0x2000 / BITS_PER_LONG];
++    unsigned long read_high [0x2000 / BITS_PER_LONG];
++    unsigned long write_low [0x2000 / BITS_PER_LONG];
++    unsigned long write_high[0x2000 / BITS_PER_LONG];
++};
++
+ struct pi_desc {
+     DECLARE_BITMAP(pir, NR_VECTORS);
+     union {
+@@ -193,7 +205,7 @@ struct arch_vmx_struct {
+     unsigned long        shadow_gs;
+     unsigned long        cstar;
+ 
+-    unsigned long       *msr_bitmap;
++    struct vmx_msr_bitmap *msr_bitmap;
+     unsigned int         msr_count;
+     struct vmx_msr_entry *msr_area;
+     unsigned int         host_msr_count;

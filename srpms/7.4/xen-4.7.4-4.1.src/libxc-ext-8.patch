@@ -1,0 +1,58 @@
+PoC: ocaml: add binding to xc_domain_suppress_spurious_page_faults
+
+Required by xapi.
+
+Taken from xen-api-libs.hg/xc and adjusted for upstream libxc+ocaml.
+
+Signed-off-by: Ian Campbell <ian.campbell-Sxgqhf6Nn4DQT0dZR+AlfA@public.gmane.org>
+
+diff --git a/tools/ocaml/libs/xc/xenctrl.ml b/tools/ocaml/libs/xc/xenctrl.ml
+index 5db7ce1..f3b9961 100644
+--- a/tools/ocaml/libs/xc/xenctrl.ml
++++ b/tools/ocaml/libs/xc/xenctrl.ml
+@@ -237,6 +237,9 @@ external domain_deassign_device: handle -> domid -> (int * int * int * int) -> u
+ external domain_test_assign_device: handle -> domid -> (int * int * int * int) -> bool
+        = "stub_xc_domain_test_assign_device"
+ 
++external domain_suppress_spurious_page_faults: handle -> domid -> unit
++       = "stub_xc_domain_suppress_spurious_page_faults"
++
+ external domain_set_timer_mode: handle -> domid -> int -> unit = "stub_xc_domain_set_timer_mode"
+ external domain_set_hpet: handle -> domid -> int -> unit = "stub_xc_domain_set_hpet"
+ external domain_set_vpt_align: handle -> domid -> int -> unit = "stub_xc_domain_set_vpt_align"
+diff --git a/tools/ocaml/libs/xc/xenctrl.mli b/tools/ocaml/libs/xc/xenctrl.mli
+index 54fdefc..73e7979 100644
+--- a/tools/ocaml/libs/xc/xenctrl.mli
++++ b/tools/ocaml/libs/xc/xenctrl.mli
+@@ -185,6 +185,9 @@ external domain_set_machine_address_size: handle -> domid -> int -> unit
+ external domain_get_machine_address_size: handle -> domid -> int
+        = "stub_xc_domain_get_machine_address_size"
+ 
++external domain_suppress_spurious_page_faults: handle -> domid -> unit
++       = "stub_xc_domain_suppress_spurious_page_faults"
++
+ external domain_cpuid_set: handle -> domid -> (int64 * (int64 option))
+                         -> string option array
+                         -> string option array
+diff --git a/tools/ocaml/libs/xc/xenctrl_stubs.c b/tools/ocaml/libs/xc/xenctrl_stubs.c
+index ec3e33a..15de1de 100644
+--- a/tools/ocaml/libs/xc/xenctrl_stubs.c
++++ b/tools/ocaml/libs/xc/xenctrl_stubs.c
+@@ -733,6 +733,17 @@ CAMLprim value stub_xc_domain_get_machine_address_size(value xch,
+ 	CAMLreturn(Val_int(retval));
+ }
+ 
++CAMLprim value stub_xc_domain_suppress_spurious_page_faults(value xch,
++							    value domid)
++{
++	CAMLparam2(xch, domid);
++
++	int retval = xc_domain_suppress_spurious_page_faults(_H(xch), _D(domid));
++	if (retval)
++		failwith_xc(_H(xch));
++	CAMLreturn(Val_unit);
++}
++
+ CAMLprim value stub_xc_domain_cpuid_set(value xch, value domid,
+                                         value input,
+                                         value config)

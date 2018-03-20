@@ -1,0 +1,91 @@
+Author: Roger Pau Monné <roger.pau@citrix.com>
+Date:   Wed Aug 30 11:02:24 2017 +0200
+
+    x86/pt: add a MSI unmask flag to XEN_DOMCTL_bind_pt_irq
+
+    The flag is part of the gflags, and should be used to request the
+    unmask of a MSI interrupt once it's bound.
+
+    This is required for the device model in order to be capable of
+    binding MSIX interrupts that have the entry mask bit already unset at
+    bind time. Without this fix the interrupts would be left masked.
+
+    Note that this commit introduces a change to the domctl, which
+    requires a bump of the interface version. This is not done here
+    because the interface version has already been bumped in this release
+    cycle.
+
+    Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
+    Reported by: Andreas Kinzler <hfp@posteo.de>
+    Reviewed-by: Jan Beulich <jbeulich@suse.com>
+
+diff --git a/xen/drivers/passthrough/io.c b/xen/drivers/passthrough/io.c
+index 66577b6..0f7bcfd 100644
+--- a/xen/drivers/passthrough/io.c
++++ b/xen/drivers/passthrough/io.c
+@@ -360,13 +360,14 @@ int pt_irq_create_bind(
+     {
+         uint8_t dest, dest_mode, delivery_mode;
+         int dest_vcpu_id;
++        uint32_t gflags = pt_irq_bind->u.msi.gflags & ~VMSI_UNMASKED;
+ 
+         if ( !(pirq_dpci->flags & HVM_IRQ_DPCI_MAPPED) )
+         {
+             pirq_dpci->flags = HVM_IRQ_DPCI_MAPPED | HVM_IRQ_DPCI_MACH_MSI |
+                                HVM_IRQ_DPCI_GUEST_MSI;
+             pirq_dpci->gmsi.gvec = pt_irq_bind->u.msi.gvec;
+-            pirq_dpci->gmsi.gflags = pt_irq_bind->u.msi.gflags;
++            pirq_dpci->gmsi.gflags = gflags;
+             /*
+              * 'pt_irq_create_bind' can be called after 'pt_irq_destroy_bind'.
+              * The 'pirq_cleanup_check' which would free the structure is only
+@@ -419,13 +420,13 @@ int pt_irq_create_bind(
+ 
+             /* If pirq is already mapped as vmsi, update guest data/addr. */
+             if ( pirq_dpci->gmsi.gvec != pt_irq_bind->u.msi.gvec ||
+-                 pirq_dpci->gmsi.gflags != pt_irq_bind->u.msi.gflags )
++                 pirq_dpci->gmsi.gflags != gflags )
+             {
+                 /* Directly clear pending EOIs before enabling new MSI info. */
+                 pirq_guest_eoi(info);
+ 
+                 pirq_dpci->gmsi.gvec = pt_irq_bind->u.msi.gvec;
+-                pirq_dpci->gmsi.gflags = pt_irq_bind->u.msi.gflags;
++                pirq_dpci->gmsi.gflags = gflags;
+             }
+         }
+         /* Calculate dest_vcpu_id for MSI-type pirq migration. */
+@@ -454,6 +455,21 @@ int pt_irq_create_bind(
+                         vcpu, pirq_dpci->gmsi.gvec);
+         }
+ 
++        if ( pt_irq_bind->u.msi.gflags & VMSI_UNMASKED )
++        {
++            unsigned long flags;
++            struct irq_desc *desc = pirq_spin_lock_irq_desc(info, &flags);
++
++            if ( !desc )
++            {
++                pt_irq_destroy_bind(d, pt_irq_bind);
++                return -EINVAL;
++            }
++
++            guest_mask_msi_irq(desc, false);
++            spin_unlock_irqrestore(&desc->lock, flags);
++        }
++
+         break;
+     }
+ 
+diff --git a/xen/include/xen/hvm/irq.h b/xen/include/xen/hvm/irq.h
+index 4c9cb20..3534dbb 100644
+--- a/xen/include/xen/hvm/irq.h
++++ b/xen/include/xen/hvm/irq.h
+@@ -54,6 +54,7 @@ struct dev_intx_gsi_link {
+ #define VMSI_DM_MASK      0x200
+ #define VMSI_DELIV_MASK   0x7000
+ #define VMSI_TRIG_MODE    0x8000
++#define VMSI_UNMASKED     0x10000
+ 
+ #define GFLAGS_SHIFT_RH             8
+ #define GFLAGS_SHIFT_DELIV_MODE     12

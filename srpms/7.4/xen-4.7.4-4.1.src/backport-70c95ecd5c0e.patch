@@ -1,0 +1,54 @@
+From 5d0db07d3032d1f26826a4f5b60fd6618412b7e5 Mon Sep 17 00:00:00 2001
+From: Kyle Huey <me@kylehuey.com>
+Date: Thu, 20 Oct 2016 06:44:27 -0700
+Subject: [PATCH] x86/Intel: Expose cpuid_faulting_enabled so it can be used
+ elsewhere
+
+While we're here, use bool instead of bool_t.
+
+Signed-off-by: Kyle Huey <khuey@kylehuey.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+Release-acked-by: Wei Liu <wei.liu2@citrix.com>
+diff --git a/xen/arch/x86/cpu/intel.c b/xen/arch/x86/cpu/intel.c
+index 181e815..dc887ae 100644
+--- a/xen/arch/x86/cpu/intel.c
++++ b/xen/arch/x86/cpu/intel.c
+@@ -18,7 +18,7 @@
+ 
+ #define select_idle_routine(x) ((void)0)
+ 
+-static bool_t __init probe_intel_cpuid_faulting(void)
++static bool __init probe_intel_cpuid_faulting(void)
+ {
+ 	uint64_t x;
+ 
+@@ -36,10 +36,11 @@ static bool_t __init probe_intel_cpuid_faulting(void)
+ 	return 1;
+ }
+ 
+-static void set_cpuid_faulting(bool_t enable)
++DEFINE_PER_CPU(bool, cpuid_faulting_enabled);
++
++static void set_cpuid_faulting(bool enable)
+ {
+-	static DEFINE_PER_CPU(bool_t, cpuid_faulting_enabled);
+-	bool_t *this_enabled = &this_cpu(cpuid_faulting_enabled);
++	bool *this_enabled = &this_cpu(cpuid_faulting_enabled);
+ 	uint32_t hi, lo;
+ 
+ 	ASSERT(cpu_has_cpuid_faulting);
+diff --git a/xen/include/asm-x86/cpuid.h b/xen/include/asm-x86/cpuid.h
+index 9a21c25..1dc73c3 100644
+--- a/xen/include/asm-x86/cpuid.h
++++ b/xen/include/asm-x86/cpuid.h
+@@ -63,6 +63,9 @@ DECLARE_PER_CPU(struct cpuidmasks, cpuidmasks);
+ /* Default masking MSR values, calculated at boot. */
+ extern struct cpuidmasks cpuidmask_defaults;
+ 
++/* Whether or not cpuid faulting is available for the current domain. */
++DECLARE_PER_CPU(bool, cpuid_faulting_enabled);
++
+ #endif /* __ASSEMBLY__ */
+ #endif /* !__X86_CPUID_H__ */
+ 

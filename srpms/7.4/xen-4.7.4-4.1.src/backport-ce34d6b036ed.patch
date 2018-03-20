@@ -1,0 +1,36 @@
+From ce34d6b036ed84b12da6cd90a40a1302df4f1fef Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Thu, 21 Apr 2016 14:47:12 +0100
+Subject: [PATCH] xen/vsprintf: Avoid returning NULL from number()
+
+In practice this is an unused codepath, as every caller of number() passes an
+explicit base of 8, 10 or 16.  For all other uses, number() returns a pointer
+between the str and end parameters, as do the other similar helper functions.
+
+However, the fact that there is a NULL return path causes Coverity to check
+whether the caller makes NULL checks on the return value, and complain.
+
+Change the conditional return into an ASSERT().
+
+No functional change, but this removes 21 instances of NULL_RETURN in
+Coverity.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/xen/common/vsprintf.c b/xen/common/vsprintf.c
+index b050ea3..f92fb67 100644
+--- a/xen/common/vsprintf.c
++++ b/xen/common/vsprintf.c
+@@ -153,11 +153,11 @@ static char *number(
+     static const char large_digits[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+     int i;
+ 
++    ASSERT(base >= 2 && base <= 36);
++
+     digits = (type & LARGE) ? large_digits : small_digits;
+     if (type & LEFT)
+         type &= ~ZEROPAD;
+-    if (base < 2 || base > 36)
+-        return NULL;
+     c = (type & ZEROPAD) ? '0' : ' ';
+     sign = 0;
+     if (type & SIGN) {

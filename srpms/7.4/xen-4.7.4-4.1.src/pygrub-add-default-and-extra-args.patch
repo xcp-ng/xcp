@@ -1,0 +1,46 @@
+diff --git a/tools/pygrub/src/pygrub b/tools/pygrub/src/pygrub
+index 1ae34a2..122c82a 100644
+--- a/tools/pygrub/src/pygrub
++++ b/tools/pygrub/src/pygrub
+@@ -765,6 +765,7 @@ if __name__ == "__main__":
+ 
+     try:
+         opts, args = getopt.gnu_getopt(sys.argv[1:], 'qilnh::',
++                                       ["default_args=", "extra_args=", "vm="] +
+                                    ["quiet", "interactive", "list-entries", "not-really", "help",
+                                     "output=", "output-format=", "output-directory=", "offset=",
+                                     "entry=", "kernel=", 
+@@ -788,6 +789,8 @@ if __name__ == "__main__":
+     not_really = False
+     output_format = "sxp"
+     output_directory = "/var/run/xen/pygrub"
++    default_args = ""
++    extra_args = ""
+ 
+     # what was passed in
+     incfg = { "kernel": None, "ramdisk": None, "args": "" }
+@@ -842,6 +845,10 @@ if __name__ == "__main__":
+                 print "%s is not an existing directory" % a
+                 sys.exit(1)
+             output_directory = a
++        elif o in ("--default_args",):
++            default_args = a
++        elif o in ("--extra_args",):
++            extra_args = a
+ 
+     if debug:
+ 	logging.basicConfig(level=logging.DEBUG)
+@@ -908,6 +915,13 @@ if __name__ == "__main__":
+     if fs is None:
+         raise RuntimeError, "Unable to find partition containing kernel"
+ 
++    # Append any extra arguments we were given
++    if extra_args:
++        if chosencfg["args"] == None:
++            chosencfg["args"] = extra_args
++        else:
++            chosencfg["args"] += " " + extra_args
++
+     bootcfg["kernel"] = copy_from_image(fs, chosencfg["kernel"], "kernel",
+                                         output_directory, not_really)
+ 

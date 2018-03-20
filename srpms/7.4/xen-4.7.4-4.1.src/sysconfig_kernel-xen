@@ -1,0 +1,6 @@
+
+# Xen hypervisor
+HYPERVISOR=/boot/xen.gz
+# host-specific configuration belongs in /etc/sysconfig/kernel-xen-args
+[ -e /etc/sysconfig/kernel-xen-args ] && . /etc/sysconfig/kernel-xen-args
+HYPERVISOR_ARGS="$HYPERVISOR_ARGS watchdog"

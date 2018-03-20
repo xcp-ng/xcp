@@ -1,0 +1,37 @@
+diff --git a/tools/flask/policy/modules/domU.te b/tools/flask/policy/modules/domU.te
+index b77df29..0b3f4e1 100644
+--- a/tools/flask/policy/modules/domU.te
++++ b/tools/flask/policy/modules/domU.te
+@@ -22,7 +22,12 @@ domain_comms(dom0_t, dm_dom_t)
+ make_device_model(dom0_t, dm_dom_t, domU_t)
+ 
+ # This is required for PCI (or other device) passthrough
+-delegate_devices(dom0_t, domU_t)
++#delegate_devices(dom0_t, domU_t)
++
++# Delegate full access to PCI passthrough devices and other
++# resources passed to target domain. Possible security risk till the time
++# we come up with a proper solution with toolstack to name all the resources.
++delegate_unlabeled_resources(dom0_t, domU_t)
+ 
+ # Both of these domain types can be created using the default (system) role
+ role system_r types { domU_t dm_dom_t };
+diff --git a/tools/flask/policy/modules/xen.if b/tools/flask/policy/modules/xen.if
+index 34e291a..202ac0c 100644
+--- a/tools/flask/policy/modules/xen.if
++++ b/tools/flask/policy/modules/xen.if
+@@ -188,3 +188,14 @@ define(`admin_device', `
+ define(`delegate_devices', `
+     allow $1 $2:resource { add remove };
+ ')
++
++# delegate_unlabeled_resources(priv-domain, target-domain)
++# Allow full access to target domain of all the unlabeled resources that have
++# been passed to it.
++define(`delegate_unlabeled_resources', `
++    allow $1 $2:resource { add remove };
++    admin_device($2, irq_t);
++    admin_device($2, ioport_t);
++    admin_device($2, device_t);
++    admin_device($2, iomem_t);
++')

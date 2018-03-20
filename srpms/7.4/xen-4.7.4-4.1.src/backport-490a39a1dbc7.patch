@@ -1,0 +1,511 @@
+From 490a39a1dbc7406776344f36e1b27c33c2ada63d Mon Sep 17 00:00:00 2001
+From: Razvan Cojocaru <rcojocaru@bitdefender.com>
+Date: Tue, 21 Jun 2016 11:59:37 +0200
+Subject: [PATCH] vm_event: allow subscribing to write events for specific
+ MSR-s
+
+Previously, subscribing to MSR write events was an all-or-none
+approach, with special cases for introspection MSR-s. This patch
+allows the vm_event consumer to specify exactly what MSR-s it is
+interested in, and as a side-effect gets rid of the
+vmx_introspection_force_enabled_msrs[] special case.
+The patch also introduces arch_monitor_init_domain() and
+arch_monitor_cleanup_domain(), to do monitor-specific work
+(as opposed to the previous way of doing all the setup in
+vm_event_init_domain() / vm_event_cleanup_domain()).
+This replaces the previously posted "xen: Filter out MSR write
+events" patch.
+
+Signed-off-by: Razvan Cojocaru <rcojocaru@bitdefender.com>
+Acked-by: Wei Liu <wei.liu2@citrix.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+Acked-by: Tamas K Lengyel <tamas@tklengyel.com>
+diff --git a/tools/libxc/include/xenctrl.h b/tools/libxc/include/xenctrl.h
+index 6ae1a2b..4f5d954 100644
+--- a/tools/libxc/include/xenctrl.h
++++ b/tools/libxc/include/xenctrl.h
+@@ -2153,8 +2153,13 @@ int xc_monitor_get_capabilities(xc_interface *xch, domid_t domain_id,
+ int xc_monitor_write_ctrlreg(xc_interface *xch, domid_t domain_id,
+                              uint16_t index, bool enable, bool sync,
+                              bool onchangeonly);
+-int xc_monitor_mov_to_msr(xc_interface *xch, domid_t domain_id, bool enable,
+-                          bool extended_capture);
++/*
++ * A list of MSR indices can usually be found in /usr/include/asm/msr-index.h.
++ * Please consult the Intel/AMD manuals for more information on
++ * non-architectural indices.
++ */
++int xc_monitor_mov_to_msr(xc_interface *xch, domid_t domain_id, uint32_t msr,
++                          bool enable);
+ int xc_monitor_singlestep(xc_interface *xch, domid_t domain_id, bool enable);
+ int xc_monitor_software_breakpoint(xc_interface *xch, domid_t domain_id,
+                                    bool enable);
+diff --git a/tools/libxc/xc_monitor.c b/tools/libxc/xc_monitor.c
+index b1705dd..78131b2 100644
+--- a/tools/libxc/xc_monitor.c
++++ b/tools/libxc/xc_monitor.c
+@@ -86,8 +86,8 @@ int xc_monitor_write_ctrlreg(xc_interface *xch, domid_t domain_id,
+     return do_domctl(xch, &domctl);
+ }
+ 
+-int xc_monitor_mov_to_msr(xc_interface *xch, domid_t domain_id, bool enable,
+-                          bool extended_capture)
++int xc_monitor_mov_to_msr(xc_interface *xch, domid_t domain_id, uint32_t msr,
++                          bool enable)
+ {
+     DECLARE_DOMCTL;
+ 
+@@ -96,7 +96,7 @@ int xc_monitor_mov_to_msr(xc_interface *xch, domid_t domain_id, bool enable,
+     domctl.u.monitor_op.op = enable ? XEN_DOMCTL_MONITOR_OP_ENABLE
+                                     : XEN_DOMCTL_MONITOR_OP_DISABLE;
+     domctl.u.monitor_op.event = XEN_DOMCTL_MONITOR_EVENT_MOV_TO_MSR;
+-    domctl.u.monitor_op.u.mov_to_msr.extended_capture = extended_capture;
++    domctl.u.monitor_op.u.mov_to_msr.msr = msr;
+ 
+     return do_domctl(xch, &domctl);
+ }
+diff --git a/xen/arch/x86/hvm/event.c b/xen/arch/x86/hvm/event.c
+index 56c5514..8fdb6f5 100644
+--- a/xen/arch/x86/hvm/event.c
++++ b/xen/arch/x86/hvm/event.c
+@@ -57,9 +57,8 @@ bool_t hvm_event_cr(unsigned int index, unsigned long value, unsigned long old)
+ void hvm_event_msr(unsigned int msr, uint64_t value)
+ {
+     struct vcpu *curr = current;
+-    struct arch_domain *ad = &curr->domain->arch;
+ 
+-    if ( ad->monitor.mov_to_msr_enabled )
++    if ( monitored_msr(curr->domain, msr) )
+     {
+         vm_event_request_t req = {
+             .reason = VM_EVENT_REASON_MOV_TO_MSR,
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 037c550..de60cff 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -3765,7 +3765,6 @@ int hvm_msr_write_intercept(unsigned int msr, uint64_t msr_content,
+     bool_t mtrr;
+     unsigned int edx, index;
+     int ret = X86EMUL_OKAY;
+-    struct arch_domain *currad = &current->domain->arch;
+ 
+     HVMTRACE_3D(MSR_WRITE, msr,
+                (uint32_t)msr_content, (uint32_t)(msr_content >> 32));
+@@ -3773,7 +3772,7 @@ int hvm_msr_write_intercept(unsigned int msr, uint64_t msr_content,
+     hvm_cpuid(1, NULL, NULL, NULL, &edx);
+     mtrr = !!(edx & cpufeat_mask(X86_FEATURE_MTRR));
+ 
+-    if ( may_defer && unlikely(currad->monitor.mov_to_msr_enabled) )
++    if ( may_defer && unlikely(monitored_msr(v->domain, msr)) )
+     {
+         ASSERT(v->arch.vm_event);
+ 
+diff --git a/xen/arch/x86/hvm/vmx/vmcs.c b/xen/arch/x86/hvm/vmx/vmcs.c
+index 776b585..463adef 100644
+--- a/xen/arch/x86/hvm/vmx/vmcs.c
++++ b/xen/arch/x86/hvm/vmx/vmcs.c
+@@ -37,6 +37,7 @@
+ #include <asm/hvm/vmx/vvmx.h>
+ #include <asm/hvm/vmx/vmcs.h>
+ #include <asm/flushtlb.h>
++#include <asm/monitor.h>
+ #include <asm/shadow.h>
+ #include <asm/tboot.h>
+ #include <asm/apic.h>
+@@ -108,18 +109,6 @@ u64 vmx_ept_vpid_cap __read_mostly;
+ u64 vmx_vmfunc __read_mostly;
+ bool_t vmx_virt_exception __read_mostly;
+ 
+-const u32 vmx_introspection_force_enabled_msrs[] = {
+-    MSR_IA32_SYSENTER_EIP,
+-    MSR_IA32_SYSENTER_ESP,
+-    MSR_IA32_SYSENTER_CS,
+-    MSR_IA32_MC0_CTL,
+-    MSR_STAR,
+-    MSR_LSTAR
+-};
+-
+-const unsigned int vmx_introspection_force_enabled_msrs_size =
+-    ARRAY_SIZE(vmx_introspection_force_enabled_msrs);
+-
+ static DEFINE_PER_CPU_READ_MOSTLY(paddr_t, vmxon_region);
+ static DEFINE_PER_CPU(paddr_t, current_vmcs);
+ static DEFINE_PER_CPU(struct list_head, active_vmcs_list);
+@@ -809,17 +798,8 @@ void vmx_disable_intercept_for_msr(struct vcpu *v, u32 msr, int type)
+     if ( msr_bitmap == NULL )
+         return;
+ 
+-    if ( unlikely(d->arch.monitor.mov_to_msr_enabled &&
+-                  d->arch.monitor.mov_to_msr_extended) &&
+-         vm_event_check_ring(&d->vm_event->monitor) )
+-    {
+-        unsigned int i;
+-
+-        /* Filter out MSR-s needed for memory introspection */
+-        for ( i = 0; i < vmx_introspection_force_enabled_msrs_size; i++ )
+-            if ( msr == vmx_introspection_force_enabled_msrs[i] )
+-                return;
+-    }
++    if ( unlikely(monitored_msr(d, msr)) )
++        return;
+ 
+     /*
+      * See Intel PRM Vol. 3, 20.6.9 (MSR-Bitmap Address). Early manuals
+diff --git a/xen/arch/x86/hvm/vmx/vmx.c b/xen/arch/x86/hvm/vmx/vmx.c
+index 63e99b6..3a823cf 100644
+--- a/xen/arch/x86/hvm/vmx/vmx.c
++++ b/xen/arch/x86/hvm/vmx/vmx.c
+@@ -1961,16 +1961,12 @@ void vmx_hypervisor_cpuid_leaf(uint32_t sub_idx,
+         *eax |= XEN_HVM_CPUID_X2APIC_VIRT;
+ }
+ 
+-static void vmx_enable_msr_exit_interception(struct domain *d)
++static void vmx_enable_msr_interception(struct domain *d, uint32_t msr)
+ {
+     struct vcpu *v;
+-    unsigned int i;
+ 
+-    /* Enable interception for MSRs needed for memory introspection. */
+     for_each_vcpu ( d, v )
+-        for ( i = 0; i < vmx_introspection_force_enabled_msrs_size; i++ )
+-            vmx_enable_intercept_for_msr(v, vmx_introspection_force_enabled_msrs[i],
+-                                         MSR_TYPE_W);
++        vmx_enable_intercept_for_msr(v, msr, MSR_TYPE_W);
+ }
+ 
+ static bool_t vmx_is_singlestep_supported(void)
+@@ -2169,7 +2165,7 @@ static struct hvm_function_table __initdata vmx_function_table = {
+     .handle_eoi           = vmx_handle_eoi,
+     .nhvm_hap_walk_L1_p2m = nvmx_hap_walk_L1_p2m,
+     .hypervisor_cpuid_leaf = vmx_hypervisor_cpuid_leaf,
+-    .enable_msr_exit_interception = vmx_enable_msr_exit_interception,
++    .enable_msr_interception = vmx_enable_msr_interception,
+     .is_singlestep_supported = vmx_is_singlestep_supported,
+     .set_mode = vmx_set_mode,
+     .altp2m_vcpu_update_p2m = vmx_vcpu_update_eptp,
+diff --git a/xen/arch/x86/monitor.c b/xen/arch/x86/monitor.c
+index 1fec412..afc8537 100644
+--- a/xen/arch/x86/monitor.c
++++ b/xen/arch/x86/monitor.c
+@@ -22,6 +22,103 @@
+ #include <asm/monitor.h>
+ #include <public/vm_event.h>
+ 
++int arch_monitor_init_domain(struct domain *d)
++{
++    if ( !d->arch.monitor.msr_bitmap )
++        d->arch.monitor.msr_bitmap = xzalloc(struct monitor_msr_bitmap);
++
++    if ( !d->arch.monitor.msr_bitmap )
++        return -ENOMEM;
++
++    return 0;
++}
++
++void arch_monitor_cleanup_domain(struct domain *d)
++{
++    xfree(d->arch.monitor.msr_bitmap);
++
++    memset(&d->arch.monitor, 0, sizeof(d->arch.monitor));
++    memset(&d->monitor, 0, sizeof(d->monitor));
++}
++
++static unsigned long *monitor_bitmap_for_msr(const struct domain *d, u32 *msr)
++{
++    ASSERT(d->arch.monitor.msr_bitmap && msr);
++
++    switch ( *msr )
++    {
++    case 0 ... 0x1fff:
++        BUILD_BUG_ON(sizeof(d->arch.monitor.msr_bitmap->low) * 8 <= 0x1fff);
++        return d->arch.monitor.msr_bitmap->low;
++
++    case 0x40000000 ... 0x40001fff:
++        BUILD_BUG_ON(
++            sizeof(d->arch.monitor.msr_bitmap->hypervisor) * 8 <= 0x1fff);
++        *msr &= 0x1fff;
++        return d->arch.monitor.msr_bitmap->hypervisor;
++
++    case 0xc0000000 ... 0xc0001fff:
++        BUILD_BUG_ON(sizeof(d->arch.monitor.msr_bitmap->high) * 8 <= 0x1fff);
++        *msr &= 0x1fff;
++        return d->arch.monitor.msr_bitmap->high;
++
++    default:
++        return NULL;
++    }
++}
++
++static int monitor_enable_msr(struct domain *d, u32 msr)
++{
++    unsigned long *bitmap;
++    u32 index = msr;
++
++    if ( !d->arch.monitor.msr_bitmap )
++        return -ENXIO;
++
++    bitmap = monitor_bitmap_for_msr(d, &index);
++
++    if ( !bitmap )
++        return -EINVAL;
++
++    __set_bit(index, bitmap);
++
++    hvm_enable_msr_interception(d, msr);
++
++    return 0;
++}
++
++static int monitor_disable_msr(struct domain *d, u32 msr)
++{
++    unsigned long *bitmap;
++
++    if ( !d->arch.monitor.msr_bitmap )
++        return -ENXIO;
++
++    bitmap = monitor_bitmap_for_msr(d, &msr);
++
++    if ( !bitmap )
++        return -EINVAL;
++
++    __clear_bit(msr, bitmap);
++
++    return 0;
++}
++
++bool_t monitored_msr(const struct domain *d, u32 msr)
++{
++    const unsigned long *bitmap;
++
++    if ( !d->arch.monitor.msr_bitmap )
++        return 0;
++
++    bitmap = monitor_bitmap_for_msr(d, &msr);
++
++    if ( !bitmap )
++        return 0;
++
++    return test_bit(msr, bitmap);
++}
++
+ int arch_monitor_domctl_event(struct domain *d,
+                               struct xen_domctl_monitor_op *mop)
+ {
+@@ -77,25 +174,28 @@ int arch_monitor_domctl_event(struct domain *d,
+ 
+     case XEN_DOMCTL_MONITOR_EVENT_MOV_TO_MSR:
+     {
+-        bool_t old_status = ad->monitor.mov_to_msr_enabled;
++        bool_t old_status;
++        int rc;
++        u32 msr = mop->u.mov_to_msr.msr;
+ 
+-        if ( unlikely(old_status == requested_status) )
+-            return -EEXIST;
++        domain_pause(d);
+ 
+-        if ( requested_status && mop->u.mov_to_msr.extended_capture &&
+-             !hvm_enable_msr_exit_interception(d) )
+-            return -EOPNOTSUPP;
++        old_status = monitored_msr(d, msr);
+ 
+-        domain_pause(d);
++        if ( unlikely(old_status == requested_status) )
++        {
++            domain_unpause(d);
++            return -EEXIST;
++        }
+ 
+-        if ( requested_status && mop->u.mov_to_msr.extended_capture )
+-            ad->monitor.mov_to_msr_extended = 1;
++        if ( requested_status )
++            rc = monitor_enable_msr(d, msr);
+         else
+-            ad->monitor.mov_to_msr_extended = 0;
++            rc = monitor_disable_msr(d, msr);
+ 
+-        ad->monitor.mov_to_msr_enabled = requested_status;
+         domain_unpause(d);
+-        break;
++
++        return rc;
+     }
+ 
+     case XEN_DOMCTL_MONITOR_EVENT_SINGLESTEP:
+diff --git a/xen/arch/x86/vm_event.c b/xen/arch/x86/vm_event.c
+index 5635603..a9d3861 100644
+--- a/xen/arch/x86/vm_event.c
++++ b/xen/arch/x86/vm_event.c
+@@ -20,6 +20,7 @@
+ 
+ #include <xen/sched.h>
+ #include <asm/hvm/hvm.h>
++#include <asm/monitor.h>
+ #include <asm/vm_event.h>
+ 
+ /* Implicitly serialized by the domctl lock. */
+@@ -56,8 +57,6 @@ void vm_event_cleanup_domain(struct domain *d)
+     }
+ 
+     d->arch.mem_access_emulate_each_rep = 0;
+-    memset(&d->arch.monitor, 0, sizeof(d->arch.monitor));
+-    memset(&d->monitor, 0, sizeof(d->monitor));
+ }
+ 
+ void vm_event_toggle_singlestep(struct domain *d, struct vcpu *v)
+diff --git a/xen/common/vm_event.c b/xen/common/vm_event.c
+index 2906407..1ba12cb 100644
+--- a/xen/common/vm_event.c
++++ b/xen/common/vm_event.c
+@@ -27,6 +27,7 @@
+ #include <xen/mem_access.h>
+ #include <asm/p2m.h>
+ #include <asm/altp2m.h>
++#include <asm/monitor.h>
+ #include <asm/vm_event.h>
+ #include <xsm/xsm.h>
+ 
+@@ -665,6 +666,9 @@ int vm_event_domctl(struct domain *d, xen_domctl_vm_event_op_t *vec,
+         {
+         case XEN_VM_EVENT_ENABLE:
+             /* domain_pause() not required here, see XSA-99 */
++            rc = arch_monitor_init_domain(d);
++            if ( rc )
++                break;
+             rc = vm_event_enable(d, vec, ved, _VPF_mem_access,
+                                  HVM_PARAM_MONITOR_RING_PFN,
+                                  monitor_notification);
+@@ -675,6 +679,7 @@ int vm_event_domctl(struct domain *d, xen_domctl_vm_event_op_t *vec,
+             {
+                 domain_pause(d);
+                 rc = vm_event_disable(d, ved);
++                arch_monitor_cleanup_domain(d);
+                 domain_unpause(d);
+             }
+             break;
+diff --git a/xen/include/asm-arm/monitor.h b/xen/include/asm-arm/monitor.h
+index 6e36e99..478f5e9 100644
+--- a/xen/include/asm-arm/monitor.h
++++ b/xen/include/asm-arm/monitor.h
+@@ -46,4 +46,17 @@ int arch_monitor_domctl_event(struct domain *d,
+     return -EOPNOTSUPP;
+ }
+ 
++static inline
++int arch_monitor_init_domain(struct domain *d)
++{
++    /* No arch-specific domain initialization on ARM. */
++    return 0;
++}
++
++static inline
++void arch_monitor_cleanup_domain(struct domain *d)
++{
++    /* No arch-specific domain cleanup on ARM. */
++}
++
+ #endif /* __ASM_ARM_MONITOR_H__ */
+diff --git a/xen/include/asm-x86/domain.h b/xen/include/asm-x86/domain.h
+index 783fa4f..7c27f9e 100644
+--- a/xen/include/asm-x86/domain.h
++++ b/xen/include/asm-x86/domain.h
+@@ -401,10 +401,9 @@ struct arch_domain
+         unsigned int write_ctrlreg_enabled       : 4;
+         unsigned int write_ctrlreg_sync          : 4;
+         unsigned int write_ctrlreg_onchangeonly  : 4;
+-        unsigned int mov_to_msr_enabled          : 1;
+-        unsigned int mov_to_msr_extended         : 1;
+         unsigned int singlestep_enabled          : 1;
+         unsigned int software_breakpoint_enabled : 1;
++        struct monitor_msr_bitmap *msr_bitmap;
+     } monitor;
+ 
+     /* Mem_access emulation control */
+diff --git a/xen/include/asm-x86/hvm/hvm.h b/xen/include/asm-x86/hvm/hvm.h
+index 4ca62bd..b08a9dc 100644
+--- a/xen/include/asm-x86/hvm/hvm.h
++++ b/xen/include/asm-x86/hvm/hvm.h
+@@ -211,7 +211,7 @@ struct hvm_function_table {
+                                   uint32_t *eax, uint32_t *ebx,
+                                   uint32_t *ecx, uint32_t *edx);
+ 
+-    void (*enable_msr_exit_interception)(struct domain *d);
++    void (*enable_msr_interception)(struct domain *d, uint32_t msr);
+     bool_t (*is_singlestep_supported)(void);
+     int (*set_mode)(struct vcpu *v, int mode);
+ 
+@@ -565,11 +565,11 @@ static inline enum hvm_intblk nhvm_interrupt_blocked(struct vcpu *v)
+     return hvm_funcs.nhvm_intr_blocked(v);
+ }
+ 
+-static inline bool_t hvm_enable_msr_exit_interception(struct domain *d)
++static inline bool_t hvm_enable_msr_interception(struct domain *d, uint32_t msr)
+ {
+-    if ( hvm_funcs.enable_msr_exit_interception )
++    if ( hvm_funcs.enable_msr_interception )
+     {
+-        hvm_funcs.enable_msr_exit_interception(d);
++        hvm_funcs.enable_msr_interception(d, msr);
+         return 1;
+     }
+ 
+diff --git a/xen/include/asm-x86/hvm/vmx/vmcs.h b/xen/include/asm-x86/hvm/vmx/vmcs.h
+index e82b34e..fb70ed6 100644
+--- a/xen/include/asm-x86/hvm/vmx/vmcs.h
++++ b/xen/include/asm-x86/hvm/vmx/vmcs.h
+@@ -562,13 +562,6 @@ enum vmcs_field {
+     HOST_RIP                        = 0x00006c16,
+ };
+ 
+-/*
+- * A set of MSR-s that need to be enabled for memory introspection
+- * to work.
+- */
+-extern const u32 vmx_introspection_force_enabled_msrs[];
+-extern const unsigned int vmx_introspection_force_enabled_msrs_size;
+-
+ #define VMCS_VPID_WIDTH 16
+ 
+ #define MSR_TYPE_R 1
+diff --git a/xen/include/asm-x86/monitor.h b/xen/include/asm-x86/monitor.h
+index d367099..84e3a3a 100644
+--- a/xen/include/asm-x86/monitor.h
++++ b/xen/include/asm-x86/monitor.h
+@@ -29,6 +29,12 @@
+ 
+ #define monitor_ctrlreg_bitmask(ctrlreg_index) (1U << (ctrlreg_index))
+ 
++struct monitor_msr_bitmap {
++    DECLARE_BITMAP(low, 8192);
++    DECLARE_BITMAP(hypervisor, 8192);
++    DECLARE_BITMAP(high, 8192);
++};
++
+ static inline
+ int arch_monitor_domctl_op(struct domain *d, struct xen_domctl_monitor_op *mop)
+ {
+@@ -60,4 +66,10 @@ int arch_monitor_domctl_op(struct domain *d, struct xen_domctl_monitor_op *mop)
+ int arch_monitor_domctl_event(struct domain *d,
+                               struct xen_domctl_monitor_op *mop);
+ 
++int arch_monitor_init_domain(struct domain *d);
++
++void arch_monitor_cleanup_domain(struct domain *d);
++
++bool_t monitored_msr(const struct domain *d, u32 msr);
++
+ #endif /* __ASM_X86_MONITOR_H__ */
+diff --git a/xen/include/public/domctl.h b/xen/include/public/domctl.h
+index 2457698..875c09a 100644
+--- a/xen/include/public/domctl.h
++++ b/xen/include/public/domctl.h
+@@ -1107,8 +1107,7 @@ struct xen_domctl_monitor_op {
+         } mov_to_cr;
+ 
+         struct {
+-            /* Enable the capture of an extended set of MSRs */
+-            uint8_t extended_capture;
++            uint32_t msr;
+         } mov_to_msr;
+ 
+         struct {

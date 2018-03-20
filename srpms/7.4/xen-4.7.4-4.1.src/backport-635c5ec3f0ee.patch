@@ -1,0 +1,281 @@
+From 635c5ec3f0ee3c55ed8cde129f1f3620dedc53f4 Mon Sep 17 00:00:00 2001
+From: Doug Goldstein <cardoe@cardoe.com>
+Date: Wed, 8 Jun 2016 14:11:21 +0200
+Subject: [PATCH] build: convert perfc{,_arrays} to Kconfig
+
+Convert the 'perfc' and 'perfc_arrays' options to Kconfig as
+CONFIG_PERF_COUNTERS and CONFIG_PERF_ARRAYS.
+
+Signed-off-by: Doug Goldstein <cardoe@cardoe.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+diff --git a/INSTALL b/INSTALL
+index f55d42c..623887d 100644
+--- a/INSTALL
++++ b/INSTALL
+@@ -227,8 +227,6 @@ VGABIOS_REL_DATE="dd Mon yyyy"
+ 
+ The following variables can be used to tweak some aspects of the
+ hypervisor build.
+-perfc=y
+-perfc_arrays=y
+ lock_profile=y
+ lto=y
+ 
+diff --git a/xen/Kconfig.debug b/xen/Kconfig.debug
+index 664a67b..56d2c79 100644
+--- a/xen/Kconfig.debug
++++ b/xen/Kconfig.debug
+@@ -28,6 +28,21 @@ config FRAME_POINTER
+ 	  maybe slower, but it gives very useful debugging information
+ 	  in case of any Xen bugs.
+ 
++config PERF_COUNTERS
++	bool "Performance Counters"
++	---help---
++	  Enables software performance counters that allows you to analyze
++	  bottlenecks in the system.  To access this data you can use serial
++	  console to print (and reset) using 'p' and 'P' respectively, or
++	  the 'xenperf' tool.
++
++config PERF_ARRAYS
++	bool "Performance Counter Array Histograms"
++	depends on PERF_COUNTERS
++	---help---
++	  Enables software performance counter array histograms.
++
++
+ config VERBOSE_DEBUG
+ 	bool "Verbose debug messages"
+ 	default DEBUG
+diff --git a/xen/Rules.mk b/xen/Rules.mk
+index 9c527fe..5cbdedd 100644
+--- a/xen/Rules.mk
++++ b/xen/Rules.mk
+@@ -3,8 +3,6 @@
+ # If you change any of these configuration options then you must
+ # 'make clean' before rebuilding.
+ #
+-perfc         ?= n
+-perfc_arrays  ?= n
+ lock_profile  ?= n
+ lto           ?= n
+ 
+@@ -12,11 +10,6 @@ lto           ?= n
+ 
+ include $(XEN_ROOT)/Config.mk
+ 
+-# Hardcoded configuration implications and dependencies.
+-# Do this is a neater way if it becomes unwieldy.
+-ifeq ($(perfc_arrays),y)
+-perfc := y
+-endif
+ 
+ ifneq ($(origin crash_debug),undefined)
+ $(error "You must use 'make menuconfig' to enable/disable crash_debug now.")
+@@ -30,6 +23,9 @@ endif
+ ifneq ($(origin kexec),undefined)
+ $(error "You must use 'make menuconfig' to enable/disable kexec now.")
+ endif
++ifneq ($(origin perfc),undefined)
++$(error "You must use 'make menuconfig' to enable/disable perfc now.")
++endif
+ ifneq ($(origin verbose),undefined)
+ $(error "You must use 'make menuconfig' to enable/disable verbose now.")
+ endif
+@@ -60,8 +56,6 @@ ifneq ($(clang),y)
+ CFLAGS += -Wa,--strip-local-absolute
+ endif
+ 
+-CFLAGS-$(perfc)         += -DPERF_COUNTERS
+-CFLAGS-$(perfc_arrays)  += -DPERF_ARRAYS
+ CFLAGS-$(lock_profile)  += -DLOCK_PROFILE
+ CFLAGS-$(CONFIG_FRAME_POINTER) += -fno-omit-frame-pointer
+ 
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 17fb210..4f734cf 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -3580,7 +3580,7 @@ void hvm_cpuid(unsigned int input, unsigned int *eax, unsigned int *ebx,
+ static uint64_t _hvm_rdtsc_intercept(void)
+ {
+     struct vcpu *curr = current;
+-#if !defined(NDEBUG) || defined(PERF_COUNTERS)
++#if !defined(NDEBUG) || defined(CONFIG_PERF_COUNTERS)
+     struct domain *currd = curr->domain;
+ 
+     if ( currd->arch.vtsc )
+diff --git a/xen/arch/x86/time.c b/xen/arch/x86/time.c
+index 6438b47..3928a5f 100644
+--- a/xen/arch/x86/time.c
++++ b/xen/arch/x86/time.c
+@@ -1688,7 +1688,7 @@ void pv_soft_rdtsc(struct vcpu *v, struct cpu_user_regs *regs, int rdtscp)
+ 
+     spin_lock(&d->arch.vtsc_lock);
+ 
+-#if !defined(NDEBUG) || defined(PERF_COUNTERS)
++#if !defined(NDEBUG) || defined(CONFIG_PERF_COUNTERS)
+     if ( guest_kernel_mode(v, regs) )
+         d->arch.vtsc_kerncount++;
+     else
+@@ -1959,7 +1959,7 @@ static void dump_softtsc(unsigned char key)
+             printk(",khz=%"PRIu32, d->arch.tsc_khz);
+         if ( d->arch.incarnation )
+             printk(",inc=%"PRIu32, d->arch.incarnation);
+-#if !defined(NDEBUG) || defined(PERF_COUNTERS)
++#if !defined(NDEBUG) || defined(CONFIG_PERF_COUNTERS)
+         if ( !(d->arch.vtsc_kerncount | d->arch.vtsc_usercount) )
+             printk("\n");
+         else
+diff --git a/xen/arch/x86/x86_64/asm-offsets.c b/xen/arch/x86/x86_64/asm-offsets.c
+index a3ae7a4..05d2b85 100644
+--- a/xen/arch/x86/x86_64/asm-offsets.c
++++ b/xen/arch/x86/x86_64/asm-offsets.c
+@@ -152,7 +152,7 @@ void __dummy__(void)
+     OFFSET(TRAPBOUNCE_eip, struct trap_bounce, eip);
+     BLANK();
+ 
+-#if PERF_COUNTERS
++#ifdef CONFIG_PERF_COUNTERS
+     DEFINE(ASM_PERFC_hypercalls, PERFC_hypercalls);
+     DEFINE(ASM_PERFC_exceptions, PERFC_exceptions);
+     BLANK();
+diff --git a/xen/common/Makefile b/xen/common/Makefile
+index a4bd4d6..e9893e2 100644
+--- a/xen/common/Makefile
++++ b/xen/common/Makefile
+@@ -27,6 +27,7 @@ obj-y += multicall.o
+ obj-y += notifier.o
+ obj-y += page_alloc.o
+ obj-$(CONFIG_HAS_PDX) += pdx.o
++obj-$(CONFIG_PERF_COUNTERS) += perfc.o
+ obj-y += preempt.o
+ obj-y += random.o
+ obj-y += rangeset.o
+@@ -63,7 +64,6 @@ obj-y += xmalloc_tlsf.o
+ 
+ obj-bin-$(CONFIG_X86) += $(foreach n,decompress bunzip2 unxz unlzma unlzo unlz4 earlycpio,$(n).init.o)
+ 
+-obj-$(perfc)       += perfc.o
+ 
+ obj-$(CONFIG_COMPAT) += $(addprefix compat/,domain.o kernel.o memory.o multicall.o xlat.o)
+ 
+diff --git a/xen/common/keyhandler.c b/xen/common/keyhandler.c
+index 4ff90f6..65b70ce 100644
+--- a/xen/common/keyhandler.c
++++ b/xen/common/keyhandler.c
+@@ -59,7 +59,7 @@ static struct keyhandler {
+     IRQ_KEYHANDLER('%', do_debug_key, "trap to xendbg", 0),
+     IRQ_KEYHANDLER('*', run_all_keyhandlers, "print all diagnostics", 0),
+ 
+-#ifdef PERF_COUNTERS
++#ifdef CONFIG_PERF_COUNTERS
+     KEYHANDLER('p', perfc_printall, "print performance counters", 1),
+     KEYHANDLER('P', perfc_reset, "reset performance counters", 0),
+ #endif
+diff --git a/xen/common/perfc.c b/xen/common/perfc.c
+index 9f078e1..3da4c96 100644
+--- a/xen/common/perfc.c
++++ b/xen/common/perfc.c
+@@ -78,7 +78,7 @@ void perfc_printall(unsigned char key)
+             printk("TOTAL[%12Lu]", sum);
+             if (sum)
+             {
+-#ifdef PERF_ARRAYS
++#ifdef CONFIG_PERF_ARRAYS
+                 for ( k = 0; k < perfc_info[i].nr_elements; k++ )
+                 {
+                     sum = 0;
+diff --git a/xen/common/sysctl.c b/xen/common/sysctl.c
+index 75f4c05..48de479 100644
+--- a/xen/common/sysctl.c
++++ b/xen/common/sysctl.c
+@@ -115,7 +115,7 @@ long do_sysctl(XEN_GUEST_HANDLE_PARAM(xen_sysctl_t) u_sysctl)
+     }
+     break;
+ 
+-#ifdef PERF_COUNTERS
++#ifdef CONFIG_PERF_COUNTERS
+     case XEN_SYSCTL_perfc_op:
+         ret = perfc_control(&op->u.perfc_op);
+         break;
+diff --git a/xen/include/asm-x86/asm_defns.h b/xen/include/asm-x86/asm_defns.h
+index 279d702..e36e78f 100644
+--- a/xen/include/asm-x86/asm_defns.h
++++ b/xen/include/asm-x86/asm_defns.h
+@@ -385,7 +385,7 @@ static always_inline void stac(void)
+ 
+ #endif
+ 
+-#ifdef PERF_COUNTERS
++#ifdef CONFIG_PERF_COUNTERS
+ #define PERFC_INCR(_name,_idx,_cur)             \
+         pushq _cur;                             \
+         movslq VCPU_processor(_cur),_cur;       \
+diff --git a/xen/include/asm-x86/domain.h b/xen/include/asm-x86/domain.h
+index 165e533..783fa4f 100644
+--- a/xen/include/asm-x86/domain.h
++++ b/xen/include/asm-x86/domain.h
+@@ -377,7 +377,7 @@ struct arch_domain
+                                      hardware TSC scaling cases */
+     uint32_t incarnation;    /* incremented every restore or live migrate
+                                 (possibly other cases in the future */
+-#if !defined(NDEBUG) || defined(PERF_COUNTERS)
++#if !defined(NDEBUG) || defined(CONFIG_PERF_COUNTERS)
+     uint64_t vtsc_kerncount;
+     uint64_t vtsc_usercount;
+ #endif
+diff --git a/xen/include/xen/perfc.h b/xen/include/xen/perfc.h
+index 6cb0cd1..6846e71 100644
+--- a/xen/include/xen/perfc.h
++++ b/xen/include/xen/perfc.h
+@@ -1,7 +1,7 @@
+ #ifndef __XEN_PERFC_H__
+ #define __XEN_PERFC_H__
+ 
+-#ifdef PERF_COUNTERS
++#ifdef CONFIG_PERF_COUNTERS
+ 
+ #include <xen/lib.h>
+ #include <xen/smp.h>
+@@ -76,7 +76,7 @@ DECLARE_PER_CPU(perfc_t[NUM_PERFCOUNTERS], perfcounters);
+  * Histogram: special treatment for 0 and 1 count. After that equally spaced 
+  * with last bucket taking the rest.
+  */
+-#ifdef PERF_ARRAYS
++#ifdef CONFIG_PERF_ARRAYS
+ #define perfc_incr_histo(x,v)                                           \
+     do {                                                                \
+         if ( (v) == 0 )                                                 \
+@@ -100,7 +100,7 @@ extern void perfc_printall(unsigned char key);
+ extern void perfc_reset(unsigned char key);
+ 
+     
+-#else /* PERF_COUNTERS */
++#else /* CONFIG_PERF_COUNTERS */
+ 
+ #define perfc_value(x)    (0)
+ #define perfc_valuea(x,y) (0)
+@@ -114,6 +114,6 @@ extern void perfc_reset(unsigned char key);
+ #define perfc_adda(x,y,z) ((void)0)
+ #define perfc_incr_histo(x,y,z) ((void)0)
+ 
+-#endif /* PERF_COUNTERS */
++#endif /* CONFIG_PERF_COUNTERS */
+ 
+ #endif /* __XEN_PERFC_H__ */
+diff --git a/xen/include/xen/sched.h b/xen/include/xen/sched.h
+index fe15e9c..46c82e7 100644
+--- a/xen/include/xen/sched.h
++++ b/xen/include/xen/sched.h
+@@ -39,7 +39,7 @@ DEFINE_XEN_GUEST_HANDLE(vcpu_runstate_info_compat_t);
+  * Enable and ease the use of scheduling related performance counters.
+  *
+  */
+-#ifdef PERF_COUNTERS
++#ifdef CONFIG_PERF_COUNTERS
+ #define SCHED_STATS
+ #endif
+ 

@@ -1,0 +1,47 @@
+From a7bb484bbf84cecb81ae2b0699699610215a049b Mon Sep 17 00:00:00 2001
+From: Wei Liu <wei.liu2@citrix.com>
+Date: Thu, 13 Oct 2016 15:33:15 +0100
+Subject: [PATCH 9/9] flask: add gcov_op check
+
+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
+Reviewed-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Acked-by: Daniel De Graaf <dgdegra@tycho.nsa.gov>
+diff --git a/tools/flask/policy/modules/dom0.te b/tools/flask/policy/modules/dom0.te
+index 4c8b1ce..196d42d 100644
+--- a/tools/flask/policy/modules/dom0.te
++++ b/tools/flask/policy/modules/dom0.te
+@@ -16,6 +16,7 @@ allow dom0_t xen_t:xen {
+ allow dom0_t xen_t:xen2 {
+ 	resource_op psr_cmt_op psr_cat_op pmu_ctrl get_symbol
+ 	get_cpu_levelling_caps get_cpu_featureset livepatch_op
++	gcov_op
+ };
+ 
+ # Allow dom0 to use all XENVER_ subops that have checks.
+diff --git a/xen/xsm/flask/hooks.c b/xen/xsm/flask/hooks.c
+index 82bd692..1a6bdb1 100644
+--- a/xen/xsm/flask/hooks.c
++++ b/xen/xsm/flask/hooks.c
+@@ -825,6 +825,9 @@ static int flask_sysctl(int cmd)
+     case XEN_SYSCTL_livepatch_op:
+         return avc_current_has_perm(SECINITSID_XEN, SECCLASS_XEN2,
+                                     XEN2__LIVEPATCH_OP, NULL);
++    case XEN_SYSCTL_gcov_op:
++        return avc_current_has_perm(SECINITSID_XEN, SECCLASS_XEN2,
++                                    XEN2__GCOV_OP, NULL);
+ 
+     default:
+         return avc_unknown_permission("sysctl", cmd);
+diff --git a/xen/xsm/flask/policy/access_vectors b/xen/xsm/flask/policy/access_vectors
+index f5d661d..70712b4 100644
+--- a/xen/xsm/flask/policy/access_vectors
++++ b/xen/xsm/flask/policy/access_vectors
+@@ -99,6 +99,8 @@ class xen2
+     get_cpu_featureset
+ # XEN_SYSCTL_livepatch_op
+     livepatch_op
++# XEN_SYSCTL_gcov_op
++    gcov_op
+ }
+ 
+ # Classes domain and domain2 consist of operations that a domain performs on

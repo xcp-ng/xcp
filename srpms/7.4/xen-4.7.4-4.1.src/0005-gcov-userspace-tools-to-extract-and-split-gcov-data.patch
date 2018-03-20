@@ -1,0 +1,305 @@
+From d16bb9b07625a5b1b9fd9352da4bcfa35b113be2 Mon Sep 17 00:00:00 2001
+From: Wei Liu <wei.liu2@citrix.com>
+Date: Mon, 3 Oct 2016 14:38:13 +0100
+Subject: [PATCH 5/9] gcov: userspace tools to extract and split gcov data
+
+Provide two tools: a small C program to extract data from hypervisor and
+a python script to split data into multiple files.
+
+The file xencov.c is salvaged and modified from the original xencov.c.
+
+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
+Acked-by: Ian Jackson <ian.jackson@eu.citrix.com>
+diff --git a/tools/misc/Makefile b/tools/misc/Makefile
+index 30a52cb..cee2b99 100644
+--- a/tools/misc/Makefile
++++ b/tools/misc/Makefile
+@@ -13,6 +13,7 @@ CFLAGS += $(CFLAGS_libxenstore)
+ INSTALL_BIN-$(CONFIG_X86)      += xen-cpuid
+ INSTALL_BIN-$(CONFIG_X86)      += xen-detect
+ INSTALL_BIN                    += xencons
++INSTALL_BIN                    += xencov_split
+ INSTALL_BIN += $(INSTALL_BIN-y)
+ 
+ # Everything to be installed in regular sbin/
+@@ -26,6 +27,7 @@ INSTALL_SBIN-$(CONFIG_X86)     += xen-lowmemd
+ INSTALL_SBIN-$(CONFIG_X86)     += xen-mfndump
+ INSTALL_SBIN                   += xen-ringwatch
+ INSTALL_SBIN                   += xen-tmem-list-parse
++INSTALL_SBIN                   += xencov
+ INSTALL_SBIN                   += xenlockprof
+ INSTALL_SBIN                   += xenperf
+ INSTALL_SBIN                   += xenpm
+@@ -43,6 +45,7 @@ TARGETS_ALL := $(INSTALL_BIN) $(INSTALL_SBIN) $(INSTALL_PRIVBIN)
+ TARGETS_COPY += xen-bugtool
+ TARGETS_COPY += xen-ringwatch
+ TARGETS_COPY += xencons
++TARGETS_COPY += xencov_split
+ TARGETS_COPY += xenpvnetboot
+ 
+ # Everything which needs to be built
+@@ -110,4 +113,7 @@ xen-lowmemd: xen-lowmemd.o
+ gtraceview: gtraceview.o
+ 	$(CC) $(LDFLAGS) -o $@ $< $(CURSES_LIBS) $(TINFO_LIBS) $(APPEND_LDFLAGS)
+ 
++xencov: xencov.o
++	$(CC) $(LDFLAGS) -o $@ $< $(LDLIBS_libxenctrl) $(APPEND_LDFLAGS)
++
+ -include $(DEPS)
+diff --git a/tools/misc/xencov.c b/tools/misc/xencov.c
+new file mode 100644
+index 0000000..4130f42
+--- /dev/null
++++ b/tools/misc/xencov.c
+@@ -0,0 +1,148 @@
++/*
++ * xencov: extract test coverage information from Xen.
++ *
++ * Copyright (c) 2013, 2016, Citrix Systems R&D Ltd.
++ *
++ * This program is free software; you can redistribute it and/or modify it
++ * under the terms and conditions of the GNU General Public License,
++ * version 2, as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along with
++ * this program; If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#include <err.h>
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <xenctrl.h>
++
++static xc_interface *xch = NULL;
++
++int gcov_sysctl(int op, struct xen_sysctl *sysctl,
++                struct xc_hypercall_buffer *buf, uint32_t buf_size)
++{
++    DECLARE_HYPERCALL_BUFFER_ARGUMENT(buf);
++
++    memset(sysctl, 0, sizeof(*sysctl));
++    sysctl->cmd = XEN_SYSCTL_gcov_op;
++
++    sysctl->u.gcov_op.cmd = op;
++    sysctl->u.gcov_op.size = buf_size;
++    set_xen_guest_handle(sysctl->u.gcov_op.buffer, buf);
++
++    return xc_sysctl(xch, sysctl);
++}
++
++static void gcov_read(const char *fn)
++{
++    struct xen_sysctl sys;
++    uint32_t total_len;
++    DECLARE_HYPERCALL_BUFFER(uint8_t, p);
++    FILE *f;
++
++    if (gcov_sysctl(XEN_SYSCTL_GCOV_get_size, &sys, NULL, 0) < 0)
++        err(1, "getting total length");
++    total_len = sys.u.gcov_op.size;
++
++    /* Shouldn't exceed a few hundred kilobytes */
++    if (total_len > 8u * 1024u * 1024u)
++        errx(1, "gcov data too big %u bytes\n", total_len);
++
++    p = xc_hypercall_buffer_alloc(xch, p, total_len);
++    if (!p)
++        err(1, "allocating buffer");
++
++    memset(p, 0, total_len);
++    if (gcov_sysctl(XEN_SYSCTL_GCOV_read, &sys, HYPERCALL_BUFFER(p),
++                    total_len) < 0)
++        err(1, "getting gcov data");
++
++    if (!strcmp(fn, "-"))
++        f = stdout;
++    else
++        f = fopen(fn, "w");
++
++    if (!f)
++        err(1, "opening output file");
++
++    if (fwrite(p, 1, total_len, f) != total_len)
++        err(1, "writing gcov data to file");
++
++    if (f != stdout)
++        fclose(f);
++
++    xc_hypercall_buffer_free(xch, p);
++}
++
++static void gcov_reset(void)
++{
++    struct xen_sysctl sys;
++
++    if (gcov_sysctl(XEN_SYSCTL_GCOV_reset, &sys, NULL, 0) < 0)
++        err(1, "resetting gcov information");
++}
++
++static void usage(int exit_code)
++{
++    FILE *out = exit_code ? stderr : stdout;
++
++    fprintf(out, "xencov {reset|read} [<filename>]\n"
++        "\treset       reset information\n"
++        "\tread        read information from xen to filename\n"
++        "\tfilename    optional filename (default output)\n"
++        );
++    exit(exit_code);
++}
++
++int main(int argc, char **argv)
++{
++    int opt;
++
++    while ((opt = getopt(argc, argv, "h")) != -1) {
++        switch (opt) {
++        case 'h':
++            usage(0);
++            break;
++        default:
++            usage(1);
++        }
++    }
++
++    argv += optind;
++    argc -= optind;
++    if (argc <= 0)
++        usage(1);
++
++    xch = xc_interface_open(NULL, NULL, 0);
++    if (!xch)
++        err(1, "opening xc interface");
++
++    if (strcmp(argv[0], "reset") == 0)
++        gcov_reset();
++    else if (strcmp(argv[0], "read") == 0)
++        gcov_read(argc > 1 ? argv[1] : "-");
++    else
++        usage(1);
++
++    xc_interface_close(xch);
++
++    return 0;
++}
++
++/*
++ * Local variables:
++ * mode: C
++ * c-file-style: "BSD"
++ * c-basic-offset: 4
++ * tab-width: 4
++ * indent-tabs-mode: nil
++ * End:
++ */
+diff --git a/tools/misc/xencov_split b/tools/misc/xencov_split
+new file mode 100755
+index 0000000..1f20518
+--- /dev/null
++++ b/tools/misc/xencov_split
+@@ -0,0 +1,97 @@
++#!/usr/bin/python
++
++import sys, os, os.path as path, struct, errno
++from optparse import OptionParser
++
++def xencov_split(opts):
++    """Split input into multiple gcda files"""
++
++    # Check native byte order and explicitly specify it.  The "native"
++    # byte order in struct module takes into account padding while the
++    # data is always packed.
++    if sys.byteorder == 'little':
++        bo_prefix = '<'
++    else:
++        bo_prefix = '>'
++
++    input_file = opts.args[0]
++
++    f = open(input_file)
++
++    # Magic number
++    s = f.read(4)
++    magic, = struct.unpack(bo_prefix + "I", s)
++    # See public/sysctl.h for magic number -- "XCOV"
++    if magic != 0x58434f56:
++        raise Exception("Invalid magic number")
++
++    # The rest is zero or more records
++    content = f.read()
++
++    f.close()
++
++    while content:
++        off = content.find('\x00')
++        fmt = bo_prefix + str(off) + 's'
++        fn, = struct.unpack_from(fmt, content)
++        content = content[off+1:]
++
++        fmt = bo_prefix + 'I'
++        sz, = struct.unpack_from(fmt, content)
++        content = content[struct.calcsize(fmt):]
++
++        fmt = bo_prefix + str(sz) + 's'
++        payload, = struct.unpack_from(fmt, content)
++        content = content[sz:]
++
++        # Create and store files
++        if opts.output_dir == '.':
++            opts.output_dir = os.getcwd()
++
++        dir = opts.output_dir + path.dirname(fn)
++        try:
++            os.makedirs(dir)
++        except OSError, e:
++            if e.errno == errno.EEXIST and os.path.isdir(dir):
++                pass
++            else:
++                raise
++
++        full_path = dir + '/' + path.basename(fn)
++        f = open(full_path, "w")
++        f.write(payload)
++        f.close()
++
++def main():
++    """ Main entrypoint """
++
++    # Change stdout to be line-buffered.
++    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 1)
++
++    parser = OptionParser(
++        usage = "%prog [OPTIONS] <INPUT>",
++        description = "Utility to split xencov data file",
++        )
++
++    parser.add_option("--output-dir", action = "store",
++                      dest = "output_dir", default = ".",
++                      type = "string",
++                      help = ('Specify the directory to place output files, '
++                              'defaults to current directory'),
++                      )
++
++    opts, args = parser.parse_args()
++    opts.args = args
++
++    xencov_split(opts)
++
++
++if __name__ == "__main__":
++    try:
++        sys.exit(main())
++    except Exception, e:
++        print >>sys.stderr, "Error:", e
++        sys.exit(1)
++    except KeyboardInterrupt:
++        sys.exit(1)
++

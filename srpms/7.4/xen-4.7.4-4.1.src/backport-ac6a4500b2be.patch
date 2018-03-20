@@ -1,0 +1,87 @@
+From 0c630bad9fa3702032c3b114d8a9f9a620473bdf Mon Sep 17 00:00:00 2001
+From: Haozhong Zhang <haozhong.zhang@intel.com>
+Date: Thu, 15 Dec 2016 11:11:20 +0100
+Subject: [PATCH] vvmx: set vmxon_region_pa of vcpu out of VMX operation to an
+ invalid address
+
+nvmx_handle_vmxon() previously checks whether a vcpu is in VMX
+operation by comparing its vmxon_region_pa with GPA 0. However, 0 is
+also a valid VMXON region address. If L1 hypervisor had set the VMXON
+region address to 0, the check in nvmx_handle_vmxon() will be skipped.
+Fix this problem by using an invalid VMXON region address for vcpu
+out of VMX operation.
+
+Signed-off-by: Haozhong Zhang <haozhong.zhang@intel.com>
+Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Acked-by: Kevin Tian <kevin.tian@intel.com>
+diff --git a/xen/arch/x86/hvm/vmx/vvmx.c b/xen/arch/x86/hvm/vmx/vvmx.c
+index 50788ce..a024674 100644
+--- a/xen/arch/x86/hvm/vmx/vvmx.c
++++ b/xen/arch/x86/hvm/vmx/vvmx.c
+@@ -32,6 +32,11 @@ static DEFINE_PER_CPU(u64 *, vvmcs_buf);
+ 
+ static void nvmx_purge_vvmcs(struct vcpu *v);
+ 
++static bool_t nvmx_vcpu_in_vmx(const struct vcpu *v)
++{
++    return vcpu_2_nvmx(v).vmxon_region_pa != INVALID_PADDR;
++}
++
+ #define VMCS_BUF_SIZE 100
+ 
+ int nvmx_cpu_up_prepare(unsigned int cpu)
+@@ -107,7 +112,7 @@ int nvmx_vcpu_initialise(struct vcpu *v)
+ 
+     nvmx->ept.enabled = 0;
+     nvmx->guest_vpid = 0;
+-    nvmx->vmxon_region_pa = 0;
++    nvmx->vmxon_region_pa = INVALID_PADDR;
+     nvcpu->nv_vvmcx = NULL;
+     nvcpu->nv_vvmcxaddr = VMCX_EADDR;
+     nvmx->intr.intr_info = 0;
+@@ -357,7 +362,7 @@ static int vmx_inst_check_privilege(struct cpu_user_regs *regs, int vmxop_check)
+              !(v->arch.hvm_vcpu.guest_cr[4] & X86_CR4_VMXE) )
+             goto invalid_op;
+     }
+-    else if ( !vcpu_2_nvmx(v).vmxon_region_pa )
++    else if ( !nvmx_vcpu_in_vmx(v) )
+         goto invalid_op;
+ 
+     vmx_get_segment_register(v, x86_seg_cs, &cs);
+@@ -1376,7 +1381,7 @@ int nvmx_handle_vmxon(struct cpu_user_regs *regs)
+     if ( rc != X86EMUL_OKAY )
+         return rc;
+ 
+-    if ( nvmx->vmxon_region_pa )
++    if ( nvmx_vcpu_in_vmx(v) )
+         gdprintk(XENLOG_WARNING, 
+                  "vmxon again: orig %"PRIpaddr" new %lx\n",
+                  nvmx->vmxon_region_pa, gpa);
+@@ -1409,7 +1414,7 @@ int nvmx_handle_vmxoff(struct cpu_user_regs *regs)
+         return rc;
+ 
+     nvmx_purge_vvmcs(v);
+-    nvmx->vmxon_region_pa = 0;
++    nvmx->vmxon_region_pa = INVALID_PADDR;
+ 
+     vmreturn(regs, VMSUCCEED);
+     return X86EMUL_OKAY;
+diff --git a/xen/include/asm-x86/hvm/vmx/vvmx.h b/xen/include/asm-x86/hvm/vmx/vvmx.h
+index aca8b4b..8f96417 100644
+--- a/xen/include/asm-x86/hvm/vmx/vvmx.h
++++ b/xen/include/asm-x86/hvm/vmx/vvmx.h
+@@ -28,6 +28,13 @@ struct vvmcs_list {
+ };
+ 
+ struct nestedvmx {
++    /*
++     * vmxon_region_pa is also used to indicate whether a vcpu is in
++     * the VMX operation. When a vcpu is out of the VMX operation, its
++     * vmxon_region_pa is set to an invalid address INVALID_PADDR. We
++     * cannot use 0 for this purpose, because it's a valid VMXON region
++     * address.
++     */
+     paddr_t    vmxon_region_pa;
+     void       *iobitmap[2];		/* map (va) of L1 guest I/O bitmap */
+     void       *msrbitmap;		/* map (va) of L1 guest MSR bitmap */

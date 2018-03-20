@@ -1,0 +1,37 @@
+From 01ea53e5e1c8ddb271d5f7180c23bfae516bec78 Mon Sep 17 00:00:00 2001
+From: Wei Liu <wei.liu2@citrix.com>
+Date: Wed, 5 Oct 2016 14:48:58 +0100
+Subject: [PATCH 6/9] Config.mk: expand cc-ver a bit
+
+... so that we can do other comparisons as well.
+
+No functional change.
+
+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
+Acked-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/Config.mk b/Config.mk
+index d705673..9c057b4 100644
+--- a/Config.mk
++++ b/Config.mk
+@@ -112,17 +112,17 @@ endef
+ 
+ cc-options-add = $(foreach o,$(3),$(call cc-option-add,$(1),$(2),$(o)))
+ 
+-# cc-ver: Check compiler is at least specified version. Return boolean 'y'/'n'.
+-# Usage: ifeq ($(call cc-ver,$(CC),0x030400),y)
++# cc-ver: Check compiler against the version requirement. Return boolean 'y'/'n'.
++# Usage: ifeq ($(call cc-ver,$(CC),ge,0x030400),y)
+ cc-ver = $(shell if [ $$((`$(1) -dumpversion | awk -F. \
+-           '{ printf "0x%02x%02x%02x", $$1, $$2, $$3}'`)) -ge $$(($(2))) ]; \
++           '{ printf "0x%02x%02x%02x", $$1, $$2, $$3}'`)) -$(2) $$(($(3))) ]; \
+            then echo y; else echo n; fi ;)
+ 
+ # cc-ver-check: Check compiler is at least specified version, else fail.
+ # Usage: $(call cc-ver-check,CC,0x030400,"Require at least gcc-3.4")
+ cc-ver-check = $(eval $(call cc-ver-check-closure,$(1),$(2),$(3)))
+ define cc-ver-check-closure
+-    ifeq ($$(call cc-ver,$$($(1)),$(2)),n)
++    ifeq ($$(call cc-ver,$$($(1)),ge,$(2)),n)
+         override $(1) = echo "*** FATAL BUILD ERROR: "$(3) >&2; exit 1;
+         cc-option := n
+     endif

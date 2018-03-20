@@ -1,0 +1,263 @@
+From 5abcf7c6348fbc5e67925d1370e861a606c1d350 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Fri, 3 Nov 2017 16:12:13 +0000
+Subject: [PATCH] x86/feature: Definitions for Indirect Branch Controls
+
+Contemporary processors are gaining Indirect Branch Controls via microcode
+updates.  Intel are introducing one bit to indicate IBRS and IBPB support, and
+a second bit for STIBP.  AMD are introducing IPBP only, so enumerate it with a
+separate bit.
+
+Furthermore, depending on compiler and microcode availability, we may want to
+run Xen with IBRS set, or clear.
+
+To use these facilities, we synthesise separate IBRS and IBPB bits for
+internal use.  A lot of infrastructure is required before these features are
+safe to offer to guests.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+Acked-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/tools/libxc/xc_cpuid_x86.c b/tools/libxc/xc_cpuid_x86.c
+index e010028..98790fb 100644
+--- a/tools/libxc/xc_cpuid_x86.c
++++ b/tools/libxc/xc_cpuid_x86.c
+@@ -515,13 +515,15 @@ static void xc_cpuid_hvm_policy(xc_interface *xch,
+         {
+             regs[1] = info->featureset[featureword_of(X86_FEATURE_FSGSBASE)];
+             regs[2] = info->featureset[featureword_of(X86_FEATURE_PREFETCHWT1)];
++            regs[3] = info->featureset[featureword_of(X86_FEATURE_IBRSB)];
+         }
+         else
+         {
+             regs[1] = 0;
+             regs[2] = 0;
++            regs[3] = 0;
+         }
+-        regs[0] = regs[3] = 0;
++        regs[0] = 0;
+         break;
+ 
+     case 0x0000000d:
+@@ -600,13 +602,15 @@ static void xc_cpuid_pv_policy(xc_interface *xch,
+         {
+             regs[1] = info->featureset[featureword_of(X86_FEATURE_FSGSBASE)];
+             regs[2] = info->featureset[featureword_of(X86_FEATURE_PREFETCHWT1)];
++            regs[3] = info->featureset[featureword_of(X86_FEATURE_IBRSB)];
+         }
+         else
+         {
+             regs[1] = 0;
+             regs[2] = 0;
++            regs[3] = 0;
+         }
+-        regs[0] = regs[3] = 0;
++        regs[0] = 0;
+         break;
+ 
+     case 0x0000000d:
+diff --git a/tools/misc/xen-cpuid.c b/tools/misc/xen-cpuid.c
+index 44991f6..0981366 100644
+--- a/tools/misc/xen-cpuid.c
++++ b/tools/misc/xen-cpuid.c
+@@ -140,7 +140,20 @@ static const char *str_e8b[32] =
+ {
+     [ 0] = "clzero",
+ 
+-    [1 ... 31] = "REZ",
++    [1 ... 11] = "REZ",
++
++    [12] = "ibpb",
++
++    [13 ... 31] = "REZ",
++};
++
++static const char *str_7d0[32] =
++{
++    [0 ... 25] = "REZ",
++
++    [26] = "ibrsb",         [27] = "stibp",
++
++    [28 ... 31] = "REZ",
+ };
+ 
+ static struct {
+@@ -158,6 +171,7 @@ static struct {
+     { "0x00000007:0.ecx", "7c0", str_7c0 },
+     { "0x80000007.edx",   "e7d", str_e7d },
+     { "0x80000008.ebx",   "e8b", str_e8b },
++    { "0x00000007:0.edx", "7d0", str_7d0 },
+ };
+ 
+ #define COL_ALIGN "18"
+diff --git a/xen/arch/x86/cpu/common.c b/xen/arch/x86/cpu/common.c
+index 496f203..e377ec8 100644
+--- a/xen/arch/x86/cpu/common.c
++++ b/xen/arch/x86/cpu/common.c
+@@ -351,7 +351,7 @@ static void generic_identify(struct cpuinfo_x86 *c)
+ 		cpuid_count(0x00000007, 0, &tmp,
+ 			    &c->x86_capability[cpufeat_word(X86_FEATURE_FSGSBASE)],
+ 			    &c->x86_capability[cpufeat_word(X86_FEATURE_PKU)],
+-			    &tmp);
++			    &c->x86_capability[cpufeat_word(X86_FEATURE_IBRSB)]);
+ }
+ 
+ /*
+diff --git a/xen/arch/x86/cpuid.c b/xen/arch/x86/cpuid.c
+index 63b2db9..3e85a63 100644
+--- a/xen/arch/x86/cpuid.c
++++ b/xen/arch/x86/cpuid.c
+@@ -78,7 +78,7 @@ static void __init calculate_raw_featureset(void)
+         cpuid_count(0x7, 0, &tmp,
+                     &raw_featureset[FEATURESET_7b0],
+                     &raw_featureset[FEATURESET_7c0],
+-                    &tmp);
++                    &raw_featureset[FEATURESET_7d0]);
+     if ( max >= 0xd )
+         cpuid_count(0xd, 1,
+                     &raw_featureset[FEATURESET_Da1],
+diff --git a/xen/arch/x86/hvm/hvm.c b/xen/arch/x86/hvm/hvm.c
+index 56ac111..079617d 100644
+--- a/xen/arch/x86/hvm/hvm.c
++++ b/xen/arch/x86/hvm/hvm.c
+@@ -3630,6 +3630,7 @@ void hvm_cpuid(unsigned int input, unsigned int *eax, unsigned int *ebx,
+                      special_features[FEATURESET_7b0]);
+ 
+             *ecx &= hvm_featureset[FEATURESET_7c0];
++            *edx &= hvm_featureset[FEATURESET_7d0];
+ 
+             /* Don't expose HAP-only features to non-hap guests. */
+             if ( !hap_enabled(d) )
+diff --git a/xen/arch/x86/spec_ctrl.c b/xen/arch/x86/spec_ctrl.c
+index c0ff4b5..1ec6e4c 100644
+--- a/xen/arch/x86/spec_ctrl.c
++++ b/xen/arch/x86/spec_ctrl.c
+@@ -68,8 +68,25 @@ custom_param("bti", parse_bti);
+ 
+ static void __init print_details(enum ind_thunk thunk)
+ {
++    unsigned int _7d0 = 0, e8b = 0, tmp;
++
++    /* Collect diagnostics about available mitigations. */
++    if ( boot_cpu_data.cpuid_level >= 7 )
++        cpuid_count(7, 0, &tmp, &tmp, &tmp, &_7d0);
++    if ( boot_cpu_data.extended_cpuid_level >= 0x80000008 )
++        cpuid(0x80000008, &tmp, &e8b, &tmp, &tmp);
++
+     printk(XENLOG_DEBUG "Speculative mitigation facilities:\n");
+ 
++    /* Hardware features which pertain to speculative mitigations. */
++    if ( (_7d0 & (cpufeat_mask(X86_FEATURE_IBRSB) |
++                  cpufeat_mask(X86_FEATURE_STIBP))) ||
++         (e8b & cpufeat_mask(X86_FEATURE_IBPB)) )
++        printk(XENLOG_DEBUG "  Hardware features:%s%s%s\n",
++               (_7d0 & cpufeat_mask(X86_FEATURE_IBRSB)) ? " IBRS/IBPB" : "",
++               (_7d0 & cpufeat_mask(X86_FEATURE_STIBP)) ? " STIBP"     : "",
++               (e8b  & cpufeat_mask(X86_FEATURE_IBPB))  ? " IBPB"      : "");
++
+     /* Compiled-in support which pertains to BTI mitigations. */
+     if ( IS_ENABLED(CONFIG_INDIRECT_THUNK) )
+         printk(XENLOG_DEBUG "  Compiled-in support: INDIRECT_THUNK\n");
+diff --git a/xen/arch/x86/traps.c b/xen/arch/x86/traps.c
+index 5f8d939..f5afccd 100644
+--- a/xen/arch/x86/traps.c
++++ b/xen/arch/x86/traps.c
+@@ -1075,6 +1075,7 @@ void pv_cpuid(struct cpu_user_regs *regs)
+                   special_features[FEATURESET_7b0]);
+ 
+             c &= pv_featureset[FEATURESET_7c0];
++            d &= pv_featureset[FEATURESET_7d0];
+ 
+             if ( !is_pvh_domain(currd) )
+             {
+@@ -1089,8 +1090,8 @@ void pv_cpuid(struct cpu_user_regs *regs)
+             }
+         }
+         else
+-            b = c = 0;
+-        a = d = 0;
++            b = c = d = 0;
++        a = 0;
+         break;
+ 
+     case XSTATE_CPUID:
+diff --git a/xen/include/asm-x86/cpufeature.h b/xen/include/asm-x86/cpufeature.h
+index 6ea4b34..16bdd0d 100644
+--- a/xen/include/asm-x86/cpufeature.h
++++ b/xen/include/asm-x86/cpufeature.h
+@@ -29,6 +29,9 @@
+ #define X86_FEATURE_LFENCE_DISPATCH	((FSCAPINTS+0)*32+10) /* lfence set as Dispatch Serialising */
+ #define X86_FEATURE_IND_THUNK_LFENCE	((FSCAPINTS+0)*32+13) /* Use IND_THUNK_LFENCE */
+ #define X86_FEATURE_IND_THUNK_JMP	((FSCAPINTS+0)*32+14) /* Use IND_THUNK_JMP */
++#define X86_FEATURE_XEN_IBPB		((FSCAPINTS+0)*32+15) /* IBRSB || IBPB */
++#define X86_FEATURE_XEN_IBRS_SET	((FSCAPINTS+0)*32+16) /* IBRSB && IRBS set in Xen */
++#define X86_FEATURE_XEN_IBRS_CLEAR	((FSCAPINTS+0)*32+17) /* IBRSB && IBRS clear in Xen */
+ 
+ #define cpufeat_word(idx)	((idx) / 32)
+ #define cpufeat_bit(idx)	((idx) % 32)
+diff --git a/xen/include/asm-x86/cpuid.h b/xen/include/asm-x86/cpuid.h
+index 1dc73c3..36a797a 100644
+--- a/xen/include/asm-x86/cpuid.h
++++ b/xen/include/asm-x86/cpuid.h
+@@ -16,6 +16,7 @@
+ #define FEATURESET_7c0    6 /* 0x00000007:0.ecx    */
+ #define FEATURESET_e7d    7 /* 0x80000007.edx      */
+ #define FEATURESET_e8b    8 /* 0x80000008.ebx      */
++#define FEATURESET_7d0    9 /* 0x00000007:0.edx    */
+ 
+ #ifndef __ASSEMBLY__
+ #include <xen/types.h>
+diff --git a/xen/include/asm-x86/msr-index.h b/xen/include/asm-x86/msr-index.h
+index 2d15afd..1a87e31 100644
+--- a/xen/include/asm-x86/msr-index.h
++++ b/xen/include/asm-x86/msr-index.h
+@@ -31,6 +31,17 @@
+ #define EFER_LMSLE		(1<<_EFER_LMSLE)
+ #define EFER_FFXSE		(1<<_EFER_FFXSE)
+ 
++/* Speculation Controls. */
++#define MSR_SPEC_CTRL			0x00000048
++#define _SPEC_CTRL_IBRS			0
++#define SPEC_CTRL_IBRS			(_AC(1, ULL) << _SPEC_CTRL_IBRS)
++#define _SPEC_CTRL_STIBP		1
++#define SPEC_CTRL_STIBP			(_AC(1, ULL) << _SPEC_CTRL_STIBP)
++
++#define MSR_PRED_CMD			0x00000049
++#define _PRED_CMD_IBPB			0
++#define PRED_CMD_IBPB			(_AC(1, ULL) << _PRED_CMD_IBPB)
++
+ /* Intel MSRs. Some also available on other CPUs */
+ #define MSR_IA32_PERFCTR0		0x000000c1
+ #define MSR_IA32_A_PERFCTR0		0x000004c1
+diff --git a/xen/include/public/arch-x86/cpufeatureset.h b/xen/include/public/arch-x86/cpufeatureset.h
+index 39acf8c..4f8cef2 100644
+--- a/xen/include/public/arch-x86/cpufeatureset.h
++++ b/xen/include/public/arch-x86/cpufeatureset.h
+@@ -224,6 +224,11 @@ XEN_CPUFEATURE(EFRO,          7*32+10) /*   APERF/MPERF Read Only interface */
+ 
+ /* AMD-defined CPU features, CPUID level 0x80000008.ebx, word 8 */
+ XEN_CPUFEATURE(CLZERO,        8*32+ 0) /*A  CLZERO instruction */
++XEN_CPUFEATURE(IBPB,          8*32+12) /*   IBPB support only (no IBRS, used by AMD) */
++
++/* Intel-defined CPU features, CPUID level 0x00000007:0.edx, word 9 */
++XEN_CPUFEATURE(IBRSB,         9*32+26) /*   IBRS and IBPB support (used by Intel) */
++XEN_CPUFEATURE(STIBP,         9*32+27) /*   STIBP */
+ 
+ #endif /* XEN_CPUFEATURE */
+ 
+diff --git a/xen/tools/gen-cpuid.py b/xen/tools/gen-cpuid.py
+index 5ba3192..963887d 100755
+--- a/xen/tools/gen-cpuid.py
++++ b/xen/tools/gen-cpuid.py
+@@ -244,6 +244,11 @@ def crunch_numbers(state):
+         # AMD K6-2+ and K6-III processors shipped with 3DNow+, beyond the
+         # standard 3DNow in the earlier K6 processors.
+         _3DNOW: [_3DNOWEXT],
++
++        # Single Thread Indirect Branch Predictors enumerates a new bit in the
++        # MSR enumerated by Indirect Branch Restricted Speculation/Indirect
++        # Branch Prediction Barrier enumeration.
++        IBRSB: [STIBP],
+     }
+ 
+     deep_features = tuple(sorted(deps.keys()))

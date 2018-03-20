@@ -1,0 +1,32 @@
+From 5dc78620da6609b52b676986710f8523e915a335 Mon Sep 17 00:00:00 2001
+From: Zhi Wang <zhi.a.wang@intel.com>
+Date: Tue, 10 Feb 2015 23:32:39 +0800
+Subject: [PATCH 16/18] ioreq-server: allocate unlimited rangeset for memory
+ type.
+
+Signed-off-by: Zhi Wang <zhi.a.wang@intel.com>
+diff --git a/xen/arch/x86/hvm/ioreq.c b/xen/arch/x86/hvm/ioreq.c
+index e640eff..9f71a33 100644
+--- a/xen/arch/x86/hvm/ioreq.c
++++ b/xen/arch/x86/hvm/ioreq.c
+@@ -486,6 +486,7 @@ static int hvm_ioreq_server_alloc_rangesets(struct hvm_ioreq_server *s,
+ 
+     for ( i = 0; i < NR_IO_RANGE_TYPES; i++ )
+     {
++        unsigned int flags = RANGESETF_prettyprint_hex;
+         char *name;
+ 
+         rc = asprintf(&name, "ioreq_server %d %s", s->id,
+@@ -496,8 +497,10 @@ static int hvm_ioreq_server_alloc_rangesets(struct hvm_ioreq_server *s,
+         if ( rc )
+             goto fail;
+ 
+-        s->range[i] = rangeset_new(s->domain, name,
+-                                   RANGESETF_prettyprint_hex);
++        if ( i == HVMOP_IO_RANGE_MEMORY )
++            flags |= RANGESETF_unlimited;
++
++        s->range[i] = rangeset_new(s->domain, name, flags);
+ 
+         xfree(name);
+ 

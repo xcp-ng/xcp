@@ -1,0 +1,35 @@
+CA-195752: Disable core parking by default
+
+Core parking is used by firmware to offline CPUs for reasons such as
+thermal and power management. However, offlining CPUs has exposed bugs
+in other areas (the scheduler). Disable core parking by default to
+prevent these issues, but add a command-line switch ("core_parking") to
+re-enable if needed.
+
+diff --git a/xen/arch/x86/platform_hypercall.c b/xen/arch/x86/platform_hypercall.c
+index 39fa808..96f3280 100644
+--- a/xen/arch/x86/platform_hypercall.c
++++ b/xen/arch/x86/platform_hypercall.c
+@@ -44,6 +44,9 @@ struct resource_access {
+     xenpf_resource_entry_t *entries;
+ };
+ 
++static bool_t __read_mostly opt_core_parking_enabled = 0;
++boolean_param("core_parking", opt_core_parking_enabled);
++
+ long cpu_frequency_change_helper(void *);
+ void check_resource_access(struct resource_access *);
+ void resource_access(void *);
+@@ -707,6 +710,12 @@ ret_t do_platform_op(XEN_GUEST_HANDLE_PARAM(xen_platform_op_t) u_xenpf_op)
+         switch(op->u.core_parking.type)
+         {
+         case XEN_CORE_PARKING_SET:
++            if ( !opt_core_parking_enabled )
++            {
++                ret = -EINVAL;
++                goto out;
++            }
++
+             idle_nums = min_t(uint32_t,
+                     op->u.core_parking.idle_nums, num_present_cpus() - 1);
+             ret = continue_hypercall_on_cpu(

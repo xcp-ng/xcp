@@ -1,0 +1,23 @@
+From 6cfe8e45808700c6d1402dbe0d86d2c5c0038323 Mon Sep 17 00:00:00 2001
+From: Wei Liu <wei.liu2@citrix.com>
+Date: Thu, 29 Sep 2016 18:40:52 +0100
+Subject: [PATCH 1/9] Kconfig: add BROKEN config
+
+Used to hide feature that is completely broken.
+
+Signed-off-by: Wei Liu <wei.liu2@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+diff --git a/xen/Kconfig b/xen/Kconfig
+index 0fe7a1a..5515fe9 100644
+--- a/xen/Kconfig
++++ b/xen/Kconfig
+@@ -12,6 +12,9 @@ config ARCH
+ 	string
+ 	option env="ARCH"
+ 
++config BROKEN
++	bool
++
+ source "arch/$SRCARCH/Kconfig"
+ 
+ config XEN_FULLVERSION

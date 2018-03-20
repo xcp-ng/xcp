@@ -1,0 +1,98 @@
+From 9dcb3c94d7e217efdf33e85a24552fbd599b6c8e Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Mon, 18 Dec 2017 13:54:25 +0000
+Subject: [PATCH] x86: Support compiling with indirect branch thunks
+
+Use -mindirect-branch=thunk-extern/-mindirect-branch-register when available.
+To begin with, use the retpoline thunk.  Later work will add alternative
+thunks which can be selected at boot time.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+diff --git a/xen/arch/x86/Makefile b/xen/arch/x86/Makefile
+index 31cd730..e093c41 100644
+--- a/xen/arch/x86/Makefile
++++ b/xen/arch/x86/Makefile
+@@ -35,6 +35,7 @@ obj-y += io_apic.o
+ obj-$(CONFIG_LIVEPATCH) += alternative.o livepatch.o
+ obj-y += msi.o
+ obj-y += msr.o
++obj-$(CONFIG_INDIRECT_THUNK) += indirect_thunk.o
+ obj-y += ioport_emulate.o
+ obj-y += irq.o
+ obj-$(CONFIG_KEXEC) += machine_kexec.o
+diff --git a/xen/arch/x86/Rules.mk b/xen/arch/x86/Rules.mk
+index 3139886..d29f2dc 100644
+--- a/xen/arch/x86/Rules.mk
++++ b/xen/arch/x86/Rules.mk
+@@ -24,3 +24,10 @@ CFLAGS += -fno-asynchronous-unwind-tables
+ ifneq ($(call cc-option,$(CC),-fvisibility=hidden,n),n)
+ CFLAGS += -DGCC_HAS_VISIBILITY_ATTRIBUTE
+ endif
++
++# Compile with thunk-extern, indirect-branch-register if avaiable.
++ifneq ($(call cc-option,$(CC),-mindirect-branch-register,n),n)
++CFLAGS += -mindirect-branch=thunk-extern -mindirect-branch-register
++CFLAGS += -DCONFIG_INDIRECT_THUNK -fno-jump-tables
++export CONFIG_INDIRECT_THUNK=y
++endif
+diff --git a/xen/arch/x86/boot/build32.mk b/xen/arch/x86/boot/build32.mk
+index 2ca7441..2520f63 100644
+--- a/xen/arch/x86/boot/build32.mk
++++ b/xen/arch/x86/boot/build32.mk
+@@ -4,6 +4,10 @@ include $(XEN_ROOT)/Config.mk
+ 
+ $(call cc-options-add,CFLAGS,CC,$(EMBEDDED_EXTRA_CFLAGS))
+ 
++ifneq ($(call cc-option,$(CC),-mindirect-branch-register,n),n)
++CFLAGS += -mindirect-branch=thunk-extern -mindirect-branch-register -fno-jump-tables
++endif
++
+ CFLAGS += -Werror -fno-builtin -fno-jump-tables -msoft-float
+ CFLAGS := $(filter-out -flto,$(CFLAGS)) 
+ 
+diff --git a/xen/arch/x86/indirect_thunk.S b/xen/arch/x86/indirect_thunk.S
+new file mode 100644
+index 0000000..4fef1c8
+--- /dev/null
++++ b/xen/arch/x86/indirect_thunk.S
+@@ -0,0 +1,28 @@
++#include <asm/asm_defns.h>
++
++.macro IND_THUNK_RETPOLINE reg:req
++        call 2f
++1:
++        lfence
++        jmp 1b
++2:
++        mov \reg, (%rsp)
++        ret
++.endm
++
++/*
++ * Build the __x86.indirect_thunk.* symbols.  Execution lands on an
++ * alternative patch point which implements one of the above THUNK_*'s
++ */
++.macro GEN_INDIRECT_THUNK name:req reg:req
++        .section .text.__x86.indirect_thunk.\name, "ax", @progbits
++
++ENTRY(__x86.indirect_thunk.\name)
++        IND_THUNK_RETPOLINE \reg
++.endm
++
++/* Instantiate GEN_INDIRECT_THUNK for each register except %rsp. */
++.irp enc, rax, rbx, rcx, rdx, rsi, rdi, rbp, \
++          r8, r9, r10, r11, r12, r13, r14, r15
++        GEN_INDIRECT_THUNK name=\enc, reg=%\enc
++.endr
+diff --git a/xen/arch/x86/xen.lds.S b/xen/arch/x86/xen.lds.S
+index 0e1848e..570ba17 100644
+--- a/xen/arch/x86/xen.lds.S
++++ b/xen/arch/x86/xen.lds.S
+@@ -60,6 +60,7 @@ SECTIONS
+   .text : {
+         _stext = .;            /* Text and read-only data */
+        *(.text)
++       *(.text.__x86.*)
+        *(.text.cold)
+        *(.text.unlikely)
+        *(.fixup)

@@ -1,0 +1,603 @@
+From 47dd42fd7b8a8a12c5001985c718cb6f0012ee0d Mon Sep 17 00:00:00 2001
+From: Daniel Kiper <daniel.kiper@oracle.com>
+Date: Fri, 30 Jan 2015 18:54:08 +0100
+Subject: [PATCH 04/18] xen/x86: add multiboot2 protocol support
+
+Add multiboot2 protocol support. Alter min memory limit handling as we
+now may not find it from either multiboot (v1) or multiboot2.
+
+This way we are laying the foundation for EFI + GRUB2 + Xen development.
+
+Signed-off-by: Daniel Kiper <daniel.kiper@oracle.com>
+diff --git a/xen/arch/x86/boot/Makefile b/xen/arch/x86/boot/Makefile
+index 5fdb5ae..0efa7d2 100644
+--- a/xen/arch/x86/boot/Makefile
++++ b/xen/arch/x86/boot/Makefile
+@@ -1,6 +1,7 @@
+ obj-bin-y += head.o
+ 
+-RELOC_DEPS = $(BASEDIR)/include/asm-x86/config.h $(BASEDIR)/include/xen/multiboot.h
++RELOC_DEPS = $(BASEDIR)/include/asm-x86/config.h $(BASEDIR)/include/xen/compiler.h \
++	     $(BASEDIR)/include/xen/multiboot.h $(BASEDIR)/include/xen/multiboot2.h
+ 
+ head.o: reloc.S
+ 
+diff --git a/xen/arch/x86/boot/head.S b/xen/arch/x86/boot/head.S
+index 1d8800d..e1ac624 100644
+--- a/xen/arch/x86/boot/head.S
++++ b/xen/arch/x86/boot/head.S
+@@ -1,5 +1,6 @@
+ #include <xen/config.h>
+ #include <xen/multiboot.h>
++#include <xen/multiboot2.h>
+ #include <public/xen.h>
+ #include <asm/asm_defns.h>
+ #include <asm/desc.h>
+@@ -34,6 +35,59 @@ multiboot1_header_start:       /*** MULTIBOOT1 HEADER ****/
+         .long   -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
+ multiboot1_header_end:
+ 
++/*** MULTIBOOT2 HEADER ****/
++/* Some ideas are taken from grub-2.00/grub-core/tests/boot/kernel-i386.S file. */
++        .align  MULTIBOOT2_HEADER_ALIGN
++
++.Lmultiboot2_header:
++        /* Magic number indicating a Multiboot2 header. */
++        .long   MULTIBOOT2_HEADER_MAGIC
++        /* Architecture: i386. */
++        .long   MULTIBOOT2_ARCHITECTURE_I386
++        /* Multiboot2 header length. */
++        .long   .Lmultiboot2_header_end - .Lmultiboot2_header
++        /* Multiboot2 header checksum. */
++        .long   -(MULTIBOOT2_HEADER_MAGIC + MULTIBOOT2_ARCHITECTURE_I386 + \
++                        (.Lmultiboot2_header_end - .Lmultiboot2_header))
++
++        /* Multiboot2 tags... */
++.Lmultiboot2_info_req:
++        /* Multiboot2 information request tag. */
++        .short  MULTIBOOT2_HEADER_TAG_INFORMATION_REQUEST
++        .short  MULTIBOOT2_HEADER_TAG_REQUIRED
++        .long   .Lmultiboot2_info_req_end - .Lmultiboot2_info_req
++        .long   MULTIBOOT2_TAG_TYPE_BASIC_MEMINFO
++        .long   MULTIBOOT2_TAG_TYPE_MMAP
++.Lmultiboot2_info_req_end:
++
++        .align  MULTIBOOT2_TAG_ALIGN
++        .short  MULTIBOOT2_HEADER_TAG_MODULE_ALIGN
++        .short  MULTIBOOT2_HEADER_TAG_REQUIRED
++        .long   8 /* Tag size. */
++
++        /* Console flags tag. */
++        .align  MULTIBOOT2_TAG_ALIGN
++        .short  MULTIBOOT2_HEADER_TAG_CONSOLE_FLAGS
++        .short  MULTIBOOT2_HEADER_TAG_OPTIONAL
++        .long   12 /* Tag size. */
++        .long   MULTIBOOT2_CONSOLE_FLAGS_EGA_TEXT_SUPPORTED
++
++        /* Framebuffer tag. */
++        .align  MULTIBOOT2_TAG_ALIGN
++        .short  MULTIBOOT2_HEADER_TAG_FRAMEBUFFER
++        .short  MULTIBOOT2_HEADER_TAG_OPTIONAL
++        .long   20 /* Tag size. */
++        .long   0 /* Number of the columns - no preference. */
++        .long   0 /* Number of the lines - no preference. */
++        .long   0 /* Number of bits per pixel - no preference. */
++
++        /* Multiboot2 header end tag. */
++        .align  MULTIBOOT2_TAG_ALIGN
++        .short  MULTIBOOT2_HEADER_TAG_END
++        .short  0
++        .long   8 /* Tag size. */
++.Lmultiboot2_header_end:
++
+         .section .init.rodata, "a", @progbits
+         .align 4
+ 
+@@ -82,10 +136,51 @@ __start:
+         mov     %ecx,%es
+         mov     %ecx,%ss
+ 
++        /* Bootloaders may set multiboot[12].mem_lower to a nonzero value */
++        xor     %edx,%edx
++
+         /* Check for Multiboot bootloader */
+         cmp     $MULTIBOOT_BOOTLOADER_MAGIC,%eax
+-        jne     not_multiboot
++        je      multiboot1_proto
++
++        /* Check for Multiboot2 bootloader */
++        cmp     $MULTIBOOT2_BOOTLOADER_MAGIC,%eax
++        je      multiboot2_proto
++
++        jmp     not_multiboot
++
++multiboot1_proto:
++        /* Get mem_lower from Multiboot information */
++        testb   $MBI_MEMLIMITS,(%ebx)
++        jz      trampoline_setup    /* not available? BDA value will be fine */
++
++        mov     MB_mem_lower(%ebx),%edx
++        jmp     trampoline_setup
+ 
++multiboot2_proto:
++        /* Skip Multiboot2 information fixed part */
++        lea     MB2_fixed_sizeof(%ebx),%ecx
++
++0:
++        /* Get mem_lower from Multiboot2 information */
++        cmpl    $MULTIBOOT2_TAG_TYPE_BASIC_MEMINFO,(%ecx)
++        jne     1f
++
++        mov     MB2_mem_lower(%ecx),%edx
++        jmp     trampoline_setup
++
++1:
++        /* Is it the end of Multiboot2 information? */
++        cmpl    $MULTIBOOT2_TAG_TYPE_END,(%ecx)
++        je      trampoline_setup
++
++        /* Go to next Multiboot2 information tag */
++        add     MB2_tag_size(%ecx),%ecx
++        add     $(MULTIBOOT2_TAG_ALIGN-1),%ecx
++        and     $~(MULTIBOOT2_TAG_ALIGN-1),%ecx
++        jmp     0b
++
++trampoline_setup:
+         /* Set up trampoline segment 64k below EBDA */
+         movzwl  0x40e,%ecx          /* EBDA segment */
+         cmp     $0xa000,%ecx        /* sanity check (high) */
+@@ -100,9 +195,6 @@ __start:
+          * Compare the value in the BDA with the information from the
+          * multiboot structure (if available) and use the smallest.
+          */
+-        testb   $MBI_MEMLIMITS,(%ebx)
+-        jz      2f                  /* not available? BDA value will be fine */
+-        mov     MB_mem_lower(%ebx),%edx
+         cmp     $0x100,%edx         /* is the multiboot value too small? */
+         jb      2f                  /* if so, do not use it */
+         shl     $10-4,%edx
+@@ -119,9 +211,9 @@ __start:
+ 
+         /* Save the Multiboot info struct (after relocation) for later use. */
+         mov     $sym_phys(cpu0_stack)+1024,%esp
+-        mov     %ecx,%eax
++        push    %eax                /* Multiboot magic */
+         push    %ebx                /* Multiboot information address */
+-        call    reloc               /* %eax contains trampoline address */
++        call    reloc               /* %ecx contains trampoline address */
+         mov     %eax,sym_phys(multiboot_ptr)
+ 
+         /* Initialize BSS (no nasty surprises!) */
+diff --git a/xen/arch/x86/boot/reloc.c b/xen/arch/x86/boot/reloc.c
+index f964cda..4b89838 100644
+--- a/xen/arch/x86/boot/reloc.c
++++ b/xen/arch/x86/boot/reloc.c
+@@ -5,19 +5,26 @@
+  * and modules. This is most easily done early with paging disabled.
+  *
+  * Copyright (c) 2009, Citrix Systems, Inc.
++ * Copyright (c) 2013, 2014, 2015 Oracle Corp.
+  *
+  * Authors:
+  *    Keir Fraser <keir@xen.org>
++ *    Daniel Kiper
+  */
+ 
+-/* entered with %eax = BOOT_TRAMPOLINE */
++/*
++ * This entry point is entered from xen/arch/x86/boot/head.S with:
++ *   - %eax = MULTIBOOT_MAGIC,
++ *   - %ebx = MULTIBOOT_INFORMATION_ADDRESS,
++ *   - %ecx = BOOT_TRAMPOLINE.
++ */
+ asm (
+     "    .text                         \n"
+     "    .globl _start                 \n"
+     "_start:                           \n"
+     "    call 1f                       \n"
+     "1:  pop  %ebx                     \n"
+-    "    mov  %eax,alloc-1b(%ebx)      \n"
++    "    mov  %ecx,alloc-1b(%ebx)      \n"
+     "    jmp  reloc                    \n"
+     );
+ 
+@@ -31,7 +38,16 @@ asm (
+     );
+ 
+ typedef unsigned int u32;
++typedef unsigned long long u64;
++
++#include "../../../include/xen/compiler.h"
+ #include "../../../include/xen/multiboot.h"
++#include "../../../include/xen/multiboot2.h"
++
++#define ALIGN_UP(addr, align) \
++                (((addr) + (typeof(addr))(align) - 1) & ~((typeof(addr))(align) - 1))
++
++#define get_mb2_data(tag, type, member) (((type *)(tag))->member)
+ 
+ static u32 alloc_struct(u32 bytes)
+ {
+@@ -49,6 +65,11 @@ static u32 alloc_struct(u32 bytes)
+     return s;
+ }
+ 
++static void zero_struct(u32 s, u32 bytes)
++{
++    asm volatile("rep stosb" : "+D" (s), "+c" (bytes) : "a" (0) : "memory");
++}
++
+ static u32 copy_struct(u32 src, u32 bytes)
+ {
+     u32 dst, dst_asm;
+@@ -74,40 +95,153 @@ static u32 copy_string(u32 src)
+     return copy_struct(src, p - (char *)src + 1);
+ }
+ 
+-multiboot_info_t *reloc(multiboot_info_t *mbi_old)
++static multiboot_info_t *mbi_mbi(void *mbi_in)
+ {
+-    multiboot_info_t *mbi = (multiboot_info_t *)copy_struct((u32)mbi_old, sizeof(*mbi));
+     int i;
++    multiboot_info_t *mbi_out;
+ 
+-    if ( mbi->flags & MBI_CMDLINE )
+-        mbi->cmdline = copy_string(mbi->cmdline);
++    mbi_out = (multiboot_info_t *)copy_struct((u32)mbi_in, sizeof(*mbi_out));
+ 
+-    if ( mbi->flags & MBI_MODULES )
++    if ( mbi_out->flags & MBI_CMDLINE )
++        mbi_out->cmdline = copy_string(mbi_out->cmdline);
++
++    if ( mbi_out->flags & MBI_MODULES )
+     {
+         module_t *mods = (module_t *)copy_struct(
+-            mbi->mods_addr, mbi->mods_count * sizeof(module_t));
++            mbi_out->mods_addr, mbi_out->mods_count * sizeof(module_t));
+ 
+-        mbi->mods_addr = (u32)mods;
++        mbi_out->mods_addr = (u32)mods;
+ 
+-        for ( i = 0; i < mbi->mods_count; i++ )
++        for ( i = 0; i < mbi_out->mods_count; i++ )
+         {
+             if ( mods[i].string )
+                 mods[i].string = copy_string(mods[i].string);
+         }
+     }
+ 
+-    if ( mbi->flags & MBI_MEMMAP )
+-        mbi->mmap_addr = copy_struct(mbi->mmap_addr, mbi->mmap_length);
++    if ( mbi_out->flags & MBI_MEMMAP )
++        mbi_out->mmap_addr = copy_struct(mbi_out->mmap_addr, mbi_out->mmap_length);
+ 
+-    if ( mbi->flags & MBI_LOADERNAME )
+-        mbi->boot_loader_name = copy_string(mbi->boot_loader_name);
++    if ( mbi_out->flags & MBI_LOADERNAME )
++        mbi_out->boot_loader_name = copy_string(mbi_out->boot_loader_name);
+ 
+     /* Mask features we don't understand or don't relocate. */
+-    mbi->flags &= (MBI_MEMLIMITS |
+-                   MBI_CMDLINE |
+-                   MBI_MODULES |
+-                   MBI_MEMMAP |
+-                   MBI_LOADERNAME);
++    mbi_out->flags &= (MBI_MEMLIMITS |
++                       MBI_CMDLINE |
++                       MBI_MODULES |
++                       MBI_MEMMAP |
++                       MBI_LOADERNAME);
++
++    return mbi_out;
++}
++
++static multiboot_info_t *mbi2_mbi(void *mbi_in)
++{
++    module_t *mbi_out_mods;
++    memory_map_t *mmap_dst;
++    multiboot2_memory_map_t *mmap_src;
++    multiboot2_tag_t *tag;
++    multiboot_info_t *mbi_out;
++    u32 ptr;
++    unsigned int i, mod_idx = 0;
++
++    mbi_out = (multiboot_info_t *)alloc_struct(sizeof(*mbi_out));
++    zero_struct((u32)mbi_out, sizeof(*mbi_out));
++
++    /* Skip Multiboot2 information fixed part. */
++    tag = mbi_in + sizeof(multiboot2_fixed_t);
+ 
+-    return mbi;
++    for ( ; ; )
++    {
++        if ( tag->type == MULTIBOOT2_TAG_TYPE_MODULE )
++            ++mbi_out->mods_count;
++        else if ( tag->type == MULTIBOOT2_TAG_TYPE_END )
++        {
++            mbi_out->flags = MBI_MODULES;
++            mbi_out->mods_addr = alloc_struct(mbi_out->mods_count * sizeof(module_t));
++            mbi_out_mods = (module_t *)mbi_out->mods_addr;
++            break;
++        }
++
++        /* Go to next Multiboot2 information tag. */
++        tag = (multiboot2_tag_t *)(ALIGN_UP((u32)tag + tag->size, MULTIBOOT2_TAG_ALIGN));
++    }
++
++    /* Skip Multiboot2 information fixed part. */
++    tag = mbi_in + sizeof(multiboot2_fixed_t);
++
++    for ( ; ; )
++    {
++        switch ( tag->type )
++        {
++        case MULTIBOOT2_TAG_TYPE_BOOT_LOADER_NAME:
++            mbi_out->flags |= MBI_LOADERNAME;
++            ptr = (u32)get_mb2_data(tag, multiboot2_tag_string_t, string);
++            mbi_out->boot_loader_name = copy_string(ptr);
++            break;
++
++        case MULTIBOOT2_TAG_TYPE_CMDLINE:
++            mbi_out->flags |= MBI_CMDLINE;
++            ptr = (u32)get_mb2_data(tag, multiboot2_tag_string_t, string);
++            mbi_out->cmdline = copy_string(ptr);
++            break;
++
++        case MULTIBOOT2_TAG_TYPE_BASIC_MEMINFO:
++            mbi_out->flags |= MBI_MEMLIMITS;
++            mbi_out->mem_lower = get_mb2_data(tag, multiboot2_tag_basic_meminfo_t, mem_lower);
++            mbi_out->mem_upper = get_mb2_data(tag, multiboot2_tag_basic_meminfo_t, mem_upper);
++            break;
++
++        case MULTIBOOT2_TAG_TYPE_MMAP:
++            mbi_out->flags |= MBI_MEMMAP;
++            mbi_out->mmap_length = get_mb2_data(tag, multiboot2_tag_mmap_t, size);
++            mbi_out->mmap_length -= sizeof(multiboot2_tag_mmap_t);
++            mbi_out->mmap_length += sizeof(((multiboot2_tag_mmap_t){0}).entries);
++            mbi_out->mmap_length /= get_mb2_data(tag, multiboot2_tag_mmap_t, entry_size);
++            mbi_out->mmap_length *= sizeof(memory_map_t);
++
++            mbi_out->mmap_addr = alloc_struct(mbi_out->mmap_length);
++
++            mmap_src = get_mb2_data(tag, multiboot2_tag_mmap_t, entries);
++            mmap_dst = (memory_map_t *)mbi_out->mmap_addr;
++
++            for ( i = 0; i < mbi_out->mmap_length / sizeof(memory_map_t); ++i )
++            {
++                mmap_dst[i].size = sizeof(memory_map_t);
++                mmap_dst[i].size -= sizeof(((memory_map_t){0}).size);
++                mmap_dst[i].base_addr_low = (u32)mmap_src[i].addr;
++                mmap_dst[i].base_addr_high = (u32)(mmap_src[i].addr >> 32);
++                mmap_dst[i].length_low = (u32)mmap_src[i].len;
++                mmap_dst[i].length_high = (u32)(mmap_src[i].len >> 32);
++                mmap_dst[i].type = mmap_src[i].type;
++            }
++            break;
++
++        case MULTIBOOT2_TAG_TYPE_MODULE:
++            mbi_out_mods[mod_idx].mod_start = get_mb2_data(tag, multiboot2_tag_module_t, mod_start);
++            mbi_out_mods[mod_idx].mod_end = get_mb2_data(tag, multiboot2_tag_module_t, mod_end);
++            ptr = (u32)get_mb2_data(tag, multiboot2_tag_module_t, cmdline);
++            mbi_out_mods[mod_idx].string = copy_string(ptr);
++            mbi_out_mods[mod_idx].reserved = 0;
++            ++mod_idx;
++            break;
++
++        case MULTIBOOT2_TAG_TYPE_END:
++            return mbi_out;
++
++        default:
++            break;
++        }
++
++        /* Go to next Multiboot2 information tag. */
++        tag = (multiboot2_tag_t *)(ALIGN_UP((u32)tag + tag->size, MULTIBOOT2_TAG_ALIGN));
++    }
++}
++
++static multiboot_info_t __used *reloc(void *mbi_in, u32 mb_magic)
++{
++    if ( mb_magic == MULTIBOOT2_BOOTLOADER_MAGIC )
++        return mbi2_mbi(mbi_in);
++    else
++        return mbi_mbi(mbi_in);
+ }
+diff --git a/xen/arch/x86/x86_64/asm-offsets.c b/xen/arch/x86/x86_64/asm-offsets.c
+index fa37ee0..8b842af 100644
+--- a/xen/arch/x86/x86_64/asm-offsets.c
++++ b/xen/arch/x86/x86_64/asm-offsets.c
+@@ -13,6 +13,7 @@
+ #include <asm/fixmap.h>
+ #include <asm/hardirq.h>
+ #include <xen/multiboot.h>
++#include <xen/multiboot2.h>
+ 
+ #define DEFINE(_sym, _val)                                                 \
+     asm volatile ("\n.ascii\"==>#define " #_sym " %0 /* " #_val " */<==\"" \
+@@ -167,6 +168,11 @@ void __dummy__(void)
+     OFFSET(MB_flags, multiboot_info_t, flags);
+     OFFSET(MB_cmdline, multiboot_info_t, cmdline);
+     OFFSET(MB_mem_lower, multiboot_info_t, mem_lower);
++    BLANK();
++
++    DEFINE(MB2_fixed_sizeof, sizeof(multiboot2_fixed_t));
++    OFFSET(MB2_tag_size, multiboot2_tag_t, size);
++    OFFSET(MB2_mem_lower, multiboot2_tag_basic_meminfo_t, mem_lower);
+ 
+     OFFSET(DOMAIN_vm_assist, struct domain, vm_assist);
+ }
+diff --git a/xen/include/xen/multiboot2.h b/xen/include/xen/multiboot2.h
+new file mode 100644
+index 0000000..09ee64e
+--- /dev/null
++++ b/xen/include/xen/multiboot2.h
+@@ -0,0 +1,169 @@
++/*
++ *  Copyright (C) 1999,2003,2007,2008,2009,2010  Free Software Foundation, Inc.
++ *
++ *  multiboot2.h - Multiboot 2 header file.
++ *
++ *  Based on grub-2.00/include/multiboot2.h file.
++ *
++ *  Permission is hereby granted, free of charge, to any person obtaining a copy
++ *  of this software and associated documentation files (the "Software"), to
++ *  deal in the Software without restriction, including without limitation the
++ *  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
++ *  sell copies of the Software, and to permit persons to whom the Software is
++ *  furnished to do so, subject to the following conditions:
++ *
++ *  The above copyright notice and this permission notice shall be included in
++ *  all copies or substantial portions of the Software.
++ *
++ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL ANY
++ *  DEVELOPER OR DISTRIBUTOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++ *  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
++ *  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ */
++
++#ifndef __MULTIBOOT2_H__
++#define __MULTIBOOT2_H__
++
++/* The magic field should contain this.  */
++#define MULTIBOOT2_HEADER_MAGIC			0xe85250d6
++
++/* This should be in %eax on x86 architecture.  */
++#define MULTIBOOT2_BOOTLOADER_MAGIC		0x36d76289
++
++/* How many bytes from the start of the file we search for the header.  */
++#define MULTIBOOT2_SEARCH			32768
++
++/* Multiboot 2 header alignment. */
++#define MULTIBOOT2_HEADER_ALIGN			8
++
++/* Alignment of multiboot 2 modules.  */
++#define MULTIBOOT2_MOD_ALIGN			0x00001000
++
++/* Alignment of the multiboot 2 info structure.  */
++#define MULTIBOOT2_INFO_ALIGN			0x00000008
++
++/* Multiboot 2 architectures. */
++#define MULTIBOOT2_ARCHITECTURE_I386	0
++#define MULTIBOOT2_ARCHITECTURE_MIPS32	4
++
++/* Header tag types. */
++#define MULTIBOOT2_HEADER_TAG_END			0
++#define MULTIBOOT2_HEADER_TAG_INFORMATION_REQUEST	1
++#define MULTIBOOT2_HEADER_TAG_ADDRESS			2
++#define MULTIBOOT2_HEADER_TAG_ENTRY_ADDRESS		3
++#define MULTIBOOT2_HEADER_TAG_CONSOLE_FLAGS		4
++#define MULTIBOOT2_HEADER_TAG_FRAMEBUFFER		5
++#define MULTIBOOT2_HEADER_TAG_MODULE_ALIGN		6
++#define MULTIBOOT2_HEADER_TAG_EFI_BS			7
++#define MULTIBOOT2_HEADER_TAG_ENTRY_ADDRESS_EFI32	8
++#define MULTIBOOT2_HEADER_TAG_ENTRY_ADDRESS_EFI64	9
++
++/* Header tag flags. */
++#define MULTIBOOT2_HEADER_TAG_REQUIRED	0
++#define MULTIBOOT2_HEADER_TAG_OPTIONAL	1
++
++/* Header console tag console_flags. */
++#define MULTIBOOT2_CONSOLE_FLAGS_CONSOLE_REQUIRED	1
++#define MULTIBOOT2_CONSOLE_FLAGS_EGA_TEXT_SUPPORTED	2
++
++/* Flags set in the 'flags' member of the multiboot header.  */
++#define MULTIBOOT2_TAG_TYPE_END			0
++#define MULTIBOOT2_TAG_TYPE_CMDLINE		1
++#define MULTIBOOT2_TAG_TYPE_BOOT_LOADER_NAME	2
++#define MULTIBOOT2_TAG_TYPE_MODULE		3
++#define MULTIBOOT2_TAG_TYPE_BASIC_MEMINFO	4
++#define MULTIBOOT2_TAG_TYPE_BOOTDEV		5
++#define MULTIBOOT2_TAG_TYPE_MMAP		6
++#define MULTIBOOT2_TAG_TYPE_VBE			7
++#define MULTIBOOT2_TAG_TYPE_FRAMEBUFFER		8
++#define MULTIBOOT2_TAG_TYPE_ELF_SECTIONS	9
++#define MULTIBOOT2_TAG_TYPE_APM			10
++#define MULTIBOOT2_TAG_TYPE_EFI32		11
++#define MULTIBOOT2_TAG_TYPE_EFI64		12
++#define MULTIBOOT2_TAG_TYPE_SMBIOS		13
++#define MULTIBOOT2_TAG_TYPE_ACPI_OLD		14
++#define MULTIBOOT2_TAG_TYPE_ACPI_NEW		15
++#define MULTIBOOT2_TAG_TYPE_NETWORK		16
++#define MULTIBOOT2_TAG_TYPE_EFI_MMAP		17
++#define MULTIBOOT2_TAG_TYPE_EFI_BS		18
++#define MULTIBOOT2_TAG_TYPE_EFI32_IH		19
++#define MULTIBOOT2_TAG_TYPE_EFI64_IH		20
++
++/* Multiboot 2 tag alignment. */
++#define MULTIBOOT2_TAG_ALIGN			8
++
++/* Memory types. */
++#define MULTIBOOT2_MEMORY_AVAILABLE		1
++#define MULTIBOOT2_MEMORY_RESERVED		2
++#define MULTIBOOT2_MEMORY_ACPI_RECLAIMABLE	3
++#define MULTIBOOT2_MEMORY_NVS			4
++#define MULTIBOOT2_MEMORY_BADRAM		5
++
++/* Framebuffer types. */
++#define MULTIBOOT2_FRAMEBUFFER_TYPE_INDEXED	0
++#define MULTIBOOT2_FRAMEBUFFER_TYPE_RGB		1
++#define MULTIBOOT2_FRAMEBUFFER_TYPE_EGA_TEXT	2
++
++#ifndef __ASSEMBLY__
++typedef struct {
++    u32 total_size;
++    u32 reserved;
++} multiboot2_fixed_t;
++
++typedef struct {
++    u32 type;
++    u32 size;
++} multiboot2_tag_t;
++
++typedef struct {
++    u32 type;
++    u32 size;
++    char string[0];
++} multiboot2_tag_string_t;
++
++typedef struct {
++    u32 type;
++    u32 size;
++    u32 mem_lower;
++    u32 mem_upper;
++} multiboot2_tag_basic_meminfo_t;
++
++typedef struct __packed {
++    u64 addr;
++    u64 len;
++    u32 type;
++    u32 zero;
++} multiboot2_memory_map_t;
++
++typedef struct {
++    u32 type;
++    u32 size;
++    u32 entry_size;
++    u32 entry_version;
++    multiboot2_memory_map_t entries[0];
++} multiboot2_tag_mmap_t;
++
++typedef struct {
++    u32 type;
++    u32 size;
++    u64 pointer;
++} multiboot2_tag_efi64_t;
++
++typedef struct {
++    u32 type;
++    u32 size;
++    u64 pointer;
++} multiboot2_tag_efi64_ih_t;
++
++typedef struct {
++    u32 type;
++    u32 size;
++    u32 mod_start;
++    u32 mod_end;
++    char cmdline[0];
++} multiboot2_tag_module_t;
++#endif /* __ASSEMBLY__ */
++
++#endif /* __MULTIBOOT2_H__ */

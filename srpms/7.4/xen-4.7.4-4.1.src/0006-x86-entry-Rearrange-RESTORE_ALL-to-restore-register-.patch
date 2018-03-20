@@ -1,0 +1,57 @@
+From 68482b970e55ec521eea163f89219b4fac462063 Mon Sep 17 00:00:00 2001
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Date: Wed, 16 Aug 2017 18:07:30 +0100
+Subject: [PATCH] x86/entry: Rearrange RESTORE_ALL to restore register in stack
+ order
+
+Results in a more predictable (i.e. linear) memory access pattern.
+
+No functional change.
+
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Reviewed-by: Wei Liu <wei.liu2@citrix.com>
+diff --git a/xen/include/asm-x86/asm_defns.h b/xen/include/asm-x86/asm_defns.h
+index 61e0b19..6c9d901 100644
+--- a/xen/include/asm-x86/asm_defns.h
++++ b/xen/include/asm-x86/asm_defns.h
+@@ -259,6 +259,19 @@ static always_inline void stac(void)
+  */
+ .macro RESTORE_ALL adj=0 compat=0
+ .if !\compat
++        movq  UREGS_r15(%rsp), %r15
++        movq  UREGS_r14(%rsp), %r14
++        movq  UREGS_r13(%rsp), %r13
++        movq  UREGS_r12(%rsp), %r12
++.else
++        xor %r15, %r15
++        xor %r14, %r14
++        xor %r13, %r13
++        xor %r12, %r12
++.endif
++        LOAD_ONE_REG(bp, \compat)
++        LOAD_ONE_REG(bx, \compat)
++.if !\compat
+         movq  UREGS_r11(%rsp),%r11
+         movq  UREGS_r10(%rsp),%r10
+         movq  UREGS_r9(%rsp),%r9
+@@ -274,19 +287,6 @@ static always_inline void stac(void)
+         LOAD_ONE_REG(dx, \compat)
+         LOAD_ONE_REG(si, \compat)
+         LOAD_ONE_REG(di, \compat)
+-.if !\compat
+-        movq  UREGS_r15(%rsp),%r15
+-        movq  UREGS_r14(%rsp),%r14
+-        movq  UREGS_r13(%rsp),%r13
+-        movq  UREGS_r12(%rsp),%r12
+-.else
+-        xor %r15, %r15
+-        xor %r14, %r14
+-        xor %r13, %r13
+-        xor %r12, %r12
+-.endif
+-        LOAD_ONE_REG(bp, \compat)
+-        LOAD_ONE_REG(bx, \compat)
+         subq  $-(UREGS_error_code-UREGS_r15+\adj), %rsp
+ .endm
+ 

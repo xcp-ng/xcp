@@ -1,0 +1,42 @@
+From d9eb706356ad4dbd04aad563ec4d2bcd3d7d6c03 Mon Sep 17 00:00:00 2001
+From: Anshul Makkar <anshul.makkar@citrix.com>
+Date: Tue, 23 May 2017 15:12:58 +0100
+Subject: [PATCH] x86/hvmloader: Don't wait for the producer to fill the ring
+ if
+
+The condition: if there is a space in the ring then wait for the producer
+to fill the ring also evaluates to true even if the ring if full. It
+leads to a deadlock where producer is waiting for consumer
+to consume the items and consumer is waiting for producer to fill the ring.
+
+Fix for the issue: check if the ring is full and then break from
+the loop to consume the items from the ring.
+eg. case: prod = 1272, cons = 248.
+
+Signed-off-by: Anshul Makkar <anshul.makkar@citrix.com>
+Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Release-acked-by: Julien Grall <julien.grall@arm.com>
+diff --git a/tools/firmware/hvmloader/xenbus.c b/tools/firmware/hvmloader/xenbus.c
+index 448157d..2b89a56 100644
+--- a/tools/firmware/hvmloader/xenbus.c
++++ b/tools/firmware/hvmloader/xenbus.c
+@@ -141,7 +141,19 @@ static void ring_read(char *data, uint32_t len)
+         /* Don't overrun the producer pointer */
+         while ( (part = MASK_XENSTORE_IDX(rings->rsp_prod -
+                                           rings->rsp_cons)) == 0 )
++        {
++            /*
++             * Don't wait for producer to fill the ring if it is already full.
++             * Condition happens when you write string > 1K into the ring.
++             * eg case prod=1272 cons=248.
++             */
++            if ( rings->rsp_prod - rings->rsp_cons == XENSTORE_RING_SIZE )
++            {
++                part = XENSTORE_RING_SIZE;
++                break;
++            }
+             ring_wait();
++        }
+         /* Don't overrun the end of the ring */
+         if ( part > (XENSTORE_RING_SIZE - MASK_XENSTORE_IDX(rings->rsp_cons)) )
+             part = XENSTORE_RING_SIZE - MASK_XENSTORE_IDX(rings->rsp_cons);

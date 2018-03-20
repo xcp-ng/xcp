@@ -1,0 +1,122 @@
+From 006fca13ad7fd0f40d8e242fb70ca595ebb52265 Mon Sep 17 00:00:00 2001
+From: Ross Lagerwall <ross.lagerwall@citrix.com>
+Date: Fri, 20 Mar 2015 12:55:53 +0000
+Subject: [PATCH 1/2] x86/efi: Find memory for trampoline relocation if
+ necessary
+
+If a firmware implementation does not have a region beginning from 0x0 in its
+memory map, GRUB2 will pass 0 for the mem_lower value which causes relocating
+the multiboot2 header to fail. To fix this, if mem_lower == 0, search through
+the given memory map to find some space under 1MB to relocate the trampoline
+and the Multiboot2 header.
+
+This is similar to what the BIOS code does where it will find a region below
+the EBDA if mem_lower is 0.
+
+Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
+---
+ xen/arch/x86/boot/head.S    | 15 ++++++++++++-
+ xen/arch/x86/efi/efi-boot.h | 54 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 68 insertions(+), 1 deletion(-)
+
+diff --git a/xen/arch/x86/boot/head.S b/xen/arch/x86/boot/head.S
+index 89f5aa7..dea9520 100644
+--- a/xen/arch/x86/boot/head.S
++++ b/xen/arch/x86/boot/head.S
+@@ -232,7 +232,20 @@ run_bs:
+         pop     %rcx
+         pop     %rax
+ 
+-        shl     $10-4,%rcx          /* Convert multiboot2.mem_lower to bytes/16 */
++        /*
++         * If multiboot2.mem_lower is 0, try find some memory below 1MB to use
++         * for the trampoline.
++         */
++        cmp     $0, %rcx
++        jne     0f
++
++        push    %rax
++        mov     %rbx,%rdi           /* Pass in Multiboot2 information */
++        call    efi_multiboot2_find_memory
++        mov     %rax,%rcx           /* Get new address address */
++        pop     %rax
++
++0:      shl     $10-4,%rcx          /* Convert multiboot2.mem_lower to bytes/16 */
+ 
+         cli
+ 
+diff --git a/xen/arch/x86/efi/efi-boot.h b/xen/arch/x86/efi/efi-boot.h
+index f50c10a..4d4c1c3 100644
+--- a/xen/arch/x86/efi/efi-boot.h
++++ b/xen/arch/x86/efi/efi-boot.h
+@@ -4,6 +4,7 @@
+  * therefore can define arch specific global variables.
+  */
+ #include <xen/vga.h>
++#include <xen/multiboot2.h>
+ #include <asm/e820.h>
+ #include <asm/edd.h>
+ #include <asm/msr.h>
+@@ -679,6 +680,59 @@ void __init efi_multiboot2(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable
+     efi_exit_boot(ImageHandle, SystemTable);
+ }
+ 
++#define ALIGN_UP(addr, align) \
++                (((addr) + (typeof(addr))(align) - 1) & ~((typeof(addr))(align) - 1))
++
++#define get_mb2_data(tag, type, member) (((type *)(tag))->member)
++
++/* 64KB for the trampoline and 32KB for the multiboot2 header */
++#define RELOC_SPACE    0x18000
++
++/*
++ * Find memory below 1MB to use for relocating the trampoline and multiboot2
++ * header.
++ */
++u64 __init efi_multiboot2_find_memory(void *mbi_in)
++{
++    multiboot2_memory_map_t *mmap_src;
++    multiboot2_tag_t *tag;
++    int i;
++
++    /* Skip Multiboot2 information fixed part. */
++    tag = mbi_in + sizeof(multiboot2_fixed_t);
++
++    for ( ; ; )
++    {
++        if ( tag->type == MULTIBOOT2_TAG_TYPE_MMAP )
++        {
++            u32 len;
++
++            len = get_mb2_data(tag, multiboot2_tag_mmap_t, size);
++            len -= sizeof(multiboot2_tag_mmap_t);
++            len += sizeof(((multiboot2_tag_mmap_t){0}).entries);
++            len /= get_mb2_data(tag, multiboot2_tag_mmap_t, entry_size);
++            len *= sizeof(memory_map_t);
++
++            mmap_src = get_mb2_data(tag, multiboot2_tag_mmap_t, entries);
++
++            for ( i = 0; i < len / sizeof(memory_map_t); ++i )
++            {
++                /* Find enough space under 1MB and return an address in KB */
++                if ( mmap_src[i].addr + RELOC_SPACE <= 0x100000 &&
++                     mmap_src[i].type == MULTIBOOT2_MEMORY_AVAILABLE )
++                    return (mmap_src[i].addr + RELOC_SPACE) >> 10;
++            }
++        }
++        else if ( tag->type == MULTIBOOT2_TAG_TYPE_END )
++            break;
++
++        /* Go to next Multiboot2 information tag. */
++        tag = (multiboot2_tag_t *)(ALIGN_UP((u64)tag + tag->size, MULTIBOOT2_TAG_ALIGN));
++    }
++
++    return 0;
++}
++
+ /*
+  * Local variables:
+  * mode: C
+-- 
+2.1.0
+
