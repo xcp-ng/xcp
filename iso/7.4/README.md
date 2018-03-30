@@ -34,6 +34,16 @@ Go into the future ISO folder, and run `createrepo` using the `groups.xml` in th
 # createrepo . -o . -g ../groups.xml
 ```
 
+### install.img modification
+
+1. `bzip2 install.img`
+2. `mkdir tmp && cd tpm && cpio -id < ../install.img.out`
+3. Edit your files
+4. `find . | cpio --create --format='newc' > /tmp/newinstall`
+5. `bzip2 /tmp/newinstall`
+6. `mv /tmp/newinstall /tmp/install.img`
+7. Replace it into the ISO
+
 ### ISO generation
 
 You need `genisoimage` program.
