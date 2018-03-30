@@ -57,3 +57,7 @@ To get the ISO bootable on USB:
 ```
 # dd if=xcpng.iso of=/dev/sdX bs=4M status=progress oflag=direct && sync
 ```
+
+### Misc
+
+To get modify a package description without "rebuilding" it completely, you can use `rpmrebuild -e -p your.rpm`
