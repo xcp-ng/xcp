@@ -36,23 +36,22 @@ Go into the future ISO folder, and run `createrepo` using the `groups.xml` in th
 
 ### ISO generation
 
-You need `mkisofs` program.
+You need `genisoimage` program.
 
 Usage:
 
 ```
 # cd isofolder/
-# mkisofs -V "XCP-ng 7.4" -no-emul-boot -boot-load-size 4 -boot-info-table -r -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -o ~/xcpng.iso .
+# genisoimage -o ../xcpng.iso -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/efiboot.img -no-emul-boot .
 ```
+
+This will create a `xcpng.iso` file into your parent directory.
 
 To get the ISO bootable on USB:
 
 ```
-# isohybrid xcpng.iso
+# isohybrid --uefi xcpng.iso
 ```
-
-This will create a `xcpng.iso` file into your home directory.
-
 ### Write the ISO to a USB key
 
 ```
