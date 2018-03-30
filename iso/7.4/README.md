@@ -42,7 +42,7 @@ Usage:
 
 ```
 # cd isofolder/
-# genisoimage -o ../xcpng.iso -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/efiboot.img -no-emul-boot .
+# genisoimage -o ../xcpng.iso -J -V "XCP-ng 7.4" -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/efiboot.img -no-emul-boot .
 ```
 
 This will create a `xcpng.iso` file into your parent directory.
