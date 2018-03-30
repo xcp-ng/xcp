@@ -1,19 +1,18 @@
-## How to generate XCP-ng ISO
+## How to build XCP-ng ISO
 
-You need `mkisofs` program.
+### Splash image and other
 
-Usage:
+In your ISO folder, you need to create a `boot/isolinux` and add:
 
-```
-# cd isofolder/
-# mkisofs -no-emul-boot -boot-load-size 4 -boot-info-table -r -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -o ~/xcpng.iso .
-```
+* `pg_help`
+* `pg_main`
+* `splash.lss` (see below)
 
-This will create a `xcpng.iso` file into your home directory.
+In the root SO folder:
 
-### Splash image
+* `.treeinfo`
 
-To generate this splash image (`boot/isolinux/splash.lss`), you need:
+To generate the splash image (`boot/isolinux/splash.lss`), you need:
 
 * a 640x240 banner
 * In Gimp: Image/mode/index colors/14 (=16 including B&W)
@@ -21,9 +20,41 @@ To generate this splash image (`boot/isolinux/splash.lss`), you need:
 * `giftopnm < splash.gif > splash.ppm`
 * `ppmtolss16 < splash.ppm > splash.lss`
 
-#### Requirements
-
-In Fedora/CentOS/RH like, those packages are needed:
+> Note: in Fedora/CentOS/RH like, those packages are needed to create the splash image:
 
 * `syslinux-perl`
 * `netpbm-progs`
+
+### Create repodata
+
+Go into the future ISO folder, and run `createrepo` using the `groups.xml` in this repo:
+
+
+```
+# createrepo . -o . -g ../groups.xml
+```
+
+### ISO generation
+
+You need `mkisofs` program.
+
+Usage:
+
+```
+# cd isofolder/
+# mkisofs -V "XCP-ng 7.4" -no-emul-boot -boot-load-size 4 -boot-info-table -r -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -o ~/xcpng.iso .
+```
+
+To get the ISO bootable on USB:
+
+```
+# isohybrid xcpng.iso
+```
+
+This will create a `xcpng.iso` file into your home directory.
+
+### Write the ISO to a USB key
+
+```
+# dd if=xcpng.iso of=/dev/sdX bs=4M status=progress oflag=direct && sync
+```
