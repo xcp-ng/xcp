@@ -36,7 +36,7 @@ Go into the future ISO folder, and run `createrepo` using the `groups.xml` in th
 
 ### install.img modification
 
-1. `bzip2 install.img`
+1. `bzip2 -d install.img`
 2. `mkdir tmp && cd tpm && cpio -id < ../install.img.out`
 3. Edit your files
 4. `find . | cpio --create --format='newc' > /tmp/newinstall`
