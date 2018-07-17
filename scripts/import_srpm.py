@@ -1,0 +1,97 @@
+#!/bin/env python
+from __future__ import print_function
+import argparse
+import os
+import subprocess
+
+def main():
+    parser = argparse.ArgumentParser(description='Imports the contents of a source RPM into a git repository')
+    parser.add_argument('source_rpm', help='local path to source RPM')
+    parser.add_argument('repository', help='local path to the repository')
+    parser.add_argument('parent_branch', help='git parent branch from which to branch')
+    parser.add_argument('branch', help='destination branch')
+    parser.add_argument('tag', nargs='?', help='tag')
+    parser.add_argument('-c', '--commit', action='store_true', help='commit the changes')
+    parser.add_argument('-p', '--push', action='store_true', help='commit and push')
+    parser.add_argument('-m', '--master', action='store_true', help='merge to master afterwards')
+    args = parser.parse_args()
+
+    # check that the source RPM file exists
+    if not os.path.isfile(args.source_rpm):
+        parser.error("File %s does not exist." % args.source_rpm)
+    if not args.source_rpm.endswith('.src.rpm'):
+        parser.error("File %s does not appear to be a source RPM." % args.source_rpm)
+    source_rpm_abs = os.path.abspath(args.source_rpm)
+
+    # enter repository directory
+    if not os.path.isdir(args.repository):
+        parser.error("Repository directory %s does not exist." % args.repository)
+    os.chdir(args.repository)
+
+    # check that the working copy is clean
+    try:
+        subprocess.check_call(['git', 'diff-index', '--quiet',  'HEAD', '--'])
+        print("Working copy is clean.")
+    except:
+        parser.error("Git repository seems to have local modifications.")
+
+    # checkout parent ref
+    subprocess.check_call(['git', 'fetch'])
+    subprocess.check_call(['git', 'checkout', args.parent_branch])
+    subprocess.check_call(['git', 'pull'])
+
+    # remove everything from SOURCES and SPECS
+    if os.path.isdir('SOURCES'):
+        subprocess.check_call(['git', 'rm', 'SOURCES/*', '-r'])
+    os.mkdir('SOURCES')
+
+    if os.path.isdir('SPECS'):
+        subprocess.check_call(['git', 'rm', 'SPECS/*', '-r'])
+    os.mkdir('SPECS')
+
+    # extract SRPM
+    os.chdir('SOURCES')
+    os.system('rpm2cpio "%s" | cpio -idmv' % source_rpm_abs)
+    os.chdir('..')
+    os.system('mv SOURCES/*.spec SPECS/')
+
+    # remove trademarked or copyrighted files
+    sources = os.listdir('SOURCES')
+    deletemsg = "File deleted from the original sources for trademark-related or copyright-related legal reasons.\n"
+    deleted = []
+    for f in ['Citrix_Logo_Black.png']:
+        if f in sources:
+            os.unlink(os.path.join('SOURCES', f))
+            open(os.path.join('SOURCES', "%s.deleted-by-XCP-ng.txt" % f), 'w').write(deletemsg)
+            deleted.append(f)
+
+    # commit
+    subprocess.check_call(['git', 'checkout', '-b', args.branch])
+    subprocess.check_call(['git', 'add', '--all'])
+    if args.commit or args.push:
+        msg = 'Import %s' % os.path.basename(args.source_rpm)
+        if deleted:
+            msg += "\n\nFiles deleted for legal reasons:\n - " + '\n - '.join(deleted)
+        subprocess.check_call(['git', 'commit', '-m', msg])
+
+        # tag
+        if args.tag is not None:
+            subprocess.check_call(['git', 'tag', args.tag])
+
+        # push to remote
+        if args.push:
+            subprocess.check_call(['git', 'push', '--set-upstream', 'origin', args.branch])
+            if args.tag is not None:
+                subprocess.check_call(['git', 'push', 'origin', args.tag])
+
+    # switch to master before leaving
+    subprocess.check_call(['git', 'checkout', 'master'])
+
+    # merge to master if needed
+    if args.push and args.master:
+        subprocess.check_call(['git', 'push', 'origin', '%s:master' % args.branch])
+        subprocess.check_call(['git', 'pull'])
+
+
+if __name__ == "__main__":
+    main()
