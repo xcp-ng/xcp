@@ -14,5 +14,6 @@ XCP-ng is a "reboot" of old XCP, which was ditched when XenServer was Open Sourc
 * John Else
 * Necouchman
 * Jon Sands
+* Samuel Verschelde
 
 Want to join us? Ask!
