@@ -1,0 +1,16 @@
+[platform]
+name = XCP
+version = 2.6.0
+
+[branding]
+name = XCP-ng
+version = 7.5.0
+
+[build]
+number = release/kolkata/master/29
+
+[keys]
+key1 = RPM-GPG-KEY-XS-7-LCM
+key2 = RPM-GPG-KEY-XS-7
+key3 = RPM-GPG-KEY-Platform-V1
+
