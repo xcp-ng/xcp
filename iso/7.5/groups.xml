@@ -46,6 +46,7 @@
             <packagereq type="mandatory">iscsi-initiator-utils</packagereq>
             <packagereq type="mandatory">kbd</packagereq>
             <packagereq type="mandatory">kexec-tools</packagereq>
+            <packagereq type="mandatory">libempserver</packagereq>
             <packagereq type="mandatory">linux-firmware</packagereq>
             <packagereq type="mandatory">linux-guest-loader-data</packagereq>
             <packagereq type="mandatory">linux-guest-loader</packagereq>
@@ -99,6 +100,7 @@
             <packagereq type="mandatory">sysfsutils</packagereq>
             <packagereq type="mandatory">sysstat</packagereq>
             <packagereq type="mandatory">system-config-firewall-tui</packagereq>
+            <packagereq type="mandatory">systemd-networkd</packagereq>
             <packagereq type="mandatory">systemtap-runtime</packagereq>
             <packagereq type="mandatory">tcpdump</packagereq>
             <packagereq type="mandatory">telnet</packagereq>
