@@ -156,7 +156,7 @@
             <packagereq type="mandatory">guest-templates-json-data-xenapp</packagereq>
             <packagereq type="mandatory">xcp-featured</packagereq>
             <packagereq type="mandatory">xcp-python-libs-xenserver</packagereq>
-            <packagereq type="mandatory">xencenter</packagereq>
+            <packagereq type="mandatory">xcp-ng-center</packagereq>
             <packagereq type="mandatory">xcp-ng-plymouth-theme</packagereq>
             <packagereq type="mandatory">xcp-ng-pv-tools</packagereq>
             <packagereq type="mandatory">xcp-ng-release-config</packagereq>
