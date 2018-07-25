@@ -161,6 +161,7 @@
             <packagereq type="mandatory">xcp-ng-pv-tools</packagereq>
             <packagereq type="mandatory">xcp-ng-release-config</packagereq>
             <packagereq type="mandatory">xcp-ng-release</packagereq>
+            <packagereq type="mandatory">xcp-ng-deps</packagereq>
         </packagelist>
     </group>
 </comps>
