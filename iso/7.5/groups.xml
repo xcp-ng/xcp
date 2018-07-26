@@ -110,7 +110,6 @@
             <packagereq type="mandatory">vcputune</packagereq>
             <packagereq type="mandatory">vendor-drivers</packagereq>
             <packagereq type="mandatory">vendor-update-keys</packagereq>
-            <packagereq type="mandatory">vgpu</packagereq>
             <packagereq type="mandatory">vhd-tool</packagereq>
             <packagereq type="mandatory">vhostmd</packagereq>
             <packagereq type="mandatory">vncsnapshot</packagereq>
