@@ -51,6 +51,8 @@ Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
     subprocess.check_call(['git', 'lfs', 'track', '*.xz'])
     subprocess.check_call(['git', 'lfs', 'track', '*.zip'])
     subprocess.check_call(['git', 'lfs', 'track', '*.tar'])
+    subprocess.check_call(['git', 'lfs', 'track', '*.tgz'])
+    subprocess.check_call(['git', 'lfs', 'track', '*.tbz'])
     subprocess.check_call(['git', 'add', '.gitattributes'])
     subprocess.check_call(['git', 'commit', '-m Initial commit'])
     subprocess.check_call(['git', 'push'])
