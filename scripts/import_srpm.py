@@ -66,7 +66,10 @@ def main():
             deleted.append(f)
 
     # commit
-    subprocess.check_call(['git', 'checkout', '-b', args.branch])
+    if subprocess.call(['git', 'rev-parse', '--quiet', '--verify', args.branch]) != 0:
+        subprocess.check_call(['git', 'checkout', '-b', args.branch])
+    else:
+        subprocess.check_call(['git', 'checkout', args.branch])
     subprocess.check_call(['git', 'add', '--all'])
     if args.commit or args.push:
         msg = 'Import %s' % os.path.basename(args.source_rpm)
