@@ -1,0 +1,1509 @@
+
+*** OpenIPMI-2.0.19-11.el7.src.rpm
+OpenIPMI-2.0.19-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/OpenIPMI-2.0.19-11.el7.x86_64.rpm
+OpenIPMI-devel-2.0.19-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/OpenIPMI-devel-2.0.19-11.el7.x86_64.rpm
+OpenIPMI-libs-2.0.19-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/OpenIPMI-libs-2.0.19-11.el7.x86_64.rpm
+OpenIPMI-modalias-2.0.19-11.el7.x86_64.rpm: OK
+OpenIPMI-perl-2.0.19-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/OpenIPMI-perl-2.0.19-11.el7.x86_64.rpm
+OpenIPMI-python-2.0.19-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/OpenIPMI-python-2.0.19-11.el7.x86_64.rpm
+
+*** PyPAM-0.5.0-19.el7.src.rpm
+PyPAM-0.5.0-19.el7.x86_64.rpm: OK
+
+*** acl-2.2.51-12.el7.src.rpm
+acl-2.2.51-12.el7.x86_64.rpm: OK
+libacl-2.2.51-12.el7.x86_64.rpm: OK
+libacl-devel-2.2.51-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libacl-devel-2.2.51-12.el7.x86_64.rpm
+
+*** acpica-tools-20150619-3.el7.src.rpm
+acpica-tools-20150619-3.el7.x86_64.rpm: OK
+
+*** aic94xx-firmware-30-6.el7.src.rpm
+aic94xx-firmware-30-6.el7.noarch.rpm: OK
+
+*** arptables-0.0.4-7.el7.src.rpm
+arptables-0.0.4-7.el7.x86_64.rpm: OK
+
+*** at-3.1.13-20.el7.src.rpm
+at-3.1.13-20.el7.x86_64.rpm: OK
+at-sysvinit-3.1.13-20.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/at-sysvinit-3.1.13-20.el7.x86_64.rpm
+
+*** attr-2.4.46-12.el7.src.rpm
+attr-2.4.46-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/attr-2.4.46-12.el7.x86_64.rpm
+libattr-2.4.46-12.el7.x86_64.rpm: OK
+libattr-devel-2.4.46-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libattr-devel-2.4.46-12.el7.x86_64.rpm
+
+*** audit-2.4.1-5.el7.src.rpm
+audispd-plugins-2.4.1-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/audispd-plugins-2.4.1-5.el7.x86_64.rpm
+audit-2.4.1-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/audit-2.4.1-5.el7.x86_64.rpm
+audit-libs-2.4.1-5.el7.x86_64.rpm: OK
+audit-libs-devel-2.4.1-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/audit-libs-devel-2.4.1-5.el7.x86_64.rpm
+audit-libs-python-2.4.1-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/audit-libs-python-2.4.1-5.el7.x86_64.rpm
+audit-libs-static-2.4.1-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/audit-libs-static-2.4.1-5.el7.x86_64.rpm
+
+*** autogen-5.18-5.el7.src.rpm
+autogen-5.18-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/autogen-5.18-5.el7.x86_64.rpm
+autogen-libopts-5.18-5.el7.x86_64.rpm: OK
+autogen-libopts-devel-5.18-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/autogen-libopts-devel-5.18-5.el7.x86_64.rpm
+
+*** avahi-0.6.31-15.el7_2.1.src.rpm
+avahi-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-autoipd-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-autoipd-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-compat-howl-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-compat-howl-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-compat-howl-devel-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-compat-howl-devel-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-compat-libdns_sd-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-compat-libdns_sd-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-compat-libdns_sd-devel-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-compat-libdns_sd-devel-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-devel-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-devel-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-dnsconfd-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-dnsconfd-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-glib-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-glib-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-glib-devel-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-glib-devel-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-gobject-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-gobject-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-gobject-devel-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-gobject-devel-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-libs-0.6.31-15.el7_2.1.x86_64.rpm: OK
+avahi-qt3-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-qt3-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-qt3-devel-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-qt3-devel-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-qt4-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-qt4-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-qt4-devel-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-qt4-devel-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-tools-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-tools-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-ui-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-ui-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-ui-devel-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-ui-devel-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-ui-gtk3-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-ui-gtk3-0.6.31-15.el7_2.1.x86_64.rpm
+avahi-ui-tools-0.6.31-15.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/avahi-ui-tools-0.6.31-15.el7_2.1.x86_64.rpm
+
+*** basesystem-10.0-7.el7.centos.src.rpm
+basesystem-10.0-7.el7.centos.noarch.rpm: OK
+
+*** bash-4.2.46-19.el7.src.rpm
+bash-4.2.46-19.el7.x86_64.rpm: OK
+bash-doc-4.2.46-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/bash-doc-4.2.46-19.el7.x86_64.rpm
+
+*** bash-completion-2.1-6.el7.src.rpm
+bash-completion-2.1-6.el7.noarch.rpm: OK
+
+*** bc-1.06.95-13.el7.src.rpm
+bc-1.06.95-13.el7.x86_64.rpm: OK
+
+*** bind-9.9.4-29.el7_2.3.src.rpm
+bind-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-9.9.4-29.el7_2.3.x86_64.rpm
+bind-chroot-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-chroot-9.9.4-29.el7_2.3.x86_64.rpm
+bind-devel-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-devel-9.9.4-29.el7_2.3.x86_64.rpm
+bind-libs-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-libs-9.9.4-29.el7_2.3.x86_64.rpm
+bind-libs-lite-9.9.4-29.el7_2.3.x86_64.rpm: OK
+bind-license-9.9.4-29.el7_2.3.noarch.rpm: OK
+bind-lite-devel-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-lite-devel-9.9.4-29.el7_2.3.x86_64.rpm
+bind-pkcs11-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-pkcs11-9.9.4-29.el7_2.3.x86_64.rpm
+bind-pkcs11-devel-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-pkcs11-devel-9.9.4-29.el7_2.3.x86_64.rpm
+bind-pkcs11-libs-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-pkcs11-libs-9.9.4-29.el7_2.3.x86_64.rpm
+bind-pkcs11-utils-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-pkcs11-utils-9.9.4-29.el7_2.3.x86_64.rpm
+bind-sdb-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-sdb-9.9.4-29.el7_2.3.x86_64.rpm
+bind-sdb-chroot-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-sdb-chroot-9.9.4-29.el7_2.3.x86_64.rpm
+bind-utils-9.9.4-29.el7_2.3.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/bind-utils-9.9.4-29.el7_2.3.x86_64.rpm
+
+*** binutils-2.23.52.0.1-55.el7.src.rpm
+binutils-2.23.52.0.1-55.el7.x86_64.rpm: OK
+binutils-devel-2.23.52.0.1-55.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/binutils-devel-2.23.52.0.1-55.el7.x86_64.rpm
+
+*** boost-1.53.0-25.el7.src.rpm
+boost-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-1.53.0-25.el7.x86_64.rpm
+boost-atomic-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-atomic-1.53.0-25.el7.x86_64.rpm
+boost-build-1.53.0-25.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-build-1.53.0-25.el7.noarch.rpm
+boost-chrono-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-chrono-1.53.0-25.el7.x86_64.rpm
+boost-context-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-context-1.53.0-25.el7.x86_64.rpm
+boost-date-time-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-date-time-1.53.0-25.el7.x86_64.rpm
+boost-devel-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-devel-1.53.0-25.el7.x86_64.rpm
+boost-doc-1.53.0-25.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-doc-1.53.0-25.el7.noarch.rpm
+boost-examples-1.53.0-25.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-examples-1.53.0-25.el7.noarch.rpm
+boost-filesystem-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-filesystem-1.53.0-25.el7.x86_64.rpm
+boost-graph-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-graph-1.53.0-25.el7.x86_64.rpm
+boost-graph-mpich-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-graph-mpich-1.53.0-25.el7.x86_64.rpm
+boost-graph-openmpi-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-graph-openmpi-1.53.0-25.el7.x86_64.rpm
+boost-iostreams-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-iostreams-1.53.0-25.el7.x86_64.rpm
+boost-jam-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-jam-1.53.0-25.el7.x86_64.rpm
+boost-locale-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-locale-1.53.0-25.el7.x86_64.rpm
+boost-math-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-math-1.53.0-25.el7.x86_64.rpm
+boost-mpich-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-mpich-1.53.0-25.el7.x86_64.rpm
+boost-mpich-devel-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-mpich-devel-1.53.0-25.el7.x86_64.rpm
+boost-mpich-python-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-mpich-python-1.53.0-25.el7.x86_64.rpm
+boost-openmpi-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-openmpi-1.53.0-25.el7.x86_64.rpm
+boost-openmpi-devel-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-openmpi-devel-1.53.0-25.el7.x86_64.rpm
+boost-openmpi-python-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-openmpi-python-1.53.0-25.el7.x86_64.rpm
+boost-program-options-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-program-options-1.53.0-25.el7.x86_64.rpm
+boost-python-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-python-1.53.0-25.el7.x86_64.rpm
+boost-random-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-random-1.53.0-25.el7.x86_64.rpm
+boost-regex-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-regex-1.53.0-25.el7.x86_64.rpm
+boost-serialization-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-serialization-1.53.0-25.el7.x86_64.rpm
+boost-signals-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-signals-1.53.0-25.el7.x86_64.rpm
+boost-static-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-static-1.53.0-25.el7.x86_64.rpm
+boost-system-1.53.0-25.el7.x86_64.rpm: OK
+boost-test-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-test-1.53.0-25.el7.x86_64.rpm
+boost-thread-1.53.0-25.el7.x86_64.rpm: OK
+boost-timer-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-timer-1.53.0-25.el7.x86_64.rpm
+boost-wave-1.53.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/boost-wave-1.53.0-25.el7.x86_64.rpm
+
+*** bridge-utils-1.5-9.el7.src.rpm
+bridge-utils-1.5-9.el7.x86_64.rpm: OK
+
+*** bzip2-1.0.6-13.el7.src.rpm
+bzip2-1.0.6-13.el7.x86_64.rpm: OK
+bzip2-devel-1.0.6-13.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/bzip2-devel-1.0.6-13.el7.x86_64.rpm
+bzip2-libs-1.0.6-13.el7.x86_64.rpm: OK
+
+*** ca-certificates-2015.2.6-73.el7.src.rpm
+ca-certificates-2015.2.6-73.el7.noarch.rpm: OK
+
+*** cdrkit-1.1.11-23.el7.src.rpm
+dirsplit-1.1.11-23.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dirsplit-1.1.11-23.el7.x86_64.rpm
+genisoimage-1.1.11-23.el7.x86_64.rpm: OK
+icedax-1.1.11-23.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/icedax-1.1.11-23.el7.x86_64.rpm
+libusal-1.1.11-23.el7.x86_64.rpm: OK
+libusal-devel-1.1.11-23.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libusal-devel-1.1.11-23.el7.x86_64.rpm
+wodim-1.1.11-23.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/wodim-1.1.11-23.el7.x86_64.rpm
+
+*** centos-logos-70.0.6-3.el7.centos.src.rpm
+centos-logos-70.0.6-3.el7.centos.noarch.rpm: OK
+
+*** chkconfig-1.3.61-5.el7.src.rpm
+chkconfig-1.3.61-5.el7.x86_64.rpm: OK
+ntsysv-1.3.61-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ntsysv-1.3.61-5.el7.x86_64.rpm
+
+*** cifs-utils-6.2-7.el7.src.rpm
+cifs-utils-6.2-7.el7.x86_64.rpm: OK
+cifs-utils-devel-6.2-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cifs-utils-devel-6.2-7.el7.x86_64.rpm
+
+*** compat-db-4.7.25-28.el7.src.rpm
+compat-db-4.7.25-28.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/compat-db-4.7.25-28.el7.x86_64.rpm
+compat-db47-4.7.25-28.el7.x86_64.rpm: OK
+compat-db-headers-4.7.25-28.el7.noarch.rpm: OK
+
+*** compat-gcc-32-3.2.3-72.el7.src.rpm
+compat-libstdc++-33-3.2.3-72.el7.x86_64.rpm: OK
+
+*** coreutils-8.22-15.el7_2.1.src.rpm
+coreutils-8.22-15.el7_2.1.x86_64.rpm: OK
+
+*** cpio-2.11-24.el7.src.rpm
+cpio-2.11-24.el7.x86_64.rpm: OK
+
+*** cracklib-2.9.0-11.el7.src.rpm
+cracklib-2.9.0-11.el7.x86_64.rpm: OK
+cracklib-devel-2.9.0-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cracklib-devel-2.9.0-11.el7.x86_64.rpm
+cracklib-dicts-2.9.0-11.el7.x86_64.rpm: OK
+cracklib-python-2.9.0-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cracklib-python-2.9.0-11.el7.x86_64.rpm
+
+*** cronie-1.4.11-14.el7_2.1.src.rpm
+cronie-1.4.11-14.el7_2.1.x86_64.rpm: OK
+cronie-anacron-1.4.11-14.el7_2.1.x86_64.rpm: OK
+cronie-noanacron-1.4.11-14.el7_2.1.x86_64.rpm: OK
+
+*** crontabs-1.11-6.20121102git.el7.src.rpm
+crontabs-1.11-6.20121102git.el7.noarch.rpm: OK
+
+*** cryptsetup-1.6.7-1.el7.src.rpm
+cryptsetup-1.6.7-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cryptsetup-1.6.7-1.el7.x86_64.rpm
+cryptsetup-devel-1.6.7-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cryptsetup-devel-1.6.7-1.el7.x86_64.rpm
+cryptsetup-libs-1.6.7-1.el7.x86_64.rpm: OK
+cryptsetup-python-1.6.7-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cryptsetup-python-1.6.7-1.el7.x86_64.rpm
+cryptsetup-reencrypt-1.6.7-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cryptsetup-reencrypt-1.6.7-1.el7.x86_64.rpm
+veritysetup-1.6.7-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/veritysetup-1.6.7-1.el7.x86_64.rpm
+
+*** cups-1.6.3-22.el7.src.rpm
+cups-1.6.3-22.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cups-1.6.3-22.el7.x86_64.rpm
+cups-client-1.6.3-22.el7.x86_64.rpm: OK
+cups-devel-1.6.3-22.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cups-devel-1.6.3-22.el7.x86_64.rpm
+cups-filesystem-1.6.3-22.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cups-filesystem-1.6.3-22.el7.noarch.rpm
+cups-ipptool-1.6.3-22.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cups-ipptool-1.6.3-22.el7.x86_64.rpm
+cups-libs-1.6.3-22.el7.x86_64.rpm: OK
+cups-lpd-1.6.3-22.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cups-lpd-1.6.3-22.el7.x86_64.rpm
+
+*** curl-7.29.0-25.el7.centos.src.rpm
+curl-7.29.0-25.el7.centos.x86_64.rpm: OK
+libcurl-7.29.0-25.el7.centos.x86_64.rpm: OK
+libcurl-devel-7.29.0-25.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcurl-devel-7.29.0-25.el7.centos.x86_64.rpm
+
+*** cyrus-sasl-2.1.26-20.el7_2.src.rpm
+cyrus-sasl-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-devel-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-devel-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-gs2-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-gs2-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-gssapi-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-gssapi-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-ldap-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-ldap-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-lib-2.1.26-20.el7_2.x86_64.rpm: OK
+cyrus-sasl-md5-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-md5-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-ntlm-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-ntlm-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-plain-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-plain-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-scram-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-scram-2.1.26-20.el7_2.x86_64.rpm
+cyrus-sasl-sql-2.1.26-20.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/cyrus-sasl-sql-2.1.26-20.el7_2.x86_64.rpm
+
+*** dbus-1.6.12-13.el7.src.rpm
+dbus-1.6.12-13.el7.x86_64.rpm: OK
+dbus-devel-1.6.12-13.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dbus-devel-1.6.12-13.el7.x86_64.rpm
+dbus-doc-1.6.12-13.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dbus-doc-1.6.12-13.el7.noarch.rpm
+dbus-libs-1.6.12-13.el7.x86_64.rpm: OK
+dbus-x11-1.6.12-13.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dbus-x11-1.6.12-13.el7.x86_64.rpm
+
+*** device-mapper-persistent-data-0.5.5-1.el7.src.rpm
+device-mapper-persistent-data-0.5.5-1.el7.x86_64.rpm: OK
+
+*** dhcp-4.2.5-42.el7.centos.src.rpm
+dhclient-4.2.5-42.el7.centos.x86_64.rpm: OK
+dhcp-4.2.5-42.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dhcp-4.2.5-42.el7.centos.x86_64.rpm
+dhcp-common-4.2.5-42.el7.centos.x86_64.rpm: OK
+dhcp-devel-4.2.5-42.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dhcp-devel-4.2.5-42.el7.centos.x86_64.rpm
+dhcp-libs-4.2.5-42.el7.centos.x86_64.rpm: OK
+
+*** diffutils-3.3-4.el7.src.rpm
+diffutils-3.3-4.el7.x86_64.rpm: OK
+
+*** ding-libs-0.5.0-25.el7.src.rpm
+libbasicobjects-0.1.1-25.el7.x86_64.rpm: OK
+libbasicobjects-devel-0.1.1-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libbasicobjects-devel-0.1.1-25.el7.x86_64.rpm
+libcollection-0.6.2-25.el7.x86_64.rpm: OK
+libcollection-devel-0.6.2-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcollection-devel-0.6.2-25.el7.x86_64.rpm
+libdhash-0.4.3-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdhash-0.4.3-25.el7.x86_64.rpm
+libdhash-devel-0.4.3-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdhash-devel-0.4.3-25.el7.x86_64.rpm
+libini_config-1.2.0-25.el7.x86_64.rpm: OK
+libini_config-devel-1.2.0-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libini_config-devel-1.2.0-25.el7.x86_64.rpm
+libpath_utils-0.2.1-25.el7.x86_64.rpm: OK
+libpath_utils-devel-0.2.1-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libpath_utils-devel-0.2.1-25.el7.x86_64.rpm
+libref_array-0.1.5-25.el7.x86_64.rpm: OK
+libref_array-devel-0.1.5-25.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libref_array-devel-0.1.5-25.el7.x86_64.rpm
+
+*** dmidecode-2.12-9.el7.src.rpm
+dmidecode-2.12-9.el7.x86_64.rpm: OK
+
+*** dyninst-8.2.0-2.el7.src.rpm
+dyninst-8.2.0-2.el7.x86_64.rpm: OK
+dyninst-devel-8.2.0-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dyninst-devel-8.2.0-2.el7.x86_64.rpm
+dyninst-doc-8.2.0-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dyninst-doc-8.2.0-2.el7.x86_64.rpm
+dyninst-static-8.2.0-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dyninst-static-8.2.0-2.el7.x86_64.rpm
+dyninst-testsuite-8.2.0-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/dyninst-testsuite-8.2.0-2.el7.x86_64.rpm
+
+*** e2fsprogs-1.42.9-7.el7.src.rpm
+e2fsprogs-1.42.9-7.el7.x86_64.rpm: OK
+e2fsprogs-devel-1.42.9-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/e2fsprogs-devel-1.42.9-7.el7.x86_64.rpm
+e2fsprogs-libs-1.42.9-7.el7.x86_64.rpm: OK
+e2fsprogs-static-1.42.9-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/e2fsprogs-static-1.42.9-7.el7.x86_64.rpm
+libcom_err-1.42.9-7.el7.x86_64.rpm: OK
+libcom_err-devel-1.42.9-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcom_err-devel-1.42.9-7.el7.x86_64.rpm
+libss-1.42.9-7.el7.x86_64.rpm: OK
+libss-devel-1.42.9-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libss-devel-1.42.9-7.el7.x86_64.rpm
+
+*** ebtables-2.0.10-13.el7.src.rpm
+ebtables-2.0.10-13.el7.x86_64.rpm: OK
+
+*** ed-1.9-4.el7.src.rpm
+ed-1.9-4.el7.x86_64.rpm: OK
+
+*** efibootmgr-0.8.0-7.el7.src.rpm
+efibootmgr-0.8.0-7.el7.x86_64.rpm: OK
+
+*** efivar-0.11-1.el7.src.rpm
+efivar-0.11-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/efivar-0.11-1.el7.x86_64.rpm
+efivar-devel-0.11-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/efivar-devel-0.11-1.el7.x86_64.rpm
+efivar-libs-0.11-1.el7.x86_64.rpm: OK
+
+*** elfutils-0.163-3.el7.src.rpm
+elfutils-0.163-3.el7.x86_64.rpm: OK
+elfutils-devel-0.163-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/elfutils-devel-0.163-3.el7.x86_64.rpm
+elfutils-devel-static-0.163-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/elfutils-devel-static-0.163-3.el7.x86_64.rpm
+elfutils-libelf-0.163-3.el7.x86_64.rpm: OK
+elfutils-libelf-devel-0.163-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/elfutils-libelf-devel-0.163-3.el7.x86_64.rpm
+elfutils-libelf-devel-static-0.163-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/elfutils-libelf-devel-static-0.163-3.el7.x86_64.rpm
+elfutils-libs-0.163-3.el7.x86_64.rpm: OK
+
+*** ethtool-3.15-2.el7.src.rpm
+ethtool-3.15-2.el7.x86_64.rpm: OK
+
+*** expat-2.1.0-8.el7.src.rpm
+expat-2.1.0-8.el7.x86_64.rpm: OK
+expat-devel-2.1.0-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/expat-devel-2.1.0-8.el7.x86_64.rpm
+expat-static-2.1.0-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/expat-static-2.1.0-8.el7.x86_64.rpm
+
+*** expect-5.45-14.el7_1.src.rpm
+expect-5.45-14.el7_1.x86_64.rpm: OK
+expect-devel-5.45-14.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/expect-devel-5.45-14.el7_1.x86_64.rpm
+expectk-5.45-14.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/expectk-5.45-14.el7_1.x86_64.rpm
+
+*** file-5.11-31.el7.src.rpm
+file-5.11-31.el7.x86_64.rpm: OK
+file-devel-5.11-31.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/file-devel-5.11-31.el7.x86_64.rpm
+file-libs-5.11-31.el7.x86_64.rpm: OK
+file-static-5.11-31.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/file-static-5.11-31.el7.x86_64.rpm
+python-magic-5.11-31.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/python-magic-5.11-31.el7.noarch.rpm
+
+*** filesystem-3.2-20.el7.src.rpm
+filesystem-3.2-20.el7.x86_64.rpm: OK
+
+*** findutils-4.5.11-5.el7.src.rpm
+findutils-4.5.11-5.el7.x86_64.rpm: OK
+
+*** fipscheck-1.4.1-5.el7.src.rpm
+fipscheck-1.4.1-5.el7.x86_64.rpm: OK
+fipscheck-devel-1.4.1-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/fipscheck-devel-1.4.1-5.el7.x86_64.rpm
+fipscheck-lib-1.4.1-5.el7.x86_64.rpm: OK
+
+*** fontconfig-2.10.95-7.el7.src.rpm
+fontconfig-2.10.95-7.el7.x86_64.rpm: OK
+fontconfig-devel-2.10.95-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/fontconfig-devel-2.10.95-7.el7.x86_64.rpm
+fontconfig-devel-doc-2.10.95-7.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/fontconfig-devel-doc-2.10.95-7.el7.noarch.rpm
+
+*** fontpackages-1.44-8.el7.src.rpm
+fontpackages-devel-1.44-8.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/fontpackages-devel-1.44-8.el7.noarch.rpm
+fontpackages-filesystem-1.44-8.el7.noarch.rpm: OK
+fontpackages-tools-1.44-8.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/fontpackages-tools-1.44-8.el7.noarch.rpm
+
+*** freetype-2.4.11-11.el7.src.rpm
+freetype-2.4.11-11.el7.x86_64.rpm: OK
+freetype-demos-2.4.11-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/freetype-demos-2.4.11-11.el7.x86_64.rpm
+freetype-devel-2.4.11-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/freetype-devel-2.4.11-11.el7.x86_64.rpm
+
+*** gawk-4.0.2-4.el7.src.rpm
+gawk-4.0.2-4.el7.x86_64.rpm: OK
+
+*** gcc-4.8.5-4.el7.src.rpm
+cpp-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/cpp-4.8.5-4.el7.x86_64.rpm
+gcc-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gcc-4.8.5-4.el7.x86_64.rpm
+gcc-c++-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gcc-c++-4.8.5-4.el7.x86_64.rpm
+gcc-gfortran-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gcc-gfortran-4.8.5-4.el7.x86_64.rpm
+gcc-gnat-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gcc-gnat-4.8.5-4.el7.x86_64.rpm
+gcc-go-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gcc-go-4.8.5-4.el7.x86_64.rpm
+gcc-objc-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gcc-objc-4.8.5-4.el7.x86_64.rpm
+gcc-objc++-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gcc-objc++-4.8.5-4.el7.x86_64.rpm
+gcc-plugin-devel-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gcc-plugin-devel-4.8.5-4.el7.x86_64.rpm
+libasan-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libasan-4.8.5-4.el7.x86_64.rpm
+libasan-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libasan-static-4.8.5-4.el7.x86_64.rpm
+libatomic-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libatomic-4.8.5-4.el7.x86_64.rpm
+libatomic-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libatomic-static-4.8.5-4.el7.x86_64.rpm
+libgcc-4.8.5-4.el7.x86_64.rpm: OK
+libgfortran-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgfortran-4.8.5-4.el7.x86_64.rpm
+libgfortran-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgfortran-static-4.8.5-4.el7.x86_64.rpm
+libgnat-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgnat-4.8.5-4.el7.x86_64.rpm
+libgnat-devel-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgnat-devel-4.8.5-4.el7.x86_64.rpm
+libgnat-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgnat-static-4.8.5-4.el7.x86_64.rpm
+libgo-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgo-4.8.5-4.el7.x86_64.rpm
+libgo-devel-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgo-devel-4.8.5-4.el7.x86_64.rpm
+libgomp-4.8.5-4.el7.x86_64.rpm: OK
+libgo-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgo-static-4.8.5-4.el7.x86_64.rpm
+libitm-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libitm-4.8.5-4.el7.x86_64.rpm
+libitm-devel-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libitm-devel-4.8.5-4.el7.x86_64.rpm
+libitm-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libitm-static-4.8.5-4.el7.x86_64.rpm
+libmudflap-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libmudflap-4.8.5-4.el7.x86_64.rpm
+libmudflap-devel-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libmudflap-devel-4.8.5-4.el7.x86_64.rpm
+libmudflap-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libmudflap-static-4.8.5-4.el7.x86_64.rpm
+libobjc-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libobjc-4.8.5-4.el7.x86_64.rpm
+libquadmath-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libquadmath-4.8.5-4.el7.x86_64.rpm
+libquadmath-devel-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libquadmath-devel-4.8.5-4.el7.x86_64.rpm
+libquadmath-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libquadmath-static-4.8.5-4.el7.x86_64.rpm
+libstdc++-4.8.5-4.el7.x86_64.rpm: OK
+libstdc++-devel-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libstdc++-devel-4.8.5-4.el7.x86_64.rpm
+libstdc++-docs-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libstdc++-docs-4.8.5-4.el7.x86_64.rpm
+libstdc++-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libstdc++-static-4.8.5-4.el7.x86_64.rpm
+libtsan-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libtsan-4.8.5-4.el7.x86_64.rpm
+libtsan-static-4.8.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libtsan-static-4.8.5-4.el7.x86_64.rpm
+
+*** gdbm-1.10-8.el7.src.rpm
+gdbm-1.10-8.el7.x86_64.rpm: OK
+gdbm-devel-1.10-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gdbm-devel-1.10-8.el7.x86_64.rpm
+
+*** gdisk-0.8.6-5.el7.src.rpm
+gdisk-0.8.6-5.el7.x86_64.rpm: OK
+
+*** gettext-0.18.2.1-4.el7.src.rpm
+emacs-gettext-0.18.2.1-4.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/emacs-gettext-0.18.2.1-4.el7.noarch.rpm
+emacs-gettext-el-0.18.2.1-4.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/emacs-gettext-el-0.18.2.1-4.el7.noarch.rpm
+gettext-0.18.2.1-4.el7.x86_64.rpm: OK
+gettext-common-devel-0.18.2.1-4.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gettext-common-devel-0.18.2.1-4.el7.noarch.rpm
+gettext-devel-0.18.2.1-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gettext-devel-0.18.2.1-4.el7.x86_64.rpm
+gettext-libs-0.18.2.1-4.el7.x86_64.rpm: OK
+
+*** glib2-2.42.2-5.el7.src.rpm
+glib2-2.42.2-5.el7.x86_64.rpm: OK
+glib2-devel-2.42.2-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/glib2-devel-2.42.2-5.el7.x86_64.rpm
+glib2-doc-2.42.2-5.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/glib2-doc-2.42.2-5.el7.noarch.rpm
+glib2-fam-2.42.2-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/glib2-fam-2.42.2-5.el7.x86_64.rpm
+
+*** glibc-2.17-106.el7_2.4.src.rpm
+glibc-2.17-106.el7_2.4.x86_64.rpm: OK
+glibc-common-2.17-106.el7_2.4.x86_64.rpm: OK
+glibc-devel-2.17-106.el7_2.4.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/glibc-devel-2.17-106.el7_2.4.x86_64.rpm
+glibc-headers-2.17-106.el7_2.4.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/glibc-headers-2.17-106.el7_2.4.x86_64.rpm
+glibc-static-2.17-106.el7_2.4.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/glibc-static-2.17-106.el7_2.4.x86_64.rpm
+glibc-utils-2.17-106.el7_2.4.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/glibc-utils-2.17-106.el7_2.4.x86_64.rpm
+nscd-2.17-106.el7_2.4.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/nscd-2.17-106.el7_2.4.x86_64.rpm
+
+*** gmp-6.0.0-12.el7_1.src.rpm
+gmp-6.0.0-12.el7_1.x86_64.rpm: OK
+gmp-devel-6.0.0-12.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/gmp-devel-6.0.0-12.el7_1.x86_64.rpm
+gmp-static-6.0.0-12.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/gmp-static-6.0.0-12.el7_1.x86_64.rpm
+
+*** gnu-free-fonts-20120503-8.el7.src.rpm
+gnu-free-fonts-common-20120503-8.el7.noarch.rpm: OK
+gnu-free-mono-fonts-20120503-8.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gnu-free-mono-fonts-20120503-8.el7.noarch.rpm
+gnu-free-sans-fonts-20120503-8.el7.noarch.rpm: OK
+gnu-free-serif-fonts-20120503-8.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gnu-free-serif-fonts-20120503-8.el7.noarch.rpm
+
+*** gnupg2-2.0.22-3.el7.src.rpm
+gnupg2-2.0.22-3.el7.x86_64.rpm: OK
+gnupg2-smime-2.0.22-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gnupg2-smime-2.0.22-3.el7.x86_64.rpm
+
+*** gpgme-1.3.2-5.el7.src.rpm
+gpgme-1.3.2-5.el7.x86_64.rpm: OK
+gpgme-devel-1.3.2-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/gpgme-devel-1.3.2-5.el7.x86_64.rpm
+
+*** grep-2.20-2.el7.src.rpm
+grep-2.20-2.el7.x86_64.rpm: OK
+
+*** groff-1.22.2-8.el7.src.rpm
+groff-1.22.2-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/groff-1.22.2-8.el7.x86_64.rpm
+groff-base-1.22.2-8.el7.x86_64.rpm: OK
+groff-doc-1.22.2-8.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/groff-doc-1.22.2-8.el7.noarch.rpm
+groff-perl-1.22.2-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/groff-perl-1.22.2-8.el7.x86_64.rpm
+groff-x11-1.22.2-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/groff-x11-1.22.2-8.el7.x86_64.rpm
+
+*** grubby-8.28-17.el7.src.rpm
+grubby-8.28-17.el7.x86_64.rpm: OK
+
+*** gssproxy-0.4.1-7.el7.src.rpm
+gssproxy-0.4.1-7.el7.x86_64.rpm: OK
+
+*** gzip-1.5-8.el7.src.rpm
+gzip-1.5-8.el7.x86_64.rpm: OK
+
+*** hardlink-1.0-19.el7.src.rpm
+hardlink-1.0-19.el7.x86_64.rpm: OK
+
+*** hdparm-9.43-5.el7.src.rpm
+hdparm-9.43-5.el7.x86_64.rpm: OK
+
+*** hostname-3.13-3.el7.src.rpm
+hostname-3.13-3.el7.x86_64.rpm: OK
+
+*** hwdata-0.252-8.1.el7.src.rpm
+hwdata-0.252-8.1.el7.x86_64.rpm: OK
+
+*** icu-50.1.2-15.el7.src.rpm
+icu-50.1.2-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/icu-50.1.2-15.el7.x86_64.rpm
+libicu-50.1.2-15.el7.x86_64.rpm: OK
+libicu-devel-50.1.2-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libicu-devel-50.1.2-15.el7.x86_64.rpm
+libicu-doc-50.1.2-15.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libicu-doc-50.1.2-15.el7.noarch.rpm
+
+*** initscripts-9.49.30-1.el7_2.2.src.rpm
+debugmode-9.49.30-1.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/debugmode-9.49.30-1.el7_2.2.x86_64.rpm
+initscripts-9.49.30-1.el7_2.2.x86_64.rpm: OK
+
+*** ipmitool-1.8.13-8.el7_1.src.rpm
+bmc-snmp-proxy-1.8.13-8.el7_1.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/bmc-snmp-proxy-1.8.13-8.el7_1.noarch.rpm
+exchange-bmc-os-info-1.8.13-8.el7_1.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/exchange-bmc-os-info-1.8.13-8.el7_1.noarch.rpm
+ipmitool-1.8.13-8.el7_1.x86_64.rpm: OK
+
+*** iproute-3.10.0-54.el7.src.rpm
+iproute-3.10.0-54.el7.x86_64.rpm: OK
+iproute-devel-3.10.0-54.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/iproute-devel-3.10.0-54.el7.x86_64.rpm
+iproute-doc-3.10.0-54.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/iproute-doc-3.10.0-54.el7.x86_64.rpm
+
+*** ipset-6.19-4.el7.src.rpm
+ipset-6.19-4.el7.x86_64.rpm: OK
+ipset-devel-6.19-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ipset-devel-6.19-4.el7.x86_64.rpm
+ipset-libs-6.19-4.el7.x86_64.rpm: OK
+
+*** iptables-1.4.21-16.el7.src.rpm
+iptables-1.4.21-16.el7.x86_64.rpm: OK
+iptables-devel-1.4.21-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/iptables-devel-1.4.21-16.el7.x86_64.rpm
+iptables-services-1.4.21-16.el7.x86_64.rpm: OK
+iptables-utils-1.4.21-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/iptables-utils-1.4.21-16.el7.x86_64.rpm
+
+*** iputils-20121221-7.el7.src.rpm
+iputils-20121221-7.el7.x86_64.rpm: OK
+iputils-ninfod-20121221-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/iputils-ninfod-20121221-7.el7.x86_64.rpm
+iputils-sysvinit-20121221-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/iputils-sysvinit-20121221-7.el7.x86_64.rpm
+
+*** iscsi-initiator-utils-6.2.0.873-32.el7.src.rpm
+iscsi-initiator-utils-6.2.0.873-32.el7.x86_64.rpm: OK
+iscsi-initiator-utils-devel-6.2.0.873-32.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/iscsi-initiator-utils-devel-6.2.0.873-32.el7.x86_64.rpm
+iscsi-initiator-utils-iscsiuio-6.2.0.873-32.el7.x86_64.rpm: OK
+
+*** json-c-0.11-4.el7_0.src.rpm
+json-c-0.11-4.el7_0.x86_64.rpm: OK
+json-c-devel-0.11-4.el7_0.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/json-c-devel-0.11-4.el7_0.x86_64.rpm
+json-c-doc-0.11-4.el7_0.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/json-c-doc-0.11-4.el7_0.noarch.rpm
+
+*** kbd-1.15.5-11.el7.src.rpm
+kbd-1.15.5-11.el7.x86_64.rpm: OK
+kbd-legacy-1.15.5-11.el7.noarch.rpm: OK
+kbd-misc-1.15.5-11.el7.noarch.rpm: OK
+
+*** keyutils-1.5.8-3.el7.src.rpm
+keyutils-1.5.8-3.el7.x86_64.rpm: OK
+keyutils-libs-1.5.8-3.el7.x86_64.rpm: OK
+keyutils-libs-devel-1.5.8-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/keyutils-libs-devel-1.5.8-3.el7.x86_64.rpm
+
+*** kmod-20-5.el7.src.rpm
+kmod-20-5.el7.x86_64.rpm: OK
+kmod-devel-20-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/kmod-devel-20-5.el7.x86_64.rpm
+kmod-libs-20-5.el7.x86_64.rpm: OK
+
+*** krb5-1.13.2-12.el7_2.src.rpm
+krb5-devel-1.13.2-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/krb5-devel-1.13.2-12.el7_2.x86_64.rpm
+krb5-libs-1.13.2-12.el7_2.x86_64.rpm: OK
+krb5-pkinit-1.13.2-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/krb5-pkinit-1.13.2-12.el7_2.x86_64.rpm
+krb5-server-1.13.2-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/krb5-server-1.13.2-12.el7_2.x86_64.rpm
+krb5-server-ldap-1.13.2-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/krb5-server-ldap-1.13.2-12.el7_2.x86_64.rpm
+krb5-workstation-1.13.2-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/krb5-workstation-1.13.2-12.el7_2.x86_64.rpm
+
+*** less-458-9.el7.src.rpm
+less-458-9.el7.x86_64.rpm: OK
+
+*** libaio-0.3.109-13.el7.src.rpm
+libaio-0.3.109-13.el7.x86_64.rpm: OK
+libaio-devel-0.3.109-13.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libaio-devel-0.3.109-13.el7.x86_64.rpm
+
+*** libarchive-3.1.2-7.el7.src.rpm
+bsdcpio-3.1.2-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/bsdcpio-3.1.2-7.el7.x86_64.rpm
+bsdtar-3.1.2-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/bsdtar-3.1.2-7.el7.x86_64.rpm
+libarchive-3.1.2-7.el7.x86_64.rpm: OK
+libarchive-devel-3.1.2-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libarchive-devel-3.1.2-7.el7.x86_64.rpm
+
+*** libassuan-2.1.0-3.el7.src.rpm
+libassuan-2.1.0-3.el7.x86_64.rpm: OK
+libassuan-devel-2.1.0-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libassuan-devel-2.1.0-3.el7.x86_64.rpm
+
+*** libcap-2.22-8.el7.src.rpm
+libcap-2.22-8.el7.x86_64.rpm: OK
+libcap-devel-2.22-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcap-devel-2.22-8.el7.x86_64.rpm
+
+*** libcap-ng-0.7.5-4.el7.src.rpm
+libcap-ng-0.7.5-4.el7.x86_64.rpm: OK
+libcap-ng-devel-0.7.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcap-ng-devel-0.7.5-4.el7.x86_64.rpm
+libcap-ng-python-0.7.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcap-ng-python-0.7.5-4.el7.x86_64.rpm
+libcap-ng-utils-0.7.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcap-ng-utils-0.7.5-4.el7.x86_64.rpm
+
+*** libcgroup-0.41-8.el7.src.rpm
+libcgroup-0.41-8.el7.x86_64.rpm: OK
+libcgroup-devel-0.41-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcgroup-devel-0.41-8.el7.x86_64.rpm
+libcgroup-pam-0.41-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcgroup-pam-0.41-8.el7.x86_64.rpm
+libcgroup-tools-0.41-8.el7.x86_64.rpm: OK
+
+*** libconfig-1.4.9-5.el7.src.rpm
+libconfig-1.4.9-5.el7.x86_64.rpm: OK
+libconfig-devel-1.4.9-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libconfig-devel-1.4.9-5.el7.x86_64.rpm
+
+*** libcroco-0.6.8-5.el7.src.rpm
+libcroco-0.6.8-5.el7.x86_64.rpm: OK
+libcroco-devel-0.6.8-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libcroco-devel-0.6.8-5.el7.x86_64.rpm
+
+*** libdb-5.3.21-19.el7.src.rpm
+libdb-5.3.21-19.el7.x86_64.rpm: OK
+libdb-cxx-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-cxx-5.3.21-19.el7.x86_64.rpm
+libdb-cxx-devel-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-cxx-devel-5.3.21-19.el7.x86_64.rpm
+libdb-devel-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-devel-5.3.21-19.el7.x86_64.rpm
+libdb-devel-doc-5.3.21-19.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-devel-doc-5.3.21-19.el7.noarch.rpm
+libdb-devel-static-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-devel-static-5.3.21-19.el7.x86_64.rpm
+libdb-java-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-java-5.3.21-19.el7.x86_64.rpm
+libdb-java-devel-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-java-devel-5.3.21-19.el7.x86_64.rpm
+libdb-sql-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-sql-5.3.21-19.el7.x86_64.rpm
+libdb-sql-devel-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-sql-devel-5.3.21-19.el7.x86_64.rpm
+libdb-tcl-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-tcl-5.3.21-19.el7.x86_64.rpm
+libdb-tcl-devel-5.3.21-19.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdb-tcl-devel-5.3.21-19.el7.x86_64.rpm
+libdb-utils-5.3.21-19.el7.x86_64.rpm: OK
+
+*** libdwarf-20130207-4.el7.src.rpm
+libdwarf-20130207-4.el7.x86_64.rpm: OK
+libdwarf-devel-20130207-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdwarf-devel-20130207-4.el7.x86_64.rpm
+libdwarf-static-20130207-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdwarf-static-20130207-4.el7.x86_64.rpm
+libdwarf-tools-20130207-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libdwarf-tools-20130207-4.el7.x86_64.rpm
+
+*** libedit-3.0-12.20121213cvs.el7.src.rpm
+libedit-3.0-12.20121213cvs.el7.x86_64.rpm: OK
+libedit-devel-3.0-12.20121213cvs.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libedit-devel-3.0-12.20121213cvs.el7.x86_64.rpm
+
+*** libestr-0.1.9-2.el7.src.rpm
+libestr-0.1.9-2.el7.x86_64.rpm: OK
+libestr-devel-0.1.9-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libestr-devel-0.1.9-2.el7.x86_64.rpm
+
+*** libevent-2.0.21-4.el7.src.rpm
+libevent-2.0.21-4.el7.x86_64.rpm: OK
+libevent-devel-2.0.21-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libevent-devel-2.0.21-4.el7.x86_64.rpm
+libevent-doc-2.0.21-4.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libevent-doc-2.0.21-4.el7.noarch.rpm
+
+*** libffi-3.0.13-16.el7.src.rpm
+libffi-3.0.13-16.el7.x86_64.rpm: OK
+libffi-devel-3.0.13-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libffi-devel-3.0.13-16.el7.x86_64.rpm
+
+*** libgcrypt-1.5.3-12.el7_1.1.src.rpm
+libgcrypt-1.5.3-12.el7_1.1.x86_64.rpm: OK
+libgcrypt-devel-1.5.3-12.el7_1.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgcrypt-devel-1.5.3-12.el7_1.1.x86_64.rpm
+
+*** libgpg-error-1.12-3.el7.src.rpm
+libgpg-error-1.12-3.el7.x86_64.rpm: OK
+libgpg-error-devel-1.12-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libgpg-error-devel-1.12-3.el7.x86_64.rpm
+
+*** libhbaapi-2.2.9-6.el7.src.rpm
+libhbaapi-2.2.9-6.el7.x86_64.rpm: OK
+libhbaapi-devel-2.2.9-6.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libhbaapi-devel-2.2.9-6.el7.x86_64.rpm
+
+*** libhbalinux-1.0.17-2.el7.src.rpm
+libhbalinux-1.0.17-2.el7.x86_64.rpm: OK
+libhbalinux-devel-1.0.17-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libhbalinux-devel-1.0.17-2.el7.x86_64.rpm
+
+*** libidn-1.28-4.el7.src.rpm
+emacs-libidn-1.28-4.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/emacs-libidn-1.28-4.el7.noarch.rpm
+libidn-1.28-4.el7.x86_64.rpm: OK
+libidn-devel-1.28-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libidn-devel-1.28-4.el7.x86_64.rpm
+
+*** libjpeg-turbo-1.2.90-5.el7.src.rpm
+libjpeg-turbo-1.2.90-5.el7.x86_64.rpm: OK
+libjpeg-turbo-devel-1.2.90-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libjpeg-turbo-devel-1.2.90-5.el7.x86_64.rpm
+libjpeg-turbo-static-1.2.90-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libjpeg-turbo-static-1.2.90-5.el7.x86_64.rpm
+libjpeg-turbo-utils-1.2.90-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libjpeg-turbo-utils-1.2.90-5.el7.x86_64.rpm
+turbojpeg-1.2.90-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/turbojpeg-1.2.90-5.el7.x86_64.rpm
+turbojpeg-devel-1.2.90-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/turbojpeg-devel-1.2.90-5.el7.x86_64.rpm
+
+*** libldb-1.1.20-1.el7_2.2.src.rpm
+ldb-tools-1.1.20-1.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/ldb-tools-1.1.20-1.el7_2.2.x86_64.rpm
+libldb-1.1.20-1.el7_2.2.x86_64.rpm: OK
+libldb-devel-1.1.20-1.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libldb-devel-1.1.20-1.el7_2.2.x86_64.rpm
+pyldb-1.1.20-1.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/pyldb-1.1.20-1.el7_2.2.x86_64.rpm
+pyldb-devel-1.1.20-1.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/pyldb-devel-1.1.20-1.el7_2.2.x86_64.rpm
+
+*** libmnl-1.0.3-7.el7.src.rpm
+libmnl-1.0.3-7.el7.x86_64.rpm: OK
+libmnl-devel-1.0.3-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libmnl-devel-1.0.3-7.el7.x86_64.rpm
+libmnl-static-1.0.3-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libmnl-static-1.0.3-7.el7.x86_64.rpm
+
+*** libnetfilter_conntrack-1.0.4-2.el7.src.rpm
+libnetfilter_conntrack-1.0.4-2.el7.x86_64.rpm: OK
+libnetfilter_conntrack-devel-1.0.4-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libnetfilter_conntrack-devel-1.0.4-2.el7.x86_64.rpm
+
+*** libnfnetlink-1.0.1-4.el7.src.rpm
+libnfnetlink-1.0.1-4.el7.x86_64.rpm: OK
+libnfnetlink-devel-1.0.1-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libnfnetlink-devel-1.0.1-4.el7.x86_64.rpm
+
+*** libnfsidmap-0.25-12.el7.src.rpm
+libnfsidmap-0.25-12.el7.x86_64.rpm: OK
+libnfsidmap-devel-0.25-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libnfsidmap-devel-0.25-12.el7.x86_64.rpm
+
+*** libnl-1.1.4-3.el7.src.rpm
+libnl-1.1.4-3.el7.x86_64.rpm: OK
+libnl-devel-1.1.4-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libnl-devel-1.1.4-3.el7.x86_64.rpm
+
+*** libnl3-3.2.21-10.el7.src.rpm
+libnl3-3.2.21-10.el7.x86_64.rpm: OK
+libnl3-cli-3.2.21-10.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libnl3-cli-3.2.21-10.el7.x86_64.rpm
+libnl3-devel-3.2.21-10.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libnl3-devel-3.2.21-10.el7.x86_64.rpm
+libnl3-doc-3.2.21-10.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libnl3-doc-3.2.21-10.el7.x86_64.rpm
+
+*** libpcap-1.5.3-8.el7.src.rpm
+libpcap-1.5.3-8.el7.x86_64.rpm: OK
+libpcap-devel-1.5.3-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libpcap-devel-1.5.3-8.el7.x86_64.rpm
+
+*** libpciaccess-0.13.4-2.el7.src.rpm
+libpciaccess-0.13.4-2.el7.x86_64.rpm: OK
+libpciaccess-devel-0.13.4-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libpciaccess-devel-0.13.4-2.el7.x86_64.rpm
+
+*** libpipeline-1.2.3-3.el7.src.rpm
+libpipeline-1.2.3-3.el7.x86_64.rpm: OK
+libpipeline-devel-1.2.3-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libpipeline-devel-1.2.3-3.el7.x86_64.rpm
+
+*** libpng-1.5.13-7.el7_2.src.rpm
+libpng-1.5.13-7.el7_2.x86_64.rpm: OK
+libpng-devel-1.5.13-7.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libpng-devel-1.5.13-7.el7_2.x86_64.rpm
+libpng-static-1.5.13-7.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libpng-static-1.5.13-7.el7_2.x86_64.rpm
+
+*** libpwquality-1.2.3-4.el7.src.rpm
+libpwquality-1.2.3-4.el7.x86_64.rpm: OK
+libpwquality-devel-1.2.3-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libpwquality-devel-1.2.3-4.el7.x86_64.rpm
+python-pwquality-1.2.3-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/python-pwquality-1.2.3-4.el7.x86_64.rpm
+
+*** libreport-2.1.11-32.el7.centos.src.rpm
+libreport-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-2.1.11-32.el7.centos.x86_64.rpm
+libreport-anaconda-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-anaconda-2.1.11-32.el7.centos.x86_64.rpm
+libreport-centos-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-centos-2.1.11-32.el7.centos.x86_64.rpm
+libreport-cli-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-cli-2.1.11-32.el7.centos.x86_64.rpm
+libreport-compat-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-compat-2.1.11-32.el7.centos.x86_64.rpm
+libreport-devel-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-devel-2.1.11-32.el7.centos.x86_64.rpm
+libreport-filesystem-2.1.11-32.el7.centos.x86_64.rpm: OK
+libreport-gtk-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-gtk-2.1.11-32.el7.centos.x86_64.rpm
+libreport-gtk-devel-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-gtk-devel-2.1.11-32.el7.centos.x86_64.rpm
+libreport-newt-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-newt-2.1.11-32.el7.centos.x86_64.rpm
+libreport-plugin-bugzilla-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-plugin-bugzilla-2.1.11-32.el7.centos.x86_64.rpm
+libreport-plugin-kerneloops-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-plugin-kerneloops-2.1.11-32.el7.centos.x86_64.rpm
+libreport-plugin-logger-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-plugin-logger-2.1.11-32.el7.centos.x86_64.rpm
+libreport-plugin-mailx-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-plugin-mailx-2.1.11-32.el7.centos.x86_64.rpm
+libreport-plugin-mantisbt-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-plugin-mantisbt-2.1.11-32.el7.centos.x86_64.rpm
+libreport-plugin-reportuploader-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-plugin-reportuploader-2.1.11-32.el7.centos.x86_64.rpm
+libreport-plugin-rhtsupport-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-plugin-rhtsupport-2.1.11-32.el7.centos.x86_64.rpm
+libreport-plugin-ureport-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-plugin-ureport-2.1.11-32.el7.centos.x86_64.rpm
+libreport-python-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-python-2.1.11-32.el7.centos.x86_64.rpm
+libreport-rhel-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-rhel-2.1.11-32.el7.centos.x86_64.rpm
+libreport-rhel-anaconda-bugzilla-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-rhel-anaconda-bugzilla-2.1.11-32.el7.centos.x86_64.rpm
+libreport-rhel-bugzilla-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-rhel-bugzilla-2.1.11-32.el7.centos.x86_64.rpm
+libreport-web-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-web-2.1.11-32.el7.centos.x86_64.rpm
+libreport-web-devel-2.1.11-32.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libreport-web-devel-2.1.11-32.el7.centos.x86_64.rpm
+
+*** libseccomp-2.2.1-1.el7.src.rpm
+libseccomp-2.2.1-1.el7.x86_64.rpm: OK
+libseccomp-devel-2.2.1-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libseccomp-devel-2.2.1-1.el7.x86_64.rpm
+
+*** libselinux-2.2.2-6.el7.src.rpm
+libselinux-2.2.2-6.el7.x86_64.rpm: OK
+libselinux-devel-2.2.2-6.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libselinux-devel-2.2.2-6.el7.x86_64.rpm
+libselinux-python-2.2.2-6.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libselinux-python-2.2.2-6.el7.x86_64.rpm
+libselinux-ruby-2.2.2-6.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libselinux-ruby-2.2.2-6.el7.x86_64.rpm
+libselinux-static-2.2.2-6.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libselinux-static-2.2.2-6.el7.x86_64.rpm
+libselinux-utils-2.2.2-6.el7.x86_64.rpm: OK
+
+*** libsemanage-2.1.10-18.el7.src.rpm
+libsemanage-2.1.10-18.el7.x86_64.rpm: OK
+libsemanage-devel-2.1.10-18.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libsemanage-devel-2.1.10-18.el7.x86_64.rpm
+libsemanage-python-2.1.10-18.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libsemanage-python-2.1.10-18.el7.x86_64.rpm
+libsemanage-static-2.1.10-18.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libsemanage-static-2.1.10-18.el7.x86_64.rpm
+
+*** libsepol-2.1.9-3.el7.src.rpm
+libsepol-2.1.9-3.el7.x86_64.rpm: OK
+libsepol-devel-2.1.9-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libsepol-devel-2.1.9-3.el7.x86_64.rpm
+libsepol-static-2.1.9-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libsepol-static-2.1.9-3.el7.x86_64.rpm
+
+*** libssh2-1.4.3-10.el7_2.1.src.rpm
+libssh2-1.4.3-10.el7_2.1.x86_64.rpm: OK
+libssh2-devel-1.4.3-10.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libssh2-devel-1.4.3-10.el7_2.1.x86_64.rpm
+libssh2-docs-1.4.3-10.el7_2.1.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libssh2-docs-1.4.3-10.el7_2.1.noarch.rpm
+
+*** libtalloc-2.1.2-1.el7.src.rpm
+libtalloc-2.1.2-1.el7.x86_64.rpm: OK
+libtalloc-devel-2.1.2-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libtalloc-devel-2.1.2-1.el7.x86_64.rpm
+pytalloc-2.1.2-1.el7.x86_64.rpm: OK
+pytalloc-devel-2.1.2-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pytalloc-devel-2.1.2-1.el7.x86_64.rpm
+
+*** libtasn1-3.8-2.el7.src.rpm
+libtasn1-3.8-2.el7.x86_64.rpm: OK
+libtasn1-devel-3.8-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libtasn1-devel-3.8-2.el7.x86_64.rpm
+libtasn1-tools-3.8-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libtasn1-tools-3.8-2.el7.x86_64.rpm
+
+*** libtdb-1.3.6-2.el7.src.rpm
+libtdb-1.3.6-2.el7.x86_64.rpm: OK
+libtdb-devel-1.3.6-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libtdb-devel-1.3.6-2.el7.x86_64.rpm
+python-tdb-1.3.6-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/python-tdb-1.3.6-2.el7.x86_64.rpm
+tdb-tools-1.3.6-2.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/tdb-tools-1.3.6-2.el7.x86_64.rpm
+
+*** libtevent-0.9.25-1.el7.src.rpm
+libtevent-0.9.25-1.el7.x86_64.rpm: OK
+libtevent-devel-0.9.25-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libtevent-devel-0.9.25-1.el7.x86_64.rpm
+python-tevent-0.9.25-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/python-tevent-0.9.25-1.el7.x86_64.rpm
+
+*** libtirpc-0.2.4-0.6.el7.src.rpm
+libtirpc-0.2.4-0.6.el7.x86_64.rpm: OK
+libtirpc-devel-0.2.4-0.6.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libtirpc-devel-0.2.4-0.6.el7.x86_64.rpm
+
+*** libtool-2.4.2-21.el7_2.src.rpm
+libtool-2.4.2-21.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libtool-2.4.2-21.el7_2.x86_64.rpm
+libtool-ltdl-2.4.2-21.el7_2.x86_64.rpm: OK
+libtool-ltdl-devel-2.4.2-21.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libtool-ltdl-devel-2.4.2-21.el7_2.x86_64.rpm
+
+*** libunistring-0.9.3-9.el7.src.rpm
+libunistring-0.9.3-9.el7.x86_64.rpm: OK
+libunistring-devel-0.9.3-9.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libunistring-devel-0.9.3-9.el7.x86_64.rpm
+
+*** libusbx-1.0.15-4.el7.src.rpm
+libusbx-1.0.15-4.el7.x86_64.rpm: OK
+libusbx-devel-1.0.15-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libusbx-devel-1.0.15-4.el7.x86_64.rpm
+libusbx-devel-doc-1.0.15-4.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libusbx-devel-doc-1.0.15-4.el7.noarch.rpm
+
+*** libuser-0.60-7.el7_1.src.rpm
+libuser-0.60-7.el7_1.x86_64.rpm: OK
+libuser-devel-0.60-7.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libuser-devel-0.60-7.el7_1.x86_64.rpm
+libuser-python-0.60-7.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libuser-python-0.60-7.el7_1.x86_64.rpm
+
+*** libutempter-1.1.6-4.el7.src.rpm
+libutempter-1.1.6-4.el7.x86_64.rpm: OK
+libutempter-devel-1.1.6-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libutempter-devel-1.1.6-4.el7.x86_64.rpm
+
+*** libverto-0.2.5-4.el7.src.rpm
+libverto-0.2.5-4.el7.x86_64.rpm: OK
+libverto-devel-0.2.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libverto-devel-0.2.5-4.el7.x86_64.rpm
+libverto-glib-0.2.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libverto-glib-0.2.5-4.el7.x86_64.rpm
+libverto-glib-devel-0.2.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libverto-glib-devel-0.2.5-4.el7.x86_64.rpm
+libverto-libevent-0.2.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libverto-libevent-0.2.5-4.el7.x86_64.rpm
+libverto-libevent-devel-0.2.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libverto-libevent-devel-0.2.5-4.el7.x86_64.rpm
+libverto-tevent-0.2.5-4.el7.x86_64.rpm: OK
+libverto-tevent-devel-0.2.5-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libverto-tevent-devel-0.2.5-4.el7.x86_64.rpm
+
+*** libxml2-2.9.1-6.el7_2.2.src.rpm
+libxml2-2.9.1-6.el7_2.2.x86_64.rpm: OK
+libxml2-devel-2.9.1-6.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libxml2-devel-2.9.1-6.el7_2.2.x86_64.rpm
+libxml2-python-2.9.1-6.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libxml2-python-2.9.1-6.el7_2.2.x86_64.rpm
+libxml2-static-2.9.1-6.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libxml2-static-2.9.1-6.el7_2.2.x86_64.rpm
+
+*** libxslt-1.1.28-5.el7.src.rpm
+libxslt-1.1.28-5.el7.x86_64.rpm: OK
+libxslt-devel-1.1.28-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libxslt-devel-1.1.28-5.el7.x86_64.rpm
+libxslt-python-1.1.28-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libxslt-python-1.1.28-5.el7.x86_64.rpm
+
+*** lm_sensors-3.3.4-11.el7.src.rpm
+lm_sensors-3.3.4-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/lm_sensors-3.3.4-11.el7.x86_64.rpm
+lm_sensors-devel-3.3.4-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/lm_sensors-devel-3.3.4-11.el7.x86_64.rpm
+lm_sensors-libs-3.3.4-11.el7.x86_64.rpm: OK
+lm_sensors-sensord-3.3.4-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/lm_sensors-sensord-3.3.4-11.el7.x86_64.rpm
+
+*** logrotate-3.8.6-7.el7_2.src.rpm
+logrotate-3.8.6-7.el7_2.x86_64.rpm: OK
+
+*** lsof-4.87-4.el7.src.rpm
+lsof-4.87-4.el7.x86_64.rpm: OK
+
+*** lua-5.1.4-14.el7.src.rpm
+lua-5.1.4-14.el7.x86_64.rpm: OK
+lua-devel-5.1.4-14.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/lua-devel-5.1.4-14.el7.x86_64.rpm
+lua-static-5.1.4-14.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/lua-static-5.1.4-14.el7.x86_64.rpm
+
+*** lzo-2.06-8.el7.src.rpm
+lzo-2.06-8.el7.x86_64.rpm: OK
+lzo-devel-2.06-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/lzo-devel-2.06-8.el7.x86_64.rpm
+lzo-minilzo-2.06-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/lzo-minilzo-2.06-8.el7.x86_64.rpm
+
+*** m2crypto-0.21.1-17.el7.src.rpm
+m2crypto-0.21.1-17.el7.x86_64.rpm: OK
+
+*** m4-1.4.16-10.el7.src.rpm
+m4-1.4.16-10.el7.x86_64.rpm: OK
+
+*** mailx-12.5-12.el7_0.src.rpm
+mailx-12.5-12.el7_0.x86_64.rpm: OK
+
+*** make-3.82-21.el7.src.rpm
+make-3.82-21.el7.x86_64.rpm: OK
+
+*** man-db-2.6.3-9.el7.src.rpm
+man-db-2.6.3-9.el7.x86_64.rpm: OK
+
+*** mariadb-5.5.47-1.el7_2.src.rpm
+mariadb-5.5.47-1.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/mariadb-5.5.47-1.el7_2.x86_64.rpm
+mariadb-bench-5.5.47-1.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/mariadb-bench-5.5.47-1.el7_2.x86_64.rpm
+mariadb-devel-5.5.47-1.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/mariadb-devel-5.5.47-1.el7_2.x86_64.rpm
+mariadb-embedded-5.5.47-1.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/mariadb-embedded-5.5.47-1.el7_2.x86_64.rpm
+mariadb-embedded-devel-5.5.47-1.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/mariadb-embedded-devel-5.5.47-1.el7_2.x86_64.rpm
+mariadb-libs-5.5.47-1.el7_2.x86_64.rpm: OK
+mariadb-server-5.5.47-1.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/mariadb-server-5.5.47-1.el7_2.x86_64.rpm
+mariadb-test-5.5.47-1.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/mariadb-test-5.5.47-1.el7_2.x86_64.rpm
+
+*** mcelog-120-3.e7e0ac1.el7.src.rpm
+mcelog-120-3.e7e0ac1.el7.x86_64.rpm: OK
+
+*** mdadm-3.3.2-7.el7.src.rpm
+mdadm-3.3.2-7.el7.x86_64.rpm: OK
+
+*** memtest86+-4.20-14.el7.src.rpm
+memtest86+-4.20-14.el7.x86_64.rpm: OK
+
+*** nano-2.3.1-10.el7.src.rpm
+nano-2.3.1-10.el7.x86_64.rpm: OK
+
+*** ncurses-5.9-13.20130511.el7.src.rpm
+ncurses-5.9-13.20130511.el7.x86_64.rpm: OK
+ncurses-base-5.9-13.20130511.el7.noarch.rpm: OK
+ncurses-devel-5.9-13.20130511.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ncurses-devel-5.9-13.20130511.el7.x86_64.rpm
+ncurses-libs-5.9-13.20130511.el7.x86_64.rpm: OK
+ncurses-static-5.9-13.20130511.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ncurses-static-5.9-13.20130511.el7.x86_64.rpm
+ncurses-term-5.9-13.20130511.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ncurses-term-5.9-13.20130511.el7.noarch.rpm
+
+*** net-snmp-5.7.2-24.el7.src.rpm
+net-snmp-5.7.2-24.el7.x86_64.rpm: OK
+net-snmp-agent-libs-5.7.2-24.el7.x86_64.rpm: OK
+net-snmp-devel-5.7.2-24.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/net-snmp-devel-5.7.2-24.el7.x86_64.rpm
+net-snmp-gui-5.7.2-24.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/net-snmp-gui-5.7.2-24.el7.x86_64.rpm
+net-snmp-libs-5.7.2-24.el7.x86_64.rpm: OK
+net-snmp-perl-5.7.2-24.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/net-snmp-perl-5.7.2-24.el7.x86_64.rpm
+net-snmp-python-5.7.2-24.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/net-snmp-python-5.7.2-24.el7.x86_64.rpm
+net-snmp-sysvinit-5.7.2-24.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/net-snmp-sysvinit-5.7.2-24.el7.x86_64.rpm
+net-snmp-utils-5.7.2-24.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/net-snmp-utils-5.7.2-24.el7.x86_64.rpm
+
+*** net-tools-2.0-0.17.20131004git.el7.src.rpm
+net-tools-2.0-0.17.20131004git.el7.x86_64.rpm: OK
+
+*** newt-0.52.15-4.el7.src.rpm
+newt-0.52.15-4.el7.x86_64.rpm: OK
+newt-devel-0.52.15-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/newt-devel-0.52.15-4.el7.x86_64.rpm
+newt-python-0.52.15-4.el7.x86_64.rpm: OK
+newt-static-0.52.15-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/newt-static-0.52.15-4.el7.x86_64.rpm
+
+*** nfs-utils-1.3.0-0.21.el7_2.src.rpm
+nfs-utils-1.3.0-0.21.el7_2.x86_64.rpm: OK
+
+*** nspr-4.10.8-2.el7_1.src.rpm
+nspr-4.10.8-2.el7_1.x86_64.rpm: OK
+nspr-devel-4.10.8-2.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/nspr-devel-4.10.8-2.el7_1.x86_64.rpm
+
+*** nss-3.19.1-19.el7_2.src.rpm
+nss-3.19.1-19.el7_2.x86_64.rpm: OK
+nss-devel-3.19.1-19.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/nss-devel-3.19.1-19.el7_2.x86_64.rpm
+nss-pkcs11-devel-3.19.1-19.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/nss-pkcs11-devel-3.19.1-19.el7_2.x86_64.rpm
+nss-sysinit-3.19.1-19.el7_2.x86_64.rpm: OK
+nss-tools-3.19.1-19.el7_2.x86_64.rpm: OK
+
+*** nss-softokn-3.16.2.3-13.el7_1.src.rpm
+nss-softokn-3.16.2.3-13.el7_1.x86_64.rpm: OK
+nss-softokn-devel-3.16.2.3-13.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/nss-softokn-devel-3.16.2.3-13.el7_1.x86_64.rpm
+nss-softokn-freebl-3.16.2.3-13.el7_1.x86_64.rpm: OK
+nss-softokn-freebl-devel-3.16.2.3-13.el7_1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/nss-softokn-freebl-devel-3.16.2.3-13.el7_1.x86_64.rpm
+
+*** nss-util-3.19.1-9.el7_2.src.rpm
+nss-util-3.19.1-9.el7_2.x86_64.rpm: OK
+nss-util-devel-3.19.1-9.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/nss-util-devel-3.19.1-9.el7_2.x86_64.rpm
+
+*** ntp-4.2.6p5-25.el7.centos.src.rpm
+ntp-4.2.6p5-25.el7.centos.x86_64.rpm: OK
+ntpdate-4.2.6p5-25.el7.centos.x86_64.rpm: OK
+ntp-doc-4.2.6p5-25.el7.centos.noarch.rpm: fetched from http://vault.centos.org/7.3.1611/os/x86_64/Packages/ntp-doc-4.2.6p5-25.el7.centos.noarch.rpm
+ntp-perl-4.2.6p5-25.el7.centos.noarch.rpm: fetched from http://vault.centos.org/7.3.1611/os/x86_64/Packages/ntp-perl-4.2.6p5-25.el7.centos.noarch.rpm
+sntp-4.2.6p5-25.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.3.1611/os/x86_64/Packages/sntp-4.2.6p5-25.el7.centos.x86_64.rpm
+
+*** numactl-2.0.9-6.el7_2.src.rpm
+numactl-2.0.9-6.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/numactl-2.0.9-6.el7_2.x86_64.rpm
+numactl-devel-2.0.9-6.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/numactl-devel-2.0.9-6.el7_2.x86_64.rpm
+numactl-libs-2.0.9-6.el7_2.x86_64.rpm: OK
+
+*** openldap-2.4.40-9.el7_2.src.rpm
+openldap-2.4.40-9.el7_2.x86_64.rpm: OK
+openldap-clients-2.4.40-9.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/openldap-clients-2.4.40-9.el7_2.x86_64.rpm
+openldap-devel-2.4.40-9.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/openldap-devel-2.4.40-9.el7_2.x86_64.rpm
+openldap-servers-2.4.40-9.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/openldap-servers-2.4.40-9.el7_2.x86_64.rpm
+openldap-servers-sql-2.4.40-9.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/openldap-servers-sql-2.4.40-9.el7_2.x86_64.rpm
+
+*** openssh-6.6.1p1-25.el7_2.src.rpm
+openssh-6.6.1p1-25.el7_2.x86_64.rpm: OK
+openssh-askpass-6.6.1p1-25.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/openssh-askpass-6.6.1p1-25.el7_2.x86_64.rpm
+openssh-clients-6.6.1p1-25.el7_2.x86_64.rpm: OK
+openssh-keycat-6.6.1p1-25.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/openssh-keycat-6.6.1p1-25.el7_2.x86_64.rpm
+openssh-ldap-6.6.1p1-25.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/openssh-ldap-6.6.1p1-25.el7_2.x86_64.rpm
+openssh-server-6.6.1p1-25.el7_2.x86_64.rpm: OK
+openssh-server-sysvinit-6.6.1p1-25.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/openssh-server-sysvinit-6.6.1p1-25.el7_2.x86_64.rpm
+pam_ssh_agent_auth-0.9.3-9.25.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/pam_ssh_agent_auth-0.9.3-9.25.el7_2.x86_64.rpm
+
+*** openssl-1.0.2k-8.el7.src.rpm
+openssl-1.0.2k-8.el7.x86_64.rpm: OK
+openssl-devel-1.0.2k-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.4.1708/os/x86_64/Packages/openssl-devel-1.0.2k-8.el7.x86_64.rpm
+openssl-libs-1.0.2k-8.el7.x86_64.rpm: OK
+openssl-perl-1.0.2k-8.el7.x86_64.rpm: OK
+openssl-static-1.0.2k-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.4.1708/os/x86_64/Packages/openssl-static-1.0.2k-8.el7.x86_64.rpm
+
+*** oprofile-0.9.9-16.el7.src.rpm
+oprofile-0.9.9-16.el7.x86_64.rpm: OK
+oprofile-devel-0.9.9-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/oprofile-devel-0.9.9-16.el7.x86_64.rpm
+oprofile-gui-0.9.9-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/oprofile-gui-0.9.9-16.el7.x86_64.rpm
+oprofile-jit-0.9.9-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/oprofile-jit-0.9.9-16.el7.x86_64.rpm
+
+*** os-prober-1.58-5.el7.src.rpm
+os-prober-1.58-5.el7.x86_64.rpm: OK
+
+*** p11-kit-0.20.7-3.el7.src.rpm
+p11-kit-0.20.7-3.el7.x86_64.rpm: OK
+p11-kit-devel-0.20.7-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/p11-kit-devel-0.20.7-3.el7.x86_64.rpm
+p11-kit-doc-0.20.7-3.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/p11-kit-doc-0.20.7-3.el7.noarch.rpm
+p11-kit-trust-0.20.7-3.el7.x86_64.rpm: OK
+
+*** pam-1.1.8-12.el7_1.1.src.rpm
+pam-1.1.8-12.el7_1.1.x86_64.rpm: OK
+pam-devel-1.1.8-12.el7_1.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pam-devel-1.1.8-12.el7_1.1.x86_64.rpm
+
+*** parted-3.1-23.el7.src.rpm
+parted-3.1-23.el7.x86_64.rpm: OK
+parted-devel-3.1-23.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/parted-devel-3.1-23.el7.x86_64.rpm
+
+*** passwd-0.79-4.el7.src.rpm
+passwd-0.79-4.el7.x86_64.rpm: OK
+
+*** patch-2.7.1-8.el7.src.rpm
+patch-2.7.1-8.el7.x86_64.rpm: OK
+
+*** pciutils-3.2.1-4.el7.src.rpm
+pciutils-3.2.1-4.el7.x86_64.rpm: OK
+pciutils-devel-3.2.1-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pciutils-devel-3.2.1-4.el7.x86_64.rpm
+pciutils-devel-static-3.2.1-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pciutils-devel-static-3.2.1-4.el7.x86_64.rpm
+pciutils-libs-3.2.1-4.el7.x86_64.rpm: OK
+
+*** pcre-8.32-15.el7.src.rpm
+pcre-8.32-15.el7.x86_64.rpm: OK
+pcre-devel-8.32-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pcre-devel-8.32-15.el7.x86_64.rpm
+pcre-static-8.32-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pcre-static-8.32-15.el7.x86_64.rpm
+pcre-tools-8.32-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pcre-tools-8.32-15.el7.x86_64.rpm
+
+*** perl-5.16.3-286.el7.src.rpm
+perl-5.16.3-286.el7.x86_64.rpm: OK
+perl-core-5.16.3-286.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-core-5.16.3-286.el7.x86_64.rpm
+perl-CPAN-1.9800-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-CPAN-1.9800-286.el7.noarch.rpm
+perl-devel-5.16.3-286.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-devel-5.16.3-286.el7.x86_64.rpm
+perl-ExtUtils-CBuilder-0.28.2.6-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-ExtUtils-CBuilder-0.28.2.6-286.el7.noarch.rpm
+perl-ExtUtils-Embed-1.30-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-ExtUtils-Embed-1.30-286.el7.noarch.rpm
+perl-ExtUtils-Install-1.58-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-ExtUtils-Install-1.58-286.el7.noarch.rpm
+perl-IO-Zlib-1.10-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-IO-Zlib-1.10-286.el7.noarch.rpm
+perl-libs-5.16.3-286.el7.x86_64.rpm: OK
+perl-Locale-Maketext-Simple-0.21-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-Locale-Maketext-Simple-0.21-286.el7.noarch.rpm
+perl-macros-5.16.3-286.el7.x86_64.rpm: OK
+perl-Module-CoreList-2.76.02-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-Module-CoreList-2.76.02-286.el7.noarch.rpm
+perl-Module-Loaded-0.08-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-Module-Loaded-0.08-286.el7.noarch.rpm
+perl-Object-Accessor-0.42-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-Object-Accessor-0.42-286.el7.noarch.rpm
+perl-Package-Constants-0.02-286.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-Package-Constants-0.02-286.el7.noarch.rpm
+perl-Pod-Escapes-1.04-286.el7.noarch.rpm: OK
+perl-tests-5.16.3-286.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-tests-5.16.3-286.el7.x86_64.rpm
+perl-Time-Piece-1.20.1-286.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-Time-Piece-1.20.1-286.el7.x86_64.rpm
+
+*** perl-Carp-1.26-244.el7.src.rpm
+perl-Carp-1.26-244.el7.noarch.rpm: OK
+
+*** perl-Data-Dumper-2.145-3.el7.src.rpm
+perl-Data-Dumper-2.145-3.el7.x86_64.rpm: OK
+
+*** perl-Encode-2.51-7.el7.src.rpm
+perl-Encode-2.51-7.el7.x86_64.rpm: OK
+perl-Encode-devel-2.51-7.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/perl-Encode-devel-2.51-7.el7.x86_64.rpm
+
+*** perl-Exporter-5.68-3.el7.src.rpm
+perl-Exporter-5.68-3.el7.noarch.rpm: OK
+
+*** perl-File-Path-2.09-2.el7.src.rpm
+perl-File-Path-2.09-2.el7.noarch.rpm: OK
+
+*** perl-File-Temp-0.23.01-3.el7.src.rpm
+perl-File-Temp-0.23.01-3.el7.noarch.rpm: OK
+
+*** perl-Filter-1.49-3.el7.src.rpm
+perl-Filter-1.49-3.el7.x86_64.rpm: OK
+
+*** perl-Getopt-Long-2.40-2.el7.src.rpm
+perl-Getopt-Long-2.40-2.el7.noarch.rpm: OK
+
+*** perl-HTTP-Tiny-0.033-3.el7.src.rpm
+perl-HTTP-Tiny-0.033-3.el7.noarch.rpm: OK
+
+*** perl-PathTools-3.40-5.el7.src.rpm
+perl-PathTools-3.40-5.el7.x86_64.rpm: OK
+
+*** perl-Pod-Perldoc-3.20-4.el7.src.rpm
+perl-Pod-Perldoc-3.20-4.el7.noarch.rpm: OK
+
+*** perl-Pod-Simple-3.28-4.el7.src.rpm
+perl-Pod-Simple-3.28-4.el7.noarch.rpm: OK
+
+*** perl-Pod-Usage-1.63-3.el7.src.rpm
+perl-Pod-Usage-1.63-3.el7.noarch.rpm: OK
+
+*** perl-Scalar-List-Utils-1.27-248.el7.src.rpm
+perl-Scalar-List-Utils-1.27-248.el7.x86_64.rpm: OK
+
+*** perl-Socket-2.010-3.el7.src.rpm
+perl-Socket-2.010-3.el7.x86_64.rpm: OK
+
+*** perl-Storable-2.45-3.el7.src.rpm
+perl-Storable-2.45-3.el7.x86_64.rpm: OK
+
+*** perl-Text-ParseWords-3.29-4.el7.src.rpm
+perl-Text-ParseWords-3.29-4.el7.noarch.rpm: OK
+
+*** perl-Time-HiRes-1.9725-3.el7.src.rpm
+perl-Time-HiRes-1.9725-3.el7.x86_64.rpm: OK
+
+*** perl-Time-Local-1.2300-2.el7.src.rpm
+perl-Time-Local-1.2300-2.el7.noarch.rpm: OK
+
+*** perl-WWW-Curl-4.15-12.el7.src.rpm
+perl-WWW-Curl-4.15-12.el7.x86_64.rpm: OK
+
+*** perl-constant-1.27-2.el7.src.rpm
+perl-constant-1.27-2.el7.noarch.rpm: OK
+
+*** perl-parent-0.225-244.el7.src.rpm
+perl-parent-0.225-244.el7.noarch.rpm: OK
+
+*** perl-podlators-2.5.1-3.el7.src.rpm
+perl-podlators-2.5.1-3.el7.noarch.rpm: OK
+
+*** perl-threads-1.87-4.el7.src.rpm
+perl-threads-1.87-4.el7.x86_64.rpm: OK
+
+*** perl-threads-shared-1.43-6.el7.src.rpm
+perl-threads-shared-1.43-6.el7.x86_64.rpm: OK
+
+*** pinentry-0.8.1-14.el7.src.rpm
+pinentry-0.8.1-14.el7.x86_64.rpm: OK
+pinentry-gtk-0.8.1-14.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pinentry-gtk-0.8.1-14.el7.x86_64.rpm
+pinentry-qt-0.8.1-14.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pinentry-qt-0.8.1-14.el7.x86_64.rpm
+pinentry-qt4-0.8.1-14.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pinentry-qt4-0.8.1-14.el7.x86_64.rpm
+
+*** pixman-0.32.6-3.el7.src.rpm
+pixman-0.32.6-3.el7.x86_64.rpm: OK
+pixman-devel-0.32.6-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pixman-devel-0.32.6-3.el7.x86_64.rpm
+
+*** pkgconfig-0.27.1-4.el7.src.rpm
+pkgconfig-0.27.1-4.el7.x86_64.rpm: OK
+
+*** plymouth-0.8.9-0.24.20140113.el7.centos.src.rpm
+plymouth-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: OK
+plymouth-core-libs-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: OK
+plymouth-devel-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-devel-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-graphics-libs-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: OK
+plymouth-plugin-fade-throbber-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-plugin-fade-throbber-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-plugin-label-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-plugin-label-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-plugin-script-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: OK
+plymouth-plugin-space-flares-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-plugin-space-flares-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-plugin-throbgress-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-plugin-throbgress-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-plugin-two-step-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-plugin-two-step-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-scripts-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: OK
+plymouth-system-theme-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-system-theme-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-theme-charge-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-theme-charge-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-theme-fade-in-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-theme-fade-in-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-theme-script-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-theme-script-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-theme-solar-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-theme-solar-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-theme-spinfinity-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-theme-spinfinity-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+plymouth-theme-spinner-0.8.9-0.24.20140113.el7.centos.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/plymouth-theme-spinner-0.8.9-0.24.20140113.el7.centos.x86_64.rpm
+
+*** policycoreutils-2.2.5-20.el7.src.rpm
+policycoreutils-2.2.5-20.el7.x86_64.rpm: OK
+policycoreutils-devel-2.2.5-20.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/policycoreutils-devel-2.2.5-20.el7.x86_64.rpm
+policycoreutils-gui-2.2.5-20.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/policycoreutils-gui-2.2.5-20.el7.x86_64.rpm
+policycoreutils-newrole-2.2.5-20.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/policycoreutils-newrole-2.2.5-20.el7.x86_64.rpm
+policycoreutils-python-2.2.5-20.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/policycoreutils-python-2.2.5-20.el7.x86_64.rpm
+policycoreutils-restorecond-2.2.5-20.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/policycoreutils-restorecond-2.2.5-20.el7.x86_64.rpm
+policycoreutils-sandbox-2.2.5-20.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/policycoreutils-sandbox-2.2.5-20.el7.x86_64.rpm
+
+*** popt-1.13-16.el7.src.rpm
+popt-1.13-16.el7.x86_64.rpm: OK
+popt-devel-1.13-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/popt-devel-1.13-16.el7.x86_64.rpm
+popt-static-1.13-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/popt-static-1.13-16.el7.x86_64.rpm
+
+*** portreserve-0.0.5-10.el7.src.rpm
+portreserve-0.0.5-10.el7.x86_64.rpm: OK
+
+*** procps-ng-3.3.10-5.el7_2.src.rpm
+procps-ng-3.3.10-5.el7_2.x86_64.rpm: OK
+procps-ng-devel-3.3.10-5.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/procps-ng-devel-3.3.10-5.el7_2.x86_64.rpm
+procps-ng-i18n-3.3.10-5.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/procps-ng-i18n-3.3.10-5.el7_2.x86_64.rpm
+
+*** psmisc-22.20-9.el7.src.rpm
+psmisc-22.20-9.el7.x86_64.rpm: OK
+
+*** pth-2.0.7-23.el7.src.rpm
+pth-2.0.7-23.el7.x86_64.rpm: OK
+pth-devel-2.0.7-23.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/pth-devel-2.0.7-23.el7.x86_64.rpm
+
+*** pygpgme-0.3-9.el7.src.rpm
+pygpgme-0.3-9.el7.x86_64.rpm: OK
+
+*** pyliblzma-0.5.3-11.el7.src.rpm
+pyliblzma-0.5.3-11.el7.x86_64.rpm: OK
+
+*** pyserial-2.6-5.el7.src.rpm
+pyserial-2.6-5.el7.noarch.rpm: OK
+
+*** python-2.7.5-34.el7.src.rpm
+python-2.7.5-34.el7.x86_64.rpm: OK
+python-debug-2.7.5-34.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/python-debug-2.7.5-34.el7.x86_64.rpm
+python-devel-2.7.5-34.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/python-devel-2.7.5-34.el7.x86_64.rpm
+python-libs-2.7.5-34.el7.x86_64.rpm: OK
+python-test-2.7.5-34.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/python-test-2.7.5-34.el7.x86_64.rpm
+python-tools-2.7.5-34.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/python-tools-2.7.5-34.el7.x86_64.rpm
+tkinter-2.7.5-34.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/tkinter-2.7.5-34.el7.x86_64.rpm
+
+*** python-iniparse-0.4-9.el7.src.rpm
+python-iniparse-0.4-9.el7.noarch.rpm: OK
+
+*** python-pycurl-7.19.0-17.el7.src.rpm
+python-pycurl-7.19.0-17.el7.x86_64.rpm: OK
+
+*** python-pyudev-0.15-7.el7_2.1.src.rpm
+python-pyudev-0.15-7.el7_2.1.noarch.rpm: OK
+
+*** python-six-1.9.0-2.el7.src.rpm
+python-six-1.9.0-2.el7.noarch.rpm: OK
+
+*** python-urlgrabber-3.10-7.el7.src.rpm
+python-urlgrabber-3.10-7.el7.noarch.rpm: OK
+
+*** pyxattr-0.5.1-5.el7.src.rpm
+pyxattr-0.5.1-5.el7.x86_64.rpm: OK
+
+*** qrencode-3.4.1-3.el7.src.rpm
+qrencode-3.4.1-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/qrencode-3.4.1-3.el7.x86_64.rpm
+qrencode-devel-3.4.1-3.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/qrencode-devel-3.4.1-3.el7.x86_64.rpm
+qrencode-libs-3.4.1-3.el7.x86_64.rpm: OK
+
+*** quota-4.01-11.el7_2.1.src.rpm
+quota-4.01-11.el7_2.1.x86_64.rpm: OK
+quota-devel-4.01-11.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/quota-devel-4.01-11.el7_2.1.x86_64.rpm
+quota-doc-4.01-11.el7_2.1.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/quota-doc-4.01-11.el7_2.1.noarch.rpm
+quota-nld-4.01-11.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/quota-nld-4.01-11.el7_2.1.x86_64.rpm
+quota-nls-4.01-11.el7_2.1.noarch.rpm: OK
+quota-warnquota-4.01-11.el7_2.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/quota-warnquota-4.01-11.el7_2.1.x86_64.rpm
+
+*** readline-6.2-9.el7.src.rpm
+readline-6.2-9.el7.x86_64.rpm: OK
+readline-devel-6.2-9.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/readline-devel-6.2-9.el7.x86_64.rpm
+readline-static-6.2-9.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/readline-static-6.2-9.el7.x86_64.rpm
+
+*** redhat-lsb-4.1-27.el7.centos.1.src.rpm
+redhat-lsb-4.1-27.el7.centos.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/redhat-lsb-4.1-27.el7.centos.1.x86_64.rpm
+redhat-lsb-core-4.1-27.el7.centos.1.x86_64.rpm: OK
+redhat-lsb-cxx-4.1-27.el7.centos.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/redhat-lsb-cxx-4.1-27.el7.centos.1.x86_64.rpm
+redhat-lsb-desktop-4.1-27.el7.centos.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/redhat-lsb-desktop-4.1-27.el7.centos.1.x86_64.rpm
+redhat-lsb-languages-4.1-27.el7.centos.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/redhat-lsb-languages-4.1-27.el7.centos.1.x86_64.rpm
+redhat-lsb-printing-4.1-27.el7.centos.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/redhat-lsb-printing-4.1-27.el7.centos.1.x86_64.rpm
+redhat-lsb-submod-multimedia-4.1-27.el7.centos.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/redhat-lsb-submod-multimedia-4.1-27.el7.centos.1.x86_64.rpm
+redhat-lsb-submod-security-4.1-27.el7.centos.1.x86_64.rpm: OK
+redhat-lsb-supplemental-4.1-27.el7.centos.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/redhat-lsb-supplemental-4.1-27.el7.centos.1.x86_64.rpm
+redhat-lsb-trialuse-4.1-27.el7.centos.1.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/redhat-lsb-trialuse-4.1-27.el7.centos.1.x86_64.rpm
+
+*** rootfiles-8.1-11.el7.src.rpm
+rootfiles-8.1-11.el7.noarch.rpm: OK
+
+*** rpcbind-0.2.0-33.el7_2.src.rpm
+rpcbind-0.2.0-33.el7_2.x86_64.rpm: OK
+
+*** rpm-4.11.3-17.el7.src.rpm
+rpm-4.11.3-17.el7.x86_64.rpm: OK
+rpm-apidocs-4.11.3-17.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rpm-apidocs-4.11.3-17.el7.noarch.rpm
+rpm-build-4.11.3-17.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rpm-build-4.11.3-17.el7.x86_64.rpm
+rpm-build-libs-4.11.3-17.el7.x86_64.rpm: OK
+rpm-cron-4.11.3-17.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rpm-cron-4.11.3-17.el7.noarch.rpm
+rpm-devel-4.11.3-17.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rpm-devel-4.11.3-17.el7.x86_64.rpm
+rpm-libs-4.11.3-17.el7.x86_64.rpm: OK
+rpm-plugin-systemd-inhibit-4.11.3-17.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rpm-plugin-systemd-inhibit-4.11.3-17.el7.x86_64.rpm
+rpm-python-4.11.3-17.el7.x86_64.rpm: OK
+rpm-sign-4.11.3-17.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rpm-sign-4.11.3-17.el7.x86_64.rpm
+
+*** rsync-3.0.9-17.el7.src.rpm
+rsync-3.0.9-17.el7.x86_64.rpm: OK
+
+*** rsyslog-7.4.7-12.el7.src.rpm
+rsyslog-7.4.7-12.el7.x86_64.rpm: OK
+rsyslog-crypto-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-crypto-7.4.7-12.el7.x86_64.rpm
+rsyslog-doc-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-doc-7.4.7-12.el7.x86_64.rpm
+rsyslog-elasticsearch-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-elasticsearch-7.4.7-12.el7.x86_64.rpm
+rsyslog-gnutls-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-gnutls-7.4.7-12.el7.x86_64.rpm
+rsyslog-gssapi-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-gssapi-7.4.7-12.el7.x86_64.rpm
+rsyslog-libdbi-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-libdbi-7.4.7-12.el7.x86_64.rpm
+rsyslog-mmaudit-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-mmaudit-7.4.7-12.el7.x86_64.rpm
+rsyslog-mmjsonparse-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-mmjsonparse-7.4.7-12.el7.x86_64.rpm
+rsyslog-mmnormalize-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-mmnormalize-7.4.7-12.el7.x86_64.rpm
+rsyslog-mmsnmptrapd-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-mmsnmptrapd-7.4.7-12.el7.x86_64.rpm
+rsyslog-mysql-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-mysql-7.4.7-12.el7.x86_64.rpm
+rsyslog-pgsql-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-pgsql-7.4.7-12.el7.x86_64.rpm
+rsyslog-relp-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-relp-7.4.7-12.el7.x86_64.rpm
+rsyslog-snmp-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-snmp-7.4.7-12.el7.x86_64.rpm
+rsyslog-udpspoof-7.4.7-12.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rsyslog-udpspoof-7.4.7-12.el7.x86_64.rpm
+
+*** samba-4.2.3-12.el7_2.src.rpm
+ctdb-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/ctdb-4.2.3-12.el7_2.x86_64.rpm
+ctdb-devel-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/ctdb-devel-4.2.3-12.el7_2.x86_64.rpm
+ctdb-tests-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/ctdb-tests-4.2.3-12.el7_2.x86_64.rpm
+libsmbclient-4.2.3-12.el7_2.x86_64.rpm: OK
+libsmbclient-devel-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libsmbclient-devel-4.2.3-12.el7_2.x86_64.rpm
+libwbclient-4.2.3-12.el7_2.x86_64.rpm: OK
+libwbclient-devel-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libwbclient-devel-4.2.3-12.el7_2.x86_64.rpm
+samba-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-4.2.3-12.el7_2.x86_64.rpm
+samba-client-4.2.3-12.el7_2.x86_64.rpm: OK
+samba-client-libs-4.2.3-12.el7_2.x86_64.rpm: OK
+samba-common-4.2.3-12.el7_2.noarch.rpm: OK
+samba-common-libs-4.2.3-12.el7_2.x86_64.rpm: OK
+samba-common-tools-4.2.3-12.el7_2.x86_64.rpm: OK
+samba-dc-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-dc-4.2.3-12.el7_2.x86_64.rpm
+samba-dc-libs-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-dc-libs-4.2.3-12.el7_2.x86_64.rpm
+samba-devel-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-devel-4.2.3-12.el7_2.x86_64.rpm
+samba-libs-4.2.3-12.el7_2.x86_64.rpm: OK
+samba-pidl-4.2.3-12.el7_2.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-pidl-4.2.3-12.el7_2.noarch.rpm
+samba-python-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-python-4.2.3-12.el7_2.x86_64.rpm
+samba-test-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-test-4.2.3-12.el7_2.x86_64.rpm
+samba-test-devel-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-test-devel-4.2.3-12.el7_2.x86_64.rpm
+samba-test-libs-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-test-libs-4.2.3-12.el7_2.x86_64.rpm
+samba-vfs-glusterfs-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-vfs-glusterfs-4.2.3-12.el7_2.x86_64.rpm
+samba-winbind-4.2.3-12.el7_2.x86_64.rpm: OK
+samba-winbind-clients-4.2.3-12.el7_2.x86_64.rpm: OK
+samba-winbind-krb5-locator-4.2.3-12.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/samba-winbind-krb5-locator-4.2.3-12.el7_2.x86_64.rpm
+samba-winbind-modules-4.2.3-12.el7_2.x86_64.rpm: OK
+
+*** screen-4.1.0-0.23.20120314git3c2946.el7_2.src.rpm
+screen-4.1.0-0.23.20120314git3c2946.el7_2.x86_64.rpm: OK
+
+*** sed-4.2.2-5.el7.src.rpm
+sed-4.2.2-5.el7.x86_64.rpm: OK
+
+*** setup-2.8.71-6.el7.src.rpm
+setup-2.8.71-6.el7.noarch.rpm: OK
+
+*** sg3_utils-1.37-5.el7.src.rpm
+sg3_utils-1.37-5.el7.x86_64.rpm: OK
+sg3_utils-devel-1.37-5.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/sg3_utils-devel-1.37-5.el7.x86_64.rpm
+sg3_utils-libs-1.37-5.el7.x86_64.rpm: OK
+
+*** shadow-utils-4.1.5.1-18.el7.src.rpm
+shadow-utils-4.1.5.1-18.el7.x86_64.rpm: OK
+
+*** shared-mime-info-1.1-9.el7.src.rpm
+shared-mime-info-1.1-9.el7.x86_64.rpm: OK
+
+*** sharutils-4.13.3-8.el7.src.rpm
+sharutils-4.13.3-8.el7.x86_64.rpm: OK
+
+*** slang-2.2.4-11.el7.src.rpm
+slang-2.2.4-11.el7.x86_64.rpm: OK
+slang-devel-2.2.4-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/slang-devel-2.2.4-11.el7.x86_64.rpm
+slang-slsh-2.2.4-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/slang-slsh-2.2.4-11.el7.x86_64.rpm
+slang-static-2.2.4-11.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/slang-static-2.2.4-11.el7.x86_64.rpm
+
+*** smartmontools-6.2-4.el7.src.rpm
+smartmontools-6.2-4.el7.x86_64.rpm: OK
+
+*** sqlite-3.7.17-8.el7.src.rpm
+lemon-3.7.17-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/lemon-3.7.17-8.el7.x86_64.rpm
+sqlite-3.7.17-8.el7.x86_64.rpm: OK
+sqlite-devel-3.7.17-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/sqlite-devel-3.7.17-8.el7.x86_64.rpm
+sqlite-doc-3.7.17-8.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/sqlite-doc-3.7.17-8.el7.noarch.rpm
+sqlite-tcl-3.7.17-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/sqlite-tcl-3.7.17-8.el7.x86_64.rpm
+
+*** star-1.5.2-13.el7.src.rpm
+rmt-1.5.2-13.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/rmt-1.5.2-13.el7.x86_64.rpm
+scpio-1.5.2-13.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/scpio-1.5.2-13.el7.x86_64.rpm
+spax-1.5.2-13.el7.x86_64.rpm: OK
+star-1.5.2-13.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/star-1.5.2-13.el7.x86_64.rpm
+
+*** sudo-1.8.6p7-17.el7_2.src.rpm
+sudo-1.8.6p7-17.el7_2.x86_64.rpm: OK
+sudo-devel-1.8.6p7-17.el7_2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/sudo-devel-1.8.6p7-17.el7_2.x86_64.rpm
+
+*** sysfsutils-2.1.0-16.el7.src.rpm
+libsysfs-2.1.0-16.el7.x86_64.rpm: OK
+libsysfs-devel-2.1.0-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/libsysfs-devel-2.1.0-16.el7.x86_64.rpm
+sysfsutils-2.1.0-16.el7.x86_64.rpm: OK
+
+*** sysstat-10.1.5-7.el7.src.rpm
+sysstat-10.1.5-7.el7.x86_64.rpm: OK
+
+*** system-config-firewall-1.2.29-10.el7.src.rpm
+system-config-firewall-1.2.29-10.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/system-config-firewall-1.2.29-10.el7.noarch.rpm
+system-config-firewall-base-1.2.29-10.el7.noarch.rpm: OK
+system-config-firewall-tui-1.2.29-10.el7.noarch.rpm: OK
+
+*** sysvinit-2.88-14.dsf.el7.src.rpm
+sysvinit-tools-2.88-14.dsf.el7.x86_64.rpm: OK
+
+*** tar-1.26-29.el7.src.rpm
+tar-1.26-29.el7.x86_64.rpm: OK
+
+*** tcl-8.5.13-8.el7.src.rpm
+tcl-8.5.13-8.el7.x86_64.rpm: OK
+tcl-devel-8.5.13-8.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/tcl-devel-8.5.13-8.el7.x86_64.rpm
+
+*** tcp_wrappers-7.6-77.el7.src.rpm
+tcp_wrappers-7.6-77.el7.x86_64.rpm: OK
+tcp_wrappers-devel-7.6-77.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/tcp_wrappers-devel-7.6-77.el7.x86_64.rpm
+tcp_wrappers-libs-7.6-77.el7.x86_64.rpm: OK
+
+*** tcpdump-4.5.1-3.el7.src.rpm
+tcpdump-4.5.1-3.el7.x86_64.rpm: OK
+
+*** telnet-0.17-59.el7.src.rpm
+telnet-0.17-59.el7.x86_64.rpm: OK
+telnet-server-0.17-59.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/telnet-server-0.17-59.el7.x86_64.rpm
+
+*** texinfo-5.1-4.el7.src.rpm
+info-5.1-4.el7.x86_64.rpm: OK
+texinfo-5.1-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/texinfo-5.1-4.el7.x86_64.rpm
+texinfo-tex-5.1-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/texinfo-tex-5.1-4.el7.x86_64.rpm
+
+*** time-1.7-45.el7.src.rpm
+time-1.7-45.el7.x86_64.rpm: OK
+
+*** tzdata-2016c-1.el7.src.rpm
+tzdata-2016c-1.el7.noarch.rpm: OK
+tzdata-java-2016c-1.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/tzdata-java-2016c-1.el7.noarch.rpm
+
+*** unzip-6.0-15.el7.src.rpm
+unzip-6.0-15.el7.x86_64.rpm: OK
+
+*** usbutils-007-5.el7.src.rpm
+usbutils-007-5.el7.x86_64.rpm: OK
+
+*** ustr-1.0.4-16.el7.src.rpm
+ustr-1.0.4-16.el7.x86_64.rpm: OK
+ustr-debug-1.0.4-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ustr-debug-1.0.4-16.el7.x86_64.rpm
+ustr-debug-static-1.0.4-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ustr-debug-static-1.0.4-16.el7.x86_64.rpm
+ustr-devel-1.0.4-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ustr-devel-1.0.4-16.el7.x86_64.rpm
+ustr-static-1.0.4-16.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/ustr-static-1.0.4-16.el7.x86_64.rpm
+
+*** util-linux-2.23.2-26.el7_2.2.src.rpm
+libblkid-2.23.2-26.el7_2.2.x86_64.rpm: OK
+libblkid-devel-2.23.2-26.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libblkid-devel-2.23.2-26.el7_2.2.x86_64.rpm
+libmount-2.23.2-26.el7_2.2.x86_64.rpm: OK
+libmount-devel-2.23.2-26.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libmount-devel-2.23.2-26.el7_2.2.x86_64.rpm
+libuuid-2.23.2-26.el7_2.2.x86_64.rpm: OK
+libuuid-devel-2.23.2-26.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/libuuid-devel-2.23.2-26.el7_2.2.x86_64.rpm
+util-linux-2.23.2-26.el7_2.2.x86_64.rpm: OK
+uuidd-2.23.2-26.el7_2.2.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/updates/x86_64/Packages/uuidd-2.23.2-26.el7_2.2.x86_64.rpm
+
+*** vim-7.4.160-1.el7.src.rpm
+vim-common-7.4.160-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/vim-common-7.4.160-1.el7.x86_64.rpm
+vim-enhanced-7.4.160-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/vim-enhanced-7.4.160-1.el7.x86_64.rpm
+vim-filesystem-7.4.160-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/vim-filesystem-7.4.160-1.el7.x86_64.rpm
+vim-minimal-7.4.160-1.el7.x86_64.rpm: OK
+vim-X11-7.4.160-1.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/vim-X11-7.4.160-1.el7.x86_64.rpm
+
+*** wget-1.14-10.el7_0.1.src.rpm
+wget-1.14-10.el7_0.1.x86_64.rpm: OK
+
+*** which-2.20-7.el7.src.rpm
+which-2.20-7.el7.x86_64.rpm: OK
+
+*** xdelta-3.0.7-4.el7.src.rpm
+xdelta-3.0.7-4.el7.x86_64.rpm: OK
+
+*** xz-5.1.2-12alpha.el7.src.rpm
+xz-5.1.2-12alpha.el7.x86_64.rpm: OK
+xz-compat-libs-5.1.2-12alpha.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/xz-compat-libs-5.1.2-12alpha.el7.x86_64.rpm
+xz-devel-5.1.2-12alpha.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/xz-devel-5.1.2-12alpha.el7.x86_64.rpm
+xz-libs-5.1.2-12alpha.el7.x86_64.rpm: OK
+xz-lzma-compat-5.1.2-12alpha.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/xz-lzma-compat-5.1.2-12alpha.el7.x86_64.rpm
+
+*** yajl-2.0.4-4.el7.src.rpm
+yajl-2.0.4-4.el7.x86_64.rpm: OK
+yajl-devel-2.0.4-4.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yajl-devel-2.0.4-4.el7.x86_64.rpm
+
+*** yum-3.4.3-132.el7.centos.0.1.src.rpm
+yum-3.4.3-132.el7.centos.0.1.noarch.rpm: OK
+yum-cron-3.4.3-132.el7.centos.0.1.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-cron-3.4.3-132.el7.centos.0.1.noarch.rpm
+
+*** yum-metadata-parser-1.1.4-10.el7.src.rpm
+yum-metadata-parser-1.1.4-10.el7.x86_64.rpm: OK
+
+*** yum-utils-1.1.31-34.el7.src.rpm
+yum-NetworkManager-dispatcher-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-NetworkManager-dispatcher-1.1.31-34.el7.noarch.rpm
+yum-plugin-aliases-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-aliases-1.1.31-34.el7.noarch.rpm
+yum-plugin-auto-update-debug-info-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-auto-update-debug-info-1.1.31-34.el7.noarch.rpm
+yum-plugin-changelog-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-changelog-1.1.31-34.el7.noarch.rpm
+yum-plugin-fastestmirror-1.1.31-34.el7.noarch.rpm: OK
+yum-plugin-filter-data-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-filter-data-1.1.31-34.el7.noarch.rpm
+yum-plugin-fs-snapshot-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-fs-snapshot-1.1.31-34.el7.noarch.rpm
+yum-plugin-keys-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-keys-1.1.31-34.el7.noarch.rpm
+yum-plugin-list-data-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-list-data-1.1.31-34.el7.noarch.rpm
+yum-plugin-local-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-local-1.1.31-34.el7.noarch.rpm
+yum-plugin-merge-conf-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-merge-conf-1.1.31-34.el7.noarch.rpm
+yum-plugin-ovl-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-ovl-1.1.31-34.el7.noarch.rpm
+yum-plugin-post-transaction-actions-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-post-transaction-actions-1.1.31-34.el7.noarch.rpm
+yum-plugin-priorities-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-priorities-1.1.31-34.el7.noarch.rpm
+yum-plugin-protectbase-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-protectbase-1.1.31-34.el7.noarch.rpm
+yum-plugin-ps-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-ps-1.1.31-34.el7.noarch.rpm
+yum-plugin-remove-with-leaves-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-remove-with-leaves-1.1.31-34.el7.noarch.rpm
+yum-plugin-rpm-warm-cache-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-rpm-warm-cache-1.1.31-34.el7.noarch.rpm
+yum-plugin-show-leaves-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-show-leaves-1.1.31-34.el7.noarch.rpm
+yum-plugin-tmprepo-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-tmprepo-1.1.31-34.el7.noarch.rpm
+yum-plugin-tsflags-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-tsflags-1.1.31-34.el7.noarch.rpm
+yum-plugin-upgrade-helper-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-upgrade-helper-1.1.31-34.el7.noarch.rpm
+yum-plugin-verify-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-verify-1.1.31-34.el7.noarch.rpm
+yum-plugin-versionlock-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-plugin-versionlock-1.1.31-34.el7.noarch.rpm
+yum-updateonboot-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-updateonboot-1.1.31-34.el7.noarch.rpm
+yum-utils-1.1.31-34.el7.noarch.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/yum-utils-1.1.31-34.el7.noarch.rpm
+
+*** zip-3.0-10.el7.src.rpm
+zip-3.0-10.el7.x86_64.rpm: OK
+
+*** zlib-1.2.7-15.el7.src.rpm
+minizip-1.2.7-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/minizip-1.2.7-15.el7.x86_64.rpm
+minizip-devel-1.2.7-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/minizip-devel-1.2.7-15.el7.x86_64.rpm
+zlib-1.2.7-15.el7.x86_64.rpm: OK
+zlib-devel-1.2.7-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/zlib-devel-1.2.7-15.el7.x86_64.rpm
+zlib-static-1.2.7-15.el7.x86_64.rpm: fetched from http://vault.centos.org/7.2.1511/os/x86_64/Packages/zlib-static-1.2.7-15.el7.x86_64.rpm
