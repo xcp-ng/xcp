@@ -1,0 +1,16 @@
+[platform]
+name = XCP
+version = 2.7.0
+
+[branding]
+name = XCP-ng
+version = 7.6.0
+
+[build]
+number = release/lima/master/8
+
+[keys]
+key1 = RPM-GPG-KEY-XS-7-LCM
+key2 = RPM-GPG-KEY-XS-7
+key3 = RPM-GPG-KEY-Platform-V1
+

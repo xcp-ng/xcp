@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+    <group>
+        <id>xenserver_base</id>
+        <default>false</default>
+        <uservisible>false</uservisible>
+        <name>XenServer base system</name>
+        <description></description>
+        <packagelist>
+            <packagereq type="mandatory">aic94xx-firmware</packagereq>
+            <packagereq type="mandatory">bash-completion</packagereq>
+            <packagereq type="mandatory">blktap</packagereq>
+            <packagereq type="mandatory">bzip2</packagereq>
+            <packagereq type="mandatory">cifs-utils</packagereq>
+            <packagereq type="mandatory">compat-db47</packagereq>
+            <packagereq type="mandatory">compat-libstdc++-33</packagereq>
+            <packagereq type="mandatory">control-slice</packagereq>
+            <packagereq type="mandatory">conversion-plugin</packagereq>
+            <packagereq type="mandatory">cronie-noanacron</packagereq>
+            <packagereq type="mandatory">dlm</packagereq>
+            <packagereq type="mandatory">dracut-network</packagereq>
+            <packagereq type="mandatory">e2fsprogs</packagereq>
+            <packagereq type="mandatory">efibootmgr</packagereq>
+            <packagereq type="mandatory">expect</packagereq>
+            <packagereq type="mandatory">fcoe-utils</packagereq>
+            <packagereq type="mandatory">fontconfig</packagereq>
+            <packagereq type="mandatory">gdisk</packagereq>
+            <packagereq type="mandatory">gfs2-utils</packagereq>
+            <packagereq type="mandatory">gnu-free-sans-fonts</packagereq>
+            <packagereq type="mandatory">gnupg</packagereq>
+            <packagereq type="mandatory">gpumon</packagereq>
+            <packagereq type="mandatory">grub-efi</packagereq>
+            <packagereq type="mandatory">grub</packagereq>
+            <packagereq type="mandatory">guest-templates-json-data-linux</packagereq>
+            <packagereq type="mandatory">guest-templates-json-data-other</packagereq>
+            <packagereq type="mandatory">guest-templates-json-data-windows</packagereq>
+            <packagereq type="mandatory">host-upgrade-plugin</packagereq>
+            <packagereq type="mandatory">interface-rename</packagereq>
+            <packagereq type="mandatory">ipmitool</packagereq>
+            <packagereq type="mandatory">ipset</packagereq>
+            <packagereq type="mandatory">irqbalance</packagereq>
+            <packagereq type="mandatory">iscsi-initiator-utils</packagereq>
+            <packagereq type="mandatory">kbd</packagereq>
+            <packagereq type="mandatory">kexec-tools</packagereq>
+            <packagereq type="mandatory">linux-firmware</packagereq>
+            <packagereq type="mandatory">linux-guest-loader-data</packagereq>
+            <packagereq type="mandatory">linux-guest-loader</packagereq>
+            <packagereq type="mandatory">lsof</packagereq>
+            <packagereq type="mandatory">makedumpfile</packagereq>
+            <packagereq type="mandatory">mcelog</packagereq>
+            <packagereq type="mandatory">mdadm</packagereq>
+            <packagereq type="mandatory">memtest86+</packagereq>
+            <packagereq type="mandatory">microcode_ctl</packagereq>
+            <packagereq type="mandatory">module-init-tools</packagereq>
+            <packagereq type="mandatory">nano</packagereq>
+            <packagereq type="mandatory">net-snmp</packagereq>
+            <packagereq type="mandatory">nfs-utils</packagereq>
+            <packagereq type="mandatory">ntp</packagereq>
+            <packagereq type="mandatory">ocaml-xenops-tools</packagereq>
+            <packagereq type="mandatory">openssh-clients</packagereq>
+            <packagereq type="mandatory">openssh-server</packagereq>
+            <packagereq type="mandatory">openssl-perl</packagereq>
+            <packagereq type="mandatory">openvswitch</packagereq>
+            <packagereq type="mandatory">oprofile</packagereq>
+            <packagereq type="mandatory">parted</packagereq>
+            <packagereq type="mandatory">pbis-open</packagereq>
+            <packagereq type="mandatory">plymouth-graphics-libs</packagereq>
+            <packagereq type="mandatory">plymouth-plugin-script</packagereq>
+            <packagereq type="mandatory">plymouth</packagereq>
+            <packagereq type="mandatory">pmtools</packagereq>
+            <packagereq type="mandatory">policycoreutils</packagereq>
+            <packagereq type="mandatory">portmap</packagereq>
+            <packagereq type="mandatory">pyserial</packagereq>
+            <packagereq type="mandatory">python-fasteners</packagereq>
+            <packagereq type="mandatory">redhat-lsb-core</packagereq>
+            <packagereq type="mandatory">redhat-lsb-submod-security</packagereq>
+            <packagereq type="mandatory">rootfiles</packagereq>
+            <packagereq type="mandatory">rrd2csv</packagereq>
+            <packagereq type="mandatory">rrdd-plugins</packagereq>
+            <packagereq type="mandatory">rsync</packagereq>
+            <packagereq type="mandatory">rsyslog</packagereq>
+            <packagereq type="mandatory">samba-client</packagereq>
+            <packagereq type="mandatory">samba-winbind-clients</packagereq>
+            <packagereq type="mandatory">screen</packagereq>
+            <packagereq type="mandatory">sharutils</packagereq>
+            <packagereq type="mandatory">sm-cli</packagereq>
+            <packagereq type="mandatory">sm-rawhba</packagereq>
+            <packagereq type="mandatory">sm</packagereq>
+            <packagereq type="mandatory">smartmontools</packagereq>
+            <packagereq type="mandatory">squeezed</packagereq>
+            <packagereq type="mandatory">strace</packagereq>
+            <packagereq type="mandatory">stunnel_xs</packagereq>
+            <packagereq type="mandatory">sudo</packagereq>
+            <packagereq type="mandatory">sysfsutils</packagereq>
+            <packagereq type="mandatory">sysstat</packagereq>
+            <packagereq type="mandatory">system-config-firewall-tui</packagereq>
+            <packagereq type="mandatory">systemtap-runtime</packagereq>
+            <packagereq type="mandatory">tcpdump</packagereq>
+            <packagereq type="mandatory">telnet</packagereq>
+            <packagereq type="mandatory">unzip</packagereq>
+            <packagereq type="mandatory">usbutils</packagereq>
+            <packagereq type="mandatory">vconfig</packagereq>
+            <packagereq type="mandatory">vcputune</packagereq>
+            <packagereq type="mandatory">vendor-drivers</packagereq>
+            <packagereq type="mandatory">vendor-update-keys</packagereq>
+            <packagereq type="mandatory">vhd-tool</packagereq>
+            <packagereq type="mandatory">vhostmd</packagereq>
+            <packagereq type="mandatory">vncsnapshot</packagereq>
+            <packagereq type="mandatory">vncterm</packagereq>
+            <packagereq type="mandatory">wget</packagereq>
+            <packagereq type="mandatory">wsproxy</packagereq>
+            <packagereq type="mandatory">xapi-nbd</packagereq>
+            <packagereq type="mandatory">xapi-storage-script</packagereq>
+            <packagereq type="mandatory">xapi-storage</packagereq>
+            <packagereq type="mandatory">xapi-tests</packagereq>
+            <packagereq type="mandatory">xcp-networkd</packagereq>
+            <packagereq type="mandatory">xcp-ng-updater</packagereq>
+            <packagereq type="mandatory">xcp-rrdd</packagereq>
+            <packagereq type="mandatory">xdelta</packagereq>
+            <packagereq type="mandatory">xen-crashdump-analyser</packagereq>
+            <packagereq type="mandatory">xen-device-model</packagereq>
+            <packagereq type="mandatory">xengt-modules</packagereq>
+            <packagereq type="mandatory">xenopsd-xc</packagereq>
+            <packagereq type="mandatory">xenopsd-xenlight</packagereq>
+            <packagereq type="mandatory">xenserver-dracut</packagereq>
+            <packagereq type="mandatory">xenserver-firstboot</packagereq>
+            <packagereq type="mandatory">xenserver-hwdata</packagereq>
+            <packagereq type="mandatory">xenserver-status-report</packagereq>
+            <packagereq type="mandatory">xenserver-transfer-vm</packagereq>
+            <packagereq type="mandatory">xha</packagereq>
+            <packagereq type="mandatory">xsconsole</packagereq>
+            <packagereq type="mandatory">yum</packagereq>
+            <packagereq type="mandatory">zip</packagereq>
+        </packagelist>
+    </group>
+
+    <group>
+        <id>xenserver_dom0</id>
+        <default>false</default>
+        <uservisible>true</uservisible>
+        <name>XenServer Dom0</name>
+        <description></description>
+        <grouplist>
+            <groupreq>xenserver_base</groupreq>
+        </grouplist>
+        <packagelist>
+            <packagereq type="mandatory">bugtool-conn-tests</packagereq>
+            <packagereq type="mandatory">guest-templates-json-data-xenapp</packagereq>
+            <packagereq type="mandatory">xcp-featured</packagereq>
+            <packagereq type="mandatory">xcp-ng-center</packagereq>
+            <packagereq type="mandatory">xcp-ng-plymouth-theme</packagereq>
+            <packagereq type="mandatory">xcp-ng-pv-tools</packagereq>
+            <packagereq type="mandatory">xcp-ng-release-config</packagereq>
+            <packagereq type="mandatory">xcp-ng-release</packagereq>
+            <packagereq type="mandatory">xcp-ng-deps</packagereq>
+        </packagelist>
+    </group>
+</comps>
