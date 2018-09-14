@@ -72,10 +72,19 @@ def main():
         subprocess.check_call(['git', 'checkout', args.branch])
     subprocess.check_call(['git', 'add', '--all'])
     if args.commit or args.push:
-        msg = 'Import %s' % os.path.basename(args.source_rpm)
-        if deleted:
-            msg += "\n\nFiles deleted for legal reasons:\n - " + '\n - '.join(deleted)
-        subprocess.check_call(['git', 'commit', '-m', msg])
+        has_changes = False
+        try:
+            subprocess.check_call(['git', 'diff-index', '--quiet',  'HEAD', '--'])
+        except:
+            has_changes = True
+
+        if not has_changes:
+            print("\nWorking copy has no modifications. Nothing to commit. No changes from previous release?\n")
+        else:
+            msg = 'Import %s' % os.path.basename(args.source_rpm)
+            if deleted:
+                msg += "\n\nFiles deleted for legal reasons:\n - " + '\n - '.join(deleted)
+            subprocess.check_call(['git', 'commit', '-m', msg])
 
         # tag
         if args.tag is not None:
