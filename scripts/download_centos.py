@@ -6,7 +6,6 @@ import sys
 import glob
 import subprocess
 import csv
-from ansible.modules.cloud.rackspace.rax_files_objects import download
 
 def build_url(path):
     if path.startswith('7/'):
