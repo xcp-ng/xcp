@@ -6,6 +6,7 @@ import os
 import subprocess
 import glob
 import shutil
+import tempfile
 
 VERSIONS = [
     '7.6'
@@ -21,6 +22,8 @@ TAGS = [
 
 KOJI_ROOT_DIR = '/mnt/koji'
 
+KEY_ID = "3fd3ac9e"
+
 def version_from_tag(tag):
     matches = re.match('\d+\.\d+', tag)
     return matches.group(0)
@@ -31,6 +34,31 @@ def repo_name_from_tag(tag):
         return 'base'
     else:
         return tag[len(version)+1:]
+
+def sign_rpm(rpm):
+    # create temporary work directory
+    tmpdir = tempfile.mkdtemp(prefix=rpm)
+    current_dir = os.getcwd()
+
+    try:
+        os.chdir(tmpdir)
+
+        # download from koji
+        subprocess.check_call(['koji', 'download-build', '--rpm', rpm])
+
+        # sign: requires a sign-rpm executable or alias in the PATH
+        subprocess.check_call(['sign-rpm', rpm])
+
+        # import signature
+        subprocess.check_call(['koji', 'import-sig', rpm])
+
+    finally:
+        # clean up
+        os.chdir(current_dir)
+        shutil.rmtree(tmpdir)
+
+def sign_file(filepath):
+    subprocess.check_call('sign-file', filepath)
 
 def write_repo(tag, dest_dir):
     version = version_from_tag(tag)
@@ -61,11 +89,35 @@ def write_repo(tag, dest_dir):
     for f in glob.glob('%s/repos-dist/%s/latest/src/Packages/*/*.rpm' % (KOJI_ROOT_DIR, tag)):
         shutil.copy(f, os.path.join(path_to_repo, 'Source', 'SPackages'))
 
-    # generate repodata
-    subprocess.check_call(['createrepo_c', os.path.join(path_to_repo, 'x86_64')])
-    subprocess.check_call(['createrepo_c', os.path.join(path_to_repo, 'Source')])
+    # generate repodata and sign
+    for path in [os.path.join(path_to_repo, 'x86_64'), os.path.join(path_to_repo, 'Source')]:
+        subprocess.check_call(['createrepo_c', path])
+        subprocess.check_call(['sign-file', os.path.join(path, 'repodata', 'repomd.xml')])
 
-    # TODO: sign repomd.xml
+def sign_unsigned_rpms(tag):
+    # get list of RPMs not signed by us by comparing the list that is signed with the full list
+
+    # all RPMs for the tag
+    output = subprocess.check_output(['koji', 'list-tagged', tag, '--rpms'])
+    rpms = set(output.strip().splitlines())
+
+    # only signed RPMs
+    # koji list-tagged 7.6 --sigs | grep "^3fd3ac9e" | cut -c 10-
+    signed_rpms = set()
+    output = subprocess.check_output(['koji', 'list-tagged', tag, '--sigs'])
+    for line in output.strip().splitlines():
+        key, rpm = line.split(' ')
+        if key == KEY_ID:
+            signed_rpms.add(rpm)
+
+    # diff and sort
+    unsigned_rpms = sorted(list(rpms.difference(signed_rpms)))
+
+    if unsigned_rpms:
+        print("\nSigning unsigned RPMs first\n")
+
+    for rpm in unsigned_rpms:
+        sign_rpm(rpm + '.rpm')
 
 
 def main():
@@ -99,9 +151,12 @@ def main():
 
             if needs_update:
                 print("Repository update needed")
+
+                # sign RPMs in the tag if needed
+                sign_unsigned_rpms(tag)
+
                 # export the RPMs from koji
-                # FIXME: remove the --allow-missing-signatures option
-                subprocess.check_call(['koji', 'dist-repo', tag, '--allow-missing-signatures', '--with-src', '--noinherit'])
+                subprocess.check_call(['koji', 'dist-repo', tag, '--with-src', '--noinherit'])
 
                 # write repo in work directory (we'll sync everything at the end)
                 write_repo(tag, dest_dir)
