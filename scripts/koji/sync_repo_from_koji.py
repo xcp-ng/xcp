@@ -119,6 +119,11 @@ def sign_unsigned_rpms(tag):
     for rpm in unsigned_rpms:
         sign_rpm(rpm + '.rpm')
 
+    for rpm in unsigned_rpms:
+        if rpm.endswith('.src'):
+            nvr = rpm[:-4]
+            # write signed file to koji's own repositories
+            subprocess.check_call(['koji', 'write-signed-rpm', KEY_ID, nvr])
 
 def main():
     parser = argparse.ArgumentParser(description='Detect package changes in koji and update repository')
@@ -156,7 +161,7 @@ def main():
                 sign_unsigned_rpms(tag)
 
                 # export the RPMs from koji
-                subprocess.check_call(['koji', 'dist-repo', tag, '--with-src', '--noinherit'])
+                subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'])
 
                 # write repo in work directory (we'll sync everything at the end)
                 write_repo(tag, dest_dir)
