@@ -32,26 +32,26 @@ def main():
     parser.add_argument('dir1', help='first directory')
     parser.add_argument('dir2', help='second directory')
     args = parser.parse_args()
-    
+
     DEVNULL = open(os.devnull, 'w')
-    
+
     dir1 = os.path.abspath(args.dir1)
     dir2 = os.path.abspath(args.dir2)
-    
-    # list RPMs 
+
+    # list RPMs
     rpms1 = list_rpms(dir1)
     rpms2 = list_rpms(dir2)
-    
+
     for name, info in rpms1.iteritems():
         if name not in rpms2:
             info['removed'] = True
             rpms2[name] = info
-      
+
     rpms2 = OrderedDict(sorted(rpms2.iteritems(), key=lambda t: t[0]))
-             
+
     vendors = set([info['vendor'] for info in rpms1.itervalues()])
     vendors |= set([info['vendor'] for info in rpms2.itervalues()])
-    
+
     for vendor in sorted(list(vendors)):
         print("\n\n-------------------- Vendor: %s ------------------------\n" % vendor)
         for name, info in rpms2.iteritems():
@@ -70,7 +70,7 @@ def main():
                     ret = subprocess.call(['diff', '-q', rpms1[name]['filepath'], info['filepath']],
                                           stdout=DEVNULL, stderr=subprocess.STDOUT)
                     if (ret != 0):
-                        status = "%s EVR unchanged, new file differs" % previous 
+                        status = "%s EVR unchanged, new file differs" % previous
                     else:
                         status = "%s EVR unchanged, new file identical" % previous
                     print("*** %s" % status)
@@ -81,12 +81,12 @@ def main():
                         print("Summary (previous): %s" % rpms1[name]['summary'])
                     print("Summary: %s" % info['summary'])
                     if info['license'] != rpms1[name]['license']:
-                        print("License (previous): %s" % rpms1[name]['license']) 
+                        print("License (previous): %s" % rpms1[name]['license'])
                     print("License: %s" % info['license'])
 
                 print(subprocess.check_output("rpmdiff -iT %s %s 2>&1 || echo" % (rpms1[name]['filepath'], info['filepath']),
                                               shell=True),
-                      end='')           
+                      end='')
 
 if __name__ == "__main__":
     main()
