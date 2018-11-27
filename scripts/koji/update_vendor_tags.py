@@ -13,7 +13,8 @@ XS_buildhosts = [
     '1f202679a186',
     'ebbce0ae9691',
     'f1152ddb2921',
-    'f7d02093adae'
+    'f7d02093adae',
+    'ba090b49143f'
 ]
 
 def update_vendor_tag_for_build(build, is_bootstrap=False):
