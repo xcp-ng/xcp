@@ -14,7 +14,7 @@ def build_url(path):
         return "http://vault.centos.org/" + path
 
 def download_rpm(rpm, downloaddir):
-    for version in ['7.2.1511', '7.3.1611', '7.4.1708', '7']:
+    for version in ['7.2.1511', '7.3.1611', '7.4.1708', '7.5.1804', '7']:
         for repodir in ['os', 'updates']:
             url = build_url('%s/%s/x86_64/Packages/%s' % (version, repodir, rpm))
             try:
