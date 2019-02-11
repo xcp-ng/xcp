@@ -23,6 +23,15 @@ def download_rpm(rpm, downloaddir):
                 return
             except:
                 pass
+    # also try EPEL
+    url = 'http://mirror.in2p3.fr/pub/epel/7/x86_64/Packages/%s/%s' % (rpm[0], rpm)
+    try:
+        subprocess.check_call(['wget', '-q', '-O', os.path.join(downloaddir, rpm), url])
+        print("%s: fetched from %s" % (rpm, url))
+        return
+    except:
+        pass
+
     print("%s: NOT FOUND" % rpm)
     sys.exit(1)
 
@@ -53,7 +62,8 @@ def main():
         filename = os.path.basename(filepath)
 
         vendor = subprocess.check_output(['rpm', '-qp', filepath, '--qf', '%{vendor}'], stderr=DEVNULL)
-        if vendor != "CentOS":
+        if vendor not in ("CentOS", "Fedora Project"):
+            print("Skipping %s due to unknown vendor %s" % (filename, vendor))
             continue
 
         print("\n*** %s" % filename)
