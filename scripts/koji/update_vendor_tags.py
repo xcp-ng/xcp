@@ -17,6 +17,11 @@ XS_buildhosts = [
     'ba090b49143f'
 ]
 
+def build_has_tag(build, tag):
+    out = subprocess.check_output(['koji', 'buildinfo', build])
+    matches = re.search(r'^Tags: .*\b%s\b' % tag, out, re.MULTILINE)
+    return matches is not None
+
 def update_vendor_tag_for_build(build, is_bootstrap=False):
     # get the first binary RPM found for the build
     output = subprocess.check_output(['koji', 'buildinfo', build])
@@ -61,7 +66,11 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
         raise Exception("Vendor unknown: %s, %s" % (vendor, buildhost))
 
     subprocess.check_call(['koji', 'add-pkg', tag, package, '--owner=kojiadmin']) # otherwise we can't tag the build
-    subprocess.check_call(['koji', 'tag-build', tag, build])
+    # check if build already has the tag, else it will fail
+    if not build_has_tag(build, tag):
+        subprocess.check_call(['koji', 'tag-build', tag, build])
+    else:
+        print("Build %s already has tag %s." % (build, tag))
 
 def main():
     parser = argparse.ArgumentParser(description='Update vendor tags for builds without one')
