@@ -8,12 +8,14 @@ import glob
 import shutil
 import tempfile
 
-VERSIONS = [
+RELEASE_VERSIONS = [
     '7.6',
 ]
 
 DEV_VERSIONS = [
 ]
+
+VERSIONS = DEV_VERSIONS + RELEASE_VERSIONS
 
 TAGS = [
     'v7.6-base',
@@ -29,6 +31,8 @@ RELEASE_TAGS = [
 KOJI_ROOT_DIR = '/mnt/koji'
 
 KEY_ID = "3fd3ac9e"
+
+DEVNULL = open(os.devnull, 'w')
 
 def version_from_tag(tag):
     matches = re.match(r'v(\d+\.\d+)', tag)
@@ -50,7 +54,7 @@ def sign_rpm(rpm):
         subprocess.check_call(['koji', 'download-build', '--debuginfo', '--rpm', rpm])
 
         # sign: requires a sign-rpm executable or alias in the PATH
-        subprocess.check_call(['sign-rpm', rpm])
+        subprocess.check_call(['sign-rpm', rpm], stdout=DEVNULL)
 
         # import signature
         subprocess.check_call(['koji', 'import-sig', rpm])
@@ -59,9 +63,6 @@ def sign_rpm(rpm):
         # clean up
         os.chdir(current_dir)
         shutil.rmtree(tmpdir)
-
-def sign_file(filepath):
-    subprocess.check_call('sign-file', filepath)
 
 def write_repo(tag, dest_dir):
     version = version_from_tag(tag)
@@ -95,25 +96,25 @@ def write_repo(tag, dest_dir):
     for f in glob.glob('%s/repos-dist/%s/latest/src/Packages/*/*.rpm' % (KOJI_ROOT_DIR, tag)):
         shutil.copy(f, os.path.join(path_to_tmp_repo, 'Source', 'SPackages'))
 
+    # generate repodata and sign
+    for path in [os.path.join(path_to_tmp_repo, 'x86_64'), os.path.join(path_to_tmp_repo, 'Source')]:
+        print("\n-- Generate repodata for %s" % path)
+        subprocess.check_call(['createrepo_c', path], stdout=DEVNULL)
+        subprocess.check_call(['sign-file', os.path.join(path, 'repodata', 'repomd.xml')], stdout=DEVNULL)
+
     # Synchronize to our final repository:
     # - add new RPMs
     # - remove RPMs that are not present anymore (for tags in RELEASE_TAGS)
     # - do NOT change the creation nor modification stamps for existing RPMs that have not been modified
     #   (and usually there's no reason why they would have been modified without changing names)
     #   => using -c and omitting -t
+    # - sync updated repodata
     print("\n-- Syncing to final repository %s" % path_to_repo)
     if not os.path.exists(path_to_repo):
         os.makedirs(path_to_repo)
-    subprocess.check_call(['rsync', '-crlpvP', '--exclude=repodata/', '--delete-after',
-                           path_to_tmp_repo + '/', path_to_repo])
+    subprocess.check_call(['rsync', '-crlpi', '--delete-after', path_to_tmp_repo + '/', path_to_repo])
     print()
     shutil.rmtree(path_to_tmp_repo)
-
-    # generate repodata and sign
-    for path in [os.path.join(path_to_repo, 'x86_64'), os.path.join(path_to_repo, 'Source')]:
-        print("\n-- Generate repodata for %s" % path)
-        subprocess.check_call(['createrepo_c', path])
-        subprocess.check_call(['sign-file', os.path.join(path, 'repodata', 'repomd.xml')])
 
 def sign_unsigned_rpms(tag):
     # get list of RPMs not signed by us by comparing the list that is signed with the full list
@@ -154,26 +155,19 @@ def main():
     parser = argparse.ArgumentParser(description='Detect package changes in koji and update repository')
     parser.add_argument('dest_dir', help='root directory of the destination repository')
     parser.add_argument('data_dir', help='directory where the script will write or read data from')
+    parser.add_argument('--quiet', action='store_true',
+                        help='do not output anything unless there are changes to be considered')
     parser.add_argument('--modify-stable-base', action='store_true',
                         help='allow modifying the base repository of a stable release')
     args = parser.parse_args()
     dest_dir = args.dest_dir
     data_dir = args.data_dir
+    quiet = args.quiet
 
     for version in VERSIONS:
         for tag in TAGS:
             if version_from_tag(tag) != version:
                 continue
-
-            print("\n*** %s" % tag)
-
-            if tag in RELEASE_TAGS and version not in DEV_VERSIONS:
-                if args.modify_stable_base:
-                    print("Modification of base repository for stable release %s " % version
-                          + "allowed through the --modify-stable-base switch.")
-                else:
-                    print("Not modifying base repository for stable release %s..." % version)
-                    continue
 
             needs_update = False
 
@@ -190,8 +184,21 @@ def main():
             else:
                 needs_update = True
 
+            msgs = ["\n*** %s" % tag]
             if needs_update:
-                print("Repository update needed")
+                msgs.append("Repository update needed")
+
+                if tag in RELEASE_TAGS and version not in DEV_VERSIONS:
+                    if args.modify_stable_base:
+                        msgs.append("Modification of base repository for stable release %s " % version
+                                    + "allowed through the --modify-stable-base switch.")
+                    else:
+                        if not quiet:
+                            msgs.append("Not modifying base repository for stable release %s..." % version)
+                            print('\n'.join(msgs))
+                        continue
+
+                print('\n'.join(msgs))
 
                 # sign RPMs in the tag if needed
                 sign_unsigned_rpms(tag)
@@ -199,7 +206,8 @@ def main():
                 # export the RPMs from koji
                 print ("\n-- Make koji write the repository for tag %s" % tag)
                 with_non_latest = [] if tag in RELEASE_TAGS else ['--non-latest']
-                subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'] + with_non_latest)
+                subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'] + with_non_latest,
+                                      stdout=DEVNULL if quiet else subprocess.STDOUT)
 
                 # write repository to dest_dir
                 write_repo(tag, dest_dir)
@@ -207,7 +215,8 @@ def main():
                 # update data
                 with open(tag_builds_filepath, 'w') as f:
                     f.write(tag_builds_koji)
-            else:
+            elif not quiet:
+                print('\n'.join(msgs))
                 print("Already up to date")
 
 if __name__ == "__main__":
