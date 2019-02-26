@@ -77,7 +77,10 @@ def main():
     parser.add_argument('data_dir', help='directory where the script will write or read data from')
     parser.add_argument('--bootstrap', action='store_true',
                         help='accepts unknown vendors and builds without a binary RPM')
+    parser.add_argument('--quiet', action='store_true',
+                        help='do not output anything unless there are changes to be considered')
     args = parser.parse_args()
+    quiet = args.quiet
 
     data_dir = os.path.join(args.data_dir, 'vendor_tags_update')
     if os.path.isdir(args.data_dir) and not os.path.exists(data_dir):
@@ -104,7 +107,8 @@ def main():
 
 
     if not need_update:
-        print("No update needed.")
+        if not quiet:
+            print("No update needed.")
         return
 
     # get the list of builds since last event
