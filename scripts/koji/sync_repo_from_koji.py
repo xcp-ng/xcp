@@ -3,6 +3,7 @@ from __future__ import print_function
 import argparse
 import re
 import os
+import sys
 import subprocess
 import glob
 import shutil
@@ -68,16 +69,16 @@ def write_repo(tag, dest_dir):
     version = version_from_tag(tag)
     major = version.split('.')[0]
     repo_name = repo_name_from_tag(tag)
+
+    # Hack for 7.6 because koji only handles its updates and updates_testing repos:
+    if version == '7.6':
+        if repo_name == 'testing':
+            repo_name = 'updates_testing'
+        elif repo_name != 'updates':
+            raise Exception("Fatal: koji should not have any changes outside testing and updates for 7.6!")
+
     path_to_repo = os.path.join(dest_dir, major, version, repo_name)
-
-    # Temporary hack to write 7.6 packages in a different directory,
-    # because the main source for 7.6 packages is not koji yet and we don't
-    # want to override the repo.
-    path_to_repo = path_to_repo.replace('/7.6/', '/7.6-test/')
-
     path_to_tmp_repo = path_to_repo + '-tmp'
-
-    print(path_to_repo)
 
     # remove temporary repo if exists
     if os.path.isdir(path_to_tmp_repo):
@@ -87,6 +88,8 @@ def write_repo(tag, dest_dir):
     print("\n-- Copy the RPMs from %s to %s" % (KOJI_ROOT_DIR, path_to_tmp_repo))
     for d in ['x86_64/Packages', 'Source/SPackages']:
         os.makedirs(os.path.join(path_to_tmp_repo, d))
+
+    print("Link to latest dist-repo: %s" % os.readlink('%s/repos-dist/%s/latest' % (KOJI_ROOT_DIR, tag)))
 
     # copy RPMs from koji
     for f in glob.glob('%s/repos-dist/%s/latest/x86_64/Packages/*/*.rpm' % (KOJI_ROOT_DIR, tag)):
@@ -206,8 +209,8 @@ def main():
                 # export the RPMs from koji
                 print ("\n-- Make koji write the repository for tag %s" % tag)
                 with_non_latest = [] if tag in RELEASE_TAGS else ['--non-latest']
-                subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'] + with_non_latest,
-                                      stdout=DEVNULL if quiet else subprocess.STDOUT)
+                sys.stdout.flush()
+                subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'] + with_non_latest)
 
                 # write repository to dest_dir
                 write_repo(tag, dest_dir)
