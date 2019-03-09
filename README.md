@@ -1,6 +1,6 @@
 # XCP-ng
 
-XCP-ng is a "reboot" of old XCP, which was ditched when XenServer was Open Sourced. Since XenServer 7.3 removed free features, Olivier Lambert decided to resurrect XCP, this time with a full community effort and not just a Citrix project.
+XCP-ng is a "reboot" of [old XCP](https://wiki.xen.org/wiki/XCP_Overview), which was ditched when XenServer was Open Sourced. Since XenServer 7.3 removed free features, [@olivierlambert](https://github.com/olivierlambert) ([Xen Orchestra](https://xen-orchestra.com) founder) decided to resurrect XCP, this time with a full community effort and not just a Citrix project.
 
 ## Goals
 
