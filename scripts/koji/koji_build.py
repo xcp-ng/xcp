@@ -46,23 +46,25 @@ def main():
                         help='local path to one or more git repositories. If several are provided, '
                              'a chained build will be started in the order of the arguments')
     parser.add_argument('--scratch', action="store_true", help='Perform scratch build')
+    parser.add_argument('--nowait', action="store_true", help='Do not wait for the build to end')
     args = parser.parse_args()
 
     target = args.target
     git_repos = [os.path.abspath(check_dir(d)) for d in args.git_repos]
     is_scratch = args.scratch
+    is_nowait = args.nowait
 
     if len(git_repos) > 1 and is_scratch:
         parser.error("--scratch is not compatible with chained builds.")
 
     for d in git_repos:
         if not check_git_repo(d):
-            parser.error("%s is not in a clean state (or is not a git repository).")
+            parser.error("%s is not in a clean state (or is not a git repository)." % d)
 
     if len(git_repos) == 1:
         remote, hash = get_repo_and_commit_info(git_repos[0])
         url = koji_url(remote, hash)
-        command = ['koji', 'build'] + (['--scratch'] if is_scratch else []) + [target, url]
+        command = ['koji', 'build'] + (['--scratch'] if is_scratch else []) + [target, url] + (['--nowait'] if is_nowait else [])
         subprocess.check_call(['echo'] + command)
         subprocess.check_call(command)
     else:
@@ -70,7 +72,7 @@ def main():
         for d in git_repos:
             remote, hash = get_repo_and_commit_info(d)
             urls.append(koji_url(remote, hash))
-        command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ')
+        command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ') +  (['--nowait'] if is_nowait else [])
         subprocess.check_call(['echo'] + command)
         subprocess.check_call(command)
 
