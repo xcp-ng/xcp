@@ -17,6 +17,10 @@ XS_buildhosts = [
     'ba090b49143f'
 ]
 
+XCPNG_buildhosts = [
+    'koji.xcp-ng.org'
+]
+
 def build_has_tag(build, tag):
     out = subprocess.check_output(['koji', 'buildinfo', build])
     matches = re.search(r'^Tags: .*\b%s\b' % tag, out, re.MULTILINE)
@@ -48,9 +52,13 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
     package = re.search('/packages/([^/]+)/', rpm_path).group(1)
 
     tag = None
-    if vendor == 'Citrix Systems, Inc.' or buildhost in XS_buildhosts:
+    if buildhost in XS_buildhosts:
         tag = 'built-by-xs'
-    elif vendor == 'XCP-ng':
+    elif buildhost in XCPNG_buildhosts:
+        tag = 'built-by-xcp-ng'
+    elif vendor == 'Citrix Systems, Inc.':
+        tag = 'built-by-xs'
+    elif vendor in ('XCP-ng', 'XCP-ng community'):
         tag = 'built-by-xcp-ng'
     elif vendor == 'CentOS':
         tag = 'built-by-centos'
@@ -63,7 +71,7 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
     print("%s: %s, %s => %s" % (os.path.basename(rpm_path), vendor, buildhost, tag))
 
     if tag is None:
-        raise Exception("Vendor unknown: %s, %s" % (vendor, buildhost))
+        raise Exception("Vendor and buildhost unknown: %s, %s" % (vendor, buildhost))
 
     subprocess.check_call(['koji', 'add-pkg', tag, package, '--owner=kojiadmin']) # otherwise we can't tag the build
     # check if build already has the tag, else it will fail
