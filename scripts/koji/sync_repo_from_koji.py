@@ -8,12 +8,14 @@ import subprocess
 import glob
 import shutil
 import tempfile
+import atexit
 
 RELEASE_VERSIONS = [
     '7.6',
 ]
 
 DEV_VERSIONS = [
+    '8.0',
 ]
 
 VERSIONS = DEV_VERSIONS + RELEASE_VERSIONS
@@ -22,11 +24,15 @@ TAGS = [
     'v7.6-base',
     'v7.6-updates',
     'v7.6-testing',
+    'v8.0-base',
+    'v8.0-updates',
+    'v8.0-testing',
 ]
 
 # tags in which we only keep the latest build for each package
 RELEASE_TAGS = [
     'v7.6-base',
+    'v8.0-base',
 ]
 
 KOJI_ROOT_DIR = '/mnt/koji'
@@ -154,6 +160,9 @@ def sign_unsigned_rpms(tag):
             # write signed file to koji's own repositories
             subprocess.check_call(['koji', 'write-signed-rpm', KEY_ID, nvr])
 
+def atexit_remove_lock(lock_file):
+    os.unlink(lock_file)
+
 def main():
     parser = argparse.ArgumentParser(description='Detect package changes in koji and update repository')
     parser.add_argument('dest_dir', help='root directory of the destination repository')
@@ -166,6 +175,14 @@ def main():
     dest_dir = args.dest_dir
     data_dir = args.data_dir
     quiet = args.quiet
+
+    lock_file = os.path.join(data_dir, 'lock')
+
+    if os.path.exists(lock_file):
+        print("Lock file %s already exists. Aborting." % lock_file)
+    else:
+        open(lock_file, 'w').close()
+        atexit.register(atexit_remove_lock, lock_file)
 
     for version in VERSIONS:
         for tag in TAGS:
