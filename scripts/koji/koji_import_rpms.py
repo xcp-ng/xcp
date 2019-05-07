@@ -20,6 +20,7 @@ def main():
     parser.add_argument('package_tags', help='comma-separated list of tags for the package(s)')
     parser.add_argument('build_tags', help='comma-separated list of tags for imported build(s)')
     parser.add_argument('--owner', help='owner for the package(s)', default='kojiadmin')
+    parser.add_argument('--create-build', help='create the build even if there\'s no SRPM', action='store_true', default=False)
     args = parser.parse_args()
 
     DEVNULL = open(os.devnull, 'w')
@@ -56,7 +57,8 @@ def main():
     # import the RPMS
     print('*** Importing RPMs ***')
     if rpms:
-        subprocess.check_call(['koji', 'import'] + rpms)
+        create_build = ['--create-build'] if args.create_build else []
+        subprocess.check_call(['koji', 'import'] + create_build + rpms)
     else:
         print("No RPMs to import.")
     print()
