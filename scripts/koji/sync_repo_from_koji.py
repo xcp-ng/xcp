@@ -71,7 +71,7 @@ def sign_rpm(rpm):
         os.chdir(current_dir)
         shutil.rmtree(tmpdir)
 
-def write_repo(tag, dest_dir):
+def write_repo(tag, dest_dir, tmp_root_dir):
     version = version_from_tag(tag)
     major = version.split('.')[0]
     repo_name = repo_name_from_tag(tag)
@@ -84,7 +84,7 @@ def write_repo(tag, dest_dir):
             raise Exception("Fatal: koji should not have any changes outside testing and updates for 7.6!")
 
     path_to_repo = os.path.join(dest_dir, major, version, repo_name)
-    path_to_tmp_repo = path_to_repo + '-tmp'
+    path_to_tmp_repo = os.path.join(tmp_root_dir, major, version, repo_name)
 
     # remove temporary repo if exists
     if os.path.isdir(path_to_tmp_repo):
@@ -174,6 +174,7 @@ def main():
     args = parser.parse_args()
     dest_dir = args.dest_dir
     data_dir = args.data_dir
+    tmp_root_dir = os.path.join(data_dir, 'tmproot')
     quiet = args.quiet
 
     lock_file = os.path.join(data_dir, 'lock')
@@ -231,7 +232,7 @@ def main():
                 subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'] + with_non_latest)
 
                 # write repository to dest_dir
-                write_repo(tag, dest_dir)
+                write_repo(tag, dest_dir, tmp_root_dir)
 
                 # update data
                 with open(tag_builds_filepath, 'w') as f:
