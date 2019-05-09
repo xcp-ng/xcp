@@ -1,0 +1,16 @@
+[platform]
+name = XCP
+version = 3.0.0
+
+[branding]
+name = XCP-ng
+version = 8.0.0
+
+[build]
+number = release/naples/master/45
+
+[keys]
+key1 = RPM-GPG-KEY-CH-8-LCM
+key2 = RPM-GPG-KEY-CH-8
+key3 = RPM-GPG-KEY-Platform-V1
+
