@@ -180,6 +180,7 @@ def main():
 
     if os.path.exists(lock_file):
         print("Lock file %s already exists. Aborting." % lock_file)
+        return
     else:
         open(lock_file, 'w').close()
         atexit.register(atexit_remove_lock, lock_file)
