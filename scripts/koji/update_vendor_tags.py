@@ -15,7 +15,8 @@ XS_buildhosts = [
     'f1152ddb2921',
     'f7d02093adae',
     'ba090b49143f',
-    'a50e0282e69b'
+    'a50e0282e69b',
+    'eff2d405bb69',
 ]
 
 XCPNG_buildhosts = [
