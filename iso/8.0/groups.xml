@@ -118,7 +118,7 @@
             <packagereq type="mandatory">xapi-storage</packagereq>
             <packagereq type="mandatory">xapi-tests</packagereq>
             <packagereq type="mandatory">xcp-networkd</packagereq>
-            <packagereq type="mandatory">xcp-ng-updater</packagereq>
+            <packagereq type="mandatory">xcp-ng-xapi-plugins</packagereq>
             <packagereq type="mandatory">xcp-rrdd</packagereq>
             <packagereq type="mandatory">xdelta</packagereq>
             <packagereq type="mandatory">xen-crashdump-analyser</packagereq>
