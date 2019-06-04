@@ -63,7 +63,8 @@ def main():
     rpmdir = os.path.abspath(args.rpmdir)
     srpmdir = os.path.abspath(args.srpmdir)
     downloaddir = os.path.abspath(args.downloaddir)
-    os.makedirs(downloaddir)
+    if not os.path.isdir(downloaddir):
+        os.makedirs(downloaddir)
 
     local_centos = None
     local_epel = None
