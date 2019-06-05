@@ -14,3 +14,21 @@ key1 = RPM-GPG-KEY-CH-8-LCM
 key2 = RPM-GPG-KEY-CH-8
 key3 = RPM-GPG-KEY-Platform-V1
 
+[general]
+name = XCP-ng-8.0
+family = XCP-ng
+timestamp = {{timestamp}}
+variant =
+version = 8.0
+packagedir =
+arch = x86_64
+
+[images-x86_64]
+kernel = boot/pxelinux/mboot.c32
+initrd = boot/vmlinuz
+boot.iso = boot/xen.gz
+
+[images-xen]
+kernel = boot/pxelinux/mboot.c32
+initrd = boot/vmlinuz
+
