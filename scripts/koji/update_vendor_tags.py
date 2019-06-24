@@ -40,7 +40,7 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
             rpm_path = line
 
     if not rpm_path:
-        if bootstrap:
+        if is_bootstrap:
             if not srpm_path:
                 raise Exception("No SRPM found for build %s" % build)
             # accept to use the SRPM instead of the missing RPM
