@@ -36,7 +36,12 @@ def get_repo_and_commit_info(dirpath):
     return remote, hash
 
 def koji_url(remote, hash):
-    remote = re.sub(r'git@(.+):', r'git+https://\1/', remote)
+    if remote.startswith('git@'):
+        remote = re.sub(r'git@(.+):', r'git+https://\1/', remote)
+    elif remote.startswith('https://'):
+        remote = 'git+' + remote
+    else:
+        raise Exception("Unrecognized remote URL")
     return remote + "?#" + hash
 
 def main():
