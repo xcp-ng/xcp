@@ -1,7 +1,7 @@
 # XCP-ng: A turnkey open source virtualization platform
 
 
-* [What is XCP-ng?](#what-is-xcp-ng-)
+* [What is XCP-ng?](#what-is-xcp-ng)
   * [Genesis](#genesis)
   * [Key points](#key-points)
 	
@@ -11,10 +11,10 @@
 
 ![](misc/assets/logo-glossy-small.png)
 
-## What is XCP-ng ?
+## What is XCP-ng?
 
 XCP-ng is a virtualization platform based on **Xen Source** and **Citrix® Hypervisor** (formerly XenServer).
-XCP-ng stands for **Xen Cloud Platform - New Generation** and is an *hommage* to the old Open Source project XCP that was ditched when XenServer became Open Sourced in 2013. 
+XCP-ng stands for **Xen Cloud Platform - New Generation** and is an *tribute* to the old Open Source project XCP that was abandoned when XenServer was open-sourced in 2013. 
 
 ### Genesis
 
@@ -24,7 +24,7 @@ XCP-ng stands for **Xen Cloud Platform - New Generation** and is an *hommage* to
 * 2011 : XCP 1.0 (Xen Cloud Platform, Open Source XenServer)
 * 2013 : XenServer become Open (end of XCP). Birth of Xen Orchestra
 * 2017 (dec.) : Citrix changes it's pricing strategy regarding XenServer and remove essential features from free XenServer version. New features developed are (mostly) not open source anymore
-* 2018 (janv) : XenServer fork,  birth of XCP-ng
+* 2018 (janv) : XenServer fork, birth of XCP-ng
 * 2019 (Jul.): XCP-ng 8.0 is released
 
 
@@ -42,7 +42,7 @@ A combination of multiple components to deliver a cohesive solution
 
 #### Open Source
 
-XCP-ng is open source (mostly GPLv2), but also that all the components, documentation, repository and dev process are publicly available and easily accessible. 
+XCP-ng is open source (mostly GPLv2), but also, all the components, documentation, repository and dev process are publicly available and easily accessible. 
 
 #### Turnkey
 
