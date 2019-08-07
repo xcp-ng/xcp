@@ -48,7 +48,7 @@ XCP-ng is open source (mostly GPLv2), but also that all the components, document
 
 * XCP-ng is intended to be easy to download and easy to install
 * We are aiming to have the largest possible hardware compatibility
-* XCP-ng embeds a complete API and comes with a friendly web-ui: [Xen Orchestra](misc/assets/logo-glossy.png)
+* XCP-ng embeds a complete API and comes with a friendly web-ui: [Xen Orchestra](https://xen-orchestra.com/#!/xo-home)
 
 ### Documentation
 
@@ -58,7 +58,7 @@ We have an extensive documentation about XCP-ng project available [here](https:/
 
 XCP-ng has a living community that you can join on our [forum](https://xcp-ng.org/forum/). 
 
-The project is open to [contribution](https://github.com/xcp-ng/xcp/wiki/Development-process-tour), [bug report](https://github.com/xcp-ng/xcp/wiki/How-to-report-bugs) and you can also [host a mirrors](https://github.com/xcp-ng/xcp/wiki/Development-process-tour) for XCP-ng
+The project is open to [contribution](https://github.com/xcp-ng/xcp/wiki/Development-process-tour), [bug report](https://github.com/xcp-ng/xcp/wiki/How-to-report-bugs) and you can also [host a mirrors](https://github.com/xcp-ng/xcp/wiki/Mirrors) for XCP-ng
 
 ### Pro support
 
