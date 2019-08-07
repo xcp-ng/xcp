@@ -1,13 +1,13 @@
 # XCP-ng: A turnkey open source virtualization platform
 
 
-* [What is XCP-ng?](#)
-  * [History of the project](#)
-  * [Key points](#)
+* [What is XCP-ng?](#what-is-xcp-ng-)
+  * [Genesis](#genesis)
+  * [Key points](#key-points)
 	
 * [Documentation](#documentation)
-* [Contribution & community](#)
-* [Pro support](#)
+* [Contribution & community](#contribution-and-community)
+* [Pro support](#pro-support)
 
 ![](misc/assets/logo-glossy-small.png)
 
@@ -16,7 +16,7 @@
 XCP-ng is a virtualization platform based on **Xen Source** and **Citrix® Hypervisor** (formerly XenServer).
 XCP-ng stands for **Xen Cloud Platform - New Generation** and is an *hommage* to the old Open Source project XCP that was ditched when XenServer became Open Sourced in 2013. 
 
-### Genesis 
+### Genesis
 
 * 2003 : Xen project birth, first open source hypervisor
 * 2007 : Xen Source Inc. acquired by Citrix, birth of XenServer (closed source) 
