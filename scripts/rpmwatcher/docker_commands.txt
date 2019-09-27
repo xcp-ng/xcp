@@ -1,0 +1,4 @@
+docker pull centos:7.5.1804
+chcon -Rt svirt_sandbox_file_t /home/samuel/repos
+chcon -Rt svirt_sandbox_file_t /home/samuel/git
+docker run --rm -i -t -v /home/samuel/repos:/data -v /home/samuel/git/xcp/:/xcp centos:7.5.1804
