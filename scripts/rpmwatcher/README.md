@@ -12,3 +12,4 @@ There are prerequisites to be able to run them, among which:
 - python-rpm
 - python-markdown
 
+See run.sh for the way and order the scripts are run in.
