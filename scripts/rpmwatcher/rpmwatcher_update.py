@@ -86,6 +86,8 @@ def get_latest_srpms_info_from_dir(dirpath):
                 result[info['name']] = info
     return result
 
+def version_release(version, release):
+    return version + '-' + release
 
 def main():
     parser = argparse.ArgumentParser(description='Update stats about XCP-ng RPMs')
@@ -120,6 +122,18 @@ def main():
         raise Exception("The headers in %s were different from what was expected. Expected %s, got %s."
                         % (filename, expected_headers, csv_headers))
     provenance_csv = provenance_csv[1:]
+
+    # If we have information from previous runs, use that to detect updated packages
+    previous_centos_file_path = os.path.join(work_dir, 'centos-srpms.json')
+    centos_srpms_previous = {}
+    if os.path.exists(previous_centos_file_path):
+        with open(previous_centos_file_path) as f:
+            centos_srpms_previous = json.load(f)
+    previous_epel_file_path = os.path.join(work_dir, 'epel-srpms.json')
+    epel_srpms_previous = {}
+    if os.path.exists(previous_epel_file_path):
+        with open(previous_epel_file_path) as f:
+            epel_srpms_previous = json.load(f)
 
     # Read centos and epel repos
     # This takes time because each SRPM will be read by rpm -qp --qf
@@ -170,10 +184,23 @@ def main():
                     build_info['built-by'] = builder
                     break
 
+            # Notify about updated packages in CentOS, EPEL...
             if name in centos_srpms:
                 build_info['latest-centos'] = centos_srpms[name]
+                if name in centos_srpms_previous and centos_srpms[name]['nvr'] != centos_srpms_previous[name]['nvr']:
+                    print("Updated in CentOS: %s from %s to %s (XCP-ng: %s)"
+                          % (name,
+                             version_release(centos_srpms_previous[name]['version'], centos_srpms_previous[name]['release']),
+                             version_release(centos_srpms[name]['version'], centos_srpms[name]['release']),
+                             version_release(build_info['version'], build_info['release'])))
             if name in epel_srpms:
                 build_info['latest-epel'] = epel_srpms[name]
+                if name in epel_srpms_previous and epel_srpms[name]['nvr'] != epel_srpms_previous[name]['nvr']:
+                    print("Updated in EPEL: %s from %s to %s (XCP-ng: %s)"
+                          % (name,
+                             version_release(epel_srpms_previous[name]['version'], epel_srpms_previous[name]['release']),
+                             version_release(epel_srpms[name]['version'], epel_srpms[name]['release']),
+                             version_release(build_info['version'], build_info['release'])))
 
             # provenance
             srpm_name_index = csv_headers.index('SRPM_name')
@@ -222,6 +249,10 @@ def main():
         f.write('\n'.join(extra_rpms))
     with open(os.path.join(work_dir, 'xcp-ng-rpms-srpms.json'), 'w') as f:
         f.write(json.dumps(xcp_ng_rpms_srpms, sort_keys=True, indent=4))
+    with open(os.path.join(work_dir, 'centos-srpms.json'), 'w') as f:
+        f.write(json.dumps(centos_srpms, sort_keys=True, indent=4))
+    with open(os.path.join(work_dir, 'epel-srpms.json'), 'w') as f:
+        f.write(json.dumps(epel_srpms, sort_keys=True, indent=4))
 
 if __name__ == "__main__":
     main()
