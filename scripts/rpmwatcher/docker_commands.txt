@@ -1,4 +1,8 @@
+# As root: allow user to use docker after installing it on CentOS
+groupadd docker
+usermod -aG docker {user}
+
+# As user:
+chcon -Rt svirt_sandbox_file_t ~/data # if data is a symlink, replace with the actual target dir
+chcon -Rt svirt_sandbox_file_t ~/git
 docker pull centos:7.5.1804
-chcon -Rt svirt_sandbox_file_t /home/samuel/repos
-chcon -Rt svirt_sandbox_file_t /home/samuel/git
-docker run --rm -i -t -v /home/samuel/repos:/data -v /home/samuel/git/xcp/:/xcp centos:7.5.1804
