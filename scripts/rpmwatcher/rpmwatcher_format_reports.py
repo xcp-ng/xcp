@@ -106,6 +106,9 @@ def main():
     xcp_srpm_repo = check_dir(os.path.join(base_dir, 'xcp-ng', xcp_version))
     xcp_rpm_repo = check_dir(os.path.join(base_dir, 'xcp-ng_rpms', xcp_version))
     work_dir = check_dir(os.path.join(base_dir, 'workdir', xcp_version))
+    reports_dir = os.path.join(work_dir, 'reports')
+    if not os.path.exists(reports_dir):
+        os.mkdir(reports_dir)
 
     # Read data from workdir
     with open(os.path.join(work_dir, 'xcp-ng_builds.json')) as f:
@@ -319,7 +322,7 @@ def main():
 
         # format and write output
         if format == 'csv':
-            with codecs.open(os.path.join(work_dir, 'report_%s.csv' % report_name), 'w', encoding='utf8') as f:
+            with codecs.open(os.path.join(reports_dir, 'report_%s.csv' % report_name), 'w', encoding='utf8') as f:
                 for row in report:
                     row = [field.replace('\n', ' - ') for field in row]
                     f.write(';'.join(row) + '\n')
@@ -336,10 +339,10 @@ def main():
                 s.write(' | '.join(row) + '\n')
             try:
                 if format == 'markdown':
-                    with codecs.open(os.path.join(work_dir, 'report_%s.md' % report_name), 'w', encoding='utf8') as f:
+                    with codecs.open(os.path.join(reports_dir, 'report_%s.md' % report_name), 'w', encoding='utf8') as f:
                         f.write(s.getvalue())
                 elif format == 'html':
-                    with codecs.open(os.path.join(work_dir, 'report_%s.html' % report_name), 'w', encoding='utf8') as f:
+                    with codecs.open(os.path.join(reports_dir, 'report_%s.html' % report_name), 'w', encoding='utf8') as f:
                         f.write("""
 <!DOCTYPE html>
 <html lang="en">
