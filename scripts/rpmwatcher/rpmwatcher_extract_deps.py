@@ -155,7 +155,6 @@ def main():
     # For every SRPM built by ourselves, get its build dependencies
     # We use our local RPMs directory as target directory to avoid downloads
     for srpm_nvr, build_info in xcp_builds.iteritems():
-        print(srpm_nvr)
         if build_info['built-by'] == 'xcp-ng':
             build_info['build-deps'] = get_build_deps(os.path.join(xcp_srpm_repo, srpm_nvr + ".src.rpm"),
                                                       install_root,
@@ -167,9 +166,7 @@ def main():
 
     # For each RPM from our repos, get its runtime dependencies, and add info from xcp_ng_rpms_srpms
     for srpm_nvr, build_info in xcp_builds.iteritems():
-        print("\n--- " + srpm_nvr + " ---")
         for rpm_nvra in build_info['rpms']:
-            print("*** " + rpm_nvra + " ***")
             installable, deps = get_all_runtime_deps(rpm_nvra, install_root)
             xcp_rpms[rpm_nvra] = {
                 'deps': deps,
