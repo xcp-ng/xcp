@@ -22,7 +22,7 @@ python $PATH_TO_SCRIPTS/rpmwatcher_update.py $VERSION .
 # get information about the dependencies, from within a CentOS docker container
 # using "host" network because "bridge" may fail in some hosting environments
 DOCKER_NETWORK=host
-docker run --rm -t --network $DOCKER_NETWORK \
+docker run --rm -t --privileged --network $DOCKER_NETWORK \
     -v ~/data:/data -v ~/git/xcp/scripts/rpmwatcher:/scripts centos:$CENTOS_VERSION \
     python /scripts/rpmwatcher_extract_deps.py $VERSION /data
 
