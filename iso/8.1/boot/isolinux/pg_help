@@ -1,0 +1,16 @@
+
+splash.lss
+
+05Welcome to XCP-ng.
+
+  - To install or upgrade press the 0e<ENTER>05 key.
+  - To install or upgrade without a serial console, type 
+    0eno-serial <ENTER>05.
+  - To install or upgrade in safe mode, type 0esafe <ENTER>05.
+  - To install or upgrade to a multipathed root disk, type 0emultipath <ENTER>05.
+  - To boot into a shell prompt, type 0eshell <ENTER>05.
+    (This is an advanced option and should be used with care and as
+     directed by a Technical Support Representative.)
+  - To perform a memory test, type 0ememtest <ENTER>05.
+
+0f[F1-Standard] [F2-Advanced]05
