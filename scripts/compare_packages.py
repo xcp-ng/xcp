@@ -61,8 +61,12 @@ def main():
                 print("*** %s added" % info['filename'])
                 print("Summary: %s" % info['summary'])
                 print("License: %s" % info['license'])
+                print(subprocess.check_output(['rpm', '-qlp', info['filepath']]))
             elif info.get('removed', False):
-                status = "%s removed" % info['filename']
+                print("*** %s removed" % info['filename'])
+                print("Summary: %s" % info['summary'])
+                print("License: %s" % info['license'])
+                print(subprocess.check_output(['rpm', '-qlp', info['filepath']]))
             else:
                 previous = rpms1[name]['filename']
                 if info['evr'] == rpms1[name]['evr']:

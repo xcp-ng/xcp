@@ -2,6 +2,11 @@
 
 -------------------- Vendor: (none) ------------------------
 
+*** areca-arcmsr-1.30.00.23-1.el7.centos.x86_64.rpm removed
+Summary: Areca arcmsr device drivers
+License: GPL
+/lib/modules/4.4.0+10/updates/arcmsr.ko
+
 *** avago-megaraid-sas-07.701.18.00+rc1-1.el7.centos.x86_64.rpm => avago-megaraid-sas-07.707.50.00+rc1-1.el7.centos.x86_64.rpm
 Summary: Avago megaraid-sas device drivers
 License: GPL
@@ -101,6 +106,11 @@ S.5........ /bin/busybox
 *** cheliso-cxgb4-1.0.1-1.el7.centos.x86_64.rpm added
 Summary: Cheliso cxgb4 device drivers
 License: GPL
+/lib/modules/4.19.0+1/updates/csiostor.ko
+/lib/modules/4.19.0+1/updates/cxgb4.ko
+/lib/modules/4.19.0+1/updates/cxgb4i.ko
+/lib/modules/4.19.0+1/updates/libcxgbi.ko
+
 *** cisco-enic-3.1.136.0-1.el7.centos.x86_64.rpm => cisco-enic-3.2.189.0-1.el7.centos.x86_64.rpm
 Summary: Cisco enic device drivers
 License: GPL
@@ -134,6 +144,11 @@ removed     /lib/modules/4.4.0+10/updates/fnic.ko
 *** citrix-crypto-module-1.0.2n-11.x86_64.rpm added
 Summary: Citrix FIPS cryptomodule including modified OpenSSL
 License: OpenSSL
+/lib64/citrix/libcrypto.so.10
+/lib64/citrix/libssl.so.10
+/usr/share/licenses/citrix-crypto-module-1.0.2n
+/usr/share/licenses/citrix-crypto-module-1.0.2n/license.txt
+
 *** control-slice-1.1.0-1.x86_64.rpm => control-slice-1.2.1-1.x86_64.rpm
 Summary: XenServer Control Slice
 License: GPL2
@@ -398,9 +413,23 @@ S.5........ /usr/lib64/multipath/libprioweightedpath.so
 *** edk2-20180522git4b8552d-1.3.2.x86_64.rpm added
 Summary: EFI Development Kit II
 License: BSD and MIT
+/usr/share/edk2
+/usr/share/edk2/OVMF-debug.fd
+/usr/share/edk2/OVMF-release.fd
+/usr/share/edk2/OVMF.fd
+/usr/share/licenses/edk2-20180522git4b8552d
+/usr/share/licenses/edk2-20180522git4b8552d/License.ovmf
+/usr/share/licenses/edk2-20180522git4b8552d/License.txt
+
 *** emu-manager-1.0.5-1.x86_64.rpm EVR unchanged, new file differs
 added       PROVIDES gitsha(https://code.citrite.net/rest/archive/latest/projects/XSC/repos/emu-manager/archive?at=v1.0.5&prefix=emu-manager-1.0.5&format=tar.gz#/emu-manager-1.0.5.tar.gz) = e1a3f1d5fd99161f8d638ae1d0ed7d912be0b7fe
 S.5........ /usr/lib64/xen/bin/emu-manager
+
+*** emulex-be2net-11.1.196.6-1.el7.centos.x86_64.rpm removed
+Summary: Emulex be2net device drivers
+License: GPL
+/etc/modprobe.d/be2net.conf
+/lib/modules/4.4.0+10/updates/be2net.ko
 
 *** emulex-lpfc-11.1.210.1-1.el7.centos.x86_64.rpm => emulex-lpfc-12.0.0.10-1.el7.centos.x86_64.rpm
 Summary: Emulex lpfc device drivers
@@ -1700,6 +1729,11 @@ S.5........ /etc/xapi.d/plugins/prepare_host_upgrade.py
 S.5........ /etc/xapi.d/plugins/prepare_host_upgrade.pyc
 S.5........ /etc/xapi.d/plugins/prepare_host_upgrade.pyo
 
+*** hp-hpsa-3.4.16-1.el7.centos.x86_64.rpm removed
+Summary: Hewlett-Packard Company hpsa device drivers
+License: GPL
+/lib/modules/4.4.0+10/updates/hpsa.ko
+
 *** intel-e1000e-3.4.0.2-1.el7.centos.x86_64.rpm => intel-e1000e-3.4.2.1-1.el7.centos.x86_64.rpm
 Summary: Intel e1000e device drivers
 License: GPL
@@ -1745,6 +1779,11 @@ added       PROVIDES intel-i40e(x86-64) = 2.7.12-1
 added       /lib/modules/4.19.0+1/updates/i40e.ko
 removed     /lib/modules/4.4.0+10/updates/i40e.ko
 
+*** intel-i40evf-2.0.22-1.el7.centos.x86_64.rpm removed
+Summary: Intel i40evf device drivers
+License: GPL
+/lib/modules/4.4.0+10/updates/i40evf.ko
+
 *** intel-igb-5.3.5.3-2.el7.centos.x86_64.rpm => intel-igb-5.3.5.20-1.el7.centos.x86_64.rpm
 Summary: Intel igb device drivers
 License: GPL
@@ -1764,6 +1803,11 @@ added       PROVIDES intel-igb(x86-64) = 5.3.5.20-1.el7.centos
 added       /lib/modules/4.19.0+1/updates/igb.ko
 removed     /lib/modules/4.4.0+10/updates/igb.ko
 
+*** intel-igbvf-2.3.8.2-1.el7.centos.x86_64.rpm removed
+Summary: Intel igbvf device drivers
+License: GPL
+/lib/modules/4.4.0+10/updates/igbvf.ko
+
 *** intel-ixgbe-4.4.6-1.el7.centos.x86_64.rpm => intel-ixgbe-5.5.2-2.el7.centos.x86_64.rpm
 Summary: Intel ixgbe device drivers
 License: GPL
@@ -1778,6 +1822,12 @@ added       PROVIDES gitsha(https://code.citrite.net/rest/archive/latest/project
 added       PROVIDES intel-ixgbe(x86-64) = 5.5.2-2.el7.centos
 added       /lib/modules/4.19.0+1/updates/ixgbe.ko
 removed     /lib/modules/4.4.0+10/updates/ixgbe.ko
+
+*** intel-ixgbevf-3.2.2-1.el7.centos.x86_64.rpm removed
+Summary: Intel ixgbevf device drivers
+License: GPL
+/etc/modprobe.d/ixgbevf.conf
+/lib/modules/4.4.0+10/updates/ixgbevf.ko
 
 *** interface-rename-2.0.2-1.noarch.rpm EVR unchanged, new file differs
 added       PROVIDES gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/interface-rename/archive?at=v2.0.2&format=tar.gz&prefix=interface-rename-2.0.2#/interface-rename-2.0.2.tar.gz) = 76ee8cb29338cf9ee113ff07222d623e177ffddb
@@ -1934,6 +1984,8 @@ added       /usr/share/man/man8/tipc.8.gz
 *** ipxe-20121005-1.0.2.noarch.rpm added
 Summary: A network boot loader
 License: GPLv2
+/usr/share/ipxe/ipxe.bin
+
 *** irqbalance-1.0.7-5.el7.centos.xs9.x86_64.rpm => irqbalance-1.0.7-11.el7.centos.xs3.x86_64.rpm
 Summary: IRQ balancing daemon
 License: GPLv2
@@ -5843,6 +5895,13 @@ added       /usr/share/licenses/lvm2-libs-2.02.177/COPYING.LIB
 added       PROVIDES gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/makedumpfile/archive?at=1.0.0&format=tar#/makedumpfile.patches.tar) = 7a645363d64d4df52e35132c47af3a0a5953e102
 S.5........ /sbin/makedumpfile
 
+*** mellanox-mlnxen-3.4-1.el7.centos.x86_64.rpm removed
+Summary: Mellanox mlnxen device drivers
+License: GPL
+/lib/modules/4.4.0+10/updates/mlx4_core.ko
+/lib/modules/4.4.0+10/updates/mlx4_en.ko
+/lib/modules/4.4.0+10/updates/mlx5_core.ko
+
 *** message-switch-1.12.0-5.el7.centos.x86_64.rpm => message-switch-1.19.0-2.el7.centos.x86_64.rpm
 Summary: A store and forward message switch
 License: FreeBSD
@@ -5902,6 +5961,11 @@ S.5........ /lib/firmware/intel-ucode/06-9e-0a
 S.5........ /lib/firmware/intel-ucode/06-9e-0b
 added       /lib/firmware/intel-ucode/06-9e-0c
 removed     /usr/share/doc/microcode_ctl/intel-ucode-end-user.txt
+
+*** microsemi-aacraid-1.2.1_52011-1.el7.centos.x86_64.rpm removed
+Summary: Microsemi aacraid device drivers
+License: GPL
+/lib/modules/4.4.0+10/updates/aacraid.ko
 
 *** ocaml-xenops-tools-2.0.0-14.el7.centos.x86_64.rpm => ocaml-xenops-tools-2.4.0-1.el7.centos.x86_64.rpm
 Summary: Debugging tools for ocaml-xenops
@@ -6421,6 +6485,23 @@ added       PROVIDES qlogic-netxtreme2(x86-64) = 7.14.53-1.el7.centos
 *** qlogic-netxtreme2-4.19.0+1-modules-7.14.53-1.el7.centos.x86_64.rpm added
 Summary: Qlogic netxtreme2 device drivers
 License: GPL
+/etc/modprobe.d/qlogic-netxtreme2.conf
+/lib/modules/4.19.0+1/updates/bnx2.ko
+/lib/modules/4.19.0+1/updates/bnx2fc.ko
+/lib/modules/4.19.0+1/updates/bnx2i.ko
+/lib/modules/4.19.0+1/updates/bnx2x.ko
+/lib/modules/4.19.0+1/updates/cnic.ko
+
+*** qlogic-netxtreme2-4.4.0+10-modules-7.14.29.1-1.el7.centos.x86_64.rpm removed
+Summary: Qlogic netxtreme2 device drivers
+License: GPL
+/etc/modprobe.d/qlogic-netxtreme2.conf
+/lib/modules/4.4.0+10/updates/bnx2.ko
+/lib/modules/4.4.0+10/updates/bnx2fc.ko
+/lib/modules/4.4.0+10/updates/bnx2i.ko
+/lib/modules/4.4.0+10/updates/bnx2x.ko
+/lib/modules/4.4.0+10/updates/cnic.ko
+
 *** qlogic-qla2xxx-8.07.00.56.71-1.el7.centos.x86_64.rpm => qlogic-qla2xxx-10.00.00.11.80.0-1.el7.centos.x86_64.rpm
 Summary: Qlogic qla2xxx device drivers
 License: GPL
@@ -6445,6 +6526,16 @@ added       /lib/firmware/updates/4.19.0+1/ql2400_fw.bin
 added       /lib/firmware/updates/4.19.0+1/ql2500_fw.bin
 removed     /lib/firmware/updates/4.4.0+10/ql2400_fw.bin
 removed     /lib/firmware/updates/4.4.0+10/ql2500_fw.bin
+
+*** qlogic-qlcnic-5.3.64-1.el7.centos.x86_64.rpm removed
+Summary: Qlogic qlcnic device drivers
+License: GPL
+/lib/modules/4.4.0+10/updates/qlcnic.ko
+
+*** qlogic-qlge-1.00.00.35-1.el7.centos.x86_64.rpm removed
+Summary: Qlogic qlge device drivers
+License: GPL
+/lib/modules/4.4.0+10/updates/qlge.ko
 
 *** rrd2csv-1.0.5-13.el7.centos.x86_64.rpm => rrd2csv-1.1.5-1.el7.centos.x86_64.rpm
 Summary: Tool for converting Xen API RRDs to CSV
@@ -6759,6 +6850,12 @@ added       /usr/lib/python2.7/site-packages/transport-0.13.0_1.el7.centos-py2.7
 S.5........ /usr/lib/python2.7/site-packages/transport/hba.py
 S.5........ /usr/lib/python2.7/site-packages/transport/iscsi.py
 
+*** solarflare-sfc-4.10.1.1000-1.el7.centos.x86_64.rpm removed
+Summary: Solarflare sfc device drivers
+License: GPL
+/etc/modprobe.d/sfc.conf
+/lib/modules/4.4.0+10/updates/sfc.ko
+
 *** squeezed-0.19.0-7.el7.centos.x86_64.rpm => squeezed-0.21.0-1.el7.centos.x86_64.rpm
 Summary: Memory ballooning daemon for the xapi toolstack
 License: LGPL
@@ -7019,6 +7116,28 @@ S.5........ /usr/lib64/libsystemd.so.0.6.0
 S.5........ /usr/lib64/libudev.so.1.6.2
 S.5........ /usr/lib64/security/pam_systemd.so
 
+*** systemd-networkd-219-19.el7_2.7.xs7.3.x86_64.rpm removed
+Summary: System service that manages networks.
+License: LGPLv2+
+/etc/dbus-1/system.d/org.freedesktop.network1.conf
+/usr/bin/networkctl
+/usr/lib/systemd/network
+/usr/lib/systemd/system/systemd-networkd-wait-online.service
+/usr/lib/systemd/system/systemd-networkd.service
+/usr/lib/systemd/systemd-networkd
+/usr/lib/systemd/systemd-networkd-wait-online
+/usr/lib/udev/rules.d/80-net-setup-link.rules
+/usr/share/dbus-1/system-services/org.freedesktop.network1.service
+/usr/share/man/man5/systemd.link.5.gz
+/usr/share/man/man5/systemd.netdev.5.gz
+/usr/share/man/man5/systemd.network.5.gz
+/usr/share/man/man8/systemd-journal-gatewayd.8.gz
+/usr/share/man/man8/systemd-journal-gatewayd.service.8.gz
+/usr/share/man/man8/systemd-journal-gatewayd.socket.8.gz
+/usr/share/man/man8/systemd-journal-remote.8.gz
+/usr/share/man/man8/systemd-networkd.8.gz
+/usr/share/man/man8/systemd-networkd.service.8.gz
+
 *** systemd-sysv-219-19.el7_2.7.xs7.3.x86_64.rpm => systemd-sysv-219-57.el7.centos.1.xs3.x86_64.rpm
 Summary: SysV tools for systemd
 License: LGPLv2+
@@ -7083,6 +7202,11 @@ S.5........ /usr/share/man/man7/stappaths.7.gz
 S.5........ /usr/share/man/man7/warning::debuginfo.7stap.gz
 S.5........ /usr/share/man/man8/stapdyn.8.gz
 
+*** update-XS76-1.0-1.noarch.rpm removed
+Summary: XS76
+License: Proprietary
+(Ne contient pas de fichiers)
+
 *** v6d-citrix-10.41.0-1.el7.centos.x86_64.rpm => v6d-citrix-10.48.0-1.el7.centos.x86_64.rpm
 Summary: Citrix licensing daemon
 License: Proprietary
@@ -7094,12 +7218,30 @@ S.5........ /opt/xensource/libexec/v6d-citrix
 *** varstored-0.6.1-1.x86_64.rpm added
 Summary: EFI Variable Storage Daemon
 License: Proprietary and BSD
+/usr/sbin/varstored
+/usr/share/licenses/varstored-0.6.1
+/usr/share/licenses/varstored-0.6.1/LICENSE
+/usr/share/varstored
+
 *** varstored-guard-0.3.0-1.x86_64.rpm added
 Summary: Deprivileged XAPI socket Daemon for EFI variable storage
 License: LGPL
+/usr/lib/systemd/system/varstored-guard.service
+/usr/sbin/varstored-guard
+/usr/share/licenses/varstored-guard-0.3.0
+/usr/share/licenses/varstored-guard-0.3.0/LICENSE
+
 *** varstored-tools-0.6.1-1.x86_64.rpm added
 Summary: Tools for manipulating a guest's EFI variables offline
 License: Proprietary and BSD
+/usr/bin/varstore-get
+/usr/bin/varstore-ls
+/usr/bin/varstore-rm
+/usr/bin/varstore-sb-state
+/usr/bin/varstore-set
+/usr/share/licenses/varstored-tools-0.6.1
+/usr/share/licenses/varstored-tools-0.6.1/LICENSE
+
 *** vcputune-2.0.1-1.xs44.noarch.rpm EVR unchanged, new file differs
 added       PROVIDES gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/vcputune/archive?at=refs%2Ftags%2Fv2.0.1&format=tar.gz&prefix=vcputune-2.0.1#/vcputune-2.0.1.tar.gz) = 0bf371faff06c848244488d32c3ccb8feddbc868
 
@@ -7605,12 +7747,186 @@ added       /usr/share/doc/xapi-storage-plugins-1.29.0/README.md
 *** xapi-storage-plugins-datapaths-1.29.0-1.x86_64.rpm added
 Summary: I/O datapath handlers
 License: Proprietary
+/usr/libexec/xapi-storage-script/datapath
+/usr/libexec/xapi-storage-script/datapath/qdisk
+/usr/libexec/xapi-storage-script/datapath/qdisk/Datapath.activate
+/usr/libexec/xapi-storage-script/datapath/qdisk/Datapath.attach
+/usr/libexec/xapi-storage-script/datapath/qdisk/Datapath.close
+/usr/libexec/xapi-storage-script/datapath/qdisk/Datapath.deactivate
+/usr/libexec/xapi-storage-script/datapath/qdisk/Datapath.detach
+/usr/libexec/xapi-storage-script/datapath/qdisk/Datapath.open
+/usr/libexec/xapi-storage-script/datapath/qdisk/Plugin.Query
+/usr/libexec/xapi-storage-script/datapath/qdisk/datapath.py
+/usr/libexec/xapi-storage-script/datapath/qdisk/datapath.pyc
+/usr/libexec/xapi-storage-script/datapath/qdisk/datapath.pyo
+/usr/libexec/xapi-storage-script/datapath/qdisk/plugin.py
+/usr/libexec/xapi-storage-script/datapath/qdisk/plugin.pyc
+/usr/libexec/xapi-storage-script/datapath/qdisk/plugin.pyo
+/usr/libexec/xapi-storage-script/datapath/tapdisk
+/usr/libexec/xapi-storage-script/datapath/tapdisk/Datapath.activate
+/usr/libexec/xapi-storage-script/datapath/tapdisk/Datapath.attach
+/usr/libexec/xapi-storage-script/datapath/tapdisk/Datapath.close
+/usr/libexec/xapi-storage-script/datapath/tapdisk/Datapath.deactivate
+/usr/libexec/xapi-storage-script/datapath/tapdisk/Datapath.detach
+/usr/libexec/xapi-storage-script/datapath/tapdisk/Datapath.open
+/usr/libexec/xapi-storage-script/datapath/tapdisk/Plugin.Query
+/usr/libexec/xapi-storage-script/datapath/tapdisk/datapath.py
+/usr/libexec/xapi-storage-script/datapath/tapdisk/datapath.pyc
+/usr/libexec/xapi-storage-script/datapath/tapdisk/datapath.pyo
+/usr/libexec/xapi-storage-script/datapath/tapdisk/plugin.py
+/usr/libexec/xapi-storage-script/datapath/tapdisk/plugin.pyc
+/usr/libexec/xapi-storage-script/datapath/tapdisk/plugin.pyo
+
 *** xapi-storage-plugins-gfs2-1.29.0-1.x86_64.rpm added
 Summary: GFS2 SR plugin
 License: Proprietary
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Plugin.Query
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Plugin.diagnostics
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.attach
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.create
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.destroy
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.detach
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.ls
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.probe
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.set_description
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.set_name
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/SR.stat
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.clone
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.create
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.destroy
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.resize
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.set
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.set_description
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.set_name
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.snapshot
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.stat
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/Volume.unset
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/block_device_util.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/block_device_util.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/block_device_util.pyo
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/database.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/database.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/database.pyo
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/dlm_monitor.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/dlm_monitor.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/dlm_monitor.pyo
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/gfs2.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/gfs2.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/gfs2.pyo
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/plugin.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/plugin.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/plugin.pyo
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/sr.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/sr.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/sr.pyo
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/sr_monitor.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/sr_monitor.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/sr_monitor.pyo
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/stats.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/stats.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/stats.pyo
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/volume.py
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/volume.pyc
+/usr/libexec/xapi-storage-script/volume/org.xen.xapi.storage.gfs2/volume.pyo
+
 *** xapi-storage-plugins-libs-1.29.0-1.x86_64.rpm added
 Summary: Common libraries for the xapi-storage-plugins packages
 License: Proprietary
+/usr/lib/python2.7/site-packages/xapi/storage/libs
+/usr/lib/python2.7/site-packages/xapi/storage/libs/__init__.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/__init__.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/__init__.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/image.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/image.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/image.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/__init__.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/__init__.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/__init__.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/callbacks.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/callbacks.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/callbacks.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/coalesce.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/coalesce.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/coalesce.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/cowutil.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/cowutil.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/cowutil.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/database_backup.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/database_backup.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/database_backup.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/datapath.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/datapath.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/datapath.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/imageformat.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/imageformat.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/imageformat.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/intellicache.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/intellicache.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/intellicache.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/lock.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/lock.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/lock.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/metabase.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/metabase.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/metabase.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/qcow2util.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/qcow2util.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/qcow2util.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/rawutil.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/rawutil.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/rawutil.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/vhdutil.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/vhdutil.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/vhdutil.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/volume.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/volume.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/volume.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/volume_implementation.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/volume_implementation.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libcow/volume_implementation.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libdlm.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libdlm.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/libdlm.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/losetup.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/losetup.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/losetup.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/nbdclient.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/nbdclient.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/nbdclient.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/nbdtool.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/nbdtool.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/nbdtool.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/qemudisk.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/qemudisk.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/qemudisk.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/qmp.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/qmp.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/qmp.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/refcounter.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/refcounter.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/refcounter.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/__init__.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/__init__.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/__init__.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/backend.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/backend.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/backend.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/control.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/control.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/control.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/datasource.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/datasource.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/rrddlib/datasource.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/tapdisk.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/tapdisk.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/tapdisk.pyo
+/usr/lib/python2.7/site-packages/xapi/storage/libs/util.py
+/usr/lib/python2.7/site-packages/xapi/storage/libs/util.pyc
+/usr/lib/python2.7/site-packages/xapi/storage/libs/util.pyo
+
 *** xapi-storage-script-0.26.0-1.el7.centos.x86_64.rpm => xapi-storage-script-0.31.0-1.el7.centos.x86_64.rpm
 Summary: Xapi storage script plugin server
 License: LGPL+linking exception
@@ -7759,6 +8075,55 @@ removed     PROVIDES xen-crashdump-analyser(x86-64) = 2.5.2-1
 added       PROVIDES gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/xen-crashdump-analyser/archive?at=v2.5.3&format=tar.gz&prefix=xen-crashdump-analyser-2.5.3#/xen-crashdump-analyser.tar.gz) = c7728fc9ae7eba85d1abe25dbb741acb3e3d565d
 added       PROVIDES xen-crashdump-analyser(x86-64) = 2.5.3-1
 S.5........ /usr/lib64/xen/bin/xen-crashdump-analyser
+
+*** xen-device-model-0.10.2.xs-3.0.4.x86_64.rpm removed
+Summary: qemu-dm device model
+License: GPL
+/usr/lib64/xen/bin/qemu-dm
+/usr/libexec/xen/bin/qemu-dm
+/usr/share/doc/xen-device-model-0.10.2.xs
+/usr/share/doc/xen-device-model-0.10.2.xs/COPYING
+/usr/share/doc/xen-device-model-0.10.2.xs/COPYING.LIB
+/usr/share/doc/xen-device-model-0.10.2.xs/LICENSE
+/usr/share/doc/xen-device-model-0.10.2.xs/MAINTAINERS
+/usr/share/doc/xen-device-model-0.10.2.xs/README
+/usr/share/xen/qemu/keymaps
+/usr/share/xen/qemu/keymaps/ar
+/usr/share/xen/qemu/keymaps/common
+/usr/share/xen/qemu/keymaps/da
+/usr/share/xen/qemu/keymaps/de
+/usr/share/xen/qemu/keymaps/de-ch
+/usr/share/xen/qemu/keymaps/en-gb
+/usr/share/xen/qemu/keymaps/en-us
+/usr/share/xen/qemu/keymaps/es
+/usr/share/xen/qemu/keymaps/et
+/usr/share/xen/qemu/keymaps/fi
+/usr/share/xen/qemu/keymaps/fo
+/usr/share/xen/qemu/keymaps/fr
+/usr/share/xen/qemu/keymaps/fr-be
+/usr/share/xen/qemu/keymaps/fr-ca
+/usr/share/xen/qemu/keymaps/fr-ch
+/usr/share/xen/qemu/keymaps/hr
+/usr/share/xen/qemu/keymaps/hu
+/usr/share/xen/qemu/keymaps/is
+/usr/share/xen/qemu/keymaps/it
+/usr/share/xen/qemu/keymaps/ja
+/usr/share/xen/qemu/keymaps/lt
+/usr/share/xen/qemu/keymaps/lv
+/usr/share/xen/qemu/keymaps/mk
+/usr/share/xen/qemu/keymaps/modifiers
+/usr/share/xen/qemu/keymaps/nl
+/usr/share/xen/qemu/keymaps/nl-be
+/usr/share/xen/qemu/keymaps/no
+/usr/share/xen/qemu/keymaps/pl
+/usr/share/xen/qemu/keymaps/pt
+/usr/share/xen/qemu/keymaps/pt-br
+/usr/share/xen/qemu/keymaps/ru
+/usr/share/xen/qemu/keymaps/sl
+/usr/share/xen/qemu/keymaps/sv
+/usr/share/xen/qemu/keymaps/th
+/usr/share/xen/qemu/keymaps/tr
+/var/xen/qemu
 
 *** xen-dom0-libs-4.7.6-6.1.x86_64.rpm => xen-dom0-libs-4.11.1-7.2.x86_64.rpm
 Summary: Xen Hypervisor Domain 0 libraries
@@ -8090,6 +8455,13 @@ S.5........ /usr/libexec/xenopsd/set-domain-uuid
 S.5........ /usr/sbin/xenopsd-xc
 S.5........ /usr/share/man/man1/xenopsd-xc.1.gz
 
+*** xenopsd-xenlight-0.66.0-1.el7.centos.x86_64.rpm removed
+Summary: Xenopsd using libxenlight
+License: LGPL
+/usr/lib/systemd/system/xenopsd-xenlight.service
+/usr/sbin/xenopsd-xenlight
+/usr/share/man/man1/xenopsd-xenlight.1.gz
+
 *** xenserver-dracut-9-1.noarch.rpm EVR unchanged, new file differs
 added       PROVIDES gitsha(https://code.citrite.net/rest/archive/latest/projects/XS/repos/xenserver-dracut/archive?at=v9&format=tar.gz&prefix=xenserver-dracut-9#/xenserver-dracut-9.tar.gz) = eddd14c7589b1302c68129fc65c7fdc871ca003d
 
@@ -8198,6 +8570,11 @@ S.5........ /usr/libexec/xapi/cluster-stack/xhad/xhad
 *** xs-clipboardd-0.0.2-1.x86_64.rpm EVR unchanged, new file differs
 added       PROVIDES gitsha(https://code.citrite.net/rest/archive/latest/projects/XSC/repos/xs-clipboardd/archive?at=v0.0.2&format=tar.gz&prefix=xs-clipboardd-0.0.2#/xs-clipboardd-0.0.2.tar.gz) = c61d34bfb27e460d0f83e69a1d87864205b10791
 S.5........ /opt/xensource/libexec/xs-clipboardd
+
+*** xs-obsolete-packages-1-2.noarch.rpm removed
+Summary: A package to obsolete retired packages
+License: Public Domain
+(Ne contient pas de fichiers)
 
 *** xsconsole-10.1.7-1.x86_64.rpm => xsconsole-10.1.9-1.x86_64.rpm
 Summary: XenServer Host Configuration Console
@@ -8388,9 +8765,16 @@ S.5........ /opt/xensource/debug/xsiostat
 
 -------------------- Vendor: Avago Technologies ------------------------
 
+*** elxocmlibhbaapi-11.1.218.4-1.x86_64.rpm removed
+Summary: Remote Management Host Bus Adapter Application.
+License: Copyright 2009-2016 Avago Technologies. All rights reserved.
+/usr/lib64/libHBAAPI.so
+
 *** hbaapiwrapper-12.2.176.0-1.x86_64.rpm added
 Summary: Remote Management Host Bus Adapter Application.
 License: Copyright 2009-2016 Avago Technologies. All rights reserved.
+/usr/lib64/libHBAAPI.so
+
 
 
 -------------------- Vendor: Broadcom Ltd or its subsidiaries ------------------------
@@ -8474,6 +8858,39 @@ S.5........ /usr/lib64/libemulexhbaapi.so
 *** GeoIP-1.5.0-11.el7.x86_64.rpm added
 Summary: Library for country/city/organization to IP address or hostname mapping
 License: LGPLv2+ and GPLv2+ and CC-BY-SA
+/etc/GeoIP.conf
+/etc/GeoIP.conf.default
+/usr/bin/geoiplookup
+/usr/bin/geoiplookup6
+/usr/bin/geoipupdate
+/usr/lib64/libGeoIP.so.1
+/usr/lib64/libGeoIP.so.1.5.0
+/usr/lib64/libGeoIPUpdate.so.0
+/usr/lib64/libGeoIPUpdate.so.0.0.0
+/usr/share/GeoIP
+/usr/share/GeoIP/GeoIP-initial.dat
+/usr/share/GeoIP/GeoIP.dat
+/usr/share/GeoIP/GeoIPASNum.dat
+/usr/share/GeoIP/GeoIPASNumv6.dat
+/usr/share/GeoIP/GeoIPCity.dat
+/usr/share/GeoIP/GeoIPCityv6.dat
+/usr/share/GeoIP/GeoIPCountry.dat
+/usr/share/GeoIP/GeoIPCountryv6.dat
+/usr/share/GeoIP/GeoIPv6-initial.dat
+/usr/share/GeoIP/GeoIPv6.dat
+/usr/share/doc/GeoIP-1.5.0
+/usr/share/doc/GeoIP-1.5.0/AUTHORS
+/usr/share/doc/GeoIP-1.5.0/COPYING
+/usr/share/doc/GeoIP-1.5.0/ChangeLog
+/usr/share/doc/GeoIP-1.5.0/LICENSE.txt
+/usr/share/doc/GeoIP-1.5.0/README
+/usr/share/doc/GeoIP-1.5.0/TODO
+/usr/share/doc/GeoIP-1.5.0/fetch-geoipdata-city.pl
+/usr/share/doc/GeoIP-1.5.0/fetch-geoipdata.pl
+/usr/share/man/man1/geoiplookup.1.gz
+/usr/share/man/man1/geoiplookup6.1.gz
+/usr/share/man/man1/geoipupdate.1.gz
+
 *** OpenIPMI-modalias-2.0.19-11.el7.x86_64.rpm => OpenIPMI-modalias-2.0.23-2.el7.x86_64.rpm
 Summary: Module aliases for IPMI subsystem
 License: LGPLv2+ and GPLv2+ or BSD
@@ -8729,6 +9146,11 @@ S.5........ /usr/share/man/man1/strip.1.gz
 *** boost-date-time-1.53.0-27.el7.x86_64.rpm added
 Summary: Run-Time component of boost date-time library
 License: Boost and MIT and Python
+/usr/lib64/libboost_date_time-mt.so.1.53.0
+/usr/lib64/libboost_date_time.so.1.53.0
+/usr/share/doc/boost-date-time-1.53.0
+/usr/share/doc/boost-date-time-1.53.0/LICENSE_1_0.txt
+
 *** boost-system-1.53.0-25.el7.x86_64.rpm => boost-system-1.53.0-27.el7.x86_64.rpm
 Summary: Run-Time component of boost system support library
 License: Boost and MIT and Python
@@ -10027,6 +10449,8 @@ added       /usr/share/licenses/elfutils-0.170/COPYING-LGPLV3
 *** elfutils-default-yama-scope-0.170-4.el7.noarch.rpm added
 Summary: Default yama attach scope sysctl setting
 License: GPLv2+ or LGPLv3+
+/usr/lib/sysctl.d/10-default-yama-scope.conf
+
 *** elfutils-libelf-0.163-3.el7.x86_64.rpm => elfutils-libelf-0.170-4.el7.x86_64.rpm
 Summary: Library to read and write ELF files
 License: GPLv2+ or LGPLv3+
@@ -12177,6 +12601,15 @@ added       /usr/share/man/man1/db_verify.1.gz
 *** libfastjson-0.99.4-2.el7.x86_64.rpm added
 Summary: A JSON implementation in C
 License: MIT
+/usr/lib64/libfastjson.so.4
+/usr/lib64/libfastjson.so.4.0.0
+/usr/share/doc/libfastjson-0.99.4
+/usr/share/doc/libfastjson-0.99.4/AUTHORS
+/usr/share/doc/libfastjson-0.99.4/ChangeLog
+/usr/share/doc/libfastjson-0.99.4/README.html
+/usr/share/licenses/libfastjson-0.99.4
+/usr/share/licenses/libfastjson-0.99.4/COPYING
+
 *** libffi-3.0.13-16.el7.x86_64.rpm => libffi-3.0.13-18.el7.x86_64.rpm
 Summary: A portable foreign function interface library
 License: MIT and Public Domain
@@ -12324,6 +12757,14 @@ S.5........ /lib64/libnfsidmap/static.so
 S.5........ /lib64/libnfsidmap/umich_ldap.so
 S.5........ /usr/share/man/man5/idmapd.conf.5.gz
 
+*** libnl-1.1.4-3.el7.x86_64.rpm removed
+Summary: Convenience library for kernel netlink sockets
+License: LGPLv2
+/lib64/libnl.so.1
+/lib64/libnl.so.1.1.4
+/usr/share/doc/libnl-1.1.4
+/usr/share/doc/libnl-1.1.4/COPYING
+
 *** libnl3-3.2.21-10.el7.x86_64.rpm => libnl3-3.2.28-4.el7.x86_64.rpm
 Summary: Convenience library for kernel netlink sockets
 License: LGPLv2
@@ -12427,6 +12868,9 @@ S.......... /usr/share/doc/libqb-1.0.1
 *** librados2-0.94.5-2.el7.x86_64.rpm added
 Summary: RADOS distributed object store client library
 License: LGPL-2.0
+/usr/lib64/librados.so.2
+/usr/lib64/librados.so.2.0.0
+
 *** libref_array-0.1.5-25.el7.x86_64.rpm => libref_array-0.1.5-29.el7.x86_64.rpm
 Summary: A refcounted array for C
 License: LGPLv3+
@@ -12734,6 +13178,14 @@ added       PROVIDES libtirpc(x86-64) = 0.2.4-0.10.el7
 S.5........ /lib64/libtirpc.so.1.0.10
 S.......... /usr/share/doc/libtirpc-0.2.4
 
+*** libtool-ltdl-2.4.2-21.el7_2.x86_64.rpm removed
+Summary: Runtime libraries for GNU Libtool Dynamic Module Loader
+License: LGPLv2+
+/usr/lib64/libltdl.so.7
+/usr/lib64/libltdl.so.7.3.0
+/usr/share/doc/libtool-ltdl-2.4.2
+/usr/share/doc/libtool-ltdl-2.4.2/COPYING.LIB
+
 *** libunistring-0.9.3-9.el7.x86_64.rpm EVR unchanged, new file differs
 *** libusbx-1.0.15-4.el7.x86_64.rpm => libusbx-1.0.21-1.el7.x86_64.rpm
 Summary: Library for accessing USB devices
@@ -12878,6 +13330,22 @@ S.5........ /usr/lib64/liblua-5.1.so
 *** lz4-1.7.5-2.el7.x86_64.rpm added
 Summary: Extremely fast compression algorithm
 License: GPLv2+ and BSD
+/usr/bin/lz4
+/usr/bin/lz4c
+/usr/bin/lz4cat
+/usr/bin/unlz4
+/usr/lib64/liblz4.so.1
+/usr/lib64/liblz4.so.1.7.5
+/usr/share/doc/lz4-1.7.5
+/usr/share/doc/lz4-1.7.5/NEWS
+/usr/share/licenses/lz4-1.7.5
+/usr/share/licenses/lz4-1.7.5/COPYING
+/usr/share/licenses/lz4-1.7.5/LICENSE
+/usr/share/man/man1/lz4.1.gz
+/usr/share/man/man1/lz4c.1.gz
+/usr/share/man/man1/lz4cat.1.gz
+/usr/share/man/man1/unlz4.1.gz
+
 *** lzo-2.06-8.el7.x86_64.rpm EVR unchanged, new file differs
 *** m2crypto-0.21.1-17.el7.x86_64.rpm EVR unchanged, new file differs
 *** m4-1.4.16-10.el7.x86_64.rpm EVR unchanged, new file differs
@@ -13350,6 +13818,10 @@ S.5........ /usr/share/man/man5/secmod.db.5.gz
 *** nss-pem-1.0.3-4.el7.x86_64.rpm added
 Summary: PEM file reader for Network Security Services (NSS)
 License: MPLv1.1
+/usr/lib64/libnsspem.so
+/usr/share/licenses/nss-pem-1.0.3
+/usr/share/licenses/nss-pem-1.0.3/COPYING
+
 *** nss-softokn-3.16.2.3-13.el7_1.x86_64.rpm => nss-softokn-3.36.0-5.el7_5.x86_64.rpm
 Summary: Network Security Services Softoken Module
 License: MPLv2.0
@@ -20737,6 +21209,16 @@ S.5........ /usr/lib64/libz.so.1.2.7
 *** security-tools-1.0.1-1.x86_64.rpm added
 Summary: XenServer security tools
 License: Proprietary
+/usr/bin/pool_secret
+
+*** xencenter-7.6.0.6655-1.noarch.rpm removed
+Summary: XenCenter
+License: BSD 2-Clause
+/opt/xensource/packages/iso/XenCenter.iso
+/opt/xensource/www/XenCenter.iso
+/opt/xensource/www/XenCenter.msi
+/var/xen/xc-install
+
 *** xenserver-pv-tools-7.32.0-2.noarch.rpm => xenserver-pv-tools-7.41.0-1.noarch.rpm
 Summary: ISO with the Windows and Linux PV Tools
 License: Portions GPL, Portions Non-Redistributable (See description)
@@ -20802,11 +21284,991 @@ added       OBSOLETES python-psutil < 2.2.1-3.el7
 *** python2-scapy-2.4.0-2.el7.noarch.rpm added
 Summary: Interactive packet manipulation tool and network scanner
 License: GPLv2
+/usr/bin/UTscapy2
+/usr/bin/scapy2
+/usr/lib/python2.7/site-packages/scapy-git_archive.devae348f861-py2.7.egg-info
+/usr/lib/python2.7/site-packages/scapy/__init__.py
+/usr/lib/python2.7/site-packages/scapy/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/all.py
+/usr/lib/python2.7/site-packages/scapy/all.pyc
+/usr/lib/python2.7/site-packages/scapy/all.pyo
+/usr/lib/python2.7/site-packages/scapy/ansmachine.py
+/usr/lib/python2.7/site-packages/scapy/ansmachine.pyc
+/usr/lib/python2.7/site-packages/scapy/ansmachine.pyo
+/usr/lib/python2.7/site-packages/scapy/arch
+/usr/lib/python2.7/site-packages/scapy/arch/__init__.py
+/usr/lib/python2.7/site-packages/scapy/arch/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/bpf
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/__init__.py
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/consts.py
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/consts.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/consts.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/core.py
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/core.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/core.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/supersocket.py
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/supersocket.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/bpf/supersocket.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/common.py
+/usr/lib/python2.7/site-packages/scapy/arch/common.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/common.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/linux.py
+/usr/lib/python2.7/site-packages/scapy/arch/linux.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/linux.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/pcapdnet.py
+/usr/lib/python2.7/site-packages/scapy/arch/pcapdnet.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/pcapdnet.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/solaris.py
+/usr/lib/python2.7/site-packages/scapy/arch/solaris.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/solaris.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/unix.py
+/usr/lib/python2.7/site-packages/scapy/arch/unix.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/unix.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/windows
+/usr/lib/python2.7/site-packages/scapy/arch/windows/__init__.py
+/usr/lib/python2.7/site-packages/scapy/arch/windows/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/windows/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/as_resolvers.py
+/usr/lib/python2.7/site-packages/scapy/as_resolvers.pyc
+/usr/lib/python2.7/site-packages/scapy/as_resolvers.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1
+/usr/lib/python2.7/site-packages/scapy/asn1/__init__.py
+/usr/lib/python2.7/site-packages/scapy/asn1/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1/asn1.py
+/usr/lib/python2.7/site-packages/scapy/asn1/asn1.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1/asn1.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1/ber.py
+/usr/lib/python2.7/site-packages/scapy/asn1/ber.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1/ber.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1/mib.py
+/usr/lib/python2.7/site-packages/scapy/asn1/mib.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1/mib.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1fields.py
+/usr/lib/python2.7/site-packages/scapy/asn1fields.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1fields.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1packet.py
+/usr/lib/python2.7/site-packages/scapy/asn1packet.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1packet.pyo
+/usr/lib/python2.7/site-packages/scapy/automaton.py
+/usr/lib/python2.7/site-packages/scapy/automaton.pyc
+/usr/lib/python2.7/site-packages/scapy/automaton.pyo
+/usr/lib/python2.7/site-packages/scapy/autorun.py
+/usr/lib/python2.7/site-packages/scapy/autorun.pyc
+/usr/lib/python2.7/site-packages/scapy/autorun.pyo
+/usr/lib/python2.7/site-packages/scapy/base_classes.py
+/usr/lib/python2.7/site-packages/scapy/base_classes.pyc
+/usr/lib/python2.7/site-packages/scapy/base_classes.pyo
+/usr/lib/python2.7/site-packages/scapy/compat.py
+/usr/lib/python2.7/site-packages/scapy/compat.pyc
+/usr/lib/python2.7/site-packages/scapy/compat.pyo
+/usr/lib/python2.7/site-packages/scapy/config.py
+/usr/lib/python2.7/site-packages/scapy/config.pyc
+/usr/lib/python2.7/site-packages/scapy/config.pyo
+/usr/lib/python2.7/site-packages/scapy/consts.py
+/usr/lib/python2.7/site-packages/scapy/consts.pyc
+/usr/lib/python2.7/site-packages/scapy/consts.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib
+/usr/lib/python2.7/site-packages/scapy/contrib/__init__.py
+/usr/lib/python2.7/site-packages/scapy/contrib/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/avs.py
+/usr/lib/python2.7/site-packages/scapy/contrib/avs.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/avs.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/bgp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/bgp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/bgp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/carp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/carp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/carp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/cdp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/cdp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/cdp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/chdlc.py
+/usr/lib/python2.7/site-packages/scapy/contrib/chdlc.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/chdlc.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/coap.py
+/usr/lib/python2.7/site-packages/scapy/contrib/coap.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/coap.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/diameter.py
+/usr/lib/python2.7/site-packages/scapy/contrib/diameter.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/diameter.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/dtp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/dtp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/dtp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/eigrp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/eigrp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/eigrp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/etherip.py
+/usr/lib/python2.7/site-packages/scapy/contrib/etherip.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/etherip.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/gsm_um.py
+/usr/lib/python2.7/site-packages/scapy/contrib/gsm_um.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/gsm_um.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp_v2.py
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp_v2.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp_v2.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/homeplugav.py
+/usr/lib/python2.7/site-packages/scapy/contrib/homeplugav.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/homeplugav.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/http2.py
+/usr/lib/python2.7/site-packages/scapy/contrib/http2.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/http2.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/icmp_extensions.py
+/usr/lib/python2.7/site-packages/scapy/contrib/icmp_extensions.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/icmp_extensions.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/igmp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/igmp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/igmp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/igmpv3.py
+/usr/lib/python2.7/site-packages/scapy/contrib/igmpv3.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/igmpv3.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ikev2.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ikev2.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ikev2.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/isis.py
+/usr/lib/python2.7/site-packages/scapy/contrib/isis.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/isis.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ldp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ldp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ldp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/lldp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/lldp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/lldp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/macsec.py
+/usr/lib/python2.7/site-packages/scapy/contrib/macsec.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/macsec.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/modbus.py
+/usr/lib/python2.7/site-packages/scapy/contrib/modbus.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/modbus.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/mpls.py
+/usr/lib/python2.7/site-packages/scapy/contrib/mpls.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/mpls.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/mqtt.py
+/usr/lib/python2.7/site-packages/scapy/contrib/mqtt.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/mqtt.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/nsh.py
+/usr/lib/python2.7/site-packages/scapy/contrib/nsh.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/nsh.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow.py
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow3.py
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow3.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow3.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ospf.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ospf.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ospf.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio.py
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio_rtc.py
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio_rtc.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio_rtc.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_cace.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_cace.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_cace.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_geotag.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_geotag.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_geotag.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ripng.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ripng.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ripng.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/rsvp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/rsvp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/rsvp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/sebek.py
+/usr/lib/python2.7/site-packages/scapy/contrib/sebek.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/sebek.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/send.py
+/usr/lib/python2.7/site-packages/scapy/contrib/send.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/send.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/skinny.py
+/usr/lib/python2.7/site-packages/scapy/contrib/skinny.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/skinny.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/spbm.py
+/usr/lib/python2.7/site-packages/scapy/contrib/spbm.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/spbm.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/tacacs.py
+/usr/lib/python2.7/site-packages/scapy/contrib/tacacs.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/tacacs.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/tzsp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/tzsp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/tzsp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ubberlogger.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ubberlogger.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ubberlogger.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/vqp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/vqp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/vqp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/vtp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/vtp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/vtp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/wpa_eapol.py
+/usr/lib/python2.7/site-packages/scapy/contrib/wpa_eapol.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/wpa_eapol.pyo
+/usr/lib/python2.7/site-packages/scapy/dadict.py
+/usr/lib/python2.7/site-packages/scapy/dadict.pyc
+/usr/lib/python2.7/site-packages/scapy/dadict.pyo
+/usr/lib/python2.7/site-packages/scapy/data.py
+/usr/lib/python2.7/site-packages/scapy/data.pyc
+/usr/lib/python2.7/site-packages/scapy/data.pyo
+/usr/lib/python2.7/site-packages/scapy/error.py
+/usr/lib/python2.7/site-packages/scapy/error.pyc
+/usr/lib/python2.7/site-packages/scapy/error.pyo
+/usr/lib/python2.7/site-packages/scapy/extlib.py
+/usr/lib/python2.7/site-packages/scapy/extlib.pyc
+/usr/lib/python2.7/site-packages/scapy/extlib.pyo
+/usr/lib/python2.7/site-packages/scapy/fields.py
+/usr/lib/python2.7/site-packages/scapy/fields.pyc
+/usr/lib/python2.7/site-packages/scapy/fields.pyo
+/usr/lib/python2.7/site-packages/scapy/layers
+/usr/lib/python2.7/site-packages/scapy/layers/__init__.py
+/usr/lib/python2.7/site-packages/scapy/layers/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/all.py
+/usr/lib/python2.7/site-packages/scapy/layers/all.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/all.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/bluetooth.py
+/usr/lib/python2.7/site-packages/scapy/layers/bluetooth.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/bluetooth.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/can.py
+/usr/lib/python2.7/site-packages/scapy/layers/can.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/can.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/clns.py
+/usr/lib/python2.7/site-packages/scapy/layers/clns.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/clns.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp.py
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp6.py
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp6.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp6.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/dns.py
+/usr/lib/python2.7/site-packages/scapy/layers/dns.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/dns.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/dot11.py
+/usr/lib/python2.7/site-packages/scapy/layers/dot11.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/dot11.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/eap.py
+/usr/lib/python2.7/site-packages/scapy/layers/eap.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/eap.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/gprs.py
+/usr/lib/python2.7/site-packages/scapy/layers/gprs.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/gprs.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/hsrp.py
+/usr/lib/python2.7/site-packages/scapy/layers/hsrp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/hsrp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/inet.py
+/usr/lib/python2.7/site-packages/scapy/layers/inet.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/inet.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/inet6.py
+/usr/lib/python2.7/site-packages/scapy/layers/inet6.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/inet6.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/ipsec.py
+/usr/lib/python2.7/site-packages/scapy/layers/ipsec.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/ipsec.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/ir.py
+/usr/lib/python2.7/site-packages/scapy/layers/ir.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/ir.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/isakmp.py
+/usr/lib/python2.7/site-packages/scapy/layers/isakmp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/isakmp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/l2.py
+/usr/lib/python2.7/site-packages/scapy/layers/l2.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/l2.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/l2tp.py
+/usr/lib/python2.7/site-packages/scapy/layers/l2tp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/l2tp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/llmnr.py
+/usr/lib/python2.7/site-packages/scapy/layers/llmnr.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/llmnr.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/lltd.py
+/usr/lib/python2.7/site-packages/scapy/layers/lltd.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/lltd.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/mgcp.py
+/usr/lib/python2.7/site-packages/scapy/layers/mgcp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/mgcp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/mobileip.py
+/usr/lib/python2.7/site-packages/scapy/layers/mobileip.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/mobileip.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/netbios.py
+/usr/lib/python2.7/site-packages/scapy/layers/netbios.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/netbios.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/netflow.py
+/usr/lib/python2.7/site-packages/scapy/layers/netflow.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/netflow.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/ntp.py
+/usr/lib/python2.7/site-packages/scapy/layers/ntp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/ntp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/pflog.py
+/usr/lib/python2.7/site-packages/scapy/layers/pflog.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/pflog.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/ppp.py
+/usr/lib/python2.7/site-packages/scapy/layers/ppp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/ppp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/pptp.py
+/usr/lib/python2.7/site-packages/scapy/layers/pptp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/pptp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/radius.py
+/usr/lib/python2.7/site-packages/scapy/layers/radius.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/radius.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/rip.py
+/usr/lib/python2.7/site-packages/scapy/layers/rip.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/rip.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/rtp.py
+/usr/lib/python2.7/site-packages/scapy/layers/rtp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/rtp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/sctp.py
+/usr/lib/python2.7/site-packages/scapy/layers/sctp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/sctp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/skinny.py
+/usr/lib/python2.7/site-packages/scapy/layers/skinny.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/skinny.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/smb.py
+/usr/lib/python2.7/site-packages/scapy/layers/smb.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/smb.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/snmp.py
+/usr/lib/python2.7/site-packages/scapy/layers/snmp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/snmp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tftp.py
+/usr/lib/python2.7/site-packages/scapy/layers/tftp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tftp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls
+/usr/lib/python2.7/site-packages/scapy/layers/tls/__init__.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/all.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/all.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/all.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton_cli.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton_cli.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton_cli.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton_srv.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton_srv.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/automaton_srv.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/basefields.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/basefields.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/basefields.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/cert.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/cert.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/cert.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/__init__.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/all.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/all.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/all.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_aead.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_aead.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_aead.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_block.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_block.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_block.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_stream.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_stream.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/cipher_stream.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/ciphers.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/ciphers.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/ciphers.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/compression.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/compression.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/compression.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/groups.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/groups.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/groups.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/h_mac.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/h_mac.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/h_mac.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/hash.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/hash.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/hash.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/hkdf.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/hkdf.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/hkdf.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/kx_algs.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/kx_algs.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/kx_algs.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/pkcs1.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/pkcs1.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/pkcs1.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/prf.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/prf.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/prf.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/suites.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/suites.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/suites.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/extensions.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/extensions.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/extensions.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/handshake.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/handshake.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/handshake.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/handshake_sslv2.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/handshake_sslv2.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/handshake_sslv2.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/keyexchange.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/keyexchange.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/keyexchange.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/keyexchange_tls13.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/keyexchange_tls13.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/keyexchange_tls13.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record_sslv2.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record_sslv2.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record_sslv2.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record_tls13.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record_tls13.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/record_tls13.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/session.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/session.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/session.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/tools.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/tools.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/tools.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/vrrp.py
+/usr/lib/python2.7/site-packages/scapy/layers/vrrp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/vrrp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/vxlan.py
+/usr/lib/python2.7/site-packages/scapy/layers/vxlan.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/vxlan.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/x509.py
+/usr/lib/python2.7/site-packages/scapy/layers/x509.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/x509.pyo
+/usr/lib/python2.7/site-packages/scapy/main.py
+/usr/lib/python2.7/site-packages/scapy/main.pyc
+/usr/lib/python2.7/site-packages/scapy/main.pyo
+/usr/lib/python2.7/site-packages/scapy/modules
+/usr/lib/python2.7/site-packages/scapy/modules/__init__.py
+/usr/lib/python2.7/site-packages/scapy/modules/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/krack
+/usr/lib/python2.7/site-packages/scapy/modules/krack/__init__.py
+/usr/lib/python2.7/site-packages/scapy/modules/krack/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/krack/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/krack/automaton.py
+/usr/lib/python2.7/site-packages/scapy/modules/krack/automaton.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/krack/automaton.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/krack/crypto.py
+/usr/lib/python2.7/site-packages/scapy/modules/krack/crypto.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/krack/crypto.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/nmap.py
+/usr/lib/python2.7/site-packages/scapy/modules/nmap.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/nmap.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/p0f.py
+/usr/lib/python2.7/site-packages/scapy/modules/p0f.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/p0f.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/queso.py
+/usr/lib/python2.7/site-packages/scapy/modules/queso.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/queso.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/six.py
+/usr/lib/python2.7/site-packages/scapy/modules/six.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/six.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/voip.py
+/usr/lib/python2.7/site-packages/scapy/modules/voip.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/voip.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/winpcapy.py
+/usr/lib/python2.7/site-packages/scapy/modules/winpcapy.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/winpcapy.pyo
+/usr/lib/python2.7/site-packages/scapy/packet.py
+/usr/lib/python2.7/site-packages/scapy/packet.pyc
+/usr/lib/python2.7/site-packages/scapy/packet.pyo
+/usr/lib/python2.7/site-packages/scapy/pipetool.py
+/usr/lib/python2.7/site-packages/scapy/pipetool.pyc
+/usr/lib/python2.7/site-packages/scapy/pipetool.pyo
+/usr/lib/python2.7/site-packages/scapy/plist.py
+/usr/lib/python2.7/site-packages/scapy/plist.pyc
+/usr/lib/python2.7/site-packages/scapy/plist.pyo
+/usr/lib/python2.7/site-packages/scapy/pton_ntop.py
+/usr/lib/python2.7/site-packages/scapy/pton_ntop.pyc
+/usr/lib/python2.7/site-packages/scapy/pton_ntop.pyo
+/usr/lib/python2.7/site-packages/scapy/route.py
+/usr/lib/python2.7/site-packages/scapy/route.pyc
+/usr/lib/python2.7/site-packages/scapy/route.pyo
+/usr/lib/python2.7/site-packages/scapy/route6.py
+/usr/lib/python2.7/site-packages/scapy/route6.pyc
+/usr/lib/python2.7/site-packages/scapy/route6.pyo
+/usr/lib/python2.7/site-packages/scapy/scapypipes.py
+/usr/lib/python2.7/site-packages/scapy/scapypipes.pyc
+/usr/lib/python2.7/site-packages/scapy/scapypipes.pyo
+/usr/lib/python2.7/site-packages/scapy/sendrecv.py
+/usr/lib/python2.7/site-packages/scapy/sendrecv.pyc
+/usr/lib/python2.7/site-packages/scapy/sendrecv.pyo
+/usr/lib/python2.7/site-packages/scapy/supersocket.py
+/usr/lib/python2.7/site-packages/scapy/supersocket.pyc
+/usr/lib/python2.7/site-packages/scapy/supersocket.pyo
+/usr/lib/python2.7/site-packages/scapy/themes.py
+/usr/lib/python2.7/site-packages/scapy/themes.pyc
+/usr/lib/python2.7/site-packages/scapy/themes.pyo
+/usr/lib/python2.7/site-packages/scapy/tools
+/usr/lib/python2.7/site-packages/scapy/tools/UTscapy.py
+/usr/lib/python2.7/site-packages/scapy/tools/UTscapy.pyc
+/usr/lib/python2.7/site-packages/scapy/tools/UTscapy.pyo
+/usr/lib/python2.7/site-packages/scapy/tools/__init__.py
+/usr/lib/python2.7/site-packages/scapy/tools/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/tools/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/tools/check_asdis.py
+/usr/lib/python2.7/site-packages/scapy/tools/check_asdis.pyc
+/usr/lib/python2.7/site-packages/scapy/tools/check_asdis.pyo
+/usr/lib/python2.7/site-packages/scapy/utils.py
+/usr/lib/python2.7/site-packages/scapy/utils.pyc
+/usr/lib/python2.7/site-packages/scapy/utils.pyo
+/usr/lib/python2.7/site-packages/scapy/utils6.py
+/usr/lib/python2.7/site-packages/scapy/utils6.pyc
+/usr/lib/python2.7/site-packages/scapy/utils6.pyo
+/usr/lib/python2.7/site-packages/scapy/volatile.py
+/usr/lib/python2.7/site-packages/scapy/volatile.pyc
+/usr/lib/python2.7/site-packages/scapy/volatile.pyo
+/usr/share/man/man1/scapy.1.gz
+
+*** scapy-2.3.3-1.el7.noarch.rpm removed
+Summary: Interactive packet manipulation tool and network scanner
+License: GPLv2
+/usr/bin/UTscapy
+/usr/bin/scapy
+/usr/lib/python2.7/site-packages/scapy-unknown.version-py2.7.egg-info
+/usr/lib/python2.7/site-packages/scapy/__init__.py
+/usr/lib/python2.7/site-packages/scapy/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/all.py
+/usr/lib/python2.7/site-packages/scapy/all.pyc
+/usr/lib/python2.7/site-packages/scapy/all.pyo
+/usr/lib/python2.7/site-packages/scapy/ansmachine.py
+/usr/lib/python2.7/site-packages/scapy/ansmachine.pyc
+/usr/lib/python2.7/site-packages/scapy/ansmachine.pyo
+/usr/lib/python2.7/site-packages/scapy/arch
+/usr/lib/python2.7/site-packages/scapy/arch/__init__.py
+/usr/lib/python2.7/site-packages/scapy/arch/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/common.py
+/usr/lib/python2.7/site-packages/scapy/arch/common.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/common.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/consts.py
+/usr/lib/python2.7/site-packages/scapy/arch/consts.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/consts.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/linux.py
+/usr/lib/python2.7/site-packages/scapy/arch/linux.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/linux.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/pcapdnet.py
+/usr/lib/python2.7/site-packages/scapy/arch/pcapdnet.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/pcapdnet.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/solaris.py
+/usr/lib/python2.7/site-packages/scapy/arch/solaris.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/solaris.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/unix.py
+/usr/lib/python2.7/site-packages/scapy/arch/unix.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/unix.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/windows
+/usr/lib/python2.7/site-packages/scapy/arch/windows/__init__.py
+/usr/lib/python2.7/site-packages/scapy/arch/windows/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/windows/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/windows/compatibility.py
+/usr/lib/python2.7/site-packages/scapy/arch/windows/compatibility.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/windows/compatibility.pyo
+/usr/lib/python2.7/site-packages/scapy/arch/winpcapy.py
+/usr/lib/python2.7/site-packages/scapy/arch/winpcapy.pyc
+/usr/lib/python2.7/site-packages/scapy/arch/winpcapy.pyo
+/usr/lib/python2.7/site-packages/scapy/as_resolvers.py
+/usr/lib/python2.7/site-packages/scapy/as_resolvers.pyc
+/usr/lib/python2.7/site-packages/scapy/as_resolvers.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1
+/usr/lib/python2.7/site-packages/scapy/asn1/__init__.py
+/usr/lib/python2.7/site-packages/scapy/asn1/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1/asn1.py
+/usr/lib/python2.7/site-packages/scapy/asn1/asn1.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1/asn1.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1/ber.py
+/usr/lib/python2.7/site-packages/scapy/asn1/ber.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1/ber.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1/mib.py
+/usr/lib/python2.7/site-packages/scapy/asn1/mib.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1/mib.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1fields.py
+/usr/lib/python2.7/site-packages/scapy/asn1fields.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1fields.pyo
+/usr/lib/python2.7/site-packages/scapy/asn1packet.py
+/usr/lib/python2.7/site-packages/scapy/asn1packet.pyc
+/usr/lib/python2.7/site-packages/scapy/asn1packet.pyo
+/usr/lib/python2.7/site-packages/scapy/automaton.py
+/usr/lib/python2.7/site-packages/scapy/automaton.pyc
+/usr/lib/python2.7/site-packages/scapy/automaton.pyo
+/usr/lib/python2.7/site-packages/scapy/autorun.py
+/usr/lib/python2.7/site-packages/scapy/autorun.pyc
+/usr/lib/python2.7/site-packages/scapy/autorun.pyo
+/usr/lib/python2.7/site-packages/scapy/base_classes.py
+/usr/lib/python2.7/site-packages/scapy/base_classes.pyc
+/usr/lib/python2.7/site-packages/scapy/base_classes.pyo
+/usr/lib/python2.7/site-packages/scapy/config.py
+/usr/lib/python2.7/site-packages/scapy/config.pyc
+/usr/lib/python2.7/site-packages/scapy/config.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib
+/usr/lib/python2.7/site-packages/scapy/contrib/HomePlugAV.py
+/usr/lib/python2.7/site-packages/scapy/contrib/HomePlugAV.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/HomePlugAV.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/__init__.py
+/usr/lib/python2.7/site-packages/scapy/contrib/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/avs.py
+/usr/lib/python2.7/site-packages/scapy/contrib/avs.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/avs.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/bgp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/bgp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/bgp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/carp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/carp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/carp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/cdp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/cdp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/cdp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/chdlc.py
+/usr/lib/python2.7/site-packages/scapy/contrib/chdlc.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/chdlc.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/coap.py
+/usr/lib/python2.7/site-packages/scapy/contrib/coap.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/coap.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/dtp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/dtp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/dtp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/eigrp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/eigrp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/eigrp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/etherip.py
+/usr/lib/python2.7/site-packages/scapy/contrib/etherip.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/etherip.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/gsm_um.py
+/usr/lib/python2.7/site-packages/scapy/contrib/gsm_um.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/gsm_um.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/gtp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/icmp_extensions.py
+/usr/lib/python2.7/site-packages/scapy/contrib/icmp_extensions.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/icmp_extensions.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/igmp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/igmp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/igmp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/igmpv3.py
+/usr/lib/python2.7/site-packages/scapy/contrib/igmpv3.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/igmpv3.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ikev2.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ikev2.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ikev2.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/isis.py
+/usr/lib/python2.7/site-packages/scapy/contrib/isis.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/isis.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ldp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ldp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ldp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/modbus.py
+/usr/lib/python2.7/site-packages/scapy/contrib/modbus.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/modbus.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/mpls.py
+/usr/lib/python2.7/site-packages/scapy/contrib/mpls.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/mpls.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/nsh.py
+/usr/lib/python2.7/site-packages/scapy/contrib/nsh.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/nsh.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow.py
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow3.py
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow3.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/openflow3.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ospf.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ospf.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ospf.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio.py
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio_rtc.py
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio_rtc.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/pnio_rtc.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_cace.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_cace.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_cace.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_geotag.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_geotag.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ppi_geotag.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ripng.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ripng.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ripng.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/rsvp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/rsvp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/rsvp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/sebek.py
+/usr/lib/python2.7/site-packages/scapy/contrib/sebek.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/sebek.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/send.py
+/usr/lib/python2.7/site-packages/scapy/contrib/send.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/send.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/skinny.py
+/usr/lib/python2.7/site-packages/scapy/contrib/skinny.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/skinny.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/spbm.py
+/usr/lib/python2.7/site-packages/scapy/contrib/spbm.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/spbm.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/ubberlogger.py
+/usr/lib/python2.7/site-packages/scapy/contrib/ubberlogger.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/ubberlogger.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/vqp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/vqp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/vqp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/vtp.py
+/usr/lib/python2.7/site-packages/scapy/contrib/vtp.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/vtp.pyo
+/usr/lib/python2.7/site-packages/scapy/contrib/wpa_eapol.py
+/usr/lib/python2.7/site-packages/scapy/contrib/wpa_eapol.pyc
+/usr/lib/python2.7/site-packages/scapy/contrib/wpa_eapol.pyo
+/usr/lib/python2.7/site-packages/scapy/dadict.py
+/usr/lib/python2.7/site-packages/scapy/dadict.pyc
+/usr/lib/python2.7/site-packages/scapy/dadict.pyo
+/usr/lib/python2.7/site-packages/scapy/data.py
+/usr/lib/python2.7/site-packages/scapy/data.pyc
+/usr/lib/python2.7/site-packages/scapy/data.pyo
+/usr/lib/python2.7/site-packages/scapy/error.py
+/usr/lib/python2.7/site-packages/scapy/error.pyc
+/usr/lib/python2.7/site-packages/scapy/error.pyo
+/usr/lib/python2.7/site-packages/scapy/fields.py
+/usr/lib/python2.7/site-packages/scapy/fields.pyc
+/usr/lib/python2.7/site-packages/scapy/fields.pyo
+/usr/lib/python2.7/site-packages/scapy/layers
+/usr/lib/python2.7/site-packages/scapy/layers/__init__.py
+/usr/lib/python2.7/site-packages/scapy/layers/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/all.py
+/usr/lib/python2.7/site-packages/scapy/layers/all.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/all.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/bluetooth.py
+/usr/lib/python2.7/site-packages/scapy/layers/bluetooth.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/bluetooth.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/clns.py
+/usr/lib/python2.7/site-packages/scapy/layers/clns.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/clns.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp.py
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp6.py
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp6.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/dhcp6.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/dns.py
+/usr/lib/python2.7/site-packages/scapy/layers/dns.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/dns.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/dot11.py
+/usr/lib/python2.7/site-packages/scapy/layers/dot11.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/dot11.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/gprs.py
+/usr/lib/python2.7/site-packages/scapy/layers/gprs.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/gprs.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/hsrp.py
+/usr/lib/python2.7/site-packages/scapy/layers/hsrp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/hsrp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/inet.py
+/usr/lib/python2.7/site-packages/scapy/layers/inet.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/inet.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/inet6.py
+/usr/lib/python2.7/site-packages/scapy/layers/inet6.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/inet6.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/ipsec.py
+/usr/lib/python2.7/site-packages/scapy/layers/ipsec.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/ipsec.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/ir.py
+/usr/lib/python2.7/site-packages/scapy/layers/ir.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/ir.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/isakmp.py
+/usr/lib/python2.7/site-packages/scapy/layers/isakmp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/isakmp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/l2.py
+/usr/lib/python2.7/site-packages/scapy/layers/l2.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/l2.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/l2tp.py
+/usr/lib/python2.7/site-packages/scapy/layers/l2tp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/l2tp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/llmnr.py
+/usr/lib/python2.7/site-packages/scapy/layers/llmnr.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/llmnr.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/lltd.py
+/usr/lib/python2.7/site-packages/scapy/layers/lltd.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/lltd.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/mgcp.py
+/usr/lib/python2.7/site-packages/scapy/layers/mgcp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/mgcp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/mobileip.py
+/usr/lib/python2.7/site-packages/scapy/layers/mobileip.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/mobileip.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/netbios.py
+/usr/lib/python2.7/site-packages/scapy/layers/netbios.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/netbios.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/netflow.py
+/usr/lib/python2.7/site-packages/scapy/layers/netflow.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/netflow.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/ntp.py
+/usr/lib/python2.7/site-packages/scapy/layers/ntp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/ntp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/pflog.py
+/usr/lib/python2.7/site-packages/scapy/layers/pflog.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/pflog.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/ppp.py
+/usr/lib/python2.7/site-packages/scapy/layers/ppp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/ppp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/radius.py
+/usr/lib/python2.7/site-packages/scapy/layers/radius.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/radius.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/rip.py
+/usr/lib/python2.7/site-packages/scapy/layers/rip.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/rip.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/rtp.py
+/usr/lib/python2.7/site-packages/scapy/layers/rtp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/rtp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/sctp.py
+/usr/lib/python2.7/site-packages/scapy/layers/sctp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/sctp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/skinny.py
+/usr/lib/python2.7/site-packages/scapy/layers/skinny.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/skinny.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/smb.py
+/usr/lib/python2.7/site-packages/scapy/layers/smb.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/smb.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/snmp.py
+/usr/lib/python2.7/site-packages/scapy/layers/snmp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/snmp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tftp.py
+/usr/lib/python2.7/site-packages/scapy/layers/tftp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tftp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls
+/usr/lib/python2.7/site-packages/scapy/layers/tls/__init__.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/cert.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/cert.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/cert.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/__init__.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/curves.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/curves.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/curves.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/pkcs1.py
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/pkcs1.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/tls/crypto/pkcs1.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/vrrp.py
+/usr/lib/python2.7/site-packages/scapy/layers/vrrp.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/vrrp.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/vxlan.py
+/usr/lib/python2.7/site-packages/scapy/layers/vxlan.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/vxlan.pyo
+/usr/lib/python2.7/site-packages/scapy/layers/x509.py
+/usr/lib/python2.7/site-packages/scapy/layers/x509.pyc
+/usr/lib/python2.7/site-packages/scapy/layers/x509.pyo
+/usr/lib/python2.7/site-packages/scapy/main.py
+/usr/lib/python2.7/site-packages/scapy/main.pyc
+/usr/lib/python2.7/site-packages/scapy/main.pyo
+/usr/lib/python2.7/site-packages/scapy/modules
+/usr/lib/python2.7/site-packages/scapy/modules/__init__.py
+/usr/lib/python2.7/site-packages/scapy/modules/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/nmap.py
+/usr/lib/python2.7/site-packages/scapy/modules/nmap.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/nmap.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/p0f.py
+/usr/lib/python2.7/site-packages/scapy/modules/p0f.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/p0f.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/queso.py
+/usr/lib/python2.7/site-packages/scapy/modules/queso.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/queso.pyo
+/usr/lib/python2.7/site-packages/scapy/modules/voip.py
+/usr/lib/python2.7/site-packages/scapy/modules/voip.pyc
+/usr/lib/python2.7/site-packages/scapy/modules/voip.pyo
+/usr/lib/python2.7/site-packages/scapy/packet.py
+/usr/lib/python2.7/site-packages/scapy/packet.pyc
+/usr/lib/python2.7/site-packages/scapy/packet.pyo
+/usr/lib/python2.7/site-packages/scapy/pipetool.py
+/usr/lib/python2.7/site-packages/scapy/pipetool.pyc
+/usr/lib/python2.7/site-packages/scapy/pipetool.pyo
+/usr/lib/python2.7/site-packages/scapy/plist.py
+/usr/lib/python2.7/site-packages/scapy/plist.pyc
+/usr/lib/python2.7/site-packages/scapy/plist.pyo
+/usr/lib/python2.7/site-packages/scapy/pton_ntop.py
+/usr/lib/python2.7/site-packages/scapy/pton_ntop.pyc
+/usr/lib/python2.7/site-packages/scapy/pton_ntop.pyo
+/usr/lib/python2.7/site-packages/scapy/route.py
+/usr/lib/python2.7/site-packages/scapy/route.pyc
+/usr/lib/python2.7/site-packages/scapy/route.pyo
+/usr/lib/python2.7/site-packages/scapy/route6.py
+/usr/lib/python2.7/site-packages/scapy/route6.pyc
+/usr/lib/python2.7/site-packages/scapy/route6.pyo
+/usr/lib/python2.7/site-packages/scapy/scapypipes.py
+/usr/lib/python2.7/site-packages/scapy/scapypipes.pyc
+/usr/lib/python2.7/site-packages/scapy/scapypipes.pyo
+/usr/lib/python2.7/site-packages/scapy/sendrecv.py
+/usr/lib/python2.7/site-packages/scapy/sendrecv.pyc
+/usr/lib/python2.7/site-packages/scapy/sendrecv.pyo
+/usr/lib/python2.7/site-packages/scapy/supersocket.py
+/usr/lib/python2.7/site-packages/scapy/supersocket.pyc
+/usr/lib/python2.7/site-packages/scapy/supersocket.pyo
+/usr/lib/python2.7/site-packages/scapy/themes.py
+/usr/lib/python2.7/site-packages/scapy/themes.pyc
+/usr/lib/python2.7/site-packages/scapy/themes.pyo
+/usr/lib/python2.7/site-packages/scapy/tools
+/usr/lib/python2.7/site-packages/scapy/tools/UTscapy.py
+/usr/lib/python2.7/site-packages/scapy/tools/UTscapy.pyc
+/usr/lib/python2.7/site-packages/scapy/tools/UTscapy.pyo
+/usr/lib/python2.7/site-packages/scapy/tools/__init__.py
+/usr/lib/python2.7/site-packages/scapy/tools/__init__.pyc
+/usr/lib/python2.7/site-packages/scapy/tools/__init__.pyo
+/usr/lib/python2.7/site-packages/scapy/tools/check_asdis.py
+/usr/lib/python2.7/site-packages/scapy/tools/check_asdis.pyc
+/usr/lib/python2.7/site-packages/scapy/tools/check_asdis.pyo
+/usr/lib/python2.7/site-packages/scapy/utils.py
+/usr/lib/python2.7/site-packages/scapy/utils.pyc
+/usr/lib/python2.7/site-packages/scapy/utils.pyo
+/usr/lib/python2.7/site-packages/scapy/utils6.py
+/usr/lib/python2.7/site-packages/scapy/utils6.pyc
+/usr/lib/python2.7/site-packages/scapy/utils6.pyo
+/usr/lib/python2.7/site-packages/scapy/volatile.py
+/usr/lib/python2.7/site-packages/scapy/volatile.pyc
+/usr/lib/python2.7/site-packages/scapy/volatile.pyo
+/usr/share/man/man1/scapy.1.gz
+
 *** ssmtp-2.64-14.el7.x86_64.rpm EVR unchanged, new file differs
 *** vconfig-1.9-16.el7.x86_64.rpm EVR unchanged, new file differs
 
 
 -------------------- Vendor: Intel Corporation ------------------------
+
+*** xengt-4.4.0+10-modules-4.0.0-1.x86_64.rpm removed
+Summary: Intel Corporation xengt device drivers
+License: GPLv2
+/lib/modules/4.4.0+10/extra/drm.ko
+/lib/modules/4.4.0+10/extra/drm_kms_helper.ko
+/lib/modules/4.4.0+10/extra/drm_mipi_dsi.ko
+/lib/modules/4.4.0+10/extra/i915.ko
+/lib/modules/4.4.0+10/extra/xengt.ko
+
+*** xengt-modules-4.0.0-1.x86_64.rpm removed
+Summary: Intel Corporation xengt drivers
+License: GPLv2
+(Ne contient pas de fichiers)
 
 *** xengt-userspace-4.0.0-1.x86_64.rpm EVR unchanged, new file differs
 removed     PROVIDES xengt-userspace(x86-64) = 4.0.0-1
