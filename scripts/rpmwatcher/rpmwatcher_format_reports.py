@@ -89,6 +89,43 @@ def cmp_to_key(mycmp):
             return mycmp(self.obj, other.obj) != 0
     return K
 
+def simplify_roles(roles):
+    # Most packages have lots of roles, so we need to simplify visually
+    # Rules:
+    # * 'main' hides 'extra_*' and 'other_*'
+    if 'main' in roles:
+        for role in roles.keys():
+            if role.startswith('extra_') or role.startswith('other_'):
+                del roles[role]
+
+    # * 'extra' hides 'other_*'
+    if 'extra' in roles:
+        for role in roles.keys():
+            if role.startswith('other_'):
+                del roles[role]
+
+    # * 'xxx_builddep' hides 'xxx_builddep_dep' (same value of xxx and same SRPM)
+    for role1 in ['main_builddep', 'extra_builddep', 'other_builddep']:
+        if role1 in roles.keys():
+            role2 = role1 + '_dep'
+            if role2 in roles.keys():
+                # remove from role2's SRPMs those that are in role1
+                roles[role2] = [x for x in roles[role2] if x not in roles[role1]]
+                # remove role2 entirely if empty
+                if not roles[role2]:
+                    del roles[role2]
+
+    # * anything hides something that ends in "_indirect_builddep"
+    if [x for x in roles if not x.endswith('_indirect_builddep')]:
+        for role in [x for x in roles if x.endswith('_indirect_builddep')]:
+            del roles[role]
+
+    # * anything that does not begin with 'other' hides 'other*'
+    if [x for x in roles if not x.startswith('other')]:
+        for role in roles.keys():
+            if role.startswith('other'):
+                del roles[role]
+
 def main():
     parser = argparse.ArgumentParser(description='Format reports about XCP-ng RPMs')
     parser.add_argument('version', help='XCP-ng 2-digit version, e.g. 8.0')
@@ -145,7 +182,7 @@ def main():
         'import_reason': 'import reason',
         'main_role': 'main role',
         'provenance': 'provenance',
-        'roles': 'roles',
+        'roles': 'main roles',
         'direct_build_deps': 'direct build deps',
         'rpms': 'rpms',
     }
@@ -192,6 +229,7 @@ def main():
         import_reason = build_info.get('import_reason', '')
 
         # roles
+        simplify_roles(build_info['roles'])
         main_role = None
         roles_list = []
         for role in role_priority:

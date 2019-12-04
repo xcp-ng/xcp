@@ -34,6 +34,14 @@ def are_siblings(rpm_nvra1, rpm_nvra2, xcp_rpms):
     """ checks whether two RPMs are from the same SRPM """
     return xcp_rpms[rpm_nvra1]['srpm_nvr'] == xcp_rpms[rpm_nvra2]['srpm_nvr']
 
+class JsonSortAndEncode(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, list):
+            return sorted(list)
+        if isinstance(obj, set):
+            return sorted(list(obj))
+        return json.JSONEncoder.default(self, obj)
+
 def main():
     parser = argparse.ArgumentParser(description='Extract package roles for XCP-ng RPMs')
     parser.add_argument('version', help='XCP-ng 2-digit version, e.g. 8.0')
@@ -56,10 +64,10 @@ def main():
         xcp_rpms = json.load(f)
 
     # Update RPM roles
-    # For each RPM we store one role, among those in descending priority order:
+    # For each RPM we store mosts roles as well as the related RPMs or SRPMs:
     # - main: RPMs installed by default
     # - extra: RPMs available in the repos and available for installation on dom0
-    # - extra_dep: RPMs that are pulled as dependencies for extra RPMs
+    # - extra_dep: RPMs that are pulled as dependencies for extra RPMs and aren't extra or main
     # - main_builddep: direct build dependency for a SRPM that produces main RPMs
     # - main_builddep_dep: dependency of a main_builddep RPM
     # - main_indirect_builddep: builddep of a builddep or of a dep of a builddep, with no limits of depth
@@ -70,38 +78,58 @@ def main():
     # - other_builddep_dep: dependency of a other_builddep
     # - other_indirect_builddep: builddep of a builddep or of a dep of a builddep, with no limits of depth
     # - other_dep: dependency for a package that has no roles, not even other_builddep_xxx or other_indirect_builddep
+    #              the "other_dep" package must also have no roles itself, except other_*
     # - None: no roles
 
     for rpm_nvra in xcp_rpms:
-        xcp_rpms[rpm_nvra]['role'] = None
-        xcp_rpms[rpm_nvra]['role_data'] = []
+        xcp_rpms[rpm_nvra]['roles'] = {}
+
+    def add_rpm_role(xcp_rpms, rpm_nvra, role, related_rpm_nvra):
+        if role not in xcp_rpms[rpm_nvra]['roles']:
+            xcp_rpms[rpm_nvra]['roles'][role] = set()
+        xcp_rpms[rpm_nvra]['roles'][role].add(related_rpm_nvra)
 
     for rpm_nvra in xcp_rpms:
         if rpm_nvra in rpms_installed_by_default:
-            xcp_rpms[rpm_nvra]['role'] = 'main'
-        elif rpm_nvra in extra_installable_nvra:
-            xcp_rpms[rpm_nvra]['role'] = 'extra'
-            for dep in xcp_rpms[rpm_nvra]['deps']:
-                if xcp_rpms[dep].get('role') is None and not are_siblings(dep, rpm_nvra, xcp_rpms):
-                    xcp_rpms[dep]['role'] = 'extra_dep'
-                    xcp_rpms[dep]['role_data'].append(rpm_nvra)
+            # for now the related RPM for the 'main' role is the RPM itself
+            # in the future we may want to improve this and detail the dependency chain more
+            add_rpm_role(xcp_rpms, rpm_nvra, 'main', rpm_nvra)
 
-    # Now every rpm_nvra has a 'role' entry, that can be one of the values assigned above, or None
+        if rpm_nvra in extra_installable_nvra:
+            add_rpm_role(xcp_rpms, rpm_nvra, 'extra', rpm_nvra)
+
+    for rpm_nvra in xcp_rpms:
+        if rpm_nvra in extra_installable_nvra:
+            for dep in xcp_rpms[rpm_nvra]['deps']:
+                if not xcp_rpms[dep]['roles']:
+                    add_rpm_role(xcp_rpms, dep, 'extra_dep', rpm_nvra)
+
+    def intersect_or_both_empty(list1, list2):
+        if not list1 and not list2:
+            return True
+        return bool(list(set(list1) & set(list2)))
+
+    def srpm_rpms_have_roles(xcp_rpms, xcp_builds, srpm_nvr):
+        for rpm_nvra in xcp_builds[srpm_nvr]['rpms']:
+            if xcp_rpms[rpm_nvra]['roles']:
+                return True
+        return False
 
     def update_builddep_role(xcp_rpms, xcp_builds, roles_from, role_to, direct):
         """
         Identify and flag RPMs that are builddeps or deps of builddeps
         """
         for rpm_nvra in xcp_rpms:
-            if xcp_rpms[rpm_nvra]['role'] in roles_from:
+            if intersect_or_both_empty(xcp_rpms[rpm_nvra]['roles'].keys(), roles_from):
                 srpm_nvr = xcp_rpms[rpm_nvra]['srpm_nvr']
+                # if roles_from is empty and the RPM belongs to a SRPM that already has RPMs with roles,
+                # don't retain that RPM. We don't want other_builddep and other_builddep_dep to pop everywhere
+                # a SRPM produces an unused RPM among other useful RPMs
+                if not roles_from and srpm_rpms_have_roles(xcp_rpms, xcp_builds, srpm_nvr):
+                    continue
                 if srpm_nvr in xcp_builds and 'build-deps' in xcp_builds[srpm_nvr]:
                     for dep_rpm_nvra in xcp_builds[srpm_nvr]['build-deps'][0 if direct else 1]:
-                        if xcp_rpms[dep_rpm_nvra]['role'] is None:
-                            xcp_rpms[dep_rpm_nvra]['role'] = role_to
-                        # store the list of SRPMs the RPM is builddep for
-                        if xcp_rpms[dep_rpm_nvra]['role'] == role_to:
-                            xcp_rpms[dep_rpm_nvra]['role_data'].append(srpm_nvr)
+                        add_rpm_role(xcp_rpms, dep_rpm_nvra, role_to, srpm_nvr)
 
     def update_indirect_builddep_role(xcp_rpms, xcp_builds, role_prefix, role_to, iterations=10):
         """
@@ -118,19 +146,24 @@ def main():
             else:
                 roles_to_scan = [role_to] # after the first iteration
             for rpm_nvra in xcp_rpms:
-                if xcp_rpms[rpm_nvra]['role'] in roles_to_scan:
+                if intersect_or_both_empty(xcp_rpms[rpm_nvra]['roles'].keys(), roles_to_scan):
+                    # if roles_to_scan is empty and the RPM belongs to a SRPM that already has RPMs with roles,
+                    # don't retain that RPM. We don't want other_indirect_builddep to pop everywhere
+                    # a SRPM produces an unused RPM among other useful RPMs
+                    if not roles_to_scan and srpm_rpms_have_roles(xcp_rpms, xcp_builds, srpm_nvr):
+                        continue
                     # scan the builddeps of its SRPM
                     srpm_nvr = xcp_rpms[rpm_nvra]['srpm_nvr']
                     if srpm_nvr in xcp_builds and 'build-deps' in xcp_builds[srpm_nvr]:
                         for dep_type in [0, 1]:
                             for dep_rpm_nvra in xcp_builds[srpm_nvr]['build-deps'][dep_type]:
-                                if xcp_rpms[dep_rpm_nvra]['role'] is None:
-                                    xcp_rpms[dep_rpm_nvra]['role'] = role_to
-                                # store the list of SRPMs the RPM is builddep for, directly or indirectly
-                                if xcp_rpms[dep_rpm_nvra]['role'] == role_to and srpm_nvr not in xcp_rpms[dep_rpm_nvra]['role_data']:
-                                    xcp_rpms[dep_rpm_nvra]['role_data'].append(srpm_nvr)
+                                # since the roles_to_scan are already build deps, the SRPMs to point
+                                # as target of the indirect builddep must be those that the build deps
+                                # themselves target
+                                for role_from in roles_to_scan:
+                                    for upper_srpm_nvr in xcp_rpms[rpm_nvra]['roles'].get(role_from, []):
+                                        add_rpm_role(xcp_rpms, dep_rpm_nvra, role_to, upper_srpm_nvr)
 
-    # The order of execution is important because each step skips RPMs that already have role
     update_builddep_role(xcp_rpms, xcp_builds, roles_from=['main'], role_to='main_builddep', direct=True)
     update_builddep_role(xcp_rpms, xcp_builds, roles_from=['main'], role_to='main_builddep_dep', direct=False)
     update_indirect_builddep_role(xcp_rpms, xcp_builds, role_prefix='main', role_to='main_indirect_builddep')
@@ -138,52 +171,41 @@ def main():
     update_builddep_role(xcp_rpms, xcp_builds, roles_from=['extra', 'extra_dep'], role_to='extra_builddep_dep', direct=False)
     update_indirect_builddep_role(xcp_rpms, xcp_builds, role_prefix='extra', role_to='extra_indirect_builddep')
 
-
-    # Now deps of RPMs that have no roles
-    update_builddep_role(xcp_rpms, xcp_builds, roles_from=[None], role_to='other_builddep', direct=True)
-    update_builddep_role(xcp_rpms, xcp_builds, roles_from=[None], role_to='other_builddep_dep', direct=False)
+    # Now deps of RPMs that still have no roles
+    update_builddep_role(xcp_rpms, xcp_builds, roles_from=[], role_to='other_builddep', direct=True)
+    update_builddep_role(xcp_rpms, xcp_builds, roles_from=[], role_to='other_builddep_dep', direct=False)
     update_indirect_builddep_role(xcp_rpms, xcp_builds, role_prefix='other', role_to='other_indirect_builddep')
     for rpm_nvra in xcp_rpms:
-        if xcp_rpms[rpm_nvra]['role'] is None:
+        if not xcp_rpms[rpm_nvra]['roles']:
             for dep in xcp_rpms[rpm_nvra]['deps']:
-                if xcp_rpms[dep].get('role') is None and not are_siblings(dep, rpm_nvra, xcp_rpms):
-                    xcp_rpms[dep]['role'] = 'other_dep'
-                    xcp_rpms[dep]['role_data'].append(rpm_nvra)
+                # other_dep possible only if has no other role than 'other_*'
+                if not [x for x in xcp_rpms[dep]['roles'] if not x.startswith('other_')]:
+                    add_rpm_role(xcp_rpms, dep, 'other_dep', rpm_nvra)
 
     # Write RPM data to file
     with open(os.path.join(work_dir, 'xcp-ng_rpms.json'), 'w') as f:
-        f.write(json.dumps(xcp_rpms, sort_keys=True, indent=4))
+        f.write(json.dumps(xcp_rpms, sort_keys=True, indent=4, cls=JsonSortAndEncode))
 
     # Update SRPM roles based on RPM roles
     for srpm_nvr, build_info in xcp_builds.iteritems():
         srpm_roles = {}
         for rpm_nvra in build_info['rpms']:
-            rpm_role = xcp_rpms[rpm_nvra]['role']
-            if rpm_role is not None:
-                if rpm_role.startswith('other_'):
-                    # check that no RPM from the SRPM has a role other than 'other_dep' or None
-                    a_sibling_has_role = False
-                    for sibling_nvra in build_info['rpms']:
-                        sibling_role = xcp_rpms[sibling_nvra]['role']
-                        if sibling_role is not None and not sibling_role.startswith('other_'):
-                            a_sibling_has_role = True
-                    if a_sibling_has_role:
-                        # skip RPM
-                        continue
+            for rpm_role, role_data in xcp_rpms[rpm_nvra]['roles'].iteritems():
+                if rpm_role in ('extra_dep', 'other_dep'):
+                    # ignore deps towards RPM of the same SRPM
+                    role_data = [x for x in role_data if xcp_rpms[x]['srpm_nvr'] != srpm_nvr]
+
+                if not role_data:
+                    continue
 
                 if rpm_role not in srpm_roles:
                     srpm_roles[rpm_role] = set()
-                if rpm_role in ['main', 'extra']:
-                    srpm_roles[rpm_role].add(rpm_nvra)
-                else:
-                    srpm_roles[rpm_role].update(xcp_rpms[rpm_nvra]['role_data'])
-        for role in srpm_roles:
-            srpm_roles[role] = list(srpm_roles[role])
+                srpm_roles[rpm_role].update(role_data)
         build_info['roles'] = srpm_roles
 
     # Write SRPM data to file
     with open(os.path.join(work_dir, 'xcp-ng_builds.json'), 'w') as f:
-        f.write(json.dumps(xcp_builds, sort_keys=True, indent=4))
+        f.write(json.dumps(xcp_builds, sort_keys=True, indent=4, cls=JsonSortAndEncode))
 
 if __name__ == "__main__":
     main()
