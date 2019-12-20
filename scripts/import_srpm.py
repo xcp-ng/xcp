@@ -35,13 +35,17 @@ def main():
     except:
         parser.error("Git repository seems to have local modifications.")
 
+    # check that there are no untracked files
+    if len(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard'])):
+        parser.error("There are untracked files.")
+
     # checkout parent ref
     subprocess.check_call(['git', 'fetch'])
     subprocess.check_call(['git', 'checkout', args.parent_branch])
     subprocess.check_call(['git', 'pull'])
 
     # remove everything from SOURCES and SPECS
-    if os.path.isdir('SOURCES'):
+    if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
         subprocess.check_call(['git', 'rm', 'SOURCES/*', '-r'])
     os.mkdir('SOURCES')
 
