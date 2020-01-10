@@ -14,12 +14,12 @@
             <packagereq type="mandatory">bash-completion</packagereq>
             <packagereq type="mandatory">blktap</packagereq>
             <packagereq type="mandatory">bzip2</packagereq>
+            <packagereq type="mandatory">chrony</packagereq>
             <packagereq type="mandatory">cifs-utils</packagereq>
             <packagereq type="mandatory">citrix-crypto-module</packagereq>
             <packagereq type="mandatory">compat-db47</packagereq>
             <packagereq type="mandatory">compat-libstdc++-33</packagereq>
             <packagereq type="mandatory">control-slice</packagereq>
-            <packagereq type="mandatory">conversion-plugin</packagereq>
             <packagereq type="mandatory">cronie-noanacron</packagereq>
             <packagereq type="mandatory">dlm</packagereq>
             <packagereq type="mandatory">dracut-network</packagereq>
@@ -62,7 +62,6 @@
             <packagereq type="mandatory">nano</packagereq>
             <packagereq type="mandatory">net-snmp</packagereq>
             <packagereq type="mandatory">nfs-utils</packagereq>
-            <packagereq type="mandatory">ntp</packagereq>
             <packagereq type="mandatory">ocaml-xenops-tools</packagereq>
             <packagereq type="mandatory">openssh-clients</packagereq>
             <packagereq type="mandatory">openssh-server</packagereq>
@@ -134,6 +133,7 @@
             <packagereq type="mandatory">xenserver-status-report</packagereq>
             <packagereq type="mandatory">xenserver-transfer-vm</packagereq>
             <packagereq type="mandatory">xha</packagereq>
+            <packagereq type="mandatory">xs-obsolete-packages</packagereq>
             <packagereq type="mandatory">xsconsole</packagereq>
             <packagereq type="mandatory">yum</packagereq>
             <packagereq type="mandatory">zip</packagereq>
@@ -152,6 +152,7 @@
         <packagelist>
             <packagereq type="mandatory">bugtool-conn-tests</packagereq>
             <packagereq type="mandatory">guest-templates-json-data-xenapp</packagereq>
+            <packagereq type="mandatory">update-CH81</packagereq>
             <packagereq type="mandatory">v6d-citrix</packagereq>
             <packagereq type="mandatory">xenserver-plymouth-theme</packagereq>
             <packagereq type="mandatory">xenserver-pv-tools</packagereq>
