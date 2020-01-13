@@ -1,13 +1,13 @@
 [platform]
 name = XCP
-version = 3.0.0
+version = 3.1.0
 
 [branding]
 name = XCP-ng
-version = 8.0.0
+version = 8.1.0
 
 [build]
-number = release/naples/master/45
+number = release/quebec/master/17
 
 [keys]
 key1 = RPM-GPG-KEY-CH-8-LCM
@@ -15,11 +15,11 @@ key2 = RPM-GPG-KEY-CH-8
 key3 = RPM-GPG-KEY-Platform-V1
 
 [general]
-name = XCP-ng-8.0
+name = XCP-ng-8.1
 family = XCP-ng
 timestamp = {{timestamp}}
 variant =
-version = 8.0
+version = 8.1
 packagedir =
 arch = x86_64
 
