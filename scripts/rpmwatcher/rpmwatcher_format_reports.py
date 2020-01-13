@@ -322,7 +322,7 @@ def main():
                 elif field == 'rpms':
                     value = rpms
                 else:
-                    raise("Couldn't handle field '%s'" % field)
+                    raise Exception("Couldn't handle field '%s'" % field)
                 row.append(value)
             report.append(row)
 

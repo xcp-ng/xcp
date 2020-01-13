@@ -134,7 +134,7 @@ def main():
     # Get the list of RPMs that are installed by default (deps of xcp-ng-deps)
     installable, rpms_installed_by_default = get_all_runtime_deps('xcp-ng-deps', install_root, include_self=True)
     if not installable:
-        raise("What? xcp-ng-deps is not installable?")
+        raise Exception("What? xcp-ng-deps is not installable?")
 
     # Add a few base packages to the install root, e.g. kernel to avoid other packages such as kernel-alt
     # to be seen as better fit for the "kernel" provides than standard kernel because of higher version
