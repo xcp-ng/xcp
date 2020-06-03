@@ -35,10 +35,11 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
     srpm_path = ""
     rpm_path = ""
     for line in output.splitlines():
-        if re.match('.+/src/.+\.src\.rpm', line):
+        first_element = line.split()[0]
+        if re.match('.+/src/.+\.src\.rpm', first_element):
             srpm_path = ""
-        if re.match('.+\.rpm', line):
-            rpm_path = line
+        if re.match('.+\.rpm', first_element):
+            rpm_path = first_element
 
     if not rpm_path:
         if is_bootstrap:
