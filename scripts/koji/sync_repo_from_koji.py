@@ -13,10 +13,11 @@ import atexit
 RELEASE_VERSIONS = [
     '7.6',
     '8.0',
+    '8.1',
 ]
 
 DEV_VERSIONS = [
-    '8.1',
+    '8.2',
 ]
 
 VERSIONS = DEV_VERSIONS + RELEASE_VERSIONS
@@ -31,6 +32,9 @@ TAGS = [
     'v8.1-base',
     'v8.1-updates',
     'v8.1-testing',
+    'v8.2-base',
+    'v8.2-updates',
+    'v8.2-testing',
 ]
 
 # tags in which we only keep the latest build for each package
@@ -38,6 +42,7 @@ RELEASE_TAGS = [
     'v7.6-base',
     'v8.0-base',
     'v8.1-base',
+    'v8.2-base',
 ]
 
 KOJI_ROOT_DIR = '/mnt/koji'
