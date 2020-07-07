@@ -47,6 +47,9 @@ def main():
     # remove everything from SOURCES and SPECS
     if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
         subprocess.check_call(['git', 'rm', 'SOURCES/*', '-r'])
+    if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
+        parser.error("Files remaining in SOURCES/ after removing the tracked ones. ")
+        parser.error("Delete them (including hidden files), reset --hard.")
     os.mkdir('SOURCES')
 
     if os.path.isdir('SPECS'):
