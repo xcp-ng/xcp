@@ -418,6 +418,7 @@ xcp-networkd;XS;;;
 xcp-ng-deps;XCP-ng;meta package that defines default installation;;
 xcp-ng-generic-lib;XCP-ng;lib for other packages;;
 xcp-ng-plymouth-theme;XCP-ng;replaces xenserver-plymouth-theme;;
+xcp-ng-pv-tools;XCP-ng;;;
 xcp-ng-release;XCP-ng;replaces xenserver-release;;
 xcp-ng-secureboot-certs;XCP-ng;stub replacement for proprietary secureboot-certs;;
 xcp-ng-xapi-plugins;XCP-ng;XAPI plugins;;
