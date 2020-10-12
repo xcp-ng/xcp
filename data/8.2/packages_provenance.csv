@@ -436,6 +436,7 @@ xenserver-hwdata;XS;;;
 xenserver-sdk;XS;;;
 xenserver-status-report;XS;;;
 xenserver-transfer-vm;XS;;;
+xfsprogs;XCP-ng;;;
 xha;XS;;;
 xs-opam-repo;XS;;;
 xs-openssl;XS;;;
