@@ -333,6 +333,7 @@ qlogic-qla2xxx;XS;;;
 qlogic-qla2xxx-firmware;XS;;;
 qrencode;XS;;;
 quota;XS;;;
+r8125-module;XCP-ng;additional driver;;
 r8169-module-alt;XCP-ng;additional driver;;
 readline;XS;;;
 redhat-lsb;XS;;;
