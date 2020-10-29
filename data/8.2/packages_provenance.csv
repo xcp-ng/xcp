@@ -343,7 +343,7 @@ rpm;XS;;;
 rrd2csv;XS;;;
 rrdd-plugins;XS;;;
 rsync;XS;;;
-rsyslog;XS;;;
+rsyslog;XS;updated to rsyslog-8.24.0-52.el7_8.2 for memory leak fixes. Dependency libfastjson not updated but would need to be if we used the mm-normalize plugin (RHBZ #1591493);;
 samba;XS;;;
 sbd;XS;dep for proprietary xapi-clusterd;;
 scapy;XS;;;
