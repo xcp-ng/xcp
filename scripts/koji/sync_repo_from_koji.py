@@ -14,10 +14,10 @@ RELEASE_VERSIONS = [
     '7.6',
     '8.0',
     '8.1',
+    '8.2',
 ]
 
 DEV_VERSIONS = [
-    '8.2',
 ]
 
 VERSIONS = DEV_VERSIONS + RELEASE_VERSIONS
