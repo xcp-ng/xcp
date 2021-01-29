@@ -35,6 +35,7 @@ TAGS = [
     'v8.2-base',
     'v8.2-updates',
     'v8.2-testing',
+    'v8.2-ipv6',
 ]
 
 # tags in which we only keep the latest build for each package
