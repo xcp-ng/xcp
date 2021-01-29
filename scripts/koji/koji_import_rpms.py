@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env python2
 from __future__ import print_function
 import argparse
 import os
