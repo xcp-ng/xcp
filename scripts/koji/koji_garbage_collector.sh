@@ -11,7 +11,7 @@ IFS=$'\n'
 # note that $username might contain a slash (e.g. host principals)
 cd $TOPDIR/scratch/
 for x in $(find $TOPDIR/scratch/ -mindepth 2 -type d -name 'task_*' -prune -mtime $TIMEARG); do
-    find "$x" -xdev "!" -type d -printf '%s\t %p\n' -delete -exec touch {}.deleted \; -exec chown apache.apache {}.deleted \;
+    find "$x" -xdev "!" -type d "!" -name "*.deleted" -printf '%s\t %p\n' -delete -exec touch {}.deleted \; -exec chown apache.apache {}.deleted \;
 done
 
 # for tasks, try to remove as a unit
