@@ -1,10 +1,4 @@
-# XCP-ng: A turnkey open source virtualization platform
 
-
-* [What is XCP-ng?](#what-is-xcp-ng)
-  * [Genesis](#genesis)
-  * [Key points](#key-points)
-	
 * [Documentation](#documentation)
 * [Contribution & community](#contribution-and-community)
 * [Pro support](#pro-support)
