@@ -1,0 +1,3 @@
+MAILTO="stormi-xcp@ylix.fr"
+PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/kojiadmin/.local/bin:/home/kojiadmin/bin
+0 10 * * mon root find /var/lib/mock -maxdepth 1 -mindepth 1 -type d ! -name tmproot -ctime +7 -exec \rm -r {} \;
