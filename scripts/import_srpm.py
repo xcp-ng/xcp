@@ -91,7 +91,7 @@ def main():
             msg = 'Import %s' % os.path.basename(args.source_rpm)
             if deleted:
                 msg += "\n\nFiles deleted for legal reasons:\n - " + '\n - '.join(deleted)
-            subprocess.check_call(['git', 'commit', '-m', msg])
+            subprocess.check_call(['git', 'commit', '-s', '-m', msg])
 
         # tag
         if args.tag is not None:
