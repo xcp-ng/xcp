@@ -1,0 +1,1991 @@
+
+
+-------------------- Vendor: (none) ------------------------
+
+*** avago-megaraid-sas-07.713.01.00+rc1-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** avago-mpt3sas-33.100.00.00-1.el7.centos.src.rpm => avago-mpt3sas-33.100.00.01-1.el7.centos.src.rpm
+Summary: Avago mpt3sas device drivers
+License: GPL
+removed     avago-mpt3sas-33.100.00.00.tar.gz
+added       avago-mpt3sas-33.100.00.01.tar.gz
+S.5........ avago-mpt3sas.spec
+
+*** biosdevname-0.3.10-2.src.rpm EVR unchanged, new file differs
+*** blktap-3.37.2-1.0.src.rpm => blktap-3.37.3-1.0.src.rpm
+Summary: blktap user space utilities
+License: BSD
+removed     blktap-3.37.2.tar.gz
+added       blktap-3.37.3.tar.gz
+S.5........ blktap.spec
+
+*** broadcom-bnxt-en-1.10.0_216.0.119.1-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** busybox-1.22.1-2.src.rpm EVR unchanged, new file differs
+*** chelsio-cxgb4-1.0.1-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** cisco-enic-3.2.189.0-1.el7.centos.src.rpm => cisco-enic-4.0.0.11-1.el7.centos.src.rpm
+Summary: Cisco enic device drivers
+License: GPL
+S.5.....    DESCRIPTION
+removed     cisco-enic-3.2.189.0.tar.gz
+added       cisco-enic-4.0.0.11.tar.gz
+SM5.....G.. cisco-enic.spec
+
+*** cisco-fnic-1.6.0.47-1.el7.centos.src.rpm => cisco-fnic-2.0.0.59-1.el7.centos.src.rpm
+Summary: Cisco fnic device drivers
+License: GPL
+S.5.....    DESCRIPTION
+removed     cisco-fnic-1.6.0.47.tar.gz
+added       cisco-fnic-2.0.0.59.tar.gz
+SM5.....G.. cisco-fnic.spec
+
+*** control-slice-1.2.1-1.src.rpm EVR unchanged, new file differs
+*** corosync-2.4.3-13.xs+2.0.0.src.rpm EVR unchanged, new file differs
+*** device-mapper-multipath-0.4.9-119.xs+1.2.src.rpm EVR unchanged, new file differs
+*** dracut-033-535.el7_5.1.xs1.1.0.src.rpm EVR unchanged, new file differs
+*** edk2-20180522git4b8552d-1.4.5.src.rpm EVR unchanged, new file differs
+*** emulex-lpfc-12.0.0.10-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** ethtool-4.19-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** forkexecd-1.18.0-1.el7.centos.src.rpm => forkexecd-1.18.0-3.el7.centos.src.rpm
+Summary: A subprocess management service
+License: LGPL
+S.5........ forkexecd.spec
+
+*** gpumon-0.18.0-1.el7.centos.src.rpm => gpumon-0.18.0-4.el7.centos.src.rpm
+Summary: RRDD GPU metrics plugin
+License: ISC
+S.5........ gpumon.spec
+
+*** grub-2.02-3.0.0.src.rpm => grub-2.02-3.1.0.src.rpm
+Summary: Bootloader with support for Linux, Multiboot and more
+License: GPLv3+
+added       0001-tsc-Change-default-tsc-calibration-method-to-pmtimer.patch
+S.5........ grub.spec
+
+*** guest-templates-json-1.9.4-1.src.rpm => guest-templates-json-1.9.6-1.src.rpm
+Summary: Creates the default guest templates
+License: BSD
+removed     guest-templates-json-1.9.4.tar.gz
+added       guest-templates-json-1.9.6.tar.gz
+S.5........ guest-templates-json.spec
+
+*** hcp_nss-1.0.0-1.el7.centos.src.rpm added
+Summary: Hybrid Citrix cloud Platform name service switch module
+License: LGPLv2+
+hcp_nss.c
+hcp_nss.h
+hcp_nss.spec
+makefile
+
+*** host-installer-10.7.5-1.src.rpm => host-installer-10.7.5.3-1.src.rpm
+Summary: XenServer Installer
+License: GPL
+added       host-installer-10.7.5.3.tar.gz
+removed     host-installer-10.7.5.tar.gz
+S.5........ host-installer.spec
+
+*** host-upgrade-plugin-2.2.0-1.src.rpm => host-upgrade-plugin-2.2.3-1.src.rpm
+Summary: Host upgrade plugin
+License: GPL
+removed     host-upgrade-plugin-2.2.0.tar.gz
+added       host-upgrade-plugin-2.2.3.tar.gz
+S.5........ host-upgrade-plugin.spec
+
+*** intel-e1000e-3.4.2.1-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** intel-fm10k-0.26.1-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** intel-i40e-2.9.21-1.src.rpm EVR unchanged, new file differs
+*** intel-ice-1.6.4-1.el7.centos.src.rpm added
+Summary: Intel ice device drivers
+License: GPLv2
+intel-ice-1.6.4.tar.gz
+intel-ice.spec
+
+*** intel-igb-5.3.5.20-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** intel-ixgbe-5.5.2-2.el7.centos.src.rpm => intel-ixgbe-5.9.4-1.el7.centos.src.rpm
+Summary: Intel ixgbe device drivers
+License: GPL
+S.5.....    DESCRIPTION
+removed     intel-ixgbe-5.5.2.tar.gz
+added       intel-ixgbe-5.9.4.tar.gz
+SM5.....G.. intel-ixgbe.spec
+
+*** interface-rename-2.0.3-1.src.rpm EVR unchanged, new file differs
+*** iproute-4.19.0-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** ipxe-20121005-1.0.3.src.rpm EVR unchanged, new file differs
+*** ipxe-efi-20180514gite7f67d5-1.0.0.src.rpm EVR unchanged, new file differs
+*** irqbalance-1.0.7-11.el7.centos.xs3.src.rpm EVR unchanged, new file differs
+*** kernel-4.19.19-7.0.13.src.rpm EVR unchanged, new file differs
+added       kernel-4.19.19.tar.gz
+S.5........ kernel.spec
+removed     linux-stable.tar.gz
+
+*** kexec-tools-2.0.15-15.el7.centos.src.rpm EVR unchanged, new file differs
+*** kpatch-0.6.2-1.src.rpm EVR unchanged, new file differs
+*** libdrm-2.4.83-2.el7.centos.xs1.src.rpm EVR unchanged, new file differs
+*** libempserver-1.1.0-1.src.rpm EVR unchanged, new file differs
+*** linux-firmware-20190314-1.src.rpm EVR unchanged, new file differs
+*** linux-guest-loader-2.3.1-1.src.rpm EVR unchanged, new file differs
+*** livepatch-build-tools-0.1-3.0.0.src.rpm EVR unchanged, new file differs
+*** lldpad-1.0.1-3.git036e314.el7.centos.xs1.src.rpm EVR unchanged, new file differs
+*** logrotate-3.8.6-17.xs1.0.1.src.rpm EVR unchanged, new file differs
+*** lvm2-2.02.180-11.xs+2.0.2.src.rpm EVR unchanged, new file differs
+*** makedumpfile-1.5.8-2.src.rpm EVR unchanged, new file differs
+*** mbootpack-v0.7a-1.src.rpm EVR unchanged, new file differs
+*** message-switch-1.23.1-1.el7.centos.src.rpm => message-switch-1.23.2-3.el7.centos.src.rpm
+Summary: A store and forward message switch
+License: FreeBSD
+removed     message-switch-1.23.1.tar.gz
+added       message-switch-1.23.2.tar.gz
+S.5........ message-switch.spec
+
+*** microcode_ctl-2.1-26.xs15.src.rpm EVR unchanged, new file differs
+*** microsemi-smartpqi-1.2.10_025-2.src.rpm EVR unchanged, new file differs
+*** ocaml-4.08.1-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** ocaml-findlib-1.8.0-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** ocaml-rrd-transport-1.16.0-3.el7.centos.src.rpm => ocaml-rrd-transport-1.16.0-5.el7.centos.src.rpm
+Summary: Shared-memory protocols for transmitting RRD data
+License: LGPL2.1 + OCaml linking exception
+S.5........ ocaml-rrd-transport.spec
+
+*** ocaml-rrdd-plugin-1.9.0-3.el7.centos.src.rpm => ocaml-rrdd-plugin-1.9.0-5.el7.centos.src.rpm
+Summary: Plugin library for the XenServer RRD daemon
+License: LGPL2.1 + OCaml linking exception
+S.5........ ocaml-rrdd-plugin.spec
+
+*** ocaml-tapctl-1.5.0-3.el7.centos.src.rpm => ocaml-tapctl-1.5.0-5.el7.centos.src.rpm
+Summary: Manipulate running tapdisk instances
+License: LGPL
+S.5........ ocaml-tapctl.spec
+
+*** ocaml-xcp-idl-1.96.1-1.el7.centos.src.rpm => ocaml-xcp-idl-1.96.2-2.el7.centos.src.rpm
+Summary: Common interface definitions for XCP services
+License: LGPL
+S.5........ ocaml-xcp-idl.spec
+removed     xcp-idl-1.96.1.tar.gz
+added       xcp-idl-1.96.2.tar.gz
+
+*** ocaml-xen-api-client-1.9.0-1.el7.centos.src.rpm => ocaml-xen-api-client-1.9.0-3.el7.centos.src.rpm
+Summary: Ocaml bindings to the Xapi API
+License: LGPL2.1 + OCaml linking exception
+S.5........ ocaml-xen-api-client.spec
+
+*** ocaml-xen-api-libs-transitional-2.25.2-1.el7.centos.src.rpm => ocaml-xen-api-libs-transitional-2.25.3-2.el7.centos.src.rpm
+Summary: Deprecated standard library extension for OCaml
+License: LGPL2.1 + OCaml linking exception
+S.5........ ocaml-xen-api-libs-transitional.spec
+removed     xen-api-libs-transitional-2.25.2.tar.gz
+added       xen-api-libs-transitional-2.25.3.tar.gz
+
+*** opam-2.0.5-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** openvswitch-2.5.3-2.3.10.src.rpm EVR unchanged, new file differs
+added       openvswitch-2.5.3.tar.gz
+S.5........ openvswitch.spec
+removed     openvswitch.tar.gz
+
+*** pacemaker-1.1.18-12.el7.centos.1.src.rpm EVR unchanged, new file differs
+*** pbis-open-8.2.3-1.7.7.src.rpm EVR unchanged, new file differs
+*** pbis-open-upgrade-8.2.2-3.src.rpm EVR unchanged, new file differs
+*** python-libarchive-c-2.5-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** qemu-2.10.2-4.5.4.src.rpm => qemu-4.2.1-4.6.1.src.rpm
+Summary: qemu-dm device model
+License: GPL
+removed     REQUIRES xen-dom0-devel  
+added       REQUIRES python2-devel  
+added       REQUIRES xen-dom0-libs-devel  
+added       REQUIRES jemalloc-devel  
+S.5........ 0001-CA-256542-Workaround-unassigned-accesses-caused-by-b.patch
+S.5........ 0001-CA-289906-Use-legacy-HID-descriptors-for-USB-Tablet-.patch
+S.5........ 0001-CP-17697-Initial-port-of-NVIDIA-VGPU-support-from-QEMU-trad.patch
+S.5........ 0001-CP-20436-Introduce-a-config-option-for-machines-comp.patch
+S.5........ 0001-CP-21434-Implement-VBE-LFB-physical-address-register.patch
+S.5........ 0001-CP-23753-Talk-to-new-clipboard-daemon.patch
+S.5........ 0001-CP-33348-Allow-media-replace-qmp-command-to-take-a-n.patch
+S.5........ 0001-Update-fd-handlers-to-support-sysfs_notify.patch
+added       0001-aio-posix-fix-use-after-leaving-scope-in-aio_poll.patch
+removed     0001-bswap-Add-new-stn_-_p-and-ldn_-_p-memory-access-func.patch
+removed     0001-error-Fix-use-of-error_prepend-with-error_fatal-erro.patch
+removed     0001-hw-block-Fix-the-return-type.patch
+added       0001-hw-ehci-destroy-sglist-in-error-path.patch
+removed     0001-ide-atapi-assert-that-the-buffer-pointer-in-range.patch
+added       0001-ide-atapi-assert-that-the-buffer-pointer-is-in-range.patch
+added       0001-ide-atapi-check-logical-block-address-and-read-size-.patch
+removed     0001-ide-atapi-check-logical-block-address-and-read-size.patch
+removed     0001-io-Add-dev-fdset-support-to-QIOChannelFile.patch
+removed     0001-io-Don-t-call-close-multiple-times-in-QIOChannelFile.patch
+removed     0001-io-Fix-QIOChannelFile-when-creating-and-opening-read.patch
+removed     0001-migration-Don-t-leak-IO-channels.patch
+removed     0001-migration-xen-Check-return-value-of-qemu_fclose.patch
+S.5........ 0001-net-introduce-qemu_receive_packet.patch
+removed     0001-nvme-Fix-get-set-number-of-queues-feature-again.patch
+S.5........ 0001-pc-Do-not-expect-to-have-a-fw_cfg-device.patch
+added       0001-pci-assert-configuration-access-is-within-bounds.patch
+removed     0001-rtl8139-fix-possible-out-of-bound-access.patch
+added       0001-scripts-qmp-Fix-shebang-and-imports.patch
+removed     0001-seccomp-changing-from-whitelist-to-blacklist.patch
+S.5........ 0001-usb-fix-setup_len-init-CVE-2020-14364.patch
+removed     0001-util-remove-the-obsolete-non-blocking-connect.patch
+removed     0001-vga-catch-depth-0.patch
+removed     0001-vga-fix-region-calculation.patch
+removed     0001-vnc-use-QEMU_ALIGN_DOWN.patch
+S.5........ 0001-xen-Emit-RTC_CHANGE-upon-TIMEOFFSET-ioreq.patch
+removed     0001-xen-Use-newly-added-dmops-for-mapping-VGA-memory.patch
+removed     0001-xen-hvm-correct-reporting-of-modified-memory-under-p.patch
+removed     0001-xen-hvm-create-separate-function-for-ioreq-server-in.patch
+removed     0001-xen-hvm-try-to-use-xenforeignmemory_map_resource-to-.patch
+removed     0001-xen-link-against-xentoolcore.patch
+added       0001-xen-mapcache-avoid-a-race-on-memory-map-while-using-.patch
+removed     0001-xen-pt-allow-QEMU-to-request-MSI-unmasking-at-bind-t.patch
+removed     0001-xen-pt-use-address_space_memory-object-for-memory-re.patch
+removed     0001-xen-pvdevice-Introduce-a-simplistic-xen-pvdevice-sav.patch
+added       0001-xen-rework-pci_piix3_xen_ide_unplug.patch
+removed     0001-xen_pt-Present-the-size-of-64-bit-BARs-correctly.patch
+removed     0002-hw-block-nvme-Convert-to-realize.patch
+added       0002-hw-ehci-check-return-value-of-usb_packet_map.patch
+S.5........ 0002-nvme-move-device-parameters-to-separate-struct.patch
+removed     0002-seccomp-add-obsolete-argument-to-command-line.patch
+removed     0002-sockets-factor-out-a-new-try_bind-function.patch
+removed     0002-vnc-use-DIV_ROUND_UP.patch
+S.5........ 0002-xen-platform-Provide-QMP-query-commands-for-XEN-PV-d.patch
+removed     0002-xen-restrict-use-xentoolcore_restrict_all.patch
+S.5........ 0003-Add-interception-layer-for-BAR-ops.patch
+removed     0003-hw-block-Use-errp-directly-rather-than-local_err.patch
+added       0003-rtl8139-switch-to-use-qemu_receive_packet-for-loopba.patch
+removed     0003-rtl8139-switch-to-use-qemu_receive_packet-for-loopback.patch
+removed     0003-seccomp-add-elevateprivileges-argument-to-command-li.patch
+removed     0003-sockets-factor-out-create_fast_reuse_socket.patch
+added       0003-usb-hcd-ehci-Fix-error-handling-on-missing-device-fo.patch
+removed     0003-xen-defer-call-to-xen_restrict-until-just-before-os_setup_post.patch
+S.5........ 0003-xen-platform-Emit-XEN_PLATFORM_PV_DRIVER_INFO-after-.patch
+S.5........ 0004-Add-AMD-code.patch
+S.5........ 0004-hotplug-Implement-legacy-CPU-hot-unplug.patch
+removed     0004-nvme-Add-tracing.patch
+S.5........ 0004-nvme-add-missing-fields-in-identify-controller.patch
+removed     0004-seccomp-add-spawn-argument-to-command-line.patch
+removed     0004-sockets-Handle-race-condition-between-binds-to-the-s.patch
+removed     0004-ui-add-tracing-of-VNC-operations-related-to-QIOChann.patch
+removed     0004-vga-migration-Update-memory-map-in-post_load.patch
+removed     0004-xen-destroy_hvm_domain-Move-reason-into-a-variable.patch
+removed     0005-hw-block-Fix-pin-based-interrupt-behaviour-of-NVMe.patch
+removed     0005-seccomp-add-resourcecontrol-argument-to-command-line.patch
+removed     0005-sockets-avoid-leak-of-listen-file-descriptor.patch
+removed     0005-ui-add-tracing-of-VNC-authentication-process.patch
+removed     0005-xen-move-xc_interface-compatibility-fallback-further-up-the-file.patch
+added       0006-block-Avoid-stale-pointer-dereference-in-blk_get_aio.patch
+removed     0006-buildsys-Move-seccomp-cflags-libs-to-per-object.patch
+removed     0006-sockets-avoid-crash-when-cleaning-up-sockets-for-an-.patch
+removed     0006-ui-Always-remove-an-old-VNC-channel-watch-before-add.patch
+removed     0006-xen-destroy_hvm_domain-Try-xendevicemodel_shutdown.patch
+removed     0007-misc-remove-duplicated-includes.patch
+removed     0007-os-posix-Provide-new--runas-uid-.-gid-facility.patch
+removed     0007-vga-add-ram_addr_t-cast.patch
+removed     0007-vnc-fix-debug-spelling.patch
+removed     0008-cirrus-fix-oob-access-in-mode4and5-write-functions.patch
+removed     0008-hw-block-nvme-add-optional-parameter-num_queues-for-.patch
+S.5........ 0008-nvme-refactor-device-realization.patch
+removed     0008-sockets-remove-obsolete-code-that-updated-listen-add.patch
+removed     0008-ui-remove-sync-parameter-from-vnc_update_client.patch
+removed     0009-sockets-fix-parsing-of-ipv4-ipv6-opts-in-parse_socke.patch
+removed     0009-ui-remove-unreachable-code-in-vnc_update_client.patch
+removed     0009-vga-fix-region-checks-in-wraparound-case.patch
+removed     0010-nvme-don-t-unref-ctrl_mem-when-device-unrealized.patch
+S.5........ 0010-nvme-support-Get-Log-Page-command.patch
+removed     0010-sockets-move-fd_is_socket-into-common-sockets-code.patch
+removed     0010-ui-remove-redundant-indentation-in-vnc_client_update.patch
+removed     0010-vga-check-the-validation-of-memory-addr-when-draw-te.patch
+S.5........ 0011-nvme-add-missing-mandatory-Features.patch
+removed     0011-nvme-free-cmbuf-in-nvme_exit.patch
+removed     0011-sockets-check-that-the-named-file-descriptor-is-a-so.patch
+removed     0011-ui-avoid-pointless-VNC-updates-if-framebuffer-isn-t-.patch
+S.5........ 0012-nvme-bump-supported-NVMe-revision-to-1.3d.patch
+removed     0012-nvme-fix-oob-access-issue-CVE-2018-16847.patch
+removed     0012-qapi-schema-Document-how-generated-documentation-is-.patch
+removed     0012-ui-track-how-much-decoded-data-we-consumed-when-doin.patch
+removed     0013-nvme-call-blk_drain-in-NVMe-reset-code-to-avoid-lock.patch
+S.5........ 0013-nvme-simplify-dma-cmb-mappings.patch
+removed     0013-qapi-schema-Rocker-doc-section-contains-unrelated-st.patch
+removed     0013-ui-introduce-enum-to-track-VNC-client-framebuffer-up.patch
+removed     0014-nvme-fix-out-of-bounds-access-to-the-CMB.patch
+S.5........ 0014-nvme-support-multiple-block-requests-per-request.patch
+removed     0014-qapi-schema-Collect-sockets-stuff-in-qapi-sockets.js.patch
+removed     0014-ui-correctly-reset-framebuffer-update-state-after-pr.patch
+removed     0015-Revert-nvme-fix-oob-access-issue-CVE-2018-16847.patch
+S.5........ 0015-nvme-support-scatter-gather-lists.patch
+removed     0015-sockets-allow-SocketAddress-fd-to-reference-numeric-.patch
+removed     0015-ui-refactor-code-for-determining-if-an-update-should.patch
+removed     0016-cutils-add-qemu_strtoi-qemu_strtoui-parsers-for-int-.patch
+removed     0016-nvme-fix-CMB-endianness-confusion.patch
+S.5........ 0016-nvme-support-multiple-namespaces.patch
+removed     0016-ui-fix-VNC-client-throttling-when-audio-capture-is-a.patch
+removed     0017-nvme-fix-bug-with-PCI-IRQ-pins-on-teardown.patch
+removed     0017-ui-fix-VNC-client-throttling-when-forced-update-is-r.patch
+removed     0018-nvme-Fix-spurious-interrupts.patch
+removed     0018-ui-place-a-hard-cap-on-VNC-server-output-buffer-size.patch
+removed     0019-qemu-queue.h-leave-head-structs-anonymous-unless-nec.patch
+removed     0019-ui-add-trace-events-related-to-VNC-client-throttling.patch
+removed     0020-nvme-use-TYPE_NVME-instead-of-constant-string.patch
+removed     0020-ui-mix-misleading-comments-return-types-of-VNC-I-O-h.patch
+removed     0021-nvme-ensure-the-num_queues-is-not-zero.patch
+removed     0021-ui-avoid-sign-extension-using-client-width-height.patch
+removed     0022-nvme-use-pci_dev-directly-in-nvme_realize.patch
+removed     0023-nvme-fix-write-zeroes-offset-and-count.patch
+removed     0024-nvme-fix-copy-direction-in-DMA-reads-going-to-CMB.patch
+removed     0025-nvme-add-Get-Set-Feature-Timestamp-support.patch
+removed     0026-nvme-do-not-advertise-support-for-unsupported-arbitr.patch
+S.5........ add-an-ide-read-cache.patch
+S.5........ allocate-vram-reserved.patch
+S.5........ build-configuration.patch
+S.5........ check-unmigratable-devices-when-saving.patch
+S.5........ disable-dirty-vram-tracking.patch
+S.5........ do_not_register_xen_backend_for_qdisk.patch
+S.5........ dont-init-cpus-on-xen.patch
+S.5........ dont-set-a20-on-xen.patch
+S.5........ force-lba-geometry.patch
+S.5........ gvt-g.patch
+added       hw-ide__check_null_block_before__cancel_dma_sync.patch
+S.5........ ignore-rtc-century-changes.patch
+added       keycodemapdb-6b3d716e2b6472eb7189d3220552280ef3d832ce.tar.gz
+S.5........ pci-add-subsystem-id-properties.patch
+removed     qemu-2.10.2.tar.gz
+added       qemu-4.2.1.tar.gz
+S.5........ qemu.spec
+S.5........ query-migratable.patch
+S.5........ remove-ioapic.patch
+added       revert_hw-i386__remove_deprecated_machines_pc-0.10_and_pc-0.11.patch
+S.5........ rtc-no-ratelimit.patch
+S.5........ xen-platform-add-device-id-property.patch
+removed     xenstore-ignore-state-write-error.patch
+
+*** qemu-dp-2.12.0-2.0.5.src.rpm EVR unchanged, new file differs
+*** qlogic-fastlinq-8.37.30.0-3.el7.centos.src.rpm => qlogic-fastlinq-8.42.10.0-3.el7.centos.src.rpm
+Summary: Qlogic fastlinq device drivers
+License: GPL
+S.5.....    DESCRIPTION
+removed     qlogic-fastlinq-8.37.30.0.tar.gz
+added       qlogic-fastlinq-8.42.10.0.tar.gz
+SM5.....G.. qlogic-fastlinq.spec
+
+*** qlogic-netxtreme2-7.14.53-1.el7.centos.src.rpm => qlogic-netxtreme2-7.14.76-1.el7.centos.src.rpm
+Summary: Qlogic NetXtreme II iSCSI, 1-Gigabit and 10-Gigabit ethernet drivers
+License: GPL
+removed     qlogic-netxtreme2-7.14.53.tar.gz
+added       qlogic-netxtreme2-7.14.76.tar.gz
+SM5.....G.. qlogic-netxtreme2.spec
+
+*** qlogic-qla2xxx-10.01.00.54.80.0_k-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** qlogic-qla2xxx-firmware-8.03.02-1.src.rpm EVR unchanged, new file differs
+*** rrd2csv-1.2.5-4.el7.centos.src.rpm => rrd2csv-1.2.5-7.el7.centos.src.rpm
+Summary: Tool for converting Xen API RRDs to CSV
+License: LGPL+linking exception
+S.5........ rrd2csv.spec
+
+*** rrdd-plugins-1.10.8-1.el7.centos.src.rpm => rrdd-plugins-1.10.8-5.el7.centos.src.rpm
+Summary: RRDD metrics plugins
+License: LGPL+linking exception
+S.5........ rrdd-plugins.spec
+
+*** sbd-1.3.1-7.xs+2.1.1.src.rpm EVR unchanged, new file differs
+*** sm-2.30.4-1.src.rpm => sm-2.30.6-1.src.rpm
+Summary: sm - XCP storage managers
+License: LGPL
+removed     sm-2.30.4.tar.gz
+added       sm-2.30.6.tar.gz
+S.5........ sm.spec
+
+*** sm-cli-0.23.0-4.el7.centos.src.rpm => sm-cli-0.23.0-6.el7.centos.src.rpm
+Summary: CLI for xapi toolstack storage managers
+License: LGPL
+S.5........ sm-cli.spec
+
+*** sm-core-libs-0.12.1-2.el7.centos.src.rpm => sm-core-libs-0.13.0-1.el7.centos.src.rpm
+Summary: sm core libraries - SM common core libraries.
+License: LGPL
+removed     REQUIRES python-devel  
+added       REQUIRES python-nose  
+added       REQUIRES python-coverage  
+added       REQUIRES python2-mock  
+removed     sm-core-libs-0.12.1.tar.gz
+added       sm-core-libs-0.13.0.tar.gz
+S.5........ sm-core-libs.spec
+
+*** squeezed-0.27.0-1.el7.centos.src.rpm => squeezed-0.27.0-4.el7.centos.src.rpm
+Summary: Memory ballooning daemon for the xapi toolstack
+License: LGPL
+S.5........ squeezed.spec
+
+*** strace-4.9-1.1.9.src.rpm EVR unchanged, new file differs
+*** stunnel-5.56-1.el7.centos.xs1.src.rpm EVR unchanged, new file differs
+*** systemd-219-57.el7.centos.1.xs3.src.rpm => systemd-219-57.el7.centos.1.xs4.src.rpm
+Summary: A System and Service Manager
+License: LGPLv2+ and MIT and GPLv2+
+........G.. 0001-kernel-install-add-fedora-specific-callouts-to-new-k.patch
+........G.. 0002-Revert-fsck-re-enable-fsck-l.patch
+........G.. 0003-sysctl-bring-back-etc-sysctl.conf.patch
+........G.. 0004-remove-user-.service.patch
+........G.. 0005-logind-session-save-stopping-flag.patch
+........G.. 0006-man-mention-System-Administrator-s-Guide-in-systemct.patch
+........G.. 0007-rules-automatically-online-hot-added-CPUs.patch
+........G.. 0008-Revert-remove-references-of-readahead.patch
+........G.. 0009-Revert-missing-remove-fanotify.patch
+........G.. 0010-Revert-readahead-wipe-out-readahead.patch
+........G.. 0011-rules-add-rule-for-naming-Dell-iDRAC-USB-Virtual-NIC.patch
+........G.. 0012-udev-net_id-correctly-name-netdevs-based-on-dev_port.patch
+........G.. 0013-Revert-blkid-Warn-when-rejecting-a-superblock-with-a.patch
+........G.. 0014-journald-audit-exit-gracefully-in-the-case-we-can-t-.patch
+........G.. 0015-fedora-disable-resolv.conf-symlink.patch
+........G.. 0016-Revert-timedated-manage-systemd-timesyncd-directly-i.patch
+........G.. 0017-journal-remote-fix-certificate-status-memory-leak.patch
+........G.. 0018-journal-remote-fix-client_cert-memory-leak.patch
+........G.. 0019-tmpfiles-Fix-parse_acl-error-message.patch
+........G.. 0020-test-utf8-fix-utf16-tests-on-BE-machines.patch
+........G.. 0021-tmpfiles-avoid-creating-duplicate-acl-entries.patch
+........G.. 0022-shared-time-util-fix-gcc5-warning.patch
+........G.. 0023-test-time-test-infinity-parsing-in-nanoseconds.patch
+........G.. 0024-bootchart-fix-default-init-path.patch
+........G.. 0025-systemctl-bump-NOFILE-only-for-systemctl_main.patch
+........G.. 0026-acl-util-avoid-freeing-uninitialized-pointer.patch
+........G.. 0027-bootchart-svg-fix-checking-of-list-end.patch
+........G.. 0028-systemd-add-getrandom-syscall-numbers-for-MIPS.patch
+........G.. 0029-unit-use-weaker-dependencies-between-mount-and-devic.patch
+........G.. 0030-unit-When-stopping-due-to-BindsTo-log-which-unit-cau.patch
+........G.. 0031-sysctl-downgrade-message-about-sysctl-overrides-to-d.patch
+........G.. 0032-sysctl-add-some-hints-how-to-override-settings.patch
+........G.. 0033-core-rework-device-state-logic.patch
+........G.. 0034-core-fix-return-value-on-OOM.patch
+........G.. 0035-machined-use-x-machine-unix-prefix-for-the-container.patch
+........G.. 0036-shared-AFS-is-also-a-network-filesystem.patch
+........G.. 0037-core-downgrade-unit-type-not-supported-message.patch
+........G.. 0038-journal-remote-fix-saving-of-binary-fields.patch
+........G.. 0039-journal-fix-Inappropriate-ioctl-for-device-on-ext4.patch
+........G.. 0040-sd-daemon-replace-VLA-with-alloca-to-make-llvm-happy.patch
+........G.. 0041-tmpfiles-quietly-ignore-ACLs-on-unsupported-filesyst.patch
+........G.. 0042-shared-util-assume-ac-when-sys-class-power_supply-is.patch
+........G.. 0043-import-remove-unused-variable.patch
+........G.. 0044-hwdb-fix-ThinkPad-X-Tablet-special-keys.patch
+........G.. 0045-man-add-newlines-to-the-pull-raw-example-in-machinec.patch
+........G.. 0046-core-shared-in-deserializing-match-same-files-reache.patch
+........G.. 0047-shared-use-SocketAddress-in-socket_address_matches_f.patch
+........G.. 0048-shared-avoid-semi-duplicating-socket_address_equal.patch
+........G.. 0049-shared-handle-unnamed-sockets-in-socket_address_equa.patch
+........G.. 0050-man-make-bootup-graph-consistent.patch
+........G.. 0051-nspawn-fix-whitespace-and-typo-in-partition-table-bl.patch
+........G.. 0052-man-explain-time-units-in-tmpfiles.patch
+........G.. 0053-systemctl-check-validity-of-PID-we-received.patch
+........G.. 0054-systemctl-support-auditd.service-better.patch
+........G.. 0055-shared-unit-name-fix-gcc5-warning.patch
+........G.. 0056-test-hashmap-fix-gcc5-warning.patch
+........G.. 0057-shared-fix-wrong-assertion-in-barrier_set_role.patch
+........G.. 0058-hwdb-Update-database-of-Bluetooth-company-identifier.patch
+........G.. 0059-journal-make-skipping-of-exhausted-journal-files-eff.patch
+........G.. 0060-shared-condition-fix-gcc5-warning.patch
+........G.. 0061-man-correct-description-of-systemd-user-sessions.patch
+........G.. 0062-build-sys-allow-lto-and-FORTIFY_SOURCE-with-O-sz.patch
+........G.. 0063-man-fix-typo.patch
+........G.. 0064-bus-proxyd-avoid-logging-oom-twice.patch
+........G.. 0065-Do-not-run-sysv-generator-test-when-sysv-compat-is-d.patch
+........G.. 0066-README-mention-ACLs-more.patch
+........G.. 0067-Do-not-advertise-.d-snippets-over-main-config-file.patch
+........G.. 0068-hwdb-add-pnpid-for-the-T450s-touchpad.patch
+........G.. 0069-networkd-netdev-inform-when-we-take-over-an-existing.patch
+........G.. 0070-man-replace-obsolete-wiki-link-with-man-page.patch
+........G.. 0071-Use-correct-uname-identifiers-in-arch_map-for-SuperH.patch
+........G.. 0072-hwdb-fix-Dell-XPS12-9Q33-key-name.patch
+........G.. 0073-Remove-the-cap-on-epoll-events.patch
+........G.. 0074-Allow-up-to-4096-simultaneous-connections.patch
+........G.. 0075-hwdb-add-Logitech-G5-Laser-Mouse.patch
+........G.. 0076-tmpfiles-Fix-handling-of-duplicate-lines.patch
+........G.. 0077-hwdb-add-Lenovo-W451-to-TOUCHPAD_HAS_TRACKPOINT_BUTT.patch
+........G.. 0078-vconsole-match-on-vtcon-events-not-fbcon-ones.patch
+........G.. 0079-core-do-not-spawn-jobs-or-touch-other-units-during-c.patch
+........G.. 0080-firstboot-set-all-spwd-fields-to-1-for-consistency-w.patch
+........G.. 0081-sysusers-do-not-reject-users-with-already-present-et.patch
+........G.. 0082-nspawn-fix-use-after-free-and-leak-in-error-paths.patch
+........G.. 0083-login-fix-copy-pasto-in-error-path.patch
+........G.. 0084-journalctl-update-hint-now-that-we-set-ACL-everywher.patch
+........G.. 0085-sd-journal-return-error-when-we-cannot-open-a-file.patch
+........G.. 0086-missing.h-add-NDA_.patch
+........G.. 0087-udevd-close-race-in-udev-settle.patch
+........G.. 0088-man-document-that-ExecStartPre-is-not-the-place-to-s.patch
+........G.. 0089-journal-fix-return-code.patch
+........G.. 0090-console-fix-error-code-inversion.patch
+........G.. 0091-bus-proxy-complain-only-once-about-queue-overflows.patch
+........G.. 0092-cgtop-fix-assert-when-not-on-tty.patch
+........G.. 0093-man-split-paragraph.patch
+........G.. 0094-hwdb-update.patch
+........G.. 0095-networkd-Begin-with-serial-number-1-for-netlink-requ.patch
+........G.. 0096-journal-remote-downgrade-routine-messages-to-debug.patch
+........G.. 0097-journal-remote-process-events-without-delay.patch
+........G.. 0098-man-update-example-2-in-systemd.network-5.patch
+........G.. 0099-gpt-auto-generator-fix-detection-of-srv.patch
+........G.. 0100-sd-rtnl-never-set-serial-to-0.patch
+........G.. 0101-gpt-auto-generator-allow-type-check-to-fail.patch
+........G.. 0102-man-fix-a-bunch-of-links.patch
+........G.. 0103-man-link-to-fd.o-for-dbus-stuff.patch
+........G.. 0104-man-fix-name-of-systemd.resource-control-5.patch
+........G.. 0105-selinux-fix-SEGV-during-switch-root-if-SELinux-polic.patch
+........G.. 0106-service-don-t-add-After-dependencies-on-.busname-uni.patch
+........G.. 0107-libudev-monitor-fix-error-path-in-send_device.patch
+........G.. 0108-core-remove-left-over-debug-message.patch
+........G.. 0109-units-there-is-no-systemd-udev-hwdb-update.service.patch
+........G.. 0110-util-remove-redundant-debug-message.patch
+........G.. 0111-tmpfiles-remove-redundant-debug-message.patch
+........G.. 0112-sysv-generator-initialize-LookupPaths-just-once.patch
+........G.. 0113-core-do-not-use-quotes-around-virt-and-arch.patch
+........G.. 0114-udev-downgrade-has-devpath-and-filled-with-db-file-m.patch
+........G.. 0115-cryptsetup-generator-remove-warning-about-crypttab-a.patch
+........G.. 0116-sysctl-tweak-debug-message.patch
+........G.. 0117-journald-add-syslog-fields-for-audit-messages.patch
+........G.. 0118-core-remove-useless-debug-message.patch
+........G.. 0119-man-standard-conf-change-directory-reference-to-wild.patch
+........G.. 0120-core-don-t-change-removed-devices-to-state-tentative.patch
+........G.. 0121-fstab-generator-ignore-invalid-swap-priority.patch
+........G.. 0122-missing.h-add-more-btrfs-types-and-defines.patch
+........G.. 0123-build-sys-add-configure-option-to-disableLTO-gold.patch
+........G.. 0124-rules-bring-back-80-net-name-slot.rules.patch
+........G.. 0125-Revert-journald-allow-restarting-journald-without-lo.patch
+........G.. 0126-Revert-man-switch-yum-to-dnf-for-Fedora.patch
+........G.. 0127-journal-remove-audit-socket-unit-files.patch
+........G.. 0128-factory-we-don-t-want-that.patch
+........G.. 0129-timedated-flip-internal-status-after-executing-opera.patch
+........G.. 0130-timedated-fix-enable-disable-reversal.patch
+........G.. 0131-core-make-SELinux-enable-disable-check-symmetric.patch
+........G.. 0132-shared-add-path_compare-an-ordering-path-comparison.patch
+........G.. 0133-core-namespace-fix-path-sorting.patch
+........G.. 0134-machine-do-not-rely-on-asprintf-setting-arg-on-error.patch
+........G.. 0135-some-compilators-don-t-support-__INCLUDE_LEVEL__.patch
+........G.. 0136-udev-net_id-support-multi-port-enpo-device-names.patch
+........G.. 0137-udev-net_id-improve-comments.patch
+........G.. 0138-udev-restore-udevadm-settle-timeout.patch
+........G.. 0139-udev-settle-should-return-immediately-when-timeout-i.patch
+........G.. 0140-udev-Fix-ping-timeout-when-settle-timeout-is-0.patch
+........G.. 0141-detect-virt-use-proc-device-tree.patch
+........G.. 0142-ARM-detect-virt-detect-Xen.patch
+........G.. 0143-ARM-detect-virt-detect-QEMU-KVM.patch
+........G.. 0144-Persistent-by_path-links-for-ata-devices.patch
+........G.. 0145-man-document-forwarding-to-syslog-better.patch
+........G.. 0146-man-fix-typos-in-previous-comimt.patch
+........G.. 0147-LSB-always-add-network-online.target-to-services-wit.patch
+........G.. 0148-rules-enable-memory-hotplug.patch
+........G.. 0149-rules-reload-sysctl-settings-when-the-bridge-module-.patch
+........G.. 0150-console-getty.service-don-t-start-when-dev-console-i.patch
+........G.. 0151-resolved-Do-not-add-.busname-dependencies-when-compi.patch
+........G.. 0152-man-add-journal-remote.conf-5.patch
+........G.. 0153-mount-don-t-run-quotaon-only-for-network-filesystems.patch
+........G.. 0154-mount-fix-up-wording-in-the-comment.patch
+........G.. 0155-udev-net_id-fix-copy-paste-error.patch
+........G.. 0156-man-don-t-mention-journalctl-dev-sda.patch
+........G.. 0157-units-move-After-systemd-hwdb-update.service-depende.patch
+........G.. 0158-units-explicitly-order-systemd-user-sessions.service.patch
+........G.. 0159-zsh-completion-update-loginctl.patch
+........G.. 0160-zsh-completion-add-missing-M-completion-for-journalc.patch
+........G.. 0161-zsh-completion-update-hostnamectl.patch
+........G.. 0162-shell-completion-systemctl-switch-root-verb.patch
+........G.. 0163-core-automount-beef-up-error-message.patch
+........G.. 0164-man-remove-fs-from-rootfsflags.patch
+........G.. 0165-shared-fix-memleak.patch
+........G.. 0166-udevd-fix-synchronization-with-settle-when-handling-.patch
+........G.. 0167-python-systemd-fix-is_socket_inet-to-cope-with-ports.patch
+........G.. 0168-man-fix-examples-indentation-in-tmpfiles.d-5.patch
+........G.. 0169-systemctl-avoid-bumping-NOFILE-rlimit-unless-needed.patch
+........G.. 0170-exit-status-Fix-NOTINSSTALLED-typo.patch
+........G.. 0171-tmpfiles-there-s-no-systemd-forbid-user-logins.servi.patch
+........G.. 0172-kmod-setup-load-ip_tables-kmod-at-boot.patch
+........G.. 0173-util-Fix-assertion-in-split-on-missing.patch
+........G.. 0174-units-set-KillMode-mixed-for-our-daemons-that-fork-w.patch
+........G.. 0175-unit-don-t-add-automatic-dependencies-on-device-unit.patch
+........G.. 0176-update-done-ignore-nanosecond-file-timestamp-compone.patch
+........G.. 0177-sd-daemon-simplify-sd_pid_notify_with_fds.patch
+........G.. 0178-fstab-generator-add-x-systemd.requires-and-x-systemd.patch
+........G.. 0179-core-Fix-assertion-with-empty-Exec-paths.patch
+........G.. 0180-rules-load-sg-module.patch
+........G.. 0181-util-add-shell_maybe_quote-call-for-preparing-a-stri.patch
+........G.. 0182-bus-util-be-more-verbose-if-dbus-job-fails.patch
+........G.. 0183-notify-fix-badly-backported-help-message.patch
+........G.. 0184-cryptsetup-craft-a-unique-ID-with-the-source-device.patch
+........G.. 0185-systemctl-introduce-now-for-enable-disable-and-mask.patch
+........G.. 0186-udev-also-create-old-sas-paths.patch
+........G.. 0187-journald-do-not-strip-leading-whitespace-from-messag.patch
+........G.. 0188-Revert-core-one-step-back-again-for-nspawn-we-actual.patch
+........G.. 0189-bus-creds-always-set-SD_BUS_CREDS_PID-when-we-set-pi.patch
+........G.. 0190-sd-bus-do-not-use-per-datagram-auxiliary-information.patch
+........G.. 0191-sd-bus-store-selinux-context-at-connection-time.patch
+........G.. 0192-journald-simplify-context-handling.patch
+........G.. 0193-bash-completion-add-verb-set-property.patch
+........G.. 0194-sd-bus-don-t-inherit-connection-creds-into-message-c.patch
+........G.. 0195-udev-fix-crash-in-path_id-builtin.patch
+........G.. 0196-sysv-generator-test-Fix-assertion.patch
+........G.. 0197-man-avoid-line-break-in-url.patch
+........G.. 0198-Add-VARIANT-as-a-standard-value-for-etc-os-release.patch
+........G.. 0199-Fix-permissions-on-run-systemd-nspawn-locks.patch
+........G.. 0200-generators-rename-add_-root-usr-_mount-to-add_-sysro.patch
+........G.. 0201-Generate-systemd-fsck-root.service-in-the-initramfs.patch
+........G.. 0202-units-fix-typo-in-systemd-resolved.service.patch
+........G.. 0203-core-don-t-consider-umask-for-SocketMode.patch
+........G.. 0204-timedate-fix-memory-leak-in-timedated.patch
+........G.. 0205-coredump-make-sure-we-vacuum-by-default.patch
+........G.. 0206-tmpfiles-don-t-fail-if-we-cannot-create-a-subvolume-.patch
+........G.. 0207-resolved-fix-crash-when-shutting-down.patch
+........G.. 0208-resolved-allow-DnsAnswer-objects-with-no-space-for-R.patch
+........G.. 0209-id128-add-new-sd_id128_is_null-call.patch
+........G.. 0210-journalctl-Improve-boot-ID-lookup.patch
+........G.. 0211-test-hashmap-fix-an-assert.patch
+........G.. 0212-units-make-sure-systemd-nspawn-.slice-instances-are-.patch
+........G.. 0213-Revert-journald-audit-exit-gracefully-in-the-case-we.patch
+........G.. 0214-journald-handle-more-gracefully-when-bind-fails-on-a.patch
+........G.. 0215-udev-link-config-fix-corruption.patch
+........G.. 0216-udev-net_id-Only-read-the-first-64-bytes-of-PCI-conf.patch
+........G.. 0217-shared-generator-correct-path-to-systemd-fsck.patch
+........G.. 0218-logind-Save-the-user-s-state-when-a-session-enters-S.patch
+........G.. 0219-small-fix-ru-translation.patch
+........G.. 0220-kmod-setup-don-t-warn-when-ipv6-can-t-be-loaded.patch
+........G.. 0221-Partially-revert-ma-setup-simplify.patch
+........G.. 0222-ima-setup-write-policy-one-line-at-a-time.patch
+........G.. 0223-ata_id-unbotch-format-specifier.patch
+........G.. 0224-install-explicitly-return-0-on-success.patch
+........G.. 0225-systemd.service.xml-document-that-systemd-removes-th.patch
+........G.. 0226-core-handle-log-target-null-when-calling-systemd-shu.patch
+........G.. 0227-man-ProtectHome-protects-root-as-well.patch
+........G.. 0228-timedatectl-trim-non-local-RTC-warning-to-80-chars-w.patch
+........G.. 0229-escape-fix-exit-code.patch
+........G.. 0230-man-information-about-available-properties.patch
+........G.. 0231-journal-in-persistent-mode-create-var-log-journal-wi.patch
+........G.. 0232-sysv-generator-fix-wrong-Overwriting-existing-symlin.patch
+........G.. 0233-mount-don-t-claim-a-device-is-gone-from-proc-self-mo.patch
+........G.. 0234-mount-properly-check-for-mounts-currently-in-proc-se.patch
+........G.. 0235-units-add-Install-section-to-tmp.mount.patch
+........G.. 0236-bus-util-add-articles-to-explanation-messages.patch
+........G.. 0237-bus-util-print-correct-warnings-for-units-that-fail-.patch
+........G.. 0238-Revert-journald-move-dev-log-socket-to-run.patch
+........G.. 0239-journald-server-don-t-read-audit-events.patch
+........G.. 0240-everything-remove-traces-of-user.patch
+........G.. 0241-selinux-fix-check-for-transient-units.patch
+........G.. 0242-socket-fix-setsockopt-call.-SOL_SOCKET-changed-to-SO.patch
+........G.. 0243-selinux-fix-missing-SELinux-unit-access-check.patch
+........G.. 0244-selinux-always-use-_raw-API-from-libselinux.patch
+........G.. 0245-udev-net_id-support-predictable-ifnames-on-virtio-bu.patch
+........G.. 0246-Revert-sysctl.d-default-to-fq_codel-fight-bufferbloa.patch
+........G.. 0247-loginctl-print-nontrivial-properties-in-logictl-show.patch
+........G.. 0248-login-fix-label-on-run-nologin.patch
+........G.. 0249-udev-rules-prandom-character-device-node-permissions.patch
+........G.. 0250-login-fix-gcc-warning-include-missing-header-file.patch
+........G.. 0251-shutdown-make-sure-run-nologin-has-correct-label.patch
+........G.. 0252-sd-event-fix-prepare-priority-queue-comparison-funct.patch
+........G.. 0253-units-run-ldconfig-also-when-cache-is-unpopulated.patch
+........G.. 0254-selinux-fix-regression-of-systemctl-subcommands-when.patch
+........G.. 0255-tmpfiles.d-don-t-clean-SAP-lockfiles-and-logs.patch
+........G.. 0256-udev-make-naming-for-virtio-devices-opt-in.patch
+........G.. 0257-tmpfiles.d-don-t-clean-SAP-sockets-either.patch
+........G.. 0258-run-synchronously-wait-until-the-scope-unit-we-creat.patch
+........G.. 0259-device-rework-how-we-enter-tentative-state.patch
+........G.. 0260-core-Do-not-bind-a-mount-unit-to-a-device-if-it-was-.patch
+........G.. 0261-logind-set-RemoveIPC-no-by-default.patch
+........G.. 0262-sysv-generator-follow-symlinks-in-etc-rc.d-init.d.patch
+........G.. 0263-sysv-generator-test-always-log-to-console.patch
+........G.. 0264-man-RemoveIPC-is-set-to-no-on-rhel.patch
+........G.. 0265-Avoid-tmp-being-mounted-as-tmpfs-without-the-user-s-.patch
+........G.. 0266-test-sysv-generator-Check-for-network-online.target.patch
+........G.. 0267-makefile-disable-udev-tests.patch
+........G.. 0268-arm-aarch64-detect-virt-check-dmi.patch
+........G.. 0269-detect-virt-dmi-look-for-KVM.patch
+........G.. 0270-Revert-journald-turn-ForwardToSyslog-off-by-default.patch
+........G.. 0271-terminal-util-when-resetting-terminals-don-t-wait-fo.patch
+........G.. 0272-basic-terminal-util-introduce-SYSTEMD_COLORS-environ.patch
+........G.. 0273-ask-password-don-t-abort-when-message-is-missing.patch
+........G.. 0274-sysv-generator-do-not-join-dependencies-on-one-line-.patch
+........G.. 0275-udev-fibre-channel-fix-NPIV-support.patch
+........G.. 0276-ata_id-unreverse-WWN-identifier.patch
+........G.. 0277-Fixup-WWN-bytes-for-big-endian-systems.patch
+........G.. 0278-sd-journal-introduce-has_runtime_files-and-has_persi.patch
+........G.. 0279-journalctl-improve-error-messages-when-the-specified.patch
+........G.. 0280-journalctl-show-friendly-info-when-using-b-on-runtim.patch
+........G.. 0281-journalctl-make-journalctl-dev-sda-work.patch
+........G.. 0282-journalctl-add-match-for-the-current-boot-when-calle.patch
+........G.. 0283-man-clarify-what-happens-when-journalctl-is-called-w.patch
+........G.. 0284-core-downgrade-warning-about-duplicate-device-names.patch
+........G.. 0285-udev-downgrade-a-few-warnings-to-debug-messages.patch
+........G.. 0286-man-LEVEL-in-systemd-analyze-set-log-level-is-not-op.patch
+........G.. 0287-Revert-udev-fibre-channel-fix-NPIV-support.patch
+........G.. 0288-udev-path-id-fibre-channel-NPIV-use-fc_vport-s-port_.patch
+........G.. 0289-systemctl-is-active-failed-should-return-0-if-at-lea.patch
+........G.. 0290-rules-set-SYSTEMD_READY-0-on-DM_UDEV_DISABLE_OTHER_R.patch
+........G.. 0291-s390-add-personality-support.patch
+........G.. 0292-socket_address_listen-do-not-rely-on-errno.patch
+........G.. 0293-path_id-reintroduce-by-path-links-for-virtio-block-d.patch
+........G.. 0294-journal-fix-error-handling-when-compressing-journal-.patch
+........G.. 0295-journal-irrelevant-coding-style-fixes.patch
+........G.. 0296-install-follow-unit-file-symlinks-in-usr-but-not-etc.patch
+........G.. 0297-core-look-for-instance-when-processing-template-name.patch
+........G.. 0298-core-improve-error-message-when-starting-template-wi.patch
+........G.. 0299-man-tmpfiles.d-add-note-about-permissions-and-owners.patch
+........G.. 0300-tmpfiles-don-t-follow-symlinks-when-adjusting-ACLs-f.patch
+........G.. 0301-udev-filter-out-non-sensically-high-onboard-indexes-.patch
+........G.. 0302-test-execute-add-tests-for-RuntimeDirectory.patch
+........G.. 0303-core-fix-group-ownership-when-Group-is-set.patch
+........G.. 0304-fstab-generator-cescape-device-name-in-root-fsck-ser.patch
+........G.. 0305-core-add-new-RandomSec-setting-for-time-units.patch
+........G.. 0306-core-rename-Random-to-RandomizedDelay.patch
+........G.. 0307-journal-remote-change-owner-of-var-log-journal-remot.patch
+........G.. 0308-Add-Seal-option-in-the-configuration-file-for-journa.patch
+........G.. 0309-tests-fix-make-check-failure.patch
+........G.. 0310-device-make-sure-to-not-ignore-re-plugged-device.patch
+........G.. 0311-device-Ensure-we-have-sysfs-path-before-comparing.patch
+........G.. 0312-core-fix-memory-leak-on-set-default-enable-disable-e.patch
+........G.. 0313-nspawn-fix-minor-memory-leak.patch
+........G.. 0314-basic-fix-error-memleak-in-socket-util.patch
+........G.. 0315-core-fix-memory-leak-in-manager_run_generators.patch
+........G.. 0316-modules-load-fix-memory-leak.patch
+........G.. 0317-core-fix-memory-leak-on-failed-preset-all.patch
+........G.. 0318-sd-bus-fix-memory-leak-in-test-bus-chat.patch
+........G.. 0319-core-fix-memory-leak-in-transient-units.patch
+........G.. 0320-bus-fix-leak-in-error-path.patch
+........G.. 0321-shared-logs-show-fix-memleak-in-add_matches_for_unit.patch
+........G.. 0322-logind-introduce-LockedHint-and-SetLockedHint-3238.patch
+........G.. 0323-import-use-the-old-curl-api.patch
+........G.. 0324-importd-drop-dkr-support.patch
+........G.. 0325-import-add-support-for-gpg2-for-verifying-imported-i.patch
+........G.. 0326-nspawn-when-connected-to-pipes-for-stdin-stdout-pass.patch
+........G.. 0327-mount-remove-obsolete-n.patch
+........G.. 0328-core-don-t-log-job-status-message-in-case-job-was-ef.patch
+........G.. 0329-core-use-an-AF_UNIX-SOCK_DGRAM-socket-for-cgroup-age.patch
+........G.. 0330-logind-process-session-inhibitor-fds-at-higher-prior.patch
+........G.. 0331-Teach-bus_append_unit_property_assignment-about-Dele.patch
+........G.. 0332-sd-netlink-fix-deep-recursion-in-message-destruction.patch
+........G.. 0333-add-REMOTE_ADDR-and-REMOTE_PORT-for-Accept-yes.patch
+........G.. 0334-core-don-t-dispatch-load-queue-when-setting-Slice-fo.patch
+........G.. 0335-run-make-slice-work-in-conjunction-with-scope.patch
+........G.. 0336-myhostname-fix-timeout-if-ipv6-is-disabled.patch
+........G.. 0337-readahead-do-not-increase-nr_requests-for-root-fs-bl.patch
+........G.. 0338-manager-reduce-complexity-of-unit_gc_sweep-3507.patch
+........G.. 0339-hwdb-selinuxify-a-bit-3460.patch
+........G.. 0340-udevadm-explicitly-relabel-etc-udev-hwdb.bin-after-r.patch
+........G.. 0341-systemctl-return-diffrent-error-code-if-service-exis.patch
+........G.. 0342-systemctl-Replace-init-script-error-codes-with-enum-.patch
+........G.. 0343-systemctl-rework-systemctl-status-a-bit.patch
+........G.. 0344-journal-verify-don-t-hit-SIGFPE-when-determining-pro.patch
+........G.. 0345-journal-avoid-mapping-empty-data-and-field-hash-tabl.patch
+........G.. 0346-journal-when-verifying-journal-files-handle-empty-on.patch
+........G.. 0347-journal-explain-the-error-when-we-find-a-non-DATA-ob.patch
+........G.. 0348-journalctl-properly-detect-empty-journal-files.patch
+........G.. 0349-journal-uppercase-first-character-in-verify-error-me.patch
+........G.. 0350-journalctl-make-sure-journalctl-f-t-unmatched-blocks.patch
+........G.. 0351-journalctl-don-t-print-No-entries-in-quiet-mode.patch
+........G.. 0352-sd-event-expose-the-event-loop-iteration-counter-via.patch
+........G.. 0353-manager-Only-invoke-a-single-sigchld-per-unit-within.patch
+........G.. 0354-manager-Fixing-a-debug-printf-formatting-mistake.patch
+........G.. 0355-core-support-IEC-suffixes-for-RLIMIT-stuff.patch
+........G.. 0356-core-accept-time-units-for-time-based-resource-limit.patch
+........G.. 0357-time-util-add-parse_time-which-is-like-parse_sec-but.patch
+........G.. 0358-core-support-soft-hard-ranges-for-RLIMIT-options.patch
+........G.. 0359-core-fix-rlimit-parsing.patch
+........G.. 0360-core-dump-rlim_cur-too.patch
+........G.. 0361-install-fix-disable-via-unit-file-path.patch
+........G.. 0362-manager-don-t-skip-sigchld-handler-for-main-and-cont.patch
+........G.. 0363-units-increase-watchdog-timeout-to-3min-for-all-our-.patch
+........G.. 0364-core-bump-net.unix.max_dgram_qlen-really-early-durin.patch
+........G.. 0365-core-fix-priority-ordering-in-notify-handling.patch
+........G.. 0366-tests-fix-personality-tests-on-ppc64-and-aarch64.patch
+........G.. 0367-systemctl-consider-service-running-only-when-it-is-i.patch
+........G.. 0368-install-do-not-crash-when-processing-empty-masked-un.patch
+........G.. 0369-Revert-install-fix-disable-via-unit-file-path.patch
+........G.. 0370-systemctl-allow-disable-on-the-unit-file-path-but-wa.patch
+........G.. 0371-tmpfiles-enforce-ordering-when-executing-lines.patch
+........G.. 0372-Introduce-bus_unit_check_load_state-helper.patch
+........G.. 0373-core-use-bus_unit_check_load_state-in-transaction_ad.patch
+........G.. 0374-udev-path_id-correct-segmentation-fault-due-to-missi.patch
+........G.. 0375-rules-load-sg-driver-also-when-scsi_target-appears-4.patch
+........G.. 0376-fix-gcc-warnings-about-uninitialized-variables.patch
+........G.. 0377-journalctl-rework-code-that-checks-whether-we-have-a.patch
+........G.. 0378-journalctl-Improve-boot-ID-lookup.patch
+........G.. 0379-journalctl-only-have-a-single-exit-path-from-main.patch
+........G.. 0380-journalctl-free-all-command-line-argument-objects.patch
+........G.. 0381-journalctl-rename-boot_id_t-to-BootId.patch
+........G.. 0382-util-introduce-CMSG_FOREACH-macro-and-make-use-of-it.patch
+........G.. 0383-journald-don-t-employ-inner-loop-for-reading-from-in.patch
+........G.. 0384-journald-fix-count-of-object-meta-fields.patch
+........G.. 0385-journal-cat-return-a-correct-error-not-1.patch
+........G.. 0386-journalctl-introduce-short-options-for-since-and-unt.patch
+........G.. 0387-journal-s-Envalid-Invalid.patch
+........G.. 0388-journald-dispatch-SIGTERM-SIGINT-with-a-low-priority.patch
+........G.. 0389-lz4-fix-size-check-which-had-no-chance-of-working-on.patch
+........G.. 0390-journal-normalize-priority-of-logging-sources.patch
+........G.. 0391-Fix-miscalculated-buffer-size-and-uses-of-size-unlim.patch
+........G.. 0392-journal-Drop-monotonicity-check-when-appending-to-jo.patch
+........G.. 0393-journalctl-unify-how-we-free-boot-id-lists-a-bit.patch
+........G.. 0394-journalctl-don-t-trust-the-per-field-entry-tables-wh.patch
+........G.. 0395-units-remove-udev-control-socket-when-systemd-stops-.patch
+........G.. 0396-logind-don-t-assert-if-the-slice-is-missing.patch
+........G.. 0397-core-enable-transient-unit-support-for-slice-units.patch
+........G.. 0398-sd-bus-bump-message-queue-size.patch
+........G.. 0399-install-fix-disable-when-etc-systemd-system-is-a-sym.patch
+........G.. 0400-rules-add-NVMe-rules-3136.patch
+........G.. 0401-rules-introduce-disk-by-id-model_serial-symlinks-for.patch
+........G.. 0402-rules-fix-for-possible-whitespace-in-the-model-attri.patch
+........G.. 0403-systemctl-pid1-do-not-warn-about-missing-install-inf.patch
+........G.. 0404-systemctl-core-ignore-masked-units-in-preset-all.patch
+........G.. 0405-shared-install-handle-dangling-aliases-as-an-explici.patch
+........G.. 0406-shared-install-ignore-unit-symlinks-when-doing-prese.patch
+........G.. 0407-40-redhat.rules-don-t-hoplug-memory-on-s390x.patch
+........G.. 0408-If-the-notification-message-length-is-0-ignore-the-m.patch
+........G.. 0409-systemctl-suppress-errors-with-show-for-nonexistent-.patch
+........G.. 0410-40-redhat.rules-disable-auto-online-of-hot-plugged-m.patch
+........G.. 0411-pid1-don-t-return-any-error-in-manager_dispatch_noti.patch
+........G.. 0412-pid1-process-zero-length-notification-messages-again.patch
+........G.. 0413-pid1-more-informative-error-message-for-ignored-noti.patch
+........G.. 0414-manager-219-needs-u-id-in-log_unit_debug.patch
+........G.. 0415-virt-add-possibility-to-skip-the-check-for-chroot.patch
+........G.. 0416-load-fragment-fix-parsing-values-in-bytes-and-preven.patch
+........G.. 0417-core-fix-assertion-check.patch
+........G.. 0418-tmp.mount.hm4-After-swap.target-3087.patch
+........G.. 0419-make-sure-all-swap-units-are-ordered-before-the-swap.patch
+........G.. 0420-Recognise-Lustre-as-a-remote-file-system-4530.patch
+........G.. 0421-unit-don-t-add-Requires-for-tmp.mount.patch
+........G.. 0422-core-return-0-from-device_serialize.patch
+........G.. 0423-mtd_probe-include-stdint.patch
+........G.. 0424-tests-fix-failure-of-test-execute-if-dev-mem-is-not-.patch
+........G.. 0425-sd-journal-properly-export-has_-persistent-runtime-_.patch
+........G.. 0426-core-add-possibility-to-set-action-for-ctrl-alt-del-.patch
+........G.. 0427-failure-action-generalize-failure-action-to-emergenc.patch
+........G.. 0428-core-use-emergency_action-for-ctr-alt-del-burst.patch
+........G.. 0429-udev-path_id-introduce-support-for-NVMe-devices-4169.patch
+........G.. 0430-core-fix-CapabilityBoundingSet-merging.patch
+........G.. 0431-core-fix-capability-bounding-set-parsing.patch
+........G.. 0432-core-make-parsing-of-RLIMIT_NICE-aware-of-actual-nic.patch
+........G.. 0433-shared-fix-double-free-in-unmask-5005.patch
+........G.. 0434-shared-fix-double-free-in-link.patch
+........G.. 0435-shared-check-strdup-NULL.patch
+........G.. 0436-core-improve-error-message-when-RefuseManualStart-St.patch
+........G.. 0437-systemctl-fix-is-enabled-exit-status-on-failure-when.patch
+........G.. 0438-man-document-that-the-automatic-journal-limits-are-c.patch
+........G.. 0439-random-seed-raise-POOL_SIZE_MIN-to-1024.patch
+........G.. 0440-bash-completion-add-support-for-now-5155.patch
+........G.. 0441-basic-fix-touch-creating-files-with-07777-mode.patch
+........G.. 0442-udev-net_id-add-support-for-phys_port_name-attribute.patch
+........G.. 0443-install-introduce-UnitFileFlags.patch
+........G.. 0444-shared-systemctl-teach-is-enabled-to-show-installati.patch
+........G.. 0445-udev-fix-crash-with-invalid-udev.log-priority.patch
+........G.. 0446-core-make-exec-code-a-bit-more-readable.patch
+........G.. 0447-core-Private-Protect-options-with-RootDirectory.patch
+........G.. 0448-core-if-the-start-command-vanishes-during-runtime-do.patch
+........G.. 0449-systemctl-make-sure-that-now-is-carried-out-5209.patch
+........G.. 0450-udev-inform-systemd-how-many-workers-we-can-potentia.patch
+........G.. 0451-service-log_unit-consumes-id-of-unit-not-a-unit.patch
+........G.. 0452-automount-add-expire-support.patch
+........G.. 0453-fstab-generator-fix-memleak.patch
+........G.. 0454-remove-bus-proxyd.patch
+........G.. 0455-execute-Add-new-PassEnvironment-directive.patch
+........G.. 0456-test-execute-Add-tests-for-new-PassEnvironment-direc.patch
+........G.. 0457-test-execute-Clarify-interaction-of-PassEnvironment-.patch
+........G.. 0458-load-fragment-resolve-specifiers-in-RuntimeDirectory.patch
+........G.. 0459-Add-microphone-mute-keymap-for-Dell-Precision.patch
+........G.. 0460-hwdb-update-micmute-YCODE-on-device-node-at-DELL-LAT.patch
+........G.. 0461-udev-path_id-improve-and-enhance-bus-detection-for-L.patch
+........G.. 0462-core-port-config_parse_bounding_set-to-extract_first.patch
+........G.. 0463-core-simplify-parsing-of-capability-bounding-set-set.patch
+........G.. 0464-test-add-test-for-capability-bounding-set-parsing.patch
+........G.. 0465-capabilities-keep-bounding-set-in-non-inverted-forma.patch
+........G.. 0466-capabilities-added-support-for-ambient-capabilities.patch
+........G.. 0467-man-add-AmbientCapabilities-entry.patch
+........G.. 0468-test-capability-rebase-to-upstream-version.patch
+........G.. 0469-namespace-don-t-fail-on-masked-mounts.patch
+........G.. 0470-sysv-generator-Provides-network-should-also-pull-net.patch
+........G.. 0471-Install-correctly-report-symlink-creations.patch
+........G.. 0472-rules-40-redhat.rules-rules-should-be-on-one-line.patch
+........G.. 0473-tmpfiles-add-new-e-action-which-cleans-up-a-dir-with.patch
+........G.. 0474-util-bind_remount_recursive-handle-return-0-of-set_c.patch
+........G.. 0475-core-add-support-for-the-pids-cgroup-controller.patch
+........G.. 0476-core-add-new-DefaultTasksMax-setting-for-system.conf.patch
+........G.. 0477-logind-add-a-new-UserTasksMax-setting-to-logind.conf.patch
+........G.. 0478-core-support-percentage-specifications-on-TasksMax.patch
+........G.. 0479-core-reinstate-propagation-of-stop-restart-jobs-via-.patch
+........G.. 0480-core-when-propagating-restart-requests-due-to-deps-d.patch
+........G.. 0481-core-properly-handle-jobs-that-are-suppressed-to-JOB.patch
+........G.. 0482-tests-set-tasks_max-to-infinity.patch
+........G.. 0483-Avoid-forever-loop-for-journalctl-list-boots-command.patch
+........G.. 0484-sd-journal-return-SD_JOURNAL_INVALIDATE-only-if-jour.patch
+........G.. 0485-load-fragment-don-t-print-error-about-incorrect-synt.patch
+........G.. 0486-core-manager-add-some-missing-dbus-properties.patch
+........G.. 0487-core-manager-expose-DefaultLimit-as-properties-on-db.patch
+........G.. 0488-fstab-generator-remove-bogus-condition.patch
+........G.. 0489-readahead-collect-don-t-print-warning-message-when-h.patch
+........G.. 0490-tmpfiles-don-t-recursively-descend-into-journal-dire.patch
+........G.. 0491-tmpfiles-also-set-acls-on-var-log-journal.patch
+........G.. 0492-tmpfiles-set-acls-on-system.journal-explicitly.patch
+........G.. 0493-sysctl-configure-kernel-parameters-in-the-order-they.patch
+........G.. 0494-units-drop-explicit-NotifyAccess-setting-from-journa.patch
+........G.. 0495-systemd-notify-Always-pass-a-valid-pid-to-sd_pid_not.patch
+........G.. 0496-sd_pid_notify_with_fds-fix-computing-msg_controllen.patch
+........G.. 0497-rules-move-cpu-hotplug-rule-to-separate-file.patch
+........G.. 0498-Revert-rules-move-cpu-hotplug-rule-to-separate-file.patch
+........G.. 0499-tests-use-XFS-as-root-filesystem-for-system-tests.patch
+........G.. 0500-tests-use-fdisk-instead-of-sfdisk.patch
+........G.. 0501-Revert-udev-net_id-add-support-for-phys_port_name-at.patch
+........G.. 0502-core-unset-sysfs-path-after-transition-to-dead-state.patch
+........G.. 0503-sysctl-fix-uninitialized-variable.patch
+........G.. 0504-udev-ignore-SIGCHLD-from-unexpected-processes-130653.patch
+........G.. 0505-compile-with-Werror.patch
+........G.. 0506-myhostname-don-t-return-any-ipv6-entries-when-ipv6-i.patch
+........G.. 0507-core-execute-fix-fork-fail-handling-in-exec_spawn.patch
+........G.. 0508-fix-compilation-after-commit-382877acc6c029e59e359a0.patch
+........G.. 0509-Redefine-32bit-time_t-format-to-signed.patch
+........G.. 0510-sd-bus-bus-kernel.c-fix-format-errors-on-ppc64le.patch
+........G.. 0511-tmpfiles-with-e-don-t-attempt-to-set-permissions-whe.patch
+........G.. 0512-units-introduce-getty-pre.target-6667.patch
+........G.. 0513-units-order-container-and-console-getty-units-after-.patch
+........G.. 0514-log-never-log-into-foreign-fd-2-in-PID-1-or-its-pre-.patch
+........G.. 0515-nspawn-new-option-to-start-as-PID2.patch
+........G.. 0516-journal-implicitly-flush-to-var-on-recovery-4028.patch
+........G.. 0517-journal-add-use-flushed_flag_is_set-helper-4041.patch
+........G.. 0518-journald-don-t-flush-to-var-log-journal-before-we-ge.patch
+........G.. 0519-path-util-make-use-of-mnt_id-field-exported-in-proc-.patch
+........G.. 0520-Revert-Revert-journald-allow-restarting-journald-wit.patch
+........G.. 0521-journald-make-sure-we-retain-all-stream-fds-across-r.patch
+........G.. 0522-Allow-systemd-tmpfiles-to-set-the-file-directory-att.patch
+........G.. 0523-tmpfiles-rework-file-attribute-code.patch
+........G.. 0524-tmpfiles-warn-if-we-get-an-argument-on-lines-that-do.patch
+........G.. 0525-tmpfiles-substitute-specifiers-in-arguments-for-writ.patch
+........G.. 0526-btrfs-util-introduce-btrfs_is_filesystem-and-make-us.patch
+........G.. 0527-journal-don-t-force-FS_NOCOW_FL-on-new-journal-files.patch
+........G.. 0528-tmpfiles-Add-C-attrib-to-the-journal-files-directori.patch
+........G.. 0529-Revert-path-util-make-use-of-mnt_id-field-exported-i.patch
+........G.. 0530-device-make-sure-to-remove-all-device-units-sharing-.patch
+........G.. 0531-manager-when-reexecuting-try-to-connect-to-bus-only-.patch
+........G.. 0532-doc-document-service-exit-codes.patch
+........G.. 0533-units-order-cryptsetup-pre.target-before-cryptsetup..patch
+........G.. 0534-man-add-an-explicit-description-of-_netdev-to-system.patch
+........G.. 0535-units-add-remote-cryptsetup.target-and-remote-crypts.patch
+........G.. 0536-cryptsetup-generator-use-remote-cryptsetup.target-wh.patch
+........G.. 0537-Support-rdma-as-a-ListenNetlink-argument-6626.patch
+........G.. 0538-core-namespace-Protect-usr-instead-of-home-with-Prot.patch
+........G.. 0539-udev-Use-parent-bus-id-for-virtio-disk-builtin-path-.patch
+........G.. 0540-socket-util-socket_address_parse-should-not-log-erro.patch
+........G.. 0541-test-fix-failing-test-socket-util-when-running-with-.patch
+........G.. 0542-scsi_id-add-missing-options-to-getopt_long-6501.patch
+........G.. 0543-unmount-Pass-in-mount-options-when-remounting-read-o.patch
+........G.. 0544-shutdown-don-t-remount-ro-network-filesystems.-6588.patch
+........G.. 0545-shutdown-fix-incorrect-fscanf-result-check-6806.patch
+........G.. 0546-path-util-make-use-of-mnt_id-field-exported-in-proc-.patch
+........G.. 0547-support-ranges-when-parsing-CPUAffinity.patch
+........G.. 0548-man-Update-man-page-documentation-for-CPUAffinity.patch
+........G.. 0549-test-path-util-force-rm_rf.patch
+........G.. 0550-Export-NVMe-WWID-udev-attribute-5348.patch
+........G.. 0551-mount-make-sure-we-unmount-tmpfs-mounts-before-we-de.patch
+........G.. 0552-journald-never-accept-fds-from-file-systems-with-man.patch
+........G.. 0553-udev-builtin-keyboard-move-fetching-the-device-node-.patch
+........G.. 0554-udev-builtin-keyboard-immediately-EVIOCSKEYCODE-when.patch
+........G.. 0555-udev-builtin-keyboard-move-actual-key-mapping-to-a-h.patch
+........G.. 0556-udev-builtin-keyboard-invert-a-condition.patch
+........G.. 0557-udev-builtin-keyboard-add-support-for-EVDEV_ABS_.patch
+........G.. 0558-hwdb-sync-60-evdev.hwdb-from-systemd-v235.patch
+........G.. 0559-journal-ensure-open-journals-from-find_journal-3973.patch
+........G.. 0560-journal-only-check-available-space-when-journal-is-o.patch
+........G.. 0561-automount-if-an-automount-unit-is-masked-don-t-react.patch
+........G.. 0562-units-add-Install-section-to-remote-cryptsetup.targe.patch
+........G.. 0563-units-replace-remote-cryptsetup-pre.target-with-remo.patch
+........G.. 0564-man-add-a-note-about-_netdev-usage.patch
+........G.. 0565-units-make-remote-cryptsetup.target-also-after-crypt.patch
+........G.. 0566-cryptsetup-generator-use-after-free.patch
+........G.. 0567-manager-fix-connecting-to-bus-when-dbus-is-actually-.patch
+........G.. 0568-journal-remote-make-url-option-support-arbitrary-url.patch
+........G.. 0569-journald-make-maximum-size-of-stream-log-lines-confi.patch
+........G.. 0570-service-serialize-information-about-currently-execut.patch
+........G.. 0571-tests-add-new-test-for-issue-518.patch
+........G.. 0572-tests-in-RHEL-7-we-don-t-have-python3-by-default.patch
+........G.. 0573-service-attempt-to-execute-next-main-command-only-fo.patch
+........G.. 0574-timedatectl-stop-using-xstrftime.patch
+........G.. 0575-Add-support-to-read-lz4-compressed-journals.patch
+........G.. 0576-journald-never-block-when-sending-messages-on-NOTIFY.patch
+........G.. 0577-journal-restore-watchdog-support.patch
+........G.. 0578-cgroup-resource-property-setting-ignored-if-einval.patch
+........G.. 0579-fileio-add-new-helper-call-read_line-as-bounded-getl.patch
+........G.. 0580-def-add-new-constant-LONG_LINE_MAX.patch
+........G.. 0581-fileio-rework-read_one_line_file-on-top-of-read_line.patch
+........G.. 0582-cgroup-util-replace-one-use-of-fgets-by-read_line.patch
+........G.. 0583-conf-parse-remove-4K-line-length-limit.patch
+........G.. 0584-test-conf-parser-add-tests-for-config-parser.patch
+........G.. 0585-fileio-use-_cleanup_-for-FILE-unlocking.patch
+........G.. 0586-test-fileio-also-test-read_line-with-actual-files.patch
+........G.. 0587-fileio-return-0-from-read_one_line_file-on-success.patch
+........G.. 0588-man-fix-description-of-force-in-halt-8-7392.patch
+........G.. 0589-journal-return-better-error-for-empty-files.patch
+........G.. 0590-journalctl-continue-operation-even-if-we-run-into-an.patch
+........G.. 0591-journal-remove-error-check-that-never-happens.patch
+........G.. 0592-sd-journal-various-clean-ups-and-modernizations.patch
+........G.. 0593-journalctl-when-we-fail-to-open-a-journal-file-print.patch
+........G.. 0594-journald-fix-accuracy-of-watchdog-timer-event.patch
+........G.. 0595-core-fix-the-reversed-sanity-check-when-setting-Star.patch
+........G.. 0596-shared-dropin-ignore-ENAMETOOLONG-when-checking-drop.patch
+........G.. 0597-cryptsetup-when-unlocking-always-put-path-to-the-obj.patch
+........G.. 0598-cryptsetup-use-more-descriptive-name-for-the-variabl.patch
+........G.. 0599-cryptsetup-generator-do-not-bind-to-the-decrypted-de.patch
+........G.. 0600-shared-cgroup-utils-_CGROUP_CONTROLLER_MASK_ALL-does.patch
+........G.. 0601-automount-ack-automount-requests-even-when-already-m.patch
+........G.. 0602-udev-net_id-add-support-for-platform-bus-ACPI-mostly.patch
+........G.. 0603-journald-native-Fix-typo-in-MANDLOCK-message.patch
+........G.. 0604-process-util-make-our-freeze-routine-do-something-us.patch
+........G.. 0605-dbus-propagate-errors-from-bus_init_system-and-bus_i.patch
+........G.. 0606-bus-util.c-fix-TasksMax-property-assignment.patch
+........G.. 0607-sparse-avoid-clash-with-__bitwise-and-__force-from-4.patch
+........G.. 0608-core-Let-two-more-booleans-survive-a-daemon-reload.patch
+........G.. 0609-core-don-t-choke-if-a-unit-another-unit-triggers-van.patch
+........G.. 0610-sd-journal-properly-handle-inotify-queue-overflow.patch
+........G.. 0611-sd-journal-make-sure-it-s-safe-to-call-sd_journal_pr.patch
+........G.. 0612-journalctl-Periodically-call-sd_journal_process-in-j.patch
+........G.. 0613-sd-journal-when-picking-up-a-new-file-compare-inode-.patch
+........G.. 0614-umount-always-use-MNT_FORCE-in-umount_all-7213.patch
+........G.. 0615-core-Implement-timeout-based-umount-remount-limit.patch
+........G.. 0616-core-Implement-sync_with_progress.patch
+........G.. 0670-Refuse-dbus-message-paths-longer-than-BUS_PATH_SIZE_.patch
+........G.. 0671-Allocate-temporary-strings-to-hold-dbus-paths-on-the.patch
+........G.. 0672-sd-bus-if-we-receive-an-invalid-dbus-message-ignore-.patch
+added       0735-udev-check-if-the-spawned-PID-didn-t-exit-after-reap.patch
+added       0736-udev-call-poll-again-after-killing-the-spawned-proce.patch
+added       0737-udev-check-age-against-both-timeouts-to-prevent-inte.patch
+added       0738-avoid-possible-hang-if-our-child-process-hangs.patch
+........G.. 60-alias-kmsg.rules
+........G.. 76-phys-port-name.conf
+........G.. 76-phys-port-name.rules
+........G.. 99-default-disable.preset
+........G.. CA-117731.patch
+........G.. allow-tag-nomatch.patch
+........G.. disable-acpi-events.patch
+........G.. disable-journal.patch
+........G.. fix-mtd_probe-build.patch
+........G.. journal-disable-kmsg.patch
+........G.. listen.conf
+........G.. net-ifnames.patch
+........G.. org.freedesktop.hostname1.policy
+........G.. org.freedesktop.import1.policy
+........G.. org.freedesktop.locale1.policy
+........G.. org.freedesktop.login1.policy
+........G.. org.freedesktop.machine1.policy
+........G.. org.freedesktop.systemd1.policy
+........G.. org.freedesktop.timedate1.policy
+........G.. phys-port-name-gen
+........G.. rc.local
+.M......G.. systemd-219.tar.gz
+........G.. systemd-sysv-convert
+SM5.....G.. systemd.spec
+........G.. yum-protect-systemd.conf
+
+*** systemtap-4.0-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** test-ring0-1.0.4-1.src.rpm EVR unchanged, new file differs
+*** varstored-guard-0.6.0-1.src.rpm => varstored-guard-0.6.1-3.src.rpm
+Summary: Deprivileged XAPI socket Daemon for EFI variable storage
+License: LGPL
+removed     varstored-guard-0.6.0.tar.gz
+added       varstored-guard-0.6.1.tar.gz
+S.5........ varstored-guard.spec
+
+*** vcputune-2.0.1-1.xs44.src.rpm EVR unchanged, new file differs
+*** vendor-drivers-1.0.2-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** vhd-tool-0.43.0-1.el7.centos.src.rpm => vhd-tool-0.43.0-4.el7.centos.src.rpm
+Summary: Command-line tools for manipulating and streaming .vhd format files
+License: LGPL+linking exception
+S.5........ vhd-tool.spec
+
+*** vhostmd-0.4-xs30.src.rpm EVR unchanged, new file differs
+*** vmss-1.1.0-1.src.rpm EVR unchanged, new file differs
+*** vncsnapshot-1.2a-xs18.src.rpm EVR unchanged, new file differs
+*** vncterm-10.2.0-2.src.rpm EVR unchanged, new file differs
+*** wsproxy-1.12.0-2.el7.centos.src.rpm => wsproxy-1.12.0-5.el7.centos.src.rpm
+Summary: Websockets proxy for VNC traffic
+License: LGPL+linking exception
+S.5........ wsproxy.spec
+
+*** xapi-1.249.10-1.src.rpm => xapi-1.249.19-1.src.rpm
+Summary: xapi - xen toolstack for XCP
+License: LGPL+linking exception
+S.5........ xapi.spec
+removed     xen-api-1.249.10.tar.gz
+added       xen-api-1.249.19.tar.gz
+
+*** xapi-nbd-1.11.0-1.el7.centos.src.rpm => xapi-nbd-1.11.0-3.el7.centos.src.rpm
+Summary: NBD server that exposes XenServer disks
+License: LGPL2.1 + OCaml linking exception
+S.5........ xapi-nbd.spec
+
+*** xapi-storage-11.19.0_sxm2-1.el7.centos.src.rpm => xapi-storage-11.19.0_sxm2-3.el7.centos.src.rpm
+Summary: Xapi storage interface
+License: LGPL+linking exception
+S.5........ xapi-storage.spec
+
+*** xapi-storage-script-0.34.0-1.el7.centos.src.rpm => xapi-storage-script-0.34.1-2.el7.centos.src.rpm
+Summary: Xapi storage script plugin server
+License: LGPL+linking exception
+removed     xapi-storage-script-0.34.0.tar.gz
+added       xapi-storage-script-0.34.1.tar.gz
+S.5........ xapi-storage-script.spec
+
+*** xcp-networkd-0.56.0-1.el7.centos.src.rpm => xcp-networkd-0.56.1-3.el7.centos.src.rpm
+Summary: Simple host network management service for the xapi toolstack
+License: LGPL
+removed     xcp-networkd-0.56.0.tar.gz
+added       xcp-networkd-0.56.1.tar.gz
+S.5........ xcp-networkd.spec
+
+*** xcp-python-libs-2.3.4-1.src.rpm EVR unchanged, new file differs
+*** xcp-rrdd-1.33.0-2.el7.centos.src.rpm => xcp-rrdd-1.33.0-5.el7.centos.src.rpm
+Summary: Statistics gathering daemon for the xapi toolstack
+License: LGPL
+S.5........ xcp-rrdd.spec
+
+*** xen-4.13.1-9.12.src.rpm => xen-4.13.4-9.17.src.rpm
+Summary: Xen is a virtual machine monitor
+License: Portions GPLv2 (See COPYING)
+removed     REQUIRES /usr/include/gnu/stubs-32.h  
+removed     REQUIRES python-devel  
+removed     REQUIRES pandoc  
+removed     REQUIRES gettext-devel  
+removed     REQUIRES glib2-devel  
+removed     REQUIRES curl-devel  
+removed     REQUIRES gnutls-devel  
+removed     REQUIRES systemd  
+added       REQUIRES python2-devel  
+added       REQUIRES python2-rpm-macros  
+added       REQUIRES perl-podlators  
+S.5........ 0001-Allocate-space-in-structs-pre-emptively-to-increase-.patch
+S.5........ 0001-efi-Workaround-page-fault-during-runtime-service.patch
+added       0001-tools-Fix-pkg-config-file-for-libxenstore.patch
+S.5........ 0001-x86-HVM-Avoid-cache-flush-operations-during-hvm_load.patch
+S.5........ 0001-x86-add-XEN_SYSCTL_spec_ctrl.patch
+S.5........ 0001-x86-msr-Blacklist-various-MSRs-which-guests-definite.patch
+removed     0001-x86-spec-ctrl-CPUID-MSR-definitions-for-Special-Regi.patch
+removed     0001-x86-svm-do-not-try-to-handle-recalc-NPT-faults-immed.patch
+removed     0001-x86-tsx-Cope-with-TSX-deprecation-on-SKL-KBL-CFL-WHL.patch
+S.5........ 0002-efi-Ensure-incorrectly-typed-runtime-services-get-ma.patch
+S.5........ 0002-x86-add-xen-spec-ctrl-utility.patch
+S.5........ 0002-x86-hpet-Use-singe-apic-vector-rather-than-irq_descs.patch
+removed     0002-x86-spec-ctrl-Mitigate-the-Special-Register-Buffer-D.patch
+..5........ 0003-tools-ocaml-xenstored-add-cooperative-live-update-co.patch
+S.5........ 0004-microcode-add-sequential-application-policy.patch
+S.5........ 0005-x86-msr-Expose-cpu_has_tsx_ctrl-via-MSR_ARCH_CAPS.patch
+S.5........ 0006-x86-vpt-fix-injection-to-remote-vCPU.patch
+S.5........ 0007-hypercall-XENMEM_get_mfn_from_pfn.patch
+S.5........ add-pv-iommu-foreign-support.patch
+S.5........ add-pv-iommu-headers.patch
+S.5........ add-pv-iommu-local-domain-ops.patch
+removed     backport-005d5eaa458d.patch
+removed     backport-0c8c10d12e98.patch
+added       backport-0eae016b6e3d.patch
+added       backport-164a0b9653f4.patch
+added       backport-1787cc167906.patch
+S.5........ backport-1b3cec69bf30.patch
+removed     backport-1c7a98cab910.patch
+removed     backport-28b78171271d.patch
+added       backport-2928c1d250b1.patch
+removed     backport-2b34d8cd734a.patch
+S.5........ backport-3670abcaf032.patch
+added       backport-368096b9c4a2.patch
+added       backport-3e09045991cd.patch
+removed     backport-3e41b727f783.patch
+S.5........ backport-4489ffdec331.patch
+removed     backport-44ac57af81ff.patch
+added       backport-4624912c0b55.patch
+removed     backport-493e143a8289.patch
+removed     backport-56e117f504f8.patch
+added       backport-570da5423dbe.patch
+removed     backport-572e349de17e.patch
+removed     backport-5fef1fd71366.patch
+added       backport-60390ccb8b9b.patch
+removed     backport-60c0444fae21.patch
+added       backport-68d757df8dd2.patch
+added       backport-6a9f5477637a.patch
+added       backport-6d45368a0a89.patch
+removed     backport-710f62cc826b.patch
+added       backport-737190abb174.patch
+added       backport-73c932d0ea43.patch
+removed     backport-74c5729bb33d.patch
+removed     backport-780d3761f117.patch
+added       backport-79ca512a1fa6.patch
+removed     backport-7a76deb101c8.patch
+removed     backport-7d6f52d47b3d.patch
+added       backport-7e5cffcd1e93.patch
+S.5........ backport-8171e0796542.patch
+added       backport-81b2b328a26c.patch
+added       backport-834cb8761051.patch
+removed     backport-8b9be8f415f2.patch
+removed     backport-90b014a6e6ec.patch
+added       backport-91bac8ad7c06.patch
+removed     backport-9318fdf757ec.patch
+added       backport-935d501ccbf5.patch
+added       backport-93c9edbef51b.patch
+added       backport-9c3b9800e201.patch
+removed     backport-9f3e9139fa6c.patch
+S.5........ backport-9fdcf851689c.patch
+removed     backport-a6ed77f1e033.patch
+added       backport-a85f67b2658e.patch
+S.5........ backport-ab5bfc049e8e.patch
+added       backport-afab477fba3b.patch
+added       backport-b11380f6cd58.patch
+added       backport-b17546d7f33e.patch
+added       backport-b4bb02d5999a.patch
+S.5........ backport-b6641f28c593.patch
+added       backport-b672695e7488.patch
+added       backport-b6b672e8a925.patch
+removed     backport-b6da9d0414d6.patch
+removed     backport-b72d8870b5f6.patch
+S.5........ backport-b7c333016e3d.patch
+S.5........ backport-b9e9ccbb11e4.patch
+removed     backport-c10b2931bf63.patch
+removed     backport-c301211a5111.patch
+added       backport-c76cfada1cfa.patch
+removed     backport-ca95985a6488.patch
+S.5........ backport-cd7dedad8209.patch
+removed     backport-d064b6581bbd.patch
+removed     backport-d112db32c622.patch
+added       backport-d8a6a8b36d86.patch
+S.5........ backport-dacb80f9757c.patch
+S.5........ backport-dc036ab9d506.patch
+added       backport-dd6c062a7a4a.patch
+added       backport-e083d753924b.patch
+added       backport-e21a6a4f966a.patch
+S.5........ backport-e373bc1bdc59.patch
+added       backport-eb7518b89be6.patch
+removed     backport-f1055a202d49.patch
+added       backport-f17d848c4caa-fix.patch
+added       backport-f26bb285949b.patch
+added       backport-f40e1c52e4e0.patch
+removed     backport-f63b20a213ec.patch
+removed     backport-fc44a7014caf.patch
+removed     backport-fe36a173d110.patch
+..5........ build-tweaks.patch
+S.5........ changeset-info.patch
+S.5........ configure-build.patch
+S.5........ detect-nehalem-c-state.patch
+S.5........ gvt-g-hvmloader+rombios.patch
+S.5........ hitachi-driver-domain-ssid.patch
+S.5........ libfsimage-Add-support-for-btrfs.patch
+S.5........ ocaml-cpuid-helpers.patch
+S.5........ oxenstore-large-packets.patch
+added       retrofit-max-featuresets.patch
+S.5........ revert-ca2eee92df44.patch
+S.5........ tweak-iommu-policy.patch
+S.5........ upstream-pv-iommu-tools.patch
+removed     xen-4.13.1.tar.gz
+added       xen-4.13.4.tar.gz
+S.5........ xen-emulate-Bypass-the-emulator-if-emulation-fails.patch
+removed     xen-override-caching-cp-26562.patch
+S.5........ xen-reexecute-instn-under-monitor-trap.patch
+S.5........ xen-tweak-cmdline-defaults.patch
+S.5........ xen.spec
+S.5........ xenguest.patch
+removed     xsa115-4.13-c-0001-tools-xenstore-allow-removing-child-of-a-node-exceed.patch
+removed     xsa115-4.13-c-0002-tools-xenstore-ignore-transaction-id-for-un-watch.patch
+removed     xsa115-4.13-c-0003-tools-xenstore-fix-node-accounting-after-failed-node.patch
+removed     xsa115-4.13-c-0004-tools-xenstore-simplify-and-rename-check_event_node.patch
+removed     xsa115-4.13-c-0005-tools-xenstore-check-privilege-for-XS_IS_DOMAIN_INTR.patch
+removed     xsa115-4.13-c-0006-tools-xenstore-rework-node-removal.patch
+removed     xsa115-4.13-c-0007-tools-xenstore-fire-watches-only-when-removing-a-spe.patch
+removed     xsa115-4.13-c-0008-tools-xenstore-introduce-node_perms-structure.patch
+removed     xsa115-4.13-c-0009-tools-xenstore-allow-special-watches-for-privileged-.patch
+removed     xsa115-4.13-c-0010-tools-xenstore-avoid-watch-events-for-nodes-without-.patch
+removed     xsa115-o-0001-tools-ocaml-xenstored-ignore-transaction-id-for-un-w.patch
+removed     xsa115-o-0002-tools-ocaml-xenstored-check-privilege-for-XS_IS_DOMA.patch
+removed     xsa115-o-0003-tools-ocaml-xenstored-unify-watch-firing.patch
+removed     xsa115-o-0004-tools-ocaml-xenstored-introduce-permissions-for-spec.patch
+removed     xsa115-o-0005-tools-ocaml-xenstored-avoid-watch-events-for-nodes-w.patch
+removed     xsa115-o-0006-tools-ocaml-xenstored-add-xenstored.conf-flag-to-tur.patch
+removed     xsa322-4.14-c.patch
+removed     xsa322-o.patch
+removed     xsa323.patch
+removed     xsa324.patch
+removed     xsa325-4.14.patch
+removed     xsa330.patch
+removed     xsa333.patch
+removed     xsa334.patch
+removed     xsa336.patch
+removed     xsa337xsa337-4.13-1.patch
+removed     xsa337xsa337-4.13-2.patch
+removed     xsa338.patch
+removed     xsa339.patch
+removed     xsa340.patch
+removed     xsa342-4.13.patch
+removed     xsa343xsa343-1.patch
+removed     xsa343xsa343-2.patch
+removed     xsa343xsa343-3.patch
+removed     xsa344xsa344-4.13-1.patch
+removed     xsa344xsa344-4.13-2.patch
+removed     xsa345-4.130001-x86-mm-Refactor-map_pages_to_xen-to-have-only-a-sing.patch
+removed     xsa345-4.130002-x86-mm-Refactor-modify_xen_mappings-to-have-one-exit.patch
+removed     xsa345-4.130003-x86-mm-Prevent-some-races-in-hypervisor-mapping-upda.patch
+removed     xsa346xsa346-4.13-1.patch
+removed     xsa346xsa346-4.13-2.patch
+removed     xsa347xsa347-4.13-1.patch
+removed     xsa347xsa347-4.13-2.patch
+removed     xsa347xsa347-4.13-3.patch
+removed     xsa348-4.13-1.patch
+removed     xsa348-4.13-2.patch
+removed     xsa348-4.13-3.patch
+removed     xsa351-x86-4.13-1.patch
+removed     xsa351-x86-4.13-2.patch
+removed     xsa352.patch
+removed     xsa353.patch
+removed     xsa355.patch
+removed     xsa358.patch
+removed     xsa359.patch
+removed     xsa360.patch
+removed     xsa373xsa373-4.13-1.patch
+removed     xsa373xsa373-4.13-2.patch
+removed     xsa373xsa373-4.13-3.patch
+removed     xsa373xsa373-4.13-4.patch
+removed     xsa373xsa373-4.13-5.patch
+removed     xsa375.patch
+removed     xsa377.patch
+removed     xsa378-4.13-0a.patch
+removed     xsa378-4.13-0b.patch
+removed     xsa378-4.13-0c.patch
+removed     xsa378-4.13-1.patch
+removed     xsa378-4.13-2.patch
+removed     xsa378-4.13-3.patch
+removed     xsa378-4.13-4.patch
+removed     xsa378-4.13-5.patch
+removed     xsa378-4.13-6.patch
+removed     xsa378-4.13-7.patch
+removed     xsa378-4.13-8.patch
+removed     xsa379-4.13.patch
+removed     xsa380-4.13-1.patch
+removed     xsa380-4.13-2.patch
+removed     xsa382.patch
+removed     xsa384-4.14.patch
+
+*** xen-crashdump-analyser-2.5.5-2.src.rpm EVR unchanged, new file differs
+*** xenopsd-0.150.5.1-1.el7.centos.src.rpm => xenopsd-0.150.9-1.el7.centos.src.rpm
+Summary: Simple VM manager
+License: LGPL
+removed     xenopsd-0.150.5.1.tar.gz
+added       xenopsd-0.150.9.tar.gz
+S.5........ xenopsd.spec
+
+*** xenserver-dracut-10-1.src.rpm EVR unchanged, new file differs
+*** xenserver-hwdata-20190202-1.src.rpm => xenserver-hwdata-20210516-1.src.rpm
+Summary: Additional hardware identification and configuration data
+License: GPLv2+
+.M5.....G.. xenserver-hwdata.spec
+SM5.....G.. xenserver-hwdata.tar.gz
+
+*** xenserver-plymouth-theme-1.2.0-1.src.rpm EVR unchanged, new file differs
+*** xenserver-release-8.2.0-2.src.rpm => xenserver-release-8.2.1-8.src.rpm
+Summary: XenServer release file
+License: GPLv2
+S.5........ xenserver-release.spec
+S.5........ xenserver-release.tar.gz
+
+*** xenserver-status-report-1.2.8-1.src.rpm => xenserver-status-report-1.2.10-1.src.rpm
+Summary: A program that generates status reports for a XenServer host
+License: GPLv2+
+S.5........ xenserver-status-report.spec
+S.5........ xenserver-status-report.tar.gz
+
+*** xha-10.1.0-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** xs-obsolete-packages-1-7.src.rpm => xs-obsolete-packages-1-8.src.rpm
+Summary: A package to obsolete retired packages
+License: Public Domain
+S.5........ xs-obsolete-packages.spec
+
+*** xs-opam-repo-6.35.6-1.el7.centos.src.rpm => xs-opam-repo-6.35.8-3.el7.centos.src.rpm
+Summary: Build and install OCaml libraries from Opam repository
+License: Various
+added       REQUIRES libev-devel  
+removed     xs-opam-repo-6.35.6.tar.gz
+added       xs-opam-repo-6.35.8.tar.gz
+S.5........ xs-opam-repo.spec
+
+*** xs-opam-src-5.1.0-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** xs-openssl-1.1.1c-2.el7.centos.src.rpm EVR unchanged, new file differs
+*** xsconsole-10.1.11-1.src.rpm => xsconsole-10.1.13-1.src.rpm
+Summary: XenServer Host Configuration Console
+License: GPL2
+S.5........ xsconsole.spec
+S.5........ xsconsole.tar.gz
+
+*** xsifstat-1.0.1-1.el7.centos.src.rpm EVR unchanged, new file differs
+*** xsiostat-1.0.1-1.el7.centos.src.rpm EVR unchanged, new file differs
+
+
+-------------------- Vendor: CentOS ------------------------
+
+*** GeoIP-1.5.0-11.el7.src.rpm EVR unchanged, new file differs
+*** OpenIPMI-2.0.23-2.el7.src.rpm EVR unchanged, new file differs
+*** PyPAM-0.5.0-19.el7.src.rpm EVR unchanged, new file differs
+*** acl-2.2.51-14.el7.src.rpm EVR unchanged, new file differs
+*** acpica-tools-20160527-1.el7.src.rpm EVR unchanged, new file differs
+*** aic94xx-firmware-30-6.el7.src.rpm EVR unchanged, new file differs
+*** arptables-0.0.4-8.el7.src.rpm EVR unchanged, new file differs
+*** at-3.1.13-23.el7.src.rpm EVR unchanged, new file differs
+*** attr-2.4.46-13.el7.src.rpm EVR unchanged, new file differs
+*** audit-2.8.1-3.el7_5.1.src.rpm EVR unchanged, new file differs
+*** autogen-5.18-5.el7.src.rpm EVR unchanged, new file differs
+*** avahi-0.6.31-19.el7.src.rpm EVR unchanged, new file differs
+*** basesystem-10.0-7.el7.centos.src.rpm EVR unchanged, new file differs
+*** bash-4.2.46-30.el7.src.rpm EVR unchanged, new file differs
+*** bash-completion-2.1-6.el7.src.rpm EVR unchanged, new file differs
+*** bc-1.06.95-13.el7.src.rpm EVR unchanged, new file differs
+*** bind-9.9.4-61.el7_5.1.src.rpm EVR unchanged, new file differs
+*** binutils-2.27-28.base.el7_5.1.src.rpm EVR unchanged, new file differs
+*** boost-1.53.0-27.el7.src.rpm EVR unchanged, new file differs
+*** bridge-utils-1.5-9.el7.src.rpm EVR unchanged, new file differs
+*** bzip2-1.0.6-13.el7.src.rpm EVR unchanged, new file differs
+*** centos-logos-70.0.6-3.el7.centos.src.rpm EVR unchanged, new file differs
+*** ceph-common-0.94.5-2.el7.src.rpm EVR unchanged, new file differs
+*** chkconfig-1.7.4-1.el7.src.rpm EVR unchanged, new file differs
+*** chrony-3.2-2.el7.src.rpm EVR unchanged, new file differs
+*** cifs-utils-6.2-10.el7.src.rpm EVR unchanged, new file differs
+*** compat-db-4.7.25-28.el7.src.rpm EVR unchanged, new file differs
+*** compat-gcc-32-3.2.3-72.el7.src.rpm EVR unchanged, new file differs
+*** coreutils-8.22-21.el7.src.rpm EVR unchanged, new file differs
+*** cpio-2.11-27.el7.src.rpm EVR unchanged, new file differs
+*** cracklib-2.9.0-11.el7.src.rpm EVR unchanged, new file differs
+*** cronie-1.4.11-19.el7.src.rpm EVR unchanged, new file differs
+*** crontabs-1.11-6.20121102git.el7.src.rpm EVR unchanged, new file differs
+*** cryptsetup-1.7.4-4.el7.src.rpm EVR unchanged, new file differs
+*** cups-1.6.3-35.el7.src.rpm EVR unchanged, new file differs
+*** curl-7.29.0-46.el7.src.rpm EVR unchanged, new file differs
+*** cyrus-sasl-2.1.26-23.el7.src.rpm EVR unchanged, new file differs
+*** dbus-1.10.24-7.el7.src.rpm EVR unchanged, new file differs
+*** device-mapper-persistent-data-0.7.3-3.el7.src.rpm EVR unchanged, new file differs
+*** dhcp-4.2.5-68.el7.centos.1.src.rpm EVR unchanged, new file differs
+*** diffutils-3.3-4.el7.src.rpm EVR unchanged, new file differs
+*** ding-libs-0.6.1-29.el7.src.rpm EVR unchanged, new file differs
+*** dlm-4.0.7-1.el7.src.rpm EVR unchanged, new file differs
+*** dmidecode-3.0-5.el7.src.rpm EVR unchanged, new file differs
+*** dosfstools-3.0.20-9.el7.src.rpm EVR unchanged, new file differs
+*** dyninst-9.3.1-1.el7.src.rpm EVR unchanged, new file differs
+*** e2fsprogs-1.42.9-12.el7_5.src.rpm EVR unchanged, new file differs
+*** ebtables-2.0.10-16.el7.src.rpm EVR unchanged, new file differs
+*** ed-1.9-4.el7.src.rpm EVR unchanged, new file differs
+*** efibootmgr-15-2.el7.src.rpm EVR unchanged, new file differs
+*** efivar-31-4.el7.src.rpm EVR unchanged, new file differs
+*** elfutils-0.170-4.el7.src.rpm EVR unchanged, new file differs
+*** expat-2.1.0-10.el7_3.src.rpm EVR unchanged, new file differs
+*** expect-5.45-14.el7_1.src.rpm EVR unchanged, new file differs
+*** fcoe-utils-1.0.32-1.el7.src.rpm EVR unchanged, new file differs
+*** file-5.11-33.el7.src.rpm EVR unchanged, new file differs
+*** filesystem-3.2-25.el7.src.rpm EVR unchanged, new file differs
+*** findutils-4.5.11-5.el7.src.rpm EVR unchanged, new file differs
+*** fipscheck-1.4.1-6.el7.src.rpm EVR unchanged, new file differs
+*** fontconfig-2.10.95-11.el7.src.rpm EVR unchanged, new file differs
+*** fontpackages-1.44-8.el7.src.rpm EVR unchanged, new file differs
+*** freetype-2.4.11-15.el7.src.rpm EVR unchanged, new file differs
+*** gawk-4.0.2-4.el7_3.1.src.rpm EVR unchanged, new file differs
+*** gcc-4.8.5-28.el7_5.1.src.rpm EVR unchanged, new file differs
+*** gdbm-1.10-8.el7.src.rpm EVR unchanged, new file differs
+*** gdisk-0.8.6-5.el7.src.rpm EVR unchanged, new file differs
+*** gettext-0.19.8.1-2.el7.src.rpm EVR unchanged, new file differs
+*** gfs2-utils-3.1.10-6.el7.src.rpm EVR unchanged, new file differs
+*** glib2-2.54.2-2.el7.src.rpm EVR unchanged, new file differs
+*** glibc-2.17-222.el7.src.rpm EVR unchanged, new file differs
+*** gmp-6.0.0-15.el7.src.rpm EVR unchanged, new file differs
+*** gnu-free-fonts-20120503-8.el7.src.rpm EVR unchanged, new file differs
+*** gnupg2-2.0.22-5.el7_5.src.rpm EVR unchanged, new file differs
+*** gnutls-3.3.26-9.el7.src.rpm => gnutls-3.3.29-9.el7_6.src.rpm
+Summary: A TLS protocol implementation
+License: GPLv3+ and LGPLv2+
+.M......... gnutls-3.1.11-nosrp.patch
+.M......... gnutls-3.2.7-rpath.patch
+.M......... gnutls-3.3.22-eapp-data.patch
+removed     gnutls-3.3.26-cve-2017-7869.patch
+.M......... gnutls-3.3.26-dh-params-1024.patch
+removed     gnutls-3.3.26-fips-rsa-keygen.patch
+removed     gnutls-3.3.26-fix-coverity-issues.patch
+removed     gnutls-3.3.26-fix-uninitialized.patch
+removed     gnutls-3.3.26-hobbled.tar.xz
+removed     gnutls-3.3.26-pin-value.patch
+removed     gnutls-3.3.26-remove-status-req-ext-parsing.patch
+removed     gnutls-3.3.26-set-unique-id-tests.patch
+added       gnutls-3.3.29-bring-back-hmac-sha256.patch
+added       gnutls-3.3.29-cbc-mac-verify-ssl3-min-pad.patch
+added       gnutls-3.3.29-cli-sni-hostname.patch
+added       gnutls-3.3.29-disable-failing-tests.patch
+added       gnutls-3.3.29-do-not-mark-object-as-private.patch
+added       gnutls-3.3.29-do-not-run-sni-hostname-windows.patch
+added       gnutls-3.3.29-dummy-wait-account-len-field.patch
+added       gnutls-3.3.29-dummy-wait-hash-same-amount-of-blocks.patch
+added       gnutls-3.3.29-fips140-fix-ecdsa-kat-selftest.patch
+added       gnutls-3.3.29-hobbled.tar.xz
+added       gnutls-3.3.29-pkcs11-retrieve-pin-from-uri-once.patch
+added       gnutls-3.3.29-re-enable-check-cert-write.patch
+added       gnutls-3.3.29-remove-hmac-sha384-sha256-from-default.patch
+added       gnutls-3.3.29-serv-large-key-resumption.patch
+added       gnutls-3.3.29-serv-sni-hostname.patch
+added       gnutls-3.3.29-serv-unrec-name.patch
+added       gnutls-3.3.29-testpkcs11.patch
+added       gnutls-3.3.29-tests-pkcs11-increase-RSA-gen-size.patch
+added       gnutls-3.3.29-tests-sni-hostname.patch
+.M......... gnutls-3.3.8-fips-key.patch
+.M......... gnutls-3.3.8-padlock-disable.patch
+SM5........ gnutls.spec
+.M......... hobble-gnutls
+.M......... libgnutls-config
+
+*** gpgme-1.3.2-5.el7.src.rpm EVR unchanged, new file differs
+*** grep-2.20-3.el7.src.rpm EVR unchanged, new file differs
+*** groff-1.22.2-8.el7.src.rpm EVR unchanged, new file differs
+*** grubby-8.28-23.el7.src.rpm EVR unchanged, new file differs
+*** gssproxy-0.7.0-17.el7.src.rpm EVR unchanged, new file differs
+*** gzip-1.5-10.el7.src.rpm EVR unchanged, new file differs
+*** hardlink-1.0-19.el7.src.rpm EVR unchanged, new file differs
+*** hdparm-9.43-5.el7.src.rpm EVR unchanged, new file differs
+*** hostname-3.13-3.el7.src.rpm EVR unchanged, new file differs
+*** hwdata-0.252-8.8.el7.src.rpm EVR unchanged, new file differs
+*** icu-50.1.2-15.el7.src.rpm EVR unchanged, new file differs
+*** initscripts-9.49.41-1.el7_5.2.src.rpm EVR unchanged, new file differs
+*** ipmitool-1.8.18-7.el7.src.rpm EVR unchanged, new file differs
+*** ipset-6.29-1.el7.src.rpm EVR unchanged, new file differs
+*** iptables-1.4.21-24.1.el7_5.src.rpm EVR unchanged, new file differs
+*** iputils-20160308-10.el7.src.rpm EVR unchanged, new file differs
+*** iscsi-initiator-utils-6.2.0.874-7.el7.src.rpm EVR unchanged, new file differs
+*** jansson-2.10-1.el7.src.rpm added
+Summary: C library for encoding, decoding and manipulating JSON data
+License: MIT
+jansson-2.10.tar.bz2
+jansson.spec
+
+*** json-c-0.11-4.el7_0.src.rpm EVR unchanged, new file differs
+*** kbd-1.15.5-13.el7.src.rpm EVR unchanged, new file differs
+*** keyutils-1.5.8-3.el7.src.rpm EVR unchanged, new file differs
+*** kmod-20-21.el7.src.rpm EVR unchanged, new file differs
+*** krb5-1.15.1-19.el7.src.rpm EVR unchanged, new file differs
+*** less-458-9.el7.src.rpm EVR unchanged, new file differs
+*** libaio-0.3.109-13.el7.src.rpm EVR unchanged, new file differs
+*** libarchive-3.1.2-10.el7_2.src.rpm EVR unchanged, new file differs
+*** libassuan-2.1.0-3.el7.src.rpm EVR unchanged, new file differs
+*** libcap-2.22-9.el7.src.rpm EVR unchanged, new file differs
+*** libcap-ng-0.7.5-4.el7.src.rpm EVR unchanged, new file differs
+*** libcgroup-0.41-15.el7.src.rpm EVR unchanged, new file differs
+*** libconfig-1.4.9-5.el7.src.rpm EVR unchanged, new file differs
+*** libcroco-0.6.11-1.el7.src.rpm EVR unchanged, new file differs
+*** libdb-5.3.21-24.el7.src.rpm EVR unchanged, new file differs
+*** libdwarf-20130207-4.el7.src.rpm EVR unchanged, new file differs
+*** libedit-3.0-12.20121213cvs.el7.src.rpm EVR unchanged, new file differs
+*** libestr-0.1.9-2.el7.src.rpm EVR unchanged, new file differs
+*** libev-4.15-7.el7.src.rpm added
+Summary: High-performance event loop/event model with lots of features
+License: BSD or GPLv2+
+libev-4.15-Modernize-the-configure.ac.patch
+libev-4.15-Respect-the-CFLAGS-if-defined.patch
+libev-4.15.tar.gz
+libev.spec
+
+*** libevent-2.0.21-4.el7.src.rpm EVR unchanged, new file differs
+*** libfastjson-0.99.4-2.el7.src.rpm EVR unchanged, new file differs
+*** libffi-3.0.13-18.el7.src.rpm EVR unchanged, new file differs
+*** libgcrypt-1.5.3-14.el7.src.rpm EVR unchanged, new file differs
+*** libgpg-error-1.12-3.el7.src.rpm EVR unchanged, new file differs
+*** libhbaapi-2.2.9-6.el7.src.rpm EVR unchanged, new file differs
+*** libhbalinux-1.0.17-2.el7.src.rpm EVR unchanged, new file differs
+*** libidn-1.28-4.el7.src.rpm EVR unchanged, new file differs
+*** libjpeg-turbo-1.2.90-5.el7.src.rpm EVR unchanged, new file differs
+*** libldb-1.2.2-1.el7.src.rpm => libldb-1.5.4-2.el7.src.rpm
+Summary: A schema-less, ldap like, API and database
+License: LGPLv3+
+removed     REQUIRES libtalloc-devel >= 2.1.2
+removed     REQUIRES libtdb-devel >= 1.3.5
+removed     REQUIRES libtevent-devel >= 0.9.24
+added       REQUIRES libtalloc-devel >= 2.1.16
+added       REQUIRES libtdb-devel >= 1.3.18
+added       REQUIRES libtevent-devel >= 0.9.39
+added       CVE-2021-20277.patch
+removed     ldb-1.2.2.tar.gz
+added       ldb-1.5.4.tar.gz
+S.5........ libldb.spec
+
+*** libmnl-1.0.3-7.el7.src.rpm EVR unchanged, new file differs
+*** libnetfilter_conntrack-1.0.6-1.el7_3.src.rpm EVR unchanged, new file differs
+*** libnfnetlink-1.0.1-4.el7.src.rpm EVR unchanged, new file differs
+*** libnfsidmap-0.25-19.el7.src.rpm EVR unchanged, new file differs
+*** libnl3-3.2.28-4.el7.src.rpm EVR unchanged, new file differs
+*** libpcap-1.5.3-11.el7.src.rpm EVR unchanged, new file differs
+*** libpciaccess-0.14-1.el7.src.rpm EVR unchanged, new file differs
+*** libpipeline-1.2.3-3.el7.src.rpm EVR unchanged, new file differs
+*** libpng-1.5.13-7.el7_2.src.rpm EVR unchanged, new file differs
+*** libpwquality-1.2.3-5.el7.src.rpm EVR unchanged, new file differs
+*** libqb-1.0.1-6.el7.src.rpm EVR unchanged, new file differs
+*** libreport-2.1.11-40.el7.centos.src.rpm EVR unchanged, new file differs
+*** libseccomp-2.3.1-3.el7.src.rpm EVR unchanged, new file differs
+*** libselinux-2.5-12.el7.src.rpm EVR unchanged, new file differs
+*** libsemanage-2.5-11.el7.src.rpm EVR unchanged, new file differs
+*** libsepol-2.5-8.1.el7.src.rpm EVR unchanged, new file differs
+*** libssh2-1.4.3-10.el7_2.1.src.rpm EVR unchanged, new file differs
+*** libtalloc-2.1.10-1.el7.src.rpm => libtalloc-2.1.16-1.el7.src.rpm
+Summary: The talloc library
+License: LGPLv3+
+S.5........ libtalloc.spec
+removed     talloc-2.1.10.tar.gz
+added       talloc-2.1.16.tar.gz
+
+*** libtasn1-4.10-1.el7.src.rpm EVR unchanged, new file differs
+*** libtdb-1.3.15-1.el7.src.rpm => libtdb-1.3.18-1.el7.src.rpm
+Summary: The tdb library
+License: LGPLv3+
+S.5........ libtdb.spec
+removed     tdb-1.3.15.tar.gz
+added       tdb-1.3.18.tar.gz
+
+*** libtevent-0.9.33-2.el7.src.rpm => libtevent-0.9.39-1.el7.src.rpm
+Summary: The tevent library
+License: LGPLv3+
+removed     0001-tevent-Fix-a-race-condition.patch
+S.5........ libtevent.spec
+removed     tevent-0.9.33.tar.gz
+added       tevent-0.9.39.tar.gz
+
+*** libtirpc-0.2.4-0.10.el7.src.rpm EVR unchanged, new file differs
+*** libtool-2.4.2-22.el7_3.src.rpm removed
+Summary: The GNU Portable Library Tool
+License: GPLv2+ and LGPLv2+ and GFDL
+libtool-2.2.10-rpath.patch
+libtool-2.4.2-ENOMEM-1.patch
+libtool-2.4.2-ENOMEM-2.patch
+libtool-2.4.2-TEMPORARY-disable-gcj-tests.patch
+libtool-2.4.2-tar-no-owner.patch
+libtool-2.4.2.tar.xz
+libtool.spec
+
+*** libunistring-0.9.3-9.el7.src.rpm EVR unchanged, new file differs
+*** libusbx-1.0.21-1.el7.src.rpm EVR unchanged, new file differs
+*** libuser-0.60-9.el7.src.rpm EVR unchanged, new file differs
+*** libutempter-1.1.6-4.el7.src.rpm EVR unchanged, new file differs
+*** libverto-0.2.5-4.el7.src.rpm EVR unchanged, new file differs
+*** libxml2-2.9.1-6.el7_2.3.src.rpm EVR unchanged, new file differs
+*** libxslt-1.1.28-5.el7.src.rpm EVR unchanged, new file differs
+*** lm_sensors-3.4.0-4.20160601gitf9185e5.el7.src.rpm EVR unchanged, new file differs
+*** lsof-4.87-5.el7.src.rpm EVR unchanged, new file differs
+*** lua-5.1.4-15.el7.src.rpm EVR unchanged, new file differs
+*** lz4-1.7.5-2.el7.src.rpm EVR unchanged, new file differs
+*** lzo-2.06-8.el7.src.rpm EVR unchanged, new file differs
+*** m2crypto-0.21.1-17.el7.src.rpm EVR unchanged, new file differs
+*** m4-1.4.16-10.el7.src.rpm EVR unchanged, new file differs
+*** mailx-12.5-19.el7.src.rpm EVR unchanged, new file differs
+*** make-3.82-23.el7.src.rpm EVR unchanged, new file differs
+*** man-db-2.6.3-9.el7.src.rpm EVR unchanged, new file differs
+*** mariadb-5.5.60-1.el7_5.src.rpm EVR unchanged, new file differs
+*** mcelog-144-8.94d853b2ea81.el7.src.rpm EVR unchanged, new file differs
+*** mdadm-4.0-13.el7.src.rpm EVR unchanged, new file differs
+*** memtest86+-5.01-2.el7.src.rpm EVR unchanged, new file differs
+*** nano-2.3.1-10.el7.src.rpm EVR unchanged, new file differs
+*** ncurses-5.9-14.20130511.el7_4.src.rpm EVR unchanged, new file differs
+*** net-snmp-5.7.2-33.el7_5.2.src.rpm EVR unchanged, new file differs
+*** net-tools-2.0-0.22.20131004git.el7.src.rpm EVR unchanged, new file differs
+*** nettle-2.7.1-8.el7.src.rpm added
+Summary: A low-level cryptographic library
+License: LGPLv2+
+nettle-2.7.1-ecc-cve.patch
+nettle-2.7.1-hobbled.tar.gz
+nettle-2.7.1-powm-sec.patch
+nettle-2.7.1-remove-ecc-testsuite.patch
+nettle-2.7.1-sha3-fix.patch
+nettle-2.7.1-tmpalloc.patch
+nettle.spec
+
+*** newt-0.52.15-4.el7.src.rpm EVR unchanged, new file differs
+*** nfs-utils-1.3.0-0.54.el7.src.rpm EVR unchanged, new file differs
+*** nspr-4.19.0-1.el7_5.src.rpm EVR unchanged, new file differs
+*** nss-3.36.0-7.el7_5.src.rpm EVR unchanged, new file differs
+*** nss-pem-1.0.3-4.el7.src.rpm EVR unchanged, new file differs
+*** nss-softokn-3.36.0-5.el7_5.src.rpm EVR unchanged, new file differs
+*** nss-util-3.36.0-1.el7_5.src.rpm EVR unchanged, new file differs
+*** numactl-2.0.9-7.el7.src.rpm EVR unchanged, new file differs
+*** openldap-2.4.44-15.el7_5.src.rpm EVR unchanged, new file differs
+*** openssh-7.4p1-21.el7.src.rpm EVR unchanged, new file differs
+*** openssl-1.0.2k-12.el7.src.rpm => openssl-1.0.2k-19.el7.src.rpm
+Summary: Utilities from the general purpose cryptography library with TLS implementation
+License: OpenSSL
+..5........ openssl-1.0.2i-fips.patch
+added       openssl-1.0.2k-cve-2017-3735.patch
+added       openssl-1.0.2k-cve-2018-0495.patch
+added       openssl-1.0.2k-cve-2018-0732.patch
+added       openssl-1.0.2k-cve-2018-0734.patch
+added       openssl-1.0.2k-cve-2018-0737.patch
+added       openssl-1.0.2k-cve-2018-0739.patch
+added       openssl-1.0.2k-cve-2018-5407.patch
+added       openssl-1.0.2k-cve-2019-1559.patch
+added       openssl-1.0.2k-fix-9-lives.patch
+added       openssl-1.0.2k-fix-one-and-done.patch
+added       openssl-1.0.2k-name-sensitive.patch
+added       openssl-1.0.2k-rsa-check.patch
+added       openssl-1.0.2k-s390x-update.patch
+S.5........ openssl.spec
+
+*** oprofile-0.9.9-25.el7_5.1.src.rpm EVR unchanged, new file differs
+*** os-prober-1.58-9.el7.src.rpm EVR unchanged, new file differs
+*** p11-kit-0.23.5-3.el7.src.rpm EVR unchanged, new file differs
+*** pam-1.1.8-22.el7.src.rpm EVR unchanged, new file differs
+*** parted-3.1-29.el7.src.rpm EVR unchanged, new file differs
+*** passwd-0.79-4.el7.src.rpm EVR unchanged, new file differs
+*** patch-2.7.1-10.el7_5.src.rpm EVR unchanged, new file differs
+*** pciutils-3.5.1-3.el7.src.rpm EVR unchanged, new file differs
+*** pcre-8.32-17.el7.src.rpm EVR unchanged, new file differs
+*** perl-5.16.3-292.el7.src.rpm EVR unchanged, new file differs
+*** perl-Carp-1.26-244.el7.src.rpm EVR unchanged, new file differs
+*** perl-Data-Dumper-2.145-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-Encode-2.51-7.el7.src.rpm EVR unchanged, new file differs
+*** perl-Exporter-5.68-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-File-Path-2.09-2.el7.src.rpm EVR unchanged, new file differs
+*** perl-File-Temp-0.23.01-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-Filter-1.49-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-Getopt-Long-2.40-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-HTTP-Tiny-0.033-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-PathTools-3.40-5.el7.src.rpm EVR unchanged, new file differs
+*** perl-Pod-Perldoc-3.20-4.el7.src.rpm EVR unchanged, new file differs
+*** perl-Pod-Simple-3.28-4.el7.src.rpm EVR unchanged, new file differs
+*** perl-Pod-Usage-1.63-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-Scalar-List-Utils-1.27-248.el7.src.rpm EVR unchanged, new file differs
+*** perl-Socket-2.010-4.el7.src.rpm EVR unchanged, new file differs
+*** perl-Storable-2.45-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-Text-ParseWords-3.29-4.el7.src.rpm EVR unchanged, new file differs
+*** perl-Time-HiRes-1.9725-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-Time-Local-1.2300-2.el7.src.rpm EVR unchanged, new file differs
+*** perl-WWW-Curl-4.15-13.el7.src.rpm EVR unchanged, new file differs
+*** perl-constant-1.27-2.el7.src.rpm EVR unchanged, new file differs
+*** perl-parent-0.225-244.el7.src.rpm EVR unchanged, new file differs
+*** perl-podlators-2.5.1-3.el7.src.rpm EVR unchanged, new file differs
+*** perl-threads-1.87-4.el7.src.rpm EVR unchanged, new file differs
+*** perl-threads-shared-1.43-6.el7.src.rpm EVR unchanged, new file differs
+*** pinentry-0.8.1-17.el7.src.rpm EVR unchanged, new file differs
+*** pixman-0.34.0-1.el7.src.rpm EVR unchanged, new file differs
+*** pkgconfig-0.27.1-4.el7.src.rpm EVR unchanged, new file differs
+*** plymouth-0.8.9-0.31.20140113.el7.centos.src.rpm EVR unchanged, new file differs
+*** policycoreutils-2.5-22.el7.src.rpm EVR unchanged, new file differs
+*** popt-1.13-16.el7.src.rpm EVR unchanged, new file differs
+*** portreserve-0.0.5-11.el7.src.rpm EVR unchanged, new file differs
+*** procps-ng-3.3.10-17.el7_5.2.src.rpm EVR unchanged, new file differs
+*** psmisc-22.20-15.el7.src.rpm EVR unchanged, new file differs
+*** pth-2.0.7-23.el7.src.rpm EVR unchanged, new file differs
+*** pygpgme-0.3-9.el7.src.rpm EVR unchanged, new file differs
+*** pyliblzma-0.5.3-11.el7.src.rpm EVR unchanged, new file differs
+*** pyserial-2.6-6.el7.src.rpm EVR unchanged, new file differs
+*** python-2.7.5-69.el7_5.src.rpm EVR unchanged, new file differs
+*** python-enum34-1.0.4-1.el7.src.rpm EVR unchanged, new file differs
+*** python-iniparse-0.4-9.el7.src.rpm EVR unchanged, new file differs
+*** python-pycurl-7.19.0-19.el7.src.rpm EVR unchanged, new file differs
+*** python-pyudev-0.15-9.el7.src.rpm EVR unchanged, new file differs
+*** python-six-1.9.0-2.el7.src.rpm EVR unchanged, new file differs
+*** python-urlgrabber-3.10-8.el7.src.rpm EVR unchanged, new file differs
+*** pyxattr-0.5.1-5.el7.src.rpm EVR unchanged, new file differs
+*** qrencode-3.4.1-3.el7.src.rpm EVR unchanged, new file differs
+*** quota-4.01-17.el7.src.rpm EVR unchanged, new file differs
+*** readline-6.2-10.el7.src.rpm EVR unchanged, new file differs
+*** redhat-lsb-4.1-27.el7.centos.1.src.rpm EVR unchanged, new file differs
+*** rootfiles-8.1-11.el7.src.rpm EVR unchanged, new file differs
+*** rpcbind-0.2.0-44.el7.src.rpm EVR unchanged, new file differs
+*** rpm-4.11.3-32.el7.src.rpm EVR unchanged, new file differs
+*** rsync-3.1.2-4.el7.src.rpm EVR unchanged, new file differs
+*** rsyslog-8.24.0-16.el7_5.4.src.rpm EVR unchanged, new file differs
+*** samba-4.7.1-9.el7_5.src.rpm => samba-4.10.16-13.el7_9.src.rpm
+Summary: Server and Client software to interoperate with Windows machines
+License: GPLv3+ and LGPLv3+
+added       REQUIRES jansson-devel  
+added       REQUIRES perl-interpreter  
+added       REQUIRES libtasn1-devel  
+added       REQUIRES libtasn1-tools  
+added       REQUIRES gnutls-devel >= 3.2.0
+removed     CVE-2017-14746.patch
+removed     CVE-2017-15275.patch
+added       libldb-require-version-1.5.4.patch
+added       samba-4.10-redhat.patch
+added       samba-4.10.16.tar.asc
+added       samba-4.10.16.tar.xz
+removed     samba-4.7-fix_aesni_intel_support.patch
+removed     samba-4.7-fix_dns_segfault_during_net_ads_join.patch
+removed     samba-4.7-fix_samba_with_systemd.patch
+removed     samba-4.7-fix_segfault_in_NT1_connection_setup.patch
+removed     samba-4.7-fix_segfault_in_keytab_handling.patch
+removed     samba-4.7-fix_segfault_in_smbclient_dfsgetinfo.patch
+removed     samba-4.7-fix_smb2_anonymous_connections.patch
+removed     samba-4.7-fix_smb2_client_read_after_free.patch
+removed     samba-4.7-fix_smbclient_volume.patch
+removed     samba-4.7-handle_smb_echo_gracefully.patch
+removed     samba-4.7-net_ads_keytab_list.patch
+removed     samba-4.7.1.tar.asc
+removed     samba-4.7.1.tar.xz
+S.5........ samba.spec
+
+*** screen-4.1.0-0.25.20120314git3c2946.el7.src.rpm EVR unchanged, new file differs
+*** sdparm-1.08-3.el7.src.rpm EVR unchanged, new file differs
+*** sed-4.2.2-5.el7.src.rpm EVR unchanged, new file differs
+*** setup-2.8.71-9.el7.src.rpm EVR unchanged, new file differs
+*** sg3_utils-1.37-12.el7.src.rpm EVR unchanged, new file differs
+*** shadow-utils-4.1.5.1-24.el7.src.rpm EVR unchanged, new file differs
+*** shared-mime-info-1.8-4.el7.src.rpm EVR unchanged, new file differs
+*** sharutils-4.13.3-8.el7.src.rpm EVR unchanged, new file differs
+*** slang-2.2.4-11.el7.src.rpm EVR unchanged, new file differs
+*** smartmontools-6.5-1.el7.src.rpm EVR unchanged, new file differs
+*** sqlite-3.7.17-8.el7.src.rpm EVR unchanged, new file differs
+*** star-1.5.2-13.el7.src.rpm EVR unchanged, new file differs
+*** sudo-1.8.19p2-14.el7_5.src.rpm => sudo-1.8.23-10.el7_9.1.src.rpm
+Summary: Allows restricted root access for specified users
+License: ISC
+removed     sudo-1.8.18-testsuitefix.patch
+removed     sudo-1.8.19p2-CVE-2017-1000368.patch
+removed     sudo-1.8.19p2-display-privs.patch
+removed     sudo-1.8.19p2-error-warning-visudo-message.patch
+removed     sudo-1.8.19p2-fqdn-use-after-free.patch
+removed     sudo-1.8.19p2-get_process_ttyname.patch
+removed     sudo-1.8.19p2-ignore-unknown-defaults.patch
+removed     sudo-1.8.19p2-iolog-zombie.patch
+removed     sudo-1.8.19p2-iologflush.patch
+removed     sudo-1.8.19p2-iologtruncate.patch
+removed     sudo-1.8.19p2-lecture-boolean.patch
+removed     sudo-1.8.19p2-lookup-issue-doc.patch
+removed     sudo-1.8.19p2-manpage-use_pty.patch
+removed     sudo-1.8.19p2-sssd-double-free.patch
+removed     sudo-1.8.19p2-sudo-l-sssd.patch
+removed     sudo-1.8.19p2-upstream-testsuitefix.patch
+removed     sudo-1.8.19p2.tar.gz
+removed     sudo-1.8.21-ldap-pass2-filter.patch
+added       sudo-1.8.23-Ignore-PAM_NEW_AUTHTOK_REQD-and-PAM_AUTHTOK_EXPIRED.patch
+added       sudo-1.8.23-fix-double-quote-parsing-for-Defaults-values.patch
+added       sudo-1.8.23-fix_empty_username_in_do_syslog.patch
+added       sudo-1.8.23-ldapsearchuidfix.patch
+added       sudo-1.8.23-legacy-group-processing.patch
+added       sudo-1.8.23-nowaitopt.patch
+added       sudo-1.8.23-pam_access-and-terminals.patch
+added       sudo-1.8.23-sudoldapconfman.patch
+added       sudo-1.8.23-who-am-i.patch
+added       sudo-1.8.23.tar.gz
+added       sudo-1.8.28-CVE-strtouid-test.patch
+added       sudo-1.8.28-CVE-strtouid.patch
+added       sudo-1.8.29-CVE-2019-18634-part1.patch
+added       sudo-1.8.29-CVE-2019-18634-part2.patch
+added       sudo-1.8.29-expired-password-part1.patch
+added       sudo-1.8.29-expired-password-part2.patch
+added       sudo-1.8.31-CVE-2021-3156.patch
+removed     sudo-1.8.6p3-doublequotefix.patch
+removed     sudo-1.8.6p3-nowaitopt.patch
+removed     sudo-1.8.6p7-digest-backport.patch
+removed     sudo-1.8.6p7-ldapsearchuidfix.patch
+removed     sudo-1.8.6p7-sudoldapconfman.patch
+S.5........ sudo.spec
+S.5........ sudoers
+
+*** sysfsutils-2.1.0-16.el7.src.rpm EVR unchanged, new file differs
+*** sysstat-10.1.5-13.el7.src.rpm EVR unchanged, new file differs
+*** system-config-firewall-1.2.29-10.el7.src.rpm EVR unchanged, new file differs
+*** sysvinit-2.88-14.dsf.el7.src.rpm EVR unchanged, new file differs
+*** tar-1.26-34.el7.src.rpm EVR unchanged, new file differs
+*** tcl-8.5.13-8.el7.src.rpm EVR unchanged, new file differs
+*** tcp_wrappers-7.6-77.el7.src.rpm EVR unchanged, new file differs
+*** tcpdump-4.9.2-3.el7.src.rpm EVR unchanged, new file differs
+*** telnet-0.17-64.el7.src.rpm EVR unchanged, new file differs
+*** texinfo-5.1-5.el7.src.rpm EVR unchanged, new file differs
+*** time-1.7-45.el7.src.rpm EVR unchanged, new file differs
+*** trousers-0.3.14-2.el7.src.rpm added
+Summary: TCG's Software Stack v1.2
+License: BSD
+tcsd.service
+trousers-0.3.14.tar.gz
+trousers.spec
+unlock-in-err-path.patch
+
+*** tzdata-2019b-1.el7.src.rpm EVR unchanged, new file differs
+*** unzip-6.0-19.el7.src.rpm EVR unchanged, new file differs
+*** usbutils-007-5.el7.src.rpm EVR unchanged, new file differs
+*** ustr-1.0.4-16.el7.src.rpm EVR unchanged, new file differs
+*** util-linux-2.23.2-52.el7_5.1.src.rpm EVR unchanged, new file differs
+*** vim-7.4.160-4.el7.src.rpm EVR unchanged, new file differs
+*** wget-1.14-15.el7_4.1.src.rpm EVR unchanged, new file differs
+*** which-2.20-7.el7.src.rpm EVR unchanged, new file differs
+*** xdelta-3.0.7-4.el7.src.rpm EVR unchanged, new file differs
+*** xz-5.2.2-1.el7.src.rpm EVR unchanged, new file differs
+*** yajl-2.0.4-4.el7.src.rpm EVR unchanged, new file differs
+*** yum-3.4.3-158.el7.centos.src.rpm EVR unchanged, new file differs
+*** yum-metadata-parser-1.1.4-10.el7.src.rpm EVR unchanged, new file differs
+*** yum-utils-1.1.31-46.el7_5.src.rpm EVR unchanged, new file differs
+*** zip-3.0-11.el7.src.rpm EVR unchanged, new file differs
+*** zlib-1.2.7-17.el7.src.rpm EVR unchanged, new file differs
+
+
+-------------------- Vendor: Citrix Systems, Inc. ------------------------
+
+*** ca-certificates-2018.2.22-70.0.el7_5.src.rpm => ca-certificates-2021.2.50-72.xs8.src.rpm
+Summary: The Mozilla CA root certificate bundle
+License: Public Domain
+.M......... README.ca-certificates
+.M......... README.etc
+.M......... README.extr
+.M......... README.java
+.M......... README.openssl
+.M......... README.pem
+.M......... README.src
+.M......... README.usr
+SM5........ ca-certificates.spec
+.M......... ca-legacy
+.M......... ca-legacy.8.txt
+.M......... ca-legacy.conf
+SM5........ certdata.txt
+.M......... certdata2pem.py
+SM5........ nssckbi.h
+.M......... trust-fixes
+.M......... update-ca-trust
+.M......... update-ca-trust.8.txt
+
+*** xenserver-ddk-files-1.0.2-30.src.rpm EVR unchanged, new file differs
+*** xenserver-sdk-1.62.0-1.xapi.1.249.3.src.rpm => xenserver-sdk-1.62.4-3.xapi.1.249.17.src.rpm
+Summary: XenServer SDK
+License: BSD 2-Clause
+removed     Citrix.Hypervisor.SDK.nuspec
+removed     build-after.sh
+removed     build-before.sh
+removed     build-win.bat
+removed     deps-map.json
+removed     sign.bat
+removed     xen-api-sdk-1.62.0.tar.gz
+added       xen-api-sdk-1.62.4.tar.gz
+S.5........ xenserver-sdk.spec
+
+*** xenserver-transfer-vm-7.1.8-1.src.rpm removed
+Summary: XenServer Transfer VM
+License: GPLv2
+transfer-vm-sources.tar.bz2
+transfer-vm.tar
+xenserver-transfer-vm-7.1.8.tar.gz
+xenserver-transfer-vm.spec
+
+
+
+-------------------- Vendor: Fedora Project ------------------------
+
+*** dev86-0.16.21-2.el7.src.rpm removed
+Summary: A real mode 80x86 assembler and linker
+License: GPL+ and GPLv2+ and LGPLv2+
+Dev86src-0.16.21.tar.gz
+dev86-64bit.patch
+dev86-long.patch
+dev86-noelks.patch
+dev86-nostrip.patch
+dev86.spec
+
+*** figlet-2.2.5-9.el7.src.rpm removed
+Summary: A program for making large letters out of ordinary text
+License: BSD and MIT
+0001-Make-test-script-a-bit-more-portable.patch
+0002-Add-Kannada-ttha-character-to-Standard-font.patch
+0003-Fix-build-with-musl-libc.patch
+0004-Adjust-compiler-flags-for-modern-gcc.patch
+0005-Test-script-cleanup.patch
+0006-Initialize-uninitialized-string.patch
+0007-Fix-memory-corruption-with-invalid-smush-amount.patch
+figlet-2.2.5.tar.gz
+figlet.spec
+
+*** inotify-tools-3.14-8.el7.src.rpm EVR unchanged, new file differs
+*** jemalloc-3.6.0-1.el7.src.rpm EVR unchanged, new file differs
+*** nbd-3.14-2.el7.src.rpm EVR unchanged, new file differs
+*** pandoc-1.12.3.1-2.el7.src.rpm removed
+Summary: Conversion between markup formats
+License: GPLv2+
+pandoc-1.12.3.1.tar.gz
+pandoc.spec
+
+*** python-asn1crypto-0.24.0-7.el7.src.rpm EVR unchanged, new file differs
+*** python-bitarray-0.8.3-1.el7.src.rpm EVR unchanged, new file differs
+*** python-fasteners-0.9.0-2.el7.src.rpm EVR unchanged, new file differs
+*** python-psutil-2.2.1-3.el7.src.rpm EVR unchanged, new file differs
+*** python-simplejson-3.10.0-1.el7.src.rpm EVR unchanged, new file differs
+*** python2-enum34-1.0.4-0.el7.src.rpm EVR unchanged, new file differs
+*** scapy-2.4.0-2.el7.src.rpm EVR unchanged, new file differs
+*** ssmtp-2.64-14.el7.src.rpm EVR unchanged, new file differs
+*** vconfig-1.9-16.el7.src.rpm EVR unchanged, new file differs
+*** xxhash-0.6.5-1.el7.src.rpm EVR unchanged, new file differs
+
+
+-------------------- Vendor: Intel Corporation ------------------------
+
+*** xengt-userspace-4.0.0-1.src.rpm EVR unchanged, new file differs
