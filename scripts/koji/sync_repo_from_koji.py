@@ -36,6 +36,7 @@ TAGS = [
     'v8.2-updates',
     'v8.2-testing',
     'v8.2-staging',
+    'v8.2-staging2',
     'v8.2-ipv6',
     'v8.2-linstor',
     'v8.2-runx',
