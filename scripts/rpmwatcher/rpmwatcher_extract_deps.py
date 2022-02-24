@@ -104,6 +104,7 @@ def main():
 
     base_dir = os.path.abspath(check_dir(args.basedir))
     xcp_version = args.version
+    xcp_major = xcp_version.split('.')[0]
     xcp_srpm_repo = check_dir(os.path.join(base_dir, 'xcp-ng', xcp_version))
     xcp_rpm_repo = check_dir(os.path.join(base_dir, 'xcp-ng_rpms', xcp_version))
     work_dir = check_dir(os.path.join(base_dir, 'workdir', xcp_version))
@@ -121,6 +122,18 @@ def main():
                            'https://raw.githubusercontent.com/xcp-ng/xcp-ng-release/v%s.0/xcp-ng.repo' % xcp_version,
                            '-o', '/etc/yum.repos.d/xcp-ng.repo'])
     # We enable all repos, including testing
+    subprocess.check_call(['sed', '-i', 's/enabled=0/enabled=1/', '/etc/yum.repos.d/xcp-ng.repo'])
+    # Also add the staging repo
+    with open('/etc/yum.repos.d/xcp-ng.repo', 'a') as f:
+        f.write("""
+[xcp-ng-staging]
+name = XCP-ng Staging Repository
+baseurl = http://mirrors.xcp-ng.org/{xcp_major}/{xcp_version}/staging/x86_64/ http://updates.xcp-ng.org/{xcp_major}/{xcp_version}/staging/x86_64/
+enabled = 1
+gpgcheck = 1
+repo_gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
+""".format(xcp_major=xcp_major,xcp_version=xcp_version))
     subprocess.check_call(['curl', 'https://xcp-ng.org/RPM-GPG-KEY-xcpng', '-o', '/etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng'])
 #    subprocess.check_call(['rpm', '--import', '/etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng'])
 
@@ -144,8 +157,19 @@ def main():
     subprocess.check_call(['yum', 'install', '-y', ' '.join(a_few_base_packages), '--installroot=%s' % install_root])
 
     # Enable all repos, including testing
-    # Needs to be done now since xcp-ng-release was one of the installed packages
+    # Needs to be re-done now since xcp-ng-release was one of the installed packages and replaced the repo file
     subprocess.check_call(['sed', '-i', 's/enabled=0/enabled=1/', os.path.join(install_root, 'etc/yum.repos.d/xcp-ng.repo')])
+    # Also add the staging repo
+    with open(os.path.join(install_root, 'etc/yum.repos.d/xcp-ng.repo'), 'a') as f:
+        f.write("""
+[xcp-ng-staging]
+name = XCP-ng Staging Repository
+baseurl = http://mirrors.xcp-ng.org/{xcp_major}/{xcp_version}/staging/x86_64/ http://updates.xcp-ng.org/{xcp_major}/{xcp_version}/staging/x86_64/
+enabled = 1
+gpgcheck = 1
+repo_gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
+""".format(xcp_major=xcp_major,xcp_version=xcp_version))
 
     # Install GPG keys again, becomes needed again after installing the 100+ packages above
     # We do it now, after actually installing packages in installroot.

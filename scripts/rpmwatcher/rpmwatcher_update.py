@@ -22,7 +22,7 @@ import urllib2
 
 DEVNULL = open(os.devnull, 'w')
 
-MAIN_TAGS = ['base', 'updates', 'testing']
+MAIN_TAGS = ['base', 'updates', 'testing', 'staging']
 
 def check_dir(dirpath):
     if not os.path.isdir(dirpath):
