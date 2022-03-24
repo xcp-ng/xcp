@@ -44,20 +44,19 @@ def main():
         if not f.endswith('.src.rpm'):
             rpms.append(f)
 
+    create_build = ['--create-build'] if args.create_build else []
+    if not srpms and not create_build:
+        raise Exception("No source RPMs to import. Use --create-build to force import.")
 
-
-    if not srpms:
-        raise Exception("No source RPMs to import")
-
-    # import the SRPMs
-    print('*** Importing SRPMs ***')
-    subprocess.check_call(['koji', 'import'] + srpms)
-    print()
+    if srpms:
+        # import the SRPMs
+        print('*** Importing SRPMs ***')
+        subprocess.check_call(['koji', 'import'] + srpms)
+        print()
 
     # import the RPMS
     print('*** Importing RPMs ***')
     if rpms:
-        create_build = ['--create-build'] if args.create_build else []
         subprocess.check_call(['koji', 'import'] + create_build + rpms)
     else:
         print("No RPMs to import.")
@@ -65,16 +64,24 @@ def main():
 
     # tag packages
     pkg_tags = args.package_tags.split(',')
-    for tag in pkg_tags:
-        print('*** Tagging packages %s with tag %s' % (' '.join(packages), tag))
-        subprocess.check_call(['koji', 'add-pkg', tag, '--owner', args.owner] + packages)
-        print()
+    if packages:
+        for tag in pkg_tags:
+            print('*** Tagging packages %s with tag %s' % (' '.join(packages), tag))
+            subprocess.check_call(['koji', 'add-pkg', tag, '--owner', args.owner] + packages)
+            print()
 
     # tag builds
     build_tags = args.build_tags.split(',')
-    for tag in build_tags:
-        print('*** Tagging builds %s with tag %s' % (' '.join(builds), tag))
-        subprocess.check_call(['koji', 'tag-build', tag, '--nowait'] + builds)
+    if builds:
+        for tag in build_tags:
+            print('*** Tagging builds %s with tag %s' % (' '.join(builds), tag))
+            subprocess.check_call(['koji', 'tag-build', tag, '--nowait'] + builds)
+
+    if create_build:
+        print("NOTE: You used the --create-build option.")
+        print("Packages without SRPMs have not been tagged with tags %s" % pkg_tags)
+        print("Builds without SRPMs have not been tagged with tags %s" % build_tags)
+        print("You will need to tag them manually.")
 
 if __name__ == "__main__":
     main()
