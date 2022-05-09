@@ -272,6 +272,7 @@ microcode_ctl;XS;;;
 microsemi-smartpqi;XS;;;
 mtr;XCP-ng;extra tool;;
 nano;XS;;;
+nbdkit;XCP-ng;added as dependency for XOSTOR;;
 ncurses;XS;;;
 net-snmp;XS;;;
 net-tools;XS;;;
