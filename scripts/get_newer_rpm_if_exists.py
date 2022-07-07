@@ -1,5 +1,4 @@
-#!/bin/env python
-from __future__ import print_function
+#!/usr/bin/env python3
 import argparse
 import csv
 import rpm
@@ -76,7 +75,7 @@ def main():
         srpm_evrs.append(filename, evr)
 
     latest_srpm = filename
-    for srpm_filename, srpm_evr in srpm_evrs.iteritems():
+    for srpm_filename, srpm_evr in srpm_evrs.items():
         if compare_evrs(srpm_evr, srpm_evrs[latest_srpm]) > 0:
             latest_srpm = srpm_filename
 
