@@ -1,5 +1,4 @@
-#!/bin/env python
-from __future__ import print_function
+#!/usr/bin/env python3
 from collections import OrderedDict
 import argparse
 import os
@@ -42,19 +41,19 @@ def main():
     rpms1 = list_rpms(dir1)
     rpms2 = list_rpms(dir2)
 
-    for name, info in rpms1.iteritems():
+    for name, info in rpms1.items():
         if name not in rpms2:
             info['removed'] = True
             rpms2[name] = info
 
-    rpms2 = OrderedDict(sorted(rpms2.iteritems(), key=lambda t: t[0]))
+    rpms2 = OrderedDict(sorted(rpms2.items(), key=lambda t: t[0]))
 
-    vendors = set([info['vendor'] for info in rpms1.itervalues()])
-    vendors |= set([info['vendor'] for info in rpms2.itervalues()])
+    vendors = set([info['vendor'] for info in rpms1.values()])
+    vendors |= set([info['vendor'] for info in rpms2.values()])
 
     for vendor in sorted(list(vendors)):
         print("\n\n-------------------- Vendor: %s ------------------------\n" % vendor)
-        for name, info in rpms2.iteritems():
+        for name, info in rpms2.items():
             if info['vendor'] != vendor:
                 continue
             if name not in rpms1:
