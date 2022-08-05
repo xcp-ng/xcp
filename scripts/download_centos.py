@@ -83,7 +83,7 @@ def main():
     for filepath in sorted(glob.glob(os.path.join(srpmdir, '*.src.rpm'))):
         filename = os.path.basename(filepath)
 
-        vendor = subprocess.check_output(['rpm', '-qp', filepath, '--qf', '%{vendor}'], stderr=DEVNULL)
+        vendor = subprocess.check_output(['rpm', '-qp', filepath, '--qf', '%{vendor}'], stderr=DEVNULL).decode('utf-8')
         if vendor not in ("CentOS", "Fedora Project"):
             print("Skipping %s due to unknown vendor %s" % (filename, vendor))
             continue
