@@ -12,6 +12,7 @@ def list_rpms(directory):
         info = subprocess.check_output(['rpm', '-qp', filepath, '--qf',
                                         "%{name},,%{license},,%{vendor},,%{buildhost},,"
                                         "%{buildtime},,%{evr},,%{sourcerpm},,%{summary}"])
+        info = info.decode('utf-8')
         info = info.split(',,')
         rpms[info[0]] = {
             'filepath': filepath,
@@ -60,12 +61,12 @@ def main():
                 print("*** %s added" % info['filename'])
                 print("Summary: %s" % info['summary'])
                 print("License: %s" % info['license'])
-                print(subprocess.check_output(['rpm', '-qlp', info['filepath']]))
+                print(subprocess.check_output(['rpm', '-qlp', info['filepath']]).decode('utf-8'))
             elif info.get('removed', False):
                 print("*** %s removed" % info['filename'])
                 print("Summary: %s" % info['summary'])
                 print("License: %s" % info['license'])
-                print(subprocess.check_output(['rpm', '-qlp', info['filepath']]))
+                print(subprocess.check_output(['rpm', '-qlp', info['filepath']]).decode('utf-8'))
             else:
                 previous = rpms1[name]['filename']
                 if info['evr'] == rpms1[name]['evr']:
@@ -88,7 +89,7 @@ def main():
                     print("License: %s" % info['license'])
 
                 print(subprocess.check_output("rpmdiff -iT %s %s 2>&1 || echo" % (rpms1[name]['filepath'], info['filepath']),
-                                              shell=True),
+                                              shell=True).decode('utf-8'),
                       end='')
 
 if __name__ == "__main__":
