@@ -65,7 +65,7 @@ def main():
     sources = os.listdir('SOURCES')
     deletemsg = "File deleted from the original sources for trademark-related or copyright-related legal reasons.\n"
     deleted = []
-    for f in ['Citrix_Logo_Black.png']:
+    for f in ['Citrix_Logo_Black.png', 'COPYING.CitrixCommercial']:
         if f in sources:
             os.unlink(os.path.join('SOURCES', f))
             open(os.path.join('SOURCES', "%s.deleted-by-XCP-ng.txt" % f), 'w').write(deletemsg)
