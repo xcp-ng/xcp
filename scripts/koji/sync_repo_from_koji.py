@@ -18,6 +18,7 @@ RELEASE_VERSIONS = [
 ]
 
 DEV_VERSIONS = [
+    '8.3'
 ]
 
 VERSIONS = DEV_VERSIONS + RELEASE_VERSIONS
@@ -40,6 +41,9 @@ TAGS = [
     'v8.2-ipv6',
     'v8.2-linstor',
     'v8.2-runx',
+    'v8.3-base',
+    'v8.3-updates',
+    'v8.3-testing',
 ]
 
 # tags in which we only keep the latest build for each package
