@@ -1,0 +1,15 @@
+
+splash.lss
+
+03Welcome to XCP-ng.0f
+
+  - To install or upgrade press the 07<ENTER>0f key.
+  - To install or upgrade using our alternate kernel, type 07install-alt <ENTER>0f.
+  - To install or upgrade without a serial console, type 07no-serial <ENTER>0f.
+  - To install or upgrade in safe mode, type 07safe <ENTER>0f.
+  - To install or upgrade to a multipathed root disk, type 07multipath <ENTER>0f.
+  - To boot into a shell prompt, type 07shell <ENTER>0f.
+  - To perform a memory test, type 07memtest <ENTER>0f.
+  - To open a boot menu and/or edit boot entries, type 07menu <ENTER>0f.
+
+0f[F1-Standard] [F2-Advanced]0f

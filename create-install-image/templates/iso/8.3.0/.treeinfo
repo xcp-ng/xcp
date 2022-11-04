@@ -1,0 +1,29 @@
+[system-v1]
+platform_name = XCP
+platform_version = 3.3.0
+product_name = XCP-ng
+product_version = 8.3.0
+
+[build]
+number = cloud
+[keys]
+key1 = RPM-GPG-KEY-xcpng
+
+[general]
+name = XCP-ng-8.3.0
+family = XCP-ng
+timestamp = @@TIMESTAMP@@
+variant =
+version = 8.3.0
+packagedir =
+arch = x86_64
+
+[images-x86_64]
+kernel = boot/pxelinux/mboot.c32
+initrd = boot/vmlinuz
+boot.iso = boot/xen.gz
+
+[images-xen]
+kernel = boot/pxelinux/mboot.c32
+initrd = boot/vmlinuz
+

@@ -1,4 +1,5 @@
 /install-*.img
+*.iso
 /tests/test-results/
 /tests/trash directory.*
 /tests/trash_directory.*
