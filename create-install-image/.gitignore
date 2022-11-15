@@ -1,3 +1,7 @@
+/install-*.img
 /tests/test-results/
 /tests/trash directory.*
 /tests/trash_directory.*
+
+# temporary files during image generation
+/tmpdir-*/

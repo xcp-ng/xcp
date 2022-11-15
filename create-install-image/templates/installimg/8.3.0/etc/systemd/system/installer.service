@@ -1,0 +1,12 @@
+[Unit]
+Description=XCP-ng Installer
+Requires=systemd-udev-settle.service interface-rename-sideway.service early-blacklist.service
+After=systemd-udev-settle.service interface-rename-sideway.service early-blacklist.service getty@tty2.service
+
+[Service]
+Type=forking
+SendSIGHUP=yes
+ExecStart=/opt/xensource/installer/preinit --
+
+[Install]
+WantedBy=multi-user.target
