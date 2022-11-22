@@ -126,10 +126,15 @@ mv ${VERBOSE} $ISODIR/boot/xen-*.gz $ISODIR/boot/xen.gz
 
 # FIXME does not boot in UEFI mode
 "${DNF[@]}" --downloadonly --downloaddir="$SCRATCHDIR" \
-        download memtest86+
+	    download memtest86+
+#(cd "$SCRATCHDIR" && wget http://www.rpmfind.net/linux/centos-stream/9-stream/AppStream/x86_64/os/Packages/memtest86+-5.31-0.4.beta.el9.x86_64.rpm)
 rpm2cpio $SCRATCHDIR/memtest86+-*.rpm | (cd $ISODIR && cpio ${VERBOSE} -idm "./boot/*")
 mv ${VERBOSE} $ISODIR/boot/memtest* $ISODIR/boot/isolinux/memtest
 mv ${VERBOSE} $ISODIR/boot/elf-memtest* $ISODIR/boot/elf-memtest
+
+#[ -z "$VERBOSE" ] || echo "fixing memtest path in boot/isolinux/isolinux.cfg"
+#sed -i "s,KERNEL memtest,KERNEL /boot/memtest," \
+#    $ISODIR/boot/isolinux/isolinux.cfg
 
 
 # optional local repo
