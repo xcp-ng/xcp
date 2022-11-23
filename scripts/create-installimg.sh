@@ -117,6 +117,8 @@ ${MOCK[@]} --shell -- rm -r \
 # /init for initrd
 ${MOCK[@]} --shell -- ln -s /sbin/init /init
 
+# files specific to the install image
+(cd "$topdir/installimg/$DIST" && find . | cpio -o) | ${MOCK[@]} --shell -- "cd / && cpio -idm ${VERBOSE}"
 
 # FIXME why ?
 ${MOCK[@]} --shell -- ": > /etc/yum/yum.conf"
@@ -127,43 +129,19 @@ ${MOCK[@]} --shell -- ln -sr /usr/lib/python2.7/site-packages/xcp/branding.py \
 	   "/opt/xensource/installer/version.py"
 
 
-# FIXME *HACK* missing bits directly from orig ISO into mock output dir
-# FIXME license to be checked
-
-ORIGIMG="$HOME/installimg/xcpng/$DIST"
-
-
 ### services
 
 case "$DIST" in
     8.2.1)
 	# FIXME do we really want to stick to 8.2.1 here?
 	INSTALLERGETTY=getty@tty2.service
-	INSTALLERGETTYLINK=$INSTALLERGETTY
-	;;
-    8.3.0)
-	INSTALLERGETTY=installer-getty@.service
-	INSTALLERGETTYLINK=installer-getty@tty2.service
 	;;
     *)
-	die "unsupported dist '$DIST'"
+	INSTALLERGETTY=installer-getty@tty2.service
 	;;
 esac
 
-for f in $(cat <<EOF
-/etc/systemd/system/installer.service
-/etc/systemd/system/$INSTALLERGETTY
-EOF
-	  )
-do
-    sudo mkdir -p $DESTIMG/$(dirname $f)
-    sudo cp $ORIGIMG/$f $DESTIMG/$f
-done
-
-$MOCK --shell -- systemctl enable installer
-
-$MOCK --shell -- ln -sr /etc/systemd/system/$INSTALLERGETTY \
-      /etc/systemd/system/getty.target.wants/$INSTALLERGETTYLINK
+${MOCK[@]} --shell -- systemctl enable installer "$INSTALLERGETTY"
 
 ${MOCK[@]} --shell -- systemctl disable \
 	   getty@tty1 fcoe lldpad xen-init-dom0 xenconsoled xenstored chronyd chrony-wait
