@@ -33,6 +33,7 @@ chkconfig;XS;;;
 chrony;XS;;;
 cifs-utils;XS;;;
 cisco-enic;XS;;;
+cisco-enic-alt;XCP-ng;alternate driver;;
 cisco-fnic;XS;;;
 compat-db;XS;;;
 compat-gcc-32;XS;;;
