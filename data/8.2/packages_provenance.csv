@@ -35,6 +35,7 @@ cifs-utils;XS;;;
 cisco-enic;XS;;;
 cisco-enic-alt;XCP-ng;alternate driver;;
 cisco-fnic;XS;;;
+cisco-fnic-alt;XCP-ng;alternate driver;;
 compat-db;XS;;;
 compat-gcc-32;XS;;;
 control-slice;XS;;;
