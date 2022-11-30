@@ -118,24 +118,27 @@ def main():
     # Prepare CentOS container
     for f in glob.glob('/etc/yum.repos.d/*.repo'):
         os.unlink(f)
-    subprocess.check_call(['curl',
-                           'https://raw.githubusercontent.com/xcp-ng/xcp-ng-release/v%s.0/xcp-ng.repo' % xcp_version,
-                           '-o', '/etc/yum.repos.d/xcp-ng.repo'])
-    # We enable all repos, including testing
-    subprocess.check_call(['sed', '-i', 's/enabled=0/enabled=1/', '/etc/yum.repos.d/xcp-ng.repo'])
-    # Also add the staging repo
-    with open('/etc/yum.repos.d/xcp-ng.repo', 'a') as f:
-        f.write("""
-[xcp-ng-staging]
-name = XCP-ng Staging Repository
-baseurl = http://mirrors.xcp-ng.org/{xcp_major}/{xcp_version}/staging/x86_64/ http://updates.xcp-ng.org/{xcp_major}/{xcp_version}/staging/x86_64/
+
+    for repo in ['base', 'updates', 'testing', 'staging']:
+        with open('/etc/yum.repos.d/xcp-ng.repo', 'a') as f:
+            f.write("""
+[xcp-ng-{repo}]
+name = XCP-ng {repo} Repository
+baseurl = http://mirrors.xcp-ng.org/{xcp_major}/{xcp_version}/{repo}/x86_64/ http://updates.xcp-ng.org/{xcp_major}/{xcp_version}/{repo}/x86_64/
 enabled = 1
 gpgcheck = 1
 repo_gpgcheck = 1
 gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
-""".format(xcp_major=xcp_major,xcp_version=xcp_version))
-    subprocess.check_call(['curl', 'https://xcp-ng.org/RPM-GPG-KEY-xcpng', '-o', '/etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng'])
-#    subprocess.check_call(['rpm', '--import', '/etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng'])
+""".format(repo=repo, xcp_major=xcp_major, xcp_version=xcp_version))
+
+    subprocess.check_call(
+        [
+            'curl',
+            '-sSf',
+            'https://xcp-ng.org/RPM-GPG-KEY-xcpng',
+            '-o', '/etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng'
+        ]
+    )
 
     # Prepare temporary directory that will serve as installroot
     install_root = tempfile.mkdtemp()
