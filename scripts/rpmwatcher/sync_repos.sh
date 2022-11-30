@@ -2,7 +2,7 @@
 # Must be run from the parent directory of the rsynced repositories
 mkdir -p xcp-ng
 mkdir -p xcp-ng_rpms
-for version in "7.6" "8.0" "8.1" "8.2"; do
+for version in "8.3" "8.2" "8.1" "8.0" "7.6"; do
     MAJOR=${version:0:1}
     rsync -rlptv updates.xcp-ng.org::repo/$MAJOR/$version/*/Source/SPackages/*.src.rpm xcp-ng/$version/
     rsync -rlptv updates.xcp-ng.org::repo/$MAJOR/$version/*/x86_64/Packages/*.rpm xcp-ng_rpms/$version/
