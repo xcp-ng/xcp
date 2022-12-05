@@ -57,7 +57,6 @@ maybe_set_srcurl "$DIST"
 [ -n "$OUTPUT_IMG" ] || OUTPUT_IMG="install-$DIST-$RPMARCH.img"
 
 command -v mock >/dev/null || die "required tool not found: mock"
-command -v bsdtar >/dev/null || die "required tool not found: bsdtar"
 
 
 #### create base rootfs
@@ -120,7 +119,7 @@ ${MOCK[@]} --shell -- ln -s /sbin/init /init
 # files specific to the install image
 (cd "$topdir/installimg/$DIST" && find . | cpio -o) | ${MOCK[@]} --shell -- "cd / && cpio -idm ${VERBOSE}"
 
-# FIXME why ?
+# FIXME ignored
 ${MOCK[@]} --shell -- ": > /etc/yum/yum.conf"
 
 # installer branding - FIXME should be part of host-installer.rpm
