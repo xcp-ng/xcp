@@ -131,7 +131,7 @@ ${MOCK[@]} --shell -- ln -sr /usr/lib/python2.7/site-packages/xcp/branding.py \
 ### services
 
 case "$DIST" in
-    8.2.1)
+    8.2.0|8.2.1)
 	# FIXME do we really want to stick to 8.2.1 here?
 	INSTALLERGETTY=getty@tty2.service
 	;;
