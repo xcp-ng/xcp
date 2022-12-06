@@ -92,6 +92,9 @@ setup_dnf_download "$DIST" "$RPMARCH" "$SRCURL"
 
 ## put all bits together
 
+# make sure dir exists, of "cpio -D" would create it (and with "-p" we really want "-D")
+test -d "$topdir/iso/$DIST" || die "cannot find dir '$topdir/iso/$DIST'"
+
 # bootloader config files etc. - like "cp -r", not forgetting .treeinfo
 (cd "$topdir/iso/$DIST" && find .) | cpio -pdm -D "$topdir/iso/$DIST" ${VERBOSE} $ISODIR/
 
