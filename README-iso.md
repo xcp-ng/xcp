@@ -34,7 +34,7 @@ Creates `install-$RELEASE.img` for input to `create-install-iso`, from:
  ./scripts/create-install-iso.sh \
      --srcurl file://$HOME/mirrors/xcpng/8.3 \
      -V "XCP-NG_830_TEST" \
-     8.3 install-8.3.0-x86_64.img xcp-ng-8.3-install.iso
+     8.3.0 install-8.3.0-x86_64.img xcp-ng-8.3-install.iso
 
 ### 8.2.1
 
@@ -61,7 +61,9 @@ UEFI:
 
 ## still to be done (a bit outdated but not that much)
 
-* [ ] getty on tty2 is broken
+* [ ] how to deal with the fact we can only reproduce 8.x.0 and 8.x.updates
+* [ ] (^^ linked ^^) customizability of available repos
+* [x] getty on tty2 is broken
 * [x] document dependencies (as asserts)
 * [x] check why the installed system is seen as 8.2 (comes from the installer's branding !?)
 
