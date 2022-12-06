@@ -106,6 +106,7 @@ EOF
          --config="$DNFCONF"
          --releasever="$DIST"
          --disablerepo="*"
+         #--enablerepo='xcpng-base'
          --enablerepo='xcpng-base,xcpng-updates,xcpng-testing'
         )
 }
