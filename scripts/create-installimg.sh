@@ -102,10 +102,17 @@ DOUBTFUL+=" /usr/share/cracklib"
 # similarly, there are other files - maybe those are just the source file?
 DOUBTFUL+=" /usr/lib/udev/hwdb.d/"
 
+# WTF cannot use glob wildcards in mock commands, srsly...
+MOCKROOT=$(${MOCK[@]} -p)
+# ... /boot/*
+MOREFILES=$(cd $MOCKROOT && ls boot/* | sed s,^,/,)
+
 ${MOCK[@]} --shell -- find /usr -name "*.py[co]" -delete
-${MOCK[@]} --shell -- rm -r \
+${MOCK[@]} --shell -- rm -r $VERBOSE \
       /usr/share/locale /usr/lib/locale /usr/share/i18n/locales \
       /usr/libexec/xen/boot \
+      /etc/dnf \
+      $MOREFILES \
       $BINPATHS \
       $DOUBTFUL \
       /usr/share/bash-completion
@@ -158,7 +165,12 @@ CACHE="/var/cache/mock/$DIST-$RPMARCH/root_cache/cache.tar.gz"
 ROOTFS=$(mktemp -d)
 CLEANUP_DIRS+=("$ROOTFS")
 # FIXME replace bzip with better algo
-fakeroot sh -c "cd '$ROOTFS' && tar -xf '$CACHE' && find . | cpio -o -H newc" | bzip2 > "$OUTPUT_IMG"
+# before repacking:
+# - make sure we can read files with bogus perms (WTF RH, srsly...)
+# - remove /builddir, which can't be removed from the mock rootfs itself without breaking mock
+fakeroot bash -c "set -o pipefail && cd '$ROOTFS' && tar -xf '$CACHE' && \
+                 chmod u+r etc/{,g}shadow{,-} && rm -r builddir && \
+                 find . | cpio -o -H newc" | bzip2 > "$OUTPUT_IMG"
 
 # cleanup for disk space
 ${MOCK[@]} --clean

@@ -39,8 +39,8 @@ maybe_set_srcurl() {
 CLEANUP_DIRS=()
 CLEANUP_FILES=()
 exitcleanup() {
-    rm ${VERBOSE} -rf "${CLEANUP_DIRS[@]}"
-    rm ${VERBOSE} -f "${CLEANUP_FILES[@]}"
+    rm -rf "${CLEANUP_DIRS[@]}"
+    rm -f "${CLEANUP_FILES[@]}"
 }
 trap 'exitcleanup' EXIT INT
 
