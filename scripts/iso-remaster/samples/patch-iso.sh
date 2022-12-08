@@ -19,7 +19,7 @@ if false; then
                     xcp-ng-release-config-8.3.0-2.x86_64.rpm
                     xcp-ng-release-presets-8.3.0-2.x86_64.rpm
                     xsconsole-10.1.13-1.xcpng8.3.x86_64.rpm
-    EOF
+EOF
               )
     do
         rm "$ISODIR/Packages/$p"
@@ -32,7 +32,7 @@ if false; then
                     xcp-ng-release-config-8.3.0-2+newtheme1.x86_64.rpm
                     xcp-ng-release-presets-8.3.0-2+newtheme1.x86_64.rpm
                     xsconsole-10.1.13-1.xcpng8.3+newtheme2.x86_64.rpm
-    EOF
+EOF
               )
     do
         cp "$HOME/newtheme/$p" "$ISODIR/Packages/"
