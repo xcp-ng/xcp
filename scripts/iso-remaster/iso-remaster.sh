@@ -112,11 +112,11 @@ exitcleanup() {
 
 trap 'exitcleanup' EXIT INT
 
-# where we unpack install.img
-INSTALLIMG=$(mktemp -d installimg.XXXXXX)
+# (absolute path) where we unpack install.img
+INSTALLIMG=$(mktemp -d -p "$PWD" installimg.XXXXXX)
 
-# where we get a RW copy of input ISO contents
-RWISO=$(mktemp -d isorw.XXXXXX)
+# (absolute path) where we get a RW copy of input ISO contents
+RWISO=$(mktemp -d -p "$PWD" isorw.XXXXXX)
 
 
 # allow successive fakeroot calls to act as a single session
