@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 set -e
 
 ISODIR="$1"
@@ -46,9 +46,15 @@ fi
 ## regenerate repodata
 createrepo "$ISODIR"
 
-# FIXME: could patch isolinux and grub kernel cmdline to add
-# `no-repo-gpgcheck` so a modified repo will be accepted
+## patches to kernel commandline
+SED_COMMANDS=()
 
+# add `no-repo-gpgcheck` so a modified repo will be accepted
+SED_COMMANDS+=(-e "s,/vmlinuz,/vmlinuz no-repo-gpgcheck,")
+
+sed -i "${SED_COMMANDS[@]}" \
+    "$ISODIR"/*/*/grub*.cfg \
+    "$ISODIR"/boot/isolinux/isolinux.cfg
 
 ## sign with a different key
 #gpg --armor --sign "$ISODIR/repodata/repomd.xml"
