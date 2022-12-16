@@ -1,15 +1,15 @@
 
 splash.lss
 
-05Welcome to XCP-ng.
+03Welcome to XCP-ng.0f
 
-  - To install or upgrade press the 0e<ENTER>05 key.
-  - To install or upgrade using our alternate kernel, type 0einstall-alt <ENTER>05.
-  - To install or upgrade without a serial console, type 0eno-serial <ENTER>05.
-  - To install or upgrade in safe mode, type 0esafe <ENTER>05.
-  - To install or upgrade to a multipathed root disk, type 0emultipath <ENTER>05.
-  - To boot into a shell prompt, type 0eshell <ENTER>05.
-  - To perform a memory test, type 0ememtest <ENTER>05.
-  - To open a boot menu and/or edit boot entries, type 0emenu <ENTER>05.
+  - To install or upgrade press the 07<ENTER>0f key.
+  - To install or upgrade using our alternate kernel, type 07install-alt <ENTER>0f.
+  - To install or upgrade without a serial console, type 07no-serial <ENTER>0f.
+  - To install or upgrade in safe mode, type 07safe <ENTER>0f.
+  - To install or upgrade to a multipathed root disk, type 07multipath <ENTER>0f.
+  - To boot into a shell prompt, type 07shell <ENTER>0f.
+  - To perform a memory test, type 07memtest <ENTER>0f.
+  - To open a boot menu and/or edit boot entries, type 07menu <ENTER>0f.
 
-0f[F1-Standard] [F2-Advanced]05
+0f[F1-Standard] [F2-Advanced]0f
