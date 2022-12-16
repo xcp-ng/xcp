@@ -1,9 +1,9 @@
 
 splash.lss
 
-05Welcome to XCP-ng.
+03Welcome to XCP-ng.0f
 
-  - To install or upgrade press the 0e<ENTER>05 key.
+  - To install or upgrade press the 07<ENTER>0f key.
     (Press F2 for other options)
 
 
@@ -11,4 +11,4 @@
 
 
 
-0f[F1-Standard] [F2-Advanced]05
+0f[F1-Standard] [F2-Advanced]0f
