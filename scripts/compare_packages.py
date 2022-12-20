@@ -64,9 +64,10 @@ def main():
                 print(subprocess.check_output(['rpm', '-qlp', info['filepath']]).decode('utf-8'))
             elif info.get('removed', False):
                 print("*** %s removed" % info['filename'])
-                print("Summary: %s" % info['summary'])
-                print("License: %s" % info['license'])
-                print(subprocess.check_output(['rpm', '-qlp', info['filepath']]).decode('utf-8'))
+                if info['vendor'] not in ['CentOS', 'Fedora Project']:
+                    print("Summary: %s" % info['summary'])
+                    print("License: %s" % info['license'])
+                    print(subprocess.check_output(['rpm', '-qlp', info['filepath']]).decode('utf-8'))
             else:
                 previous = rpms1[name]['filename']
                 if info['evr'] == rpms1[name]['evr']:
