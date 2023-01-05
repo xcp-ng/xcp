@@ -39,8 +39,10 @@ Branches:
 
 Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
 """ % args.name
-    subprocess.check_call(['git', 'clone', 'git@github.com:xcp-ng-rpms/%s.git' % args.name])
+    subprocess.check_call(['git', 'clone', 'https://github.com/xcp-ng-rpms/%s.git' % args.name])
     os.chdir(args.name)
+    subprocess.check_call(['git', 'config', '--local', 'remote.origin.pushurl',
+                           'git@github.com:xcp-ng-rpms/%s.git' % args.name])
     open('.gitignore', 'w').write(gitignore)
     subprocess.check_call(['git', 'add', '.gitignore'])
     open('README.md', 'w').write(readme)
