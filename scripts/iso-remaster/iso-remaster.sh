@@ -132,6 +132,7 @@ FAKEROOT=(fakeroot -i "$FAKEROOTSAVE" -s "$FAKEROOTSAVE" --)
 case $OPMODE in
 copy)
     7z x "$INISO" -o"$RWISO"
+    rm -rfv "$RWISO/[BOOT]"
     SRCISO="$RWISO"
     DESTISO="$RWISO"
     ;;
