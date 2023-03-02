@@ -162,6 +162,13 @@ def main():
                                 # themselves target
                                 for role_from in roles_to_scan:
                                     for upper_srpm_nvr in xcp_rpms[rpm_nvra]['roles'].get(role_from, []):
+                                        # Interpretation:
+                                        # If...
+                                        # 1. dep_rpm_nvra   ---(direct or pulled build dep of)--->     srpm_nvr
+                                        # 2. srpm_nvr       -------------(produces)-------------->     rpm_nvra
+                                        # 3. rpm_nvra       ------("role_from" build dep of)----->     upper_srpm_nvr
+                                        # Then...
+                                        # dep_rpm_nvra      -------("role_to" build dep of)------>     upper_srpm_nvr
                                         add_rpm_role(xcp_rpms, dep_rpm_nvra, role_to, upper_srpm_nvr)
 
     update_builddep_role(xcp_rpms, xcp_builds, roles_from=['main'], role_to='main_builddep', direct=True)
