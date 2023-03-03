@@ -36,6 +36,7 @@ TAGS = [
     'v8.2-base',
     'v8.2-updates',
     'v8.2-testing',
+    'v8.2-ci',
     'v8.2-staging',
     'v8.2-staging2',
     'v8.2-ipv6',
@@ -44,6 +45,7 @@ TAGS = [
     'v8.3-base',
     'v8.3-updates',
     'v8.3-testing',
+    'v8.3-ci',
     'v8.3-staging',
     'v8.3-runx',
 ]
