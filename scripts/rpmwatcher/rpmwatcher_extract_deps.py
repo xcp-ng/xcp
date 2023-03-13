@@ -119,7 +119,7 @@ def main():
     for f in glob.glob('/etc/yum.repos.d/*.repo'):
         os.unlink(f)
 
-    for repo in ['base', 'updates', 'testing', 'staging']:
+    for repo in ['base', 'updates', 'testing', 'ci']:
         with open('/etc/yum.repos.d/xcp-ng.repo', 'a') as f:
             f.write("""
 [xcp-ng-{repo}]
@@ -162,12 +162,12 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
     # Enable all repos, including testing
     # Needs to be re-done now since xcp-ng-release was one of the installed packages and replaced the repo file
     subprocess.check_call(['sed', '-i', 's/enabled=0/enabled=1/', os.path.join(install_root, 'etc/yum.repos.d/xcp-ng.repo')])
-    # Also add the staging repo
+    # Also add the ci repo
     with open(os.path.join(install_root, 'etc/yum.repos.d/xcp-ng.repo'), 'a') as f:
         f.write("""
-[xcp-ng-staging]
-name = XCP-ng Staging Repository
-baseurl = http://mirrors.xcp-ng.org/{xcp_major}/{xcp_version}/staging/x86_64/ http://updates.xcp-ng.org/{xcp_major}/{xcp_version}/staging/x86_64/
+[xcp-ng-ci]
+name = XCP-ng CI Repository
+baseurl = http://mirrors.xcp-ng.org/{xcp_major}/{xcp_version}/ci/x86_64/ http://updates.xcp-ng.org/{xcp_major}/{xcp_version}/ci/x86_64/
 enabled = 1
 gpgcheck = 1
 repo_gpgcheck = 1
