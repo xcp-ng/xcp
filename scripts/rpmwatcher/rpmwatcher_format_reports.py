@@ -15,11 +15,8 @@ Those are common concepts in the RPM world.
 
 from __future__ import print_function
 import argparse
-import subprocess
 import os
 import json
-import glob
-import tempfile
 import codecs
 import StringIO
 import markdown
