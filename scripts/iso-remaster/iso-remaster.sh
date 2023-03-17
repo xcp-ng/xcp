@@ -27,7 +27,7 @@ Options:
   --iso-patcher, -s <script>
          Run <script> with ISO contents location as single argument,
          before repacking output ISO.
-         Forces `--mode copy` to avoid fuse-overlay bug
+         Forces "--mode copy" to avoid fuse-overlay bug
          https://github.com/containers/fuse-overlayfs/issues/377
 EOF
 }
