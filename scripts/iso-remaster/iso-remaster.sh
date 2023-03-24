@@ -164,7 +164,7 @@ if [ -n "$IMGPATCHER" ]; then
     bzcat "$SRCISO/install.img" | (cd "$INSTALLIMG" && "${FAKEROOT[@]}" cpio -idm)
 
     # patch install.img contents
-    "${FAKEROOT[@]}" "$IMGPATCHER" "$INSTALLIMG"
+    "${FAKEROOT[@]}" "$IMGPATCHER" "$INSTALLIMG" || die "IMG patcher exited in error: $?"
 
     # repack install.img
     (cd "$INSTALLIMG" && "${FAKEROOT[@]}" sh -c "find . | cpio -o -H newc") |
@@ -186,7 +186,7 @@ fuse)
 esac
 
 if [ -n "$ISOPATCHER" ]; then
-    "${FAKEROOT[@]}" "$ISOPATCHER" "$RWISO"
+    "${FAKEROOT[@]}" "$ISOPATCHER" "$RWISO" || die "ISO patcher exited in error: $?"
 fi
 
 VOLID=$(isoinfo -i "$INISO" -d | grep "Volume id"| sed "s/Volume id: //")
