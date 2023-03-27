@@ -60,4 +60,5 @@ sed -i "${SED_COMMANDS[@]}" \
     "$ISODIR"/boot/isolinux/isolinux.cfg
 
 ## sign with a different key
-#gpg --armor --sign "$ISODIR/repodata/repomd.xml"
+#gpg1 --armor --detach-sign "$ISODIR/repodata/repomd.xml"
+#gpg1 --armor --export > "$ISODIR/RPM-GPG-KEY-xcpng"
