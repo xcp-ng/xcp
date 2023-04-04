@@ -42,7 +42,7 @@ ISODIR="$1"
 
 
 ## regenerate repodata
-#createrepo "$ISODIR"
+#createrepo_c "$ISODIR"
 
 ## patches to kernel commandline
 SED_COMMANDS=()
