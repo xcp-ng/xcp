@@ -163,7 +163,7 @@ prove tests/ :: -l
 - [x] There's also another depmod conf file that we used to modify the same way: /etc/depmod.d/dist.conf. Which one is necessary?
 - [x] remove unused modules from kernel-alt => as triggerin in host-installer too, so all is defined in the same place?
 - [ ] make `-o` mandatory, `--force-overwrite`
-- [ ] inverted updates and candidates
+- [x] inverted updates and candidates
 
 ### post alpha3
 
