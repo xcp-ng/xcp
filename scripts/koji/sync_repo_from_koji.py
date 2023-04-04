@@ -44,7 +44,6 @@ TAGS = [
     'v8.2-staging',
     'v8.2-staging2',
     'v8.2-ipv6',
-    'v8.2-linstor',
     'v8.2-runx',
     'v8.3-base',
     'v8.3-updates',
@@ -64,7 +63,11 @@ RELEASE_TAGS = [
 
 # Additional "user" tags. For them, repos are generated at a different place.
 # Initialized empty: user tags are autodetected based on their name
-USER_TAGS = []
+U_TAGS = []
+
+# Additional V-tags (V stands for "vates" or for "vendor"). For them, repos also are generated at a different place.
+# Initialized empty: V-tags are autodetected based on their name
+V_TAGS = []
 
 KOJI_ROOT_DIR = '/mnt/koji'
 
@@ -200,7 +203,8 @@ def atexit_remove_lock(lock_file):
 def main():
     parser = argparse.ArgumentParser(description='Detect package changes in koji and update repository')
     parser.add_argument('dest_dir', help='root directory of the destination repository')
-    parser.add_argument('user_dest_dir', help='root directory of the destination repository for user tags')
+    parser.add_argument('u_dest_dir', help='root directory of the destination repository for user tags')
+    parser.add_argument('v_dest_dir', help='root directory of the destination repository for V-tags')
     parser.add_argument('data_dir', help='directory where the script will write or read data from')
     parser.add_argument('--quiet', action='store_true',
                         help='do not output anything unless there are changes to be considered')
@@ -208,7 +212,8 @@ def main():
                         help='allow modifying the base repository of a stable release')
     args = parser.parse_args()
     dest_dir = args.dest_dir
-    user_dest_dir = args.user_dest_dir
+    u_dest_dir = args.u_dest_dir
+    v_dest_dir = args.v_dest_dir
     data_dir = args.data_dir
     tmp_root_dir = os.path.join(data_dir, 'tmproot')
     quiet = args.quiet
@@ -222,11 +227,19 @@ def main():
         open(lock_file, 'w').close()
         atexit.register(atexit_remove_lock, lock_file)
 
-    global USER_TAGS
-    USER_TAGS += subprocess.check_output(['koji', 'list-tags', 'v*.*-u-*']).strip().splitlines()
+    global U_TAGS, V_TAGS
+    U_TAGS += subprocess.check_output(['koji', 'list-tags', 'v*.*-u-*']).strip().splitlines()
+    V_TAGS += subprocess.check_output(['koji', 'list-tags', 'v*.*-v-*']).strip().splitlines()
+
+    def dest_dir_for_tag(tag):
+        if tag in U_TAGS:
+            return u_dest_dir
+        if tag in V_TAGS:
+            return v_dest_dir
+        return dest_dir
 
     for version in VERSIONS:
-        for tag in TAGS + USER_TAGS:
+        for tag in TAGS + U_TAGS + V_TAGS:
             if version_from_tag(tag) != version:
                 continue
 
@@ -270,8 +283,8 @@ def main():
                 sys.stdout.flush()
                 subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'] + with_non_latest)
 
-                # write repository to dest_dir or user_dest_dir
-                write_repo(tag, dest_dir if tag not in USER_TAGS else user_dest_dir, tmp_root_dir)
+                # write repository to the appropriate destination directory for the tag
+                write_repo(tag, dest_dir_for_tag(tag), tmp_root_dir)
 
                 # update data
                 with open(tag_builds_filepath, 'w') as f:
