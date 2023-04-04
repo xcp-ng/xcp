@@ -82,7 +82,7 @@ def version_from_tag(tag):
 def repo_name_from_tag(tag):
     version = version_from_tag(tag)
     name = tag[len("v%s-" % version):]
-    if name.startswith('u-'):
+    if name.startswith('u-') or name.startswith('v-'):
         name = name[2:]
     return name
 
