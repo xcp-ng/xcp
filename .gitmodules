@@ -1,0 +1,3 @@
+[submodule "tests/sharness"]
+	path = create-install-image/tests/sharness
+	url = https://github.com/felipec/sharness.git
