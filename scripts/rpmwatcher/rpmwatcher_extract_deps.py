@@ -145,7 +145,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
 
     # Install GPG keys again just once and then keep using this directory without altering it
     # This will save us much time afterwards.
-    subprocess.check_call(['yumdownloader', '-y', '--urls', 'xcp-ng-deps', '--installroot=%s' % install_root])
+    subprocess.check_call(['yumdownloader', '-q', '-y', '--urls', 'xcp-ng-deps', '--installroot=%s' % install_root])
 
     # Get the list of RPMs that are installed by default (deps of xcp-ng-deps)
     installable, rpms_installed_by_default = get_all_runtime_deps('xcp-ng-deps', install_root, include_self=True)
@@ -157,7 +157,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
     # Note: this simple command pulls more than 100 base packages :o
     # This could be either a very good thing or a bad one...
     a_few_base_packages = ['kernel']
-    subprocess.check_call(['yum', 'install', '-y', ' '.join(a_few_base_packages), '--installroot=%s' % install_root])
+    subprocess.check_call(['yum', 'install', '-q', '-y', ' '.join(a_few_base_packages), '--installroot=%s' % install_root])
 
     # Enable all repos, including testing
     # Needs to be re-done now since xcp-ng-release was one of the installed packages and replaced the repo file
