@@ -17,8 +17,12 @@ die_usage() {
 
 # populates CFG_SEARCH_PATH array
 parse_config_search_path() {
-    local pathstr="$1"
     CFG_SEARCH_PATH=()
+    _parse_config_search_path "$1"
+}
+
+_parse_config_search_path() {
+    local pathstr="$1"
     while true; do
         local dir=${pathstr%%:*}
         local absdir
@@ -28,6 +32,13 @@ parse_config_search_path() {
         esac
         [ -d "$absdir" ] || die "directory not found: $absdir"
         CFG_SEARCH_PATH+=("$absdir")
+
+        if [ -r "$absdir/INCLUDE" ]; then
+            while read include; do
+                _parse_config_search_path "$include"
+            done < "$absdir/INCLUDE"
+        fi
+
         [ "$pathstr" != "$dir" ] || break # was last component in search path
         pathstr=${pathstr#${dir}:}        # strip this dir and loop
     done
