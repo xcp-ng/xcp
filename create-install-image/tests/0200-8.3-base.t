@@ -24,19 +24,19 @@ test_expect_success EXPENSIVE "build install.img for 8.3:base" "
 
         $TOPDIR/scripts/create-installimg.sh \
             --srcurl $XCPTEST_REPOROOT/8.3 \
-            8.3.0
+            8.3:base
     ' &&
 
-    test -r install-8.3.0-x86_64.img
+    test -r install-8.3-x86_64.img
 "
 
 test_expect_success "build ISO for 8.3:base" "
-    ( test -r install-8.3.0-x86_64.img || touch install-8.3.0-x86_64.img ) &&
+    ( test -r install-8.3-x86_64.img || touch install-8.3-x86_64.img ) &&
 
     $TOPDIR/scripts/create-install-iso.sh \
         --srcurl $XCPTEST_REPOROOT/8.3 \
         -V 'XCP-NG_TEST' \
-        8.3.0 install-8.3.0-x86_64.img xcp-ng-8.3-install.iso &&
+        8.3:base install-8.3-x86_64.img xcp-ng-8.3-install.iso &&
 
     test -r xcp-ng-8.3-install.iso
 "

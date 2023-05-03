@@ -24,19 +24,19 @@ test_expect_success EXPENSIVE "build install.img for 8.2:updates" "
 
         $TOPDIR/scripts/create-installimg.sh \
             --srcurl $XCPTEST_REPOROOT/8.2 \
-            8.2.updates
+            8.2:updates
     ' &&
 
-    test -r install-8.2.updates-x86_64.img
+    test -r install-8.2-x86_64.img
 "
 
 test_expect_success "build ISO for 8.2:updates" "
-    ( test -r install-8.2.updates-x86_64.img || touch install-8.2.updates-x86_64.img ) &&
+    ( test -r install-8.2-x86_64.img || touch install-8.2-x86_64.img ) &&
 
     $TOPDIR/scripts/create-install-iso.sh \
         --srcurl $XCPTEST_REPOROOT/8.2 \
         -V 'XCP-NG_TEST' \
-        8.2.updates install-8.2.updates-x86_64.img xcp-ng-8.2-install.iso &&
+        8.2:updates install-8.2-x86_64.img xcp-ng-8.2-install.iso &&
 
     test -r xcp-ng-8.2-install.iso
 "

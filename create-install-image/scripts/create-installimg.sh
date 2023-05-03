@@ -157,8 +157,7 @@ ln -s ../../../usr/lib/python2.7/site-packages/xcp/branding.py \
 ### services
 
 case "$DIST" in
-    8.2.*)
-	# FIXME do we really want to stick to 8.2.1 here?
+    8.2)
 	INSTALLERGETTY=getty@tty2.service
 	;;
     *)

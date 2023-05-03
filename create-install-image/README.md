@@ -36,9 +36,34 @@ This scripts excludes from the mirror:
 - development RPMs
 - debugging-symbols RPMs
 
+### configuration layers and package repositories
+
+Configuration layers are defined as a subdirectory of the `configs/`
+directory.  Commands are given a layer search path as
+`<base-config>[:<config-overlay>]* `.
+
+Standard layers are organized such as two of the standard layers must be
+used:
+
+* The "version" layer (e.g. `8.2`) provides required files:
+  - `packages.lst` and `yum.conf.tmpl` used to create the `install.img`
+    filesystem
+  - `yumdl.conf.tmpl` used to download files for the RPM repository
+    included in the ISO
+
+* The "repo" layers (e.g. `updates`) each provide a yum repo
+  configuration file, and optionally an `INCLUDE` file to pull
+  additional base repo layers.  The `base` layer will always be in the
+  include chain.
+
+XCP-ng official repositories are located at
+https://updates.xcp-ng.org/ and most of them are available through
+standard "repo" layers; e.g. the `testing` repository for `8.2` LTS can
+be used as `8.2:testing`.
+
 ## examples
 
-### 8.3.0
+### 8.3 updates and testing
 
 ```
 ./scripts/mirror-repos.sh 8.3 ~/mirrors/xcpng
@@ -46,15 +71,15 @@ This scripts excludes from the mirror:
 sudo ./scripts/create-installimg.sh \
     --srcurl file://$HOME/mirrors/xcpng/8.3 \
     --output install-8.3.testing.img \
-    8.3.0
+    8.3:testing
 
 ./scripts/create-install-iso.sh \
     --srcurl file://$HOME/mirrors/xcpng/8.3 \
     -V "XCP-NG_830_TEST" \
-    8.3.0 install-8.3.0-x86_64.img xcp-ng-8.3-install.iso
+    8.3:testing install-8.3-testing.img xcp-ng-8.3-testing.iso
 ```
 
-### latest 8.2
+### tip of 8.2 (8.2 + updates)
 
 ```
 ./scripts/mirror-repos.sh 8.2 ~/mirrors/xcpng
@@ -62,12 +87,12 @@ sudo ./scripts/create-installimg.sh \
 sudo ./scripts/create-installimg.sh \
     --srcurl file://$HOME/mirrors/xcpng/8.2 \
     --output install-8.2.updates.img \
-    8.2.updates
+    8.2:updates
 
 ./scripts/create-install-iso.sh \
     --srcurl file://$HOME/mirrors/xcpng/8.2 \
     -V "XCP-NG_82_TEST" \
-    8.2.updates install-8.2.updates.img xcp-ng-8.2.updates.iso
+    8.2:updates install-8.2.updates.img xcp-ng-8.2.updates.iso
 ```
 
 ### testing boot modes in qemu
