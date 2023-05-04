@@ -153,6 +153,20 @@ setup_yum_download() {
                 > "$YUMREPOSD/$reponame.repo"
     done
 
+    # custom repos
+    CUSTOMREPO_TEMPLATE=$(find_config CUSTOMREPO.tmpl)
+    for repoid in "${!CUSTOM_REPOS[@]}"; do
+        repourl="${CUSTOM_REPOS[$repoid]}"
+        cat "$CUSTOMREPO_TEMPLATE" |
+            sed \
+                -e "s,@@REPOID@@,$repoid," \
+                -e "s,@@REPOURL@@,$repourl," \
+                -e "s,@@RPMARCH@@,$RPMARCH," \
+                > "$YUMREPOSD/$repoid.repo"
+        YUMFLAGS+=("--enablerepo=$repoid")
+    done
+    ls -l "$YUMREPOSD"
+
     # availability of yumdownloader does not imply that of yum
     local YUM=$(command -v yum || command -v dnf) || die "no yum or dnf found"
     # summary of repos

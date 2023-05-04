@@ -61,6 +61,11 @@ https://updates.xcp-ng.org/ and most of them are available through
 standard "repo" layers; e.g. the `testing` repository for `8.2` LTS can
 be used as `8.2:testing`.
 
+Custom repositories can be added with `--define-repo` flag (can be
+used multiple times to define more than one custom repo).  They will
+be used by `yum` using the first `CUSTOMREPO.tmpl` template found in
+the layer search path (one is provided in `base`).
+
 ## examples
 
 ### 8.3 updates and testing
@@ -163,7 +168,7 @@ prove tests/ :: -l
 ### post alpha3
 
 * [x] how to deal with the fact we can only reproduce 8.x.0 and 8.x.updates
-* [ ] (^^ linked ^^) customizability of available repos
+* [x] (^^ linked ^^) customizability of available repos
 * [ ] multipath support ?
 * [x] getty on tty2 is broken
 * [x] document dependencies (as asserts)

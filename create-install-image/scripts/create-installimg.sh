@@ -13,6 +13,8 @@ Usage: $0 [<options>] <base-config>[:<config-overlay>]*
 
 Options:
     --srcurl <URL>            get RPMs from repo at <URL>
+    -D|--define-repo <NICK>!<URL>
+                              add yum repo with name <NICK> and base URL <URL>
     --output|-o <OUTPUT.IMG>  choose a different output name
     -v|--verbose	      be talkative
 EOF
@@ -21,6 +23,7 @@ EOF
 VERBOSE=
 OUTPUT_IMG=
 SRCURL=
+declare -A CUSTOM_REPOS=()
 RPMARCH="x86_64"
 while [ $# -ge 1 ]; do
     case "$1" in
@@ -34,6 +37,20 @@ while [ $# -ge 1 ]; do
         --srcurl)
             [ $# -ge 2 ] || die_usage "$1 needs an argument"
             SRCURL="$2"
+            shift
+            ;;
+        -D|--define-repo)
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
+            case "$2" in
+                *!*)
+                    nick="${2%!*}"
+                    url="${2#*!}"
+                    ;;
+                *)
+                    die "$1 argument must have 2 parts separated by a '!'"
+                    ;;
+            esac
+            CUSTOM_REPOS["$nick"]="$url"
             shift
             ;;
         --output|-o)
