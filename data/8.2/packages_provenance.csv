@@ -272,6 +272,7 @@ memtest86+;XS;;;
 message-switch;XS;;;
 microcode_ctl;XS;;;
 microsemi-smartpqi;XS;;;
+microsemi-smartpqi-alt;XCP-ng;alternate driver;;
 mtr;XCP-ng;extra tool;;
 nano;XS;;;
 nbdkit;XCP-ng;added as dependency for XOSTOR;;
