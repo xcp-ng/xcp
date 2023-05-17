@@ -39,18 +39,18 @@ DEAD_TAGS = [
 TAGS = [
     'v8.2-base',
     'v8.2-updates',
+    'v8.2-candidates',
     'v8.2-testing',
     'v8.2-ci',
-    'v8.2-staging',
-    'v8.2-staging2',
-    'v8.2-ipv6',
-    'v8.2-runx',
+    'v8.2-incoming',
+    'v8.2-lab',
     'v8.3-base',
     'v8.3-updates',
+    'v8.3-candidates',
     'v8.3-testing',
     'v8.3-ci',
-    'v8.3-staging',
-    'v8.3-runx',
+    'v8.3-incoming',
+    'v8.3-lab',
 ]
 
 # tags in which we only keep the latest build for each package
