@@ -56,6 +56,16 @@ find_config() {
     die "cannot find '$filename' in ${CFG_SEARCH_PATH[*]}"
 }
 
+find_all_configs() {
+    local filename="$1"
+    for dir in "${CFG_SEARCH_PATH[@]}"; do
+        try="$dir/$filename"
+        if [ -r "$try" ]; then
+            echo "$try"
+        fi
+    done
+}
+
 # default src URL depending on selected $DIST
 
 maybe_set_srcurl() {
@@ -107,7 +117,6 @@ setup_yum_download() {
     SRCURL="$3"
 
     YUMDLCONF_TMPL=$(find_config yumdl.conf.tmpl)
-    YUMREPOSCONF_TMPL=$(find_config yum-repos.conf.tmpl)
 
     YUMDLCONF=$(mktemp "$TMPDIR/yum-XXXXXX.conf")
     YUMREPOSD=$(mktemp -d "$TMPDIR/yum-repos-XXXXXX.d")
@@ -134,12 +143,15 @@ setup_yum_download() {
         --config="$YUMDLCONF"
         --releasever="$DIST"
     )
-    reponame=$(basename $(dirname "$YUMREPOSCONF_TMPL"))
-    cat "$YUMREPOSCONF_TMPL" |
-        sed \
-            -e "s,@@SRCURL@@,$SRCURL," \
-            -e "s,@@RPMARCH@@,$RPMARCH," \
-            > "$YUMREPOSD/$reponame.repo"
+
+    find_all_configs yum-repos.conf.tmpl | while read YUMREPOSCONF_TMPL; do
+        reponame=$(basename $(dirname "$YUMREPOSCONF_TMPL"))
+        cat "$YUMREPOSCONF_TMPL" |
+            sed \
+                -e "s,@@SRCURL@@,$SRCURL," \
+                -e "s,@@RPMARCH@@,$RPMARCH," \
+                > "$YUMREPOSD/$reponame.repo"
+    done
 
     # availability of yumdownloader does not imply that of yum
     local YUM=$(command -v yum || command -v dnf) || die "no yum or dnf found"

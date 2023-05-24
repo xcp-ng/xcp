@@ -76,13 +76,16 @@ cat "$YUMCONF_TMPL" |
     > "$YUMCONF"
 [ -z "$VERBOSE" ] || cat "$YUMCONF"
 
-YUMREPOSCONF_TMPL=$(find_config yum-repos.conf.tmpl)
-reponame=$(basename $(dirname "$YUMREPOSCONF_TMPL"))
-cat "$YUMREPOSCONF_TMPL" |
-    sed \
-        -e "s,@@SRCURL@@,$SRCURL," \
-        -e "s,@@RPMARCH@@,$RPMARCH," \
-        > "$YUMREPOSD/$reponame.repo"
+find_all_configs yum-repos.conf.tmpl | while read YUMREPOSCONF_TMPL; do
+    reponame=$(basename $(dirname "$YUMREPOSCONF_TMPL"))
+    cat "$YUMREPOSCONF_TMPL" |
+        sed \
+            -e "s,@@SRCURL@@,$SRCURL," \
+            -e "s,@@RPMARCH@@,$RPMARCH," \
+            > "$YUMREPOSD/$reponame.repo"
+done
+[ -z "$VERBOSE" ] || ls "$YUMREPOSD"
+
 ROOTFS=$(mktemp -d "$TMPDIR/rootfs-XXXXXX")
 YUMFLAGS=(
     --config="$YUMCONF"
