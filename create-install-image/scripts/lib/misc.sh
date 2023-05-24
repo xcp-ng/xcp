@@ -66,6 +66,7 @@ setup_yum_download() {
     SRCURL="$3"
 
     YUMDLCONF=$(mktemp "$TMPDIR/yum-XXXXXX.conf")
+    YUMREPOSD=$(mktemp -d "$TMPDIR/yum-repos-XXXXXX.d")
     YUMLOGDIR=$(mktemp -d "$TMPDIR/logs-XXXXXX")
     DUMMYROOT=$(mktemp -d "$TMPDIR/root-XXXXXX")
 
@@ -76,34 +77,27 @@ setup_yum_download() {
         enable_plugins=0
     fi
 
-    # FIXME gpgcheck
-    cat > "$YUMDLCONF" <<EOF
-[main]
-reposdir=/dev/null
-cachedir=$TMPDIR/yum-cache
-persistdir=/dev/null
-gpgcheck=0
-repo_gpgcheck=0
-plugins=${enable_plugins}
-basearch=$RPMARCH
-[xcpng-base]
-name=xcpng-base
-baseurl=$SRCURL/base/$RPMARCH/
-[xcpng-updates]
-name=xcpng-updates
-baseurl=$SRCURL/updates/$RPMARCH/
-[xcpng-testing]
-name=xcpng-testing
-baseurl=$SRCURL/testing/$RPMARCH/
-EOF
+    confdir="$topdir/configs/$DIST"
+    YUMREPOSCONF_TMPL="$confdir/yum-repos.conf.tmpl"
+    cat "$confdir/yumdl.conf.tmpl" |
+        sed \
+            -e "s,@@ENABLE_PLUGINS@@,$enable_plugins," \
+            -e "s,@@YUMREPOSD@@,$YUMREPOSD," \
+            -e "s,@@CACHEDIR@@,$TMPDIR/yum-cache," \
+            > "$YUMDLCONF"
     mkdir ${VERBOSE} "$DUMMYROOT/etc"
     YUMDLFLAGS=(
         # non-$VERBOSE is -q, $VERBOSE is default, yum's -v would be debug
         $([ -n "$VERBOSE" ] || printf -- "-q")
         --config="$YUMDLCONF"
         --releasever="$DIST"
-        # --disablerepo="*" --enablerepo='xcpng-base'
     )
+    reponame=$(basename $(dirname "$YUMREPOSCONF_TMPL"))
+    cat "$YUMREPOSCONF_TMPL" |
+        sed \
+            -e "s,@@SRCURL@@,$SRCURL," \
+            -e "s,@@RPMARCH@@,$RPMARCH," \
+            > "$YUMREPOSD/$reponame.repo"
 
     # availability of yumdownloader does not imply that of yum
     local YUM=$(command -v yum || command -v dnf) || die "no yum or dnf found"
