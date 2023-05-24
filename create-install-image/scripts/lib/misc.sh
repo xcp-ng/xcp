@@ -15,6 +15,36 @@ die_usage() {
 }
 
 
+# populates CFG_SEARCH_PATH array
+parse_config_search_path() {
+    local pathstr="$1"
+    CFG_SEARCH_PATH=()
+    while true; do
+        local dir=${pathstr%%:*}
+        local absdir
+        case "$dir" in
+            /*) absdir="$dir" ;;
+            *) absdir=$(realpath "$topdir/configs/$dir") ;;
+        esac
+        [ -d "$absdir" ] || die "directory not found: $absdir"
+        CFG_SEARCH_PATH+=("$absdir")
+        [ "$pathstr" != "$dir" ] || break # was last component in search path
+        pathstr=${pathstr#${dir}:}        # strip this dir and loop
+    done
+}
+
+find_config() {
+    local filename="$1"
+    for dir in "${CFG_SEARCH_PATH[@]}"; do
+        try="$dir/$filename"
+        if [ -r "$try" ]; then
+            echo "$try"
+            return
+        fi
+    done
+    die "cannot find '$filename' in ${CFG_SEARCH_PATH[*]}"
+}
+
 # default src URL depending on selected $DIST
 
 maybe_set_srcurl() {
@@ -65,6 +95,9 @@ setup_yum_download() {
     RPMARCH="$2"
     SRCURL="$3"
 
+    YUMDLCONF_TMPL=$(find_config yumdl.conf.tmpl)
+    YUMREPOSCONF_TMPL=$(find_config yum-repos.conf.tmpl)
+
     YUMDLCONF=$(mktemp "$TMPDIR/yum-XXXXXX.conf")
     YUMREPOSD=$(mktemp -d "$TMPDIR/yum-repos-XXXXXX.d")
     YUMLOGDIR=$(mktemp -d "$TMPDIR/logs-XXXXXX")
@@ -77,9 +110,7 @@ setup_yum_download() {
         enable_plugins=0
     fi
 
-    confdir="$topdir/configs/$DIST"
-    YUMREPOSCONF_TMPL="$confdir/yum-repos.conf.tmpl"
-    cat "$confdir/yumdl.conf.tmpl" |
+    cat "$YUMDLCONF_TMPL" |
         sed \
             -e "s,@@ENABLE_PLUGINS@@,$enable_plugins," \
             -e "s,@@YUMREPOSD@@,$YUMREPOSD," \
@@ -102,7 +133,10 @@ setup_yum_download() {
     # availability of yumdownloader does not imply that of yum
     local YUM=$(command -v yum || command -v dnf) || die "no yum or dnf found"
     # summary of repos
+    test ! -r /var/cache/yum/xcpng-base || die "yum system cache should not be there to start with"
     "$YUM" ${YUMDLFLAGS[@]} repolist all
+    # double-check we don't let yum reintroduce that cache by mistake
+    test ! -r /var/cache/yum/xcpng-base || die "yum system cache should not have been created"
 }
 
 get_rpms() {

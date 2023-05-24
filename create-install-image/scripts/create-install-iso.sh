@@ -11,7 +11,7 @@ topdir=$mydir/..
 
 usage() {
     cat <<EOF
-Usage: $0 [<options>] <dist> <install.img> <output-iso>
+Usage: $0 [<options>] <base-config>[:<config-overlay>]* <install.img> <output-iso>
 
 Options:
     -V <VOLID>                (mandatory) ISO volume ID
@@ -73,11 +73,12 @@ if [ $DOREPO = 0 -a -n "$KEYID" ]; then
     die_usage "signing key is useless on netinstall media"
 fi
 
-[ -z "$VERBOSE" ] || set -x
-
-DIST="$1"
+parse_config_search_path "$1"
+DIST="$(basename ${CFG_SEARCH_PATH[0]})"
 INSTALLIMG="$2"
 OUTISO="$3"
+
+[ -z "$VERBOSE" ] || set -x
 
 maybe_set_srcurl "$DIST"
 test -r "$INSTALLIMG" || die "cannot read '$INSTALLIMG' for install.img"

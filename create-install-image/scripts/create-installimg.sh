@@ -9,7 +9,7 @@ topdir=$mydir/..
 
 usage() {
     cat <<EOF
-Usage: $0 [<options>] <dist>
+Usage: $0 [<options>] <base-config>[:<config-overlay>]*
 
 Options:
     --srcurl <URL>            get RPMs from repo at <URL>
@@ -52,15 +52,11 @@ while [ $# -ge 1 ]; do
 done
 
 [ $# = 1 ] || die_usage "need exactly 1 non-option argument"
+parse_config_search_path "$1"
+DIST="$(basename ${CFG_SEARCH_PATH[0]})"
 
 [ -z "$VERBOSE" ] || set -x
 
-DIST="$1"
-confdir="$topdir/configs/$DIST"
-
-[ -r "$confdir/yum.conf.tmpl" ] || die "cannot find yum config for '$DIST'"
-[ -r "$confdir/yum-repos.conf.tmpl" ] || die "cannot find yum-repos config for '$DIST'"
-[ -r "$confdir/packages.lst" ] || die "cannot find package list for '$DIST'"
 maybe_set_srcurl "$DIST"
 [ -n "$OUTPUT_IMG" ] || OUTPUT_IMG="install-$DIST-$RPMARCH.img"
 
@@ -73,13 +69,14 @@ command -v yum >/dev/null || die "required tool not found: yum"
 # expand template
 YUMCONF=$(mktemp "$TMPDIR/yum-XXXXXX.conf")
 YUMREPOSD=$(mktemp -d "$TMPDIR/yum-repos-XXXXXX.d")
-cat "$confdir/yum.conf.tmpl" |
+YUMCONF_TMPL=$(find_config yum.conf.tmpl)
+cat "$YUMCONF_TMPL" |
     sed \
     -e "s,@@YUMREPOSD@@,$YUMREPOSD," \
     > "$YUMCONF"
 [ -z "$VERBOSE" ] || cat "$YUMCONF"
 
-YUMREPOSCONF_TMPL="$confdir/yum-repos.conf.tmpl"
+YUMREPOSCONF_TMPL=$(find_config yum-repos.conf.tmpl)
 reponame=$(basename $(dirname "$YUMREPOSCONF_TMPL"))
 cat "$YUMREPOSCONF_TMPL" |
     sed \
@@ -97,7 +94,8 @@ YUMFLAGS=(
 # summary of repos
 yum ${YUMFLAGS[@]} repolist all
 
-xargs < "$confdir/packages.lst" \
+PACKAGES_LST=$(find_config packages.lst)
+xargs < "$PACKAGES_LST" \
     yum ${YUMFLAGS[@]} install \
         --assumeyes \
         --noplugins
