@@ -59,6 +59,7 @@ DIST="$1"
 confdir="$topdir/configs/$DIST"
 
 [ -r "$confdir/yum.conf.tmpl" ] || die "cannot find yum config for '$DIST'"
+[ -r "$confdir/yum-repos.conf.tmpl" ] || die "cannot find yum-repos config for '$DIST'"
 [ -r "$confdir/packages.lst" ] || die "cannot find package list for '$DIST'"
 maybe_set_srcurl "$DIST"
 [ -n "$OUTPUT_IMG" ] || OUTPUT_IMG="install-$DIST-$RPMARCH.img"
@@ -71,14 +72,21 @@ command -v yum >/dev/null || die "required tool not found: yum"
 
 # expand template
 YUMCONF=$(mktemp "$TMPDIR/yum-XXXXXX.conf")
-sed \
-    -e "s,@@SRCURL@@,$SRCURL," \
-    -e "s,@@RPMARCH@@,$RPMARCH," \
-    < "$confdir/yum.conf.tmpl" > "$YUMCONF"
+YUMREPOSD=$(mktemp -d "$TMPDIR/yum-repos-XXXXXX.d")
+cat "$confdir/yum.conf.tmpl" |
+    sed \
+    -e "s,@@YUMREPOSD@@,$YUMREPOSD," \
+    > "$YUMCONF"
 [ -z "$VERBOSE" ] || cat "$YUMCONF"
 
+YUMREPOSCONF_TMPL="$confdir/yum-repos.conf.tmpl"
+reponame=$(basename $(dirname "$YUMREPOSCONF_TMPL"))
+cat "$YUMREPOSCONF_TMPL" |
+    sed \
+        -e "s,@@SRCURL@@,$SRCURL," \
+        -e "s,@@RPMARCH@@,$RPMARCH," \
+        > "$YUMREPOSD/$reponame.repo"
 ROOTFS=$(mktemp -d "$TMPDIR/rootfs-XXXXXX")
-# FIXME should allow to select repos - use jinja tricks?
 YUMFLAGS=(
     --config="$YUMCONF"
     --installroot="$ROOTFS"

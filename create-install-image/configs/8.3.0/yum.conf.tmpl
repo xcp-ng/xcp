@@ -1,7 +1,7 @@
 [main]
 keepcache=1
 debuglevel=2
-reposdir=/dev/null
+reposdir=@@YUMREPOSD@@
 logfile=/var/log/yum.log
 retries=20
 obsoletes=1
@@ -15,11 +15,3 @@ best=1
 protected_packages=
 skip_missing_names_on_install=0
 tsflags=nodocs
-
-# repos
-[xcpng-base]
-name=xcpng - Base
-baseurl=@@SRCURL@@/base/@@RPMARCH@@/
-gpgkey=https://xcp-ng.org/RPM-GPG-KEY-xcpng
-failovermethod=priority
-skip_if_unavailable=False
