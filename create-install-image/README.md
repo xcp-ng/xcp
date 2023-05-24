@@ -23,8 +23,7 @@ Creates `.iso` from:
 ### `./scripts/create-installimg.sh`
 
 Creates `install-$RELEASE.img` for input to `create-install-iso`, from:
-- `mock` config file (./mock-configs/$RELEASE.cfg`)
-
+- yum repository for the product (or a local mirror)
 - a `packages.lst` file listing RPMs to be installed
 - additional files from `./installimg/$RELEASE/`
 
@@ -44,7 +43,7 @@ This scripts excludes from the mirror:
 ```
 ./scripts/mirror-repos.sh 8.3 ~/mirrors/xcpng
 
-./scripts/create-installimg.sh \
+sudo ./scripts/create-installimg.sh \
     --srcurl file://$HOME/mirrors/xcpng/8.3 \
     --output install-8.3.testing.img \
     8.3.0
@@ -55,12 +54,12 @@ This scripts excludes from the mirror:
     8.3.0 install-8.3.0-x86_64.img xcp-ng-8.3-install.iso
 ```
 
-### 8.2 updates
+### latest 8.2
 
 ```
 ./scripts/mirror-repos.sh 8.2 ~/mirrors/xcpng
 
-./scripts/create-installimg.sh \
+sudo ./scripts/create-installimg.sh \
     --srcurl file://$HOME/mirrors/xcpng/8.2 \
     --output install-8.2.updates.img \
     8.2.updates
@@ -194,11 +193,8 @@ Work to reproduce install.img
     - ...
   * file diffs:
    * kernel modules differ (!)
-   * mock leaves a "mockbuild" user and "mock" group behind
    * /etc/issue
-   * /etc/localtime points to Paris not UTC
    * host contamination:
-     * hostname leaks into $B/etc/hosts
      * ~~$B/etc/multipath.conf.disabled~~: not really, comes from BuildRequires
   * metadata diffs
     * removed locale files are not flagged as missing in CH8C install.img by "rpm -V", not clear now they achieved this
@@ -214,7 +210,7 @@ Comparison of install.img between XCP-ng 8.2.0's official ISOs and newly generat
 - [ ] they remove files in fcoe-utils (/etc, /usr/libexec)
 
 - [ ] We modify filemodes in /usr/lib/debug/usr, why?
-- [ ] Also filemodes of /etc/fstab, /etc/gshadow, /etc/hosts, /etc/shadow, /var/lib/yum/history
+- [ ] Also filemodes of /etc/fstab, /etc/hosts, /var/lib/yum/history
 
 - [ ] We remove less modules than Citrix, so in results less firmware files are removed too? (triggerin in host-installer) => investigate
 
@@ -224,11 +220,9 @@ Comparison of install.img between XCP-ng 8.2.0's official ISOs and newly generat
 
 - [ ] There are two .rpmnew files we can delete, including /etc/hosts.rpmnew whose contents is better (includes localhost4)
 
-- [ ] There's a /installation-homedir, why?
+- [x] ~~There's a /installation-homedir, why?~~
 
 - [x] Clean-up /var/lib/yum, /var/cache/yum
-
-Store our own version of mock's bootstrap image quay.io/centos/centos:7
 
 
 ### ISO image
@@ -237,7 +231,7 @@ Store our own version of mock's bootstrap image quay.io/centos/centos:7
 
 - [x] kernel-alt is missing in Packages/
 
-- [ ] Store quay.io image locally? Only if a simple file.
+- [x] ~~Store quay.io image locally? Only if a simple file.~~
 
 - [ ] Packages/ for 8.2.0 contains libverto-libevent instead of libverto-tevent (both fulfill the same Provides). Could it have adverse effects? Does this problem affect 8.3 ISOs? Create a yum conf, used when Packages/ is generated, where in case of doubt libverto-tevent be prefered?
 

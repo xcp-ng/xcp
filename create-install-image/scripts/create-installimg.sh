@@ -18,8 +18,6 @@ Options:
 EOF
 }
 
-mockdir=$topdir/mock-configs
-
 VERBOSE=
 OUTPUT_IMG=
 SRCURL=
@@ -58,35 +56,49 @@ done
 [ -z "$VERBOSE" ] || set -x
 
 DIST="$1"
-[ -r "$mockdir/$DIST-$RPMARCH.cfg" ] || die "cannot find config for '$DIST-$RPMARCH'"
+confdir="$topdir/configs/$DIST"
+
+[ -r "$confdir/yum.conf.tmpl" ] || die "cannot find yum config for '$DIST'"
+[ -r "$confdir/packages.lst" ] || die "cannot find package list for '$DIST'"
 maybe_set_srcurl "$DIST"
 [ -n "$OUTPUT_IMG" ] || OUTPUT_IMG="install-$DIST-$RPMARCH.img"
 
-command -v mock >/dev/null || die "required tool not found: mock"
-command -v fakeroot >/dev/null || die "required tool not found: fakeroot"
+command -v yum >/dev/null || die "required tool not found: yum"
+#command -v fakeroot >/dev/null || die "required tool not found: fakeroot"
 
 
 #### create base rootfs
 
+# expand template
+YUMCONF=$(mktemp "$TMPDIR/yum-XXXXXX.conf")
+sed \
+    -e "s,@@SRCURL@@,$SRCURL," \
+    -e "s,@@RPMARCH@@,$RPMARCH," \
+    < "$confdir/yum.conf.tmpl" > "$YUMCONF"
+[ -z "$VERBOSE" ] || cat "$YUMCONF"
+
+ROOTFS=$(mktemp -d "$TMPDIR/rootfs-XXXXXX")
 # FIXME should allow to select repos - use jinja tricks?
-MOCK=(
-    mock
-    --configdir="$topdir/mock-configs"
-    --config-opts=srcurl="$SRCURL"
-    -r "$DIST-$RPMARCH"
-    # non-$VERBOSE is -q, $VERBOSE is default, mock's -v would be debug
+YUMFLAGS=(
+    --config="$YUMCONF"
+    --installroot="$ROOTFS"
+    # non-$VERBOSE is -q, $VERBOSE is default, yum's -v would be debug
     $([ -n "$VERBOSE" ] || printf -- "-q")
 )
 
-${MOCK[@]} --clean
-${MOCK[@]} --scrub=root-cache
-${MOCK[@]} --init
+# summary of repos
+yum ${YUMFLAGS[@]} repolist all
 
+xargs < "$confdir/packages.lst" \
+    yum ${YUMFLAGS[@]} install \
+        --assumeyes \
+        --noplugins
 
 ### removal of abusively-pulled packages (list manually extracted as
 ### packages not in 8.2.1 install.img)
 
-${MOCK[@]} --shell -- rpm --nodeps --erase binutils dracut gpg-pubkey pkgconfig xen-hypervisor
+rpm --root="$ROOTFS" --nodeps --erase \
+    binutils dracut gpg-pubkey pkgconfig xen-hypervisor
 
 
 ### removal of misc stuff
@@ -95,50 +107,45 @@ ${MOCK[@]} --shell -- rpm --nodeps --erase binutils dracut gpg-pubkey pkgconfig 
 BINS="systemd-analyze systemd-nspawn journalctl machinectl dgawk loginctl ssh-keyscan pgawk busctl systemd-run"
 BINS+=" ssh-agent timedatectl systemd-cgls localectl hostnamectl systemd-inhibit info oldfind coredumpctl"
 SBINS="pdata_tools oxenstored ldconfig build-locale-archive glibc_post_upgrade.x86_64 sln install-info"
-BINPATHS=$(
-    for i in $BINS; do echo /usr/bin/$i; done
-    for i in $SBINS; do echo /usr/sbin/$i; done
-	)
+MOREFILES=" \
+	/boot \
+	/usr/share/locale /usr/lib/locale /usr/share/i18n/locales \
+        /usr/libexec/xen/boot \
+        /usr/share/bash-completion \
+"
 
+# FIXME decide what to do with those doubtbul ones:
 
-# FIXME decide what to do with those
-DOUBTFUL=""
 # if we want to use craklib why remove this, if we don't why not remove the rest
-DOUBTFUL+=" /usr/share/cracklib"
+MOREFILES+=" /usr/share/cracklib"
 # similarly, there are other files - maybe those are just the source file?
-DOUBTFUL+=" /usr/lib/udev/hwdb.d/"
+MOREFILES+=" /usr/lib/udev/hwdb.d/"
 
-# WTF cannot use glob wildcards in mock commands, srsly...
-MOCKROOT=$(${MOCK[@]} -p)
-# ... /boot/*
-MOREFILES=$(cd $MOCKROOT && ls boot/* | sed s,^,/,)
+RMPATHS=$(
+    for i in $BINS; do echo $ROOTFS/usr/bin/$i; done
+    for i in $SBINS; do echo $ROOTFS/usr/sbin/$i; done
+    for i in $MOREFILES; do echo $ROOTFS/$i; done
+       )
 
-${MOCK[@]} --shell -- find /usr -name "*.py[co]" -delete
-${MOCK[@]} --shell -- rm -r $VERBOSE \
-      /usr/share/locale /usr/lib/locale /usr/share/i18n/locales \
-      /usr/libexec/xen/boot \
-      /etc/dnf \
-      $MOREFILES \
-      $BINPATHS \
-      $DOUBTFUL \
-      /usr/share/bash-completion
+rm -r $VERBOSE $RMPATHS
+find $ROOTFS/usr -name "*.py[co]" -delete
 
 
 ### extra stuff
 
 # /init for initrd
-${MOCK[@]} --shell -- ln -s /sbin/init /init
+ln -sf /sbin/init $ROOTFS/init
 
 # files specific to the install image
-(cd "$topdir/templates/installimg/$DIST" && find . | cpio -o) | ${MOCK[@]} --shell -- "cd / && cpio -idm ${VERBOSE}"
+(cd "$topdir/templates/installimg/$DIST" && find . | cpio -o) | (cd $ROOTFS && cpio -idm --owner=root:root ${VERBOSE})
 
 # FIXME ignored
-${MOCK[@]} --shell -- ": > /etc/yum/yum.conf"
+: > $ROOTFS/etc/yum/yum.conf
 
 # installer branding - FIXME should be part of host-installer.rpm
-${MOCK[@]} --shell -- ln -sr /EULA "/opt/xensource/installer/"
-${MOCK[@]} --shell -- ln -sr /usr/lib/python2.7/site-packages/xcp/branding.py \
-	   "/opt/xensource/installer/version.py"
+ln -s ../../../EULA "$ROOTFS/opt/xensource/installer/"
+ln -s ../../../usr/lib/python2.7/site-packages/xcp/branding.py \
+	   "$ROOTFS/opt/xensource/installer/version.py"
 
 
 ### services
@@ -153,34 +160,20 @@ case "$DIST" in
 	;;
 esac
 
-${MOCK[@]} --shell -- systemctl enable installer "$INSTALLERGETTY"
+systemctl --root=$ROOTFS enable installer "$INSTALLERGETTY"
 
-${MOCK[@]} --shell -- systemctl disable \
+systemctl --root=$ROOTFS disable \
 	   getty@tty1 fcoe lldpad xen-init-dom0 xenconsoled xenstored chronyd chrony-wait
 
 ### final cleanups
 rm -rf $ROOTFS/var/lib/yum/{yumdb,history} $ROOTFS/var/cache/yum
 
 ### repack cache into .img
-
-# send all our changes to cache (yes the bad doc says it is not necessary)
-${MOCK[@]} --cache-alterations --shell -- true
-
-# note: no official mock interface
-CACHE="/var/cache/mock/$DIST-$RPMARCH/root_cache/cache.tar.gz"
-
-# convert tarball into compressed-cpio
-ROOTFS=$(mktemp -d)
-CLEANUP_DIRS+=("$ROOTFS")
 # make sure bzip2 doesn't leave an invalid output if its input command fails
 trap "rm -f $OUTPUT_IMG" ERR
 # FIXME replace bzip with better algo
-# before repacking:
-# - make sure we can read files with bogus perms (WTF RH, srsly...)
-# - remove /builddir, which can't be removed from the mock rootfs itself without breaking mock
-fakeroot bash -c "set -o pipefail && cd '$ROOTFS' && tar -xf '$CACHE' && \
-                 chmod u+r etc/{,g}shadow{,-} && rm -r builddir && \
-                 find . | cpio -o -H newc" | bzip2 > "$OUTPUT_IMG"
-
-# cleanup for disk space
-${MOCK[@]} --clean
+(
+    set -o pipefail
+    cd "$ROOTFS"
+    find . | cpio -o -H newc
+) | bzip2 > "$OUTPUT_IMG"

@@ -10,4 +10,8 @@ test_expect_success "verify test environment" "
     echo \"XCPTEST_REPOROOT=$XCPTEST_REPOROOT\" | grep '://'
 "
 
+test_expect_success "verify lack of cache" "
+    test ! -r /var/cache/yum/xcpng-base
+"
+
 test_done
