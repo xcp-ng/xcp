@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -uxeE
+set -ueE
 
 usage()
 {
@@ -14,17 +14,25 @@ usage()
     echo "----------------------------------------------------------------------------------------"
 }
 
+if [ $# -lt 2 ]; then
+    echo "Missing argument(s)"
+    echo
+    usage
+    exit 1
+fi
 
 VERSION="$1"
 
 if [ "$VERSION" != "8.3" ] && [ "$VERSION" != "8.2" ]; then
-	echo "Unsupported version. Please choose between 8.2 or 8.3."
-	exit
+    echo "Unsupported version. Please choose between 8.2 and 8.3."
+    exit
 fi
 
 REPOSITORY="$2"
 
 THEDATE=$(date +%Y%m%d)
+
+set -x
 
 NAMEIMG="install-${VERSION}-${REPOSITORY}.img"
 NAMEISO="xcp-ng-${VERSION}-${REPOSITORY}-nightly-${THEDATE}.iso"
@@ -42,8 +50,8 @@ sudo yum install -y genisoimage syslinux grub-tools createrepo_c
 
 cd /data
 
-sudo ./scripts/create-installimg.sh --srcurl http://mirrors.xcp-ng.org/8/${VERSION} -o ${NAMEIMG} ${VERSION}:${REPOSITORY}
+sudo ./scripts/create-installimg.sh --srcurl "https://updates.xcp-ng.org/8/${VERSION}" -o "${NAMEIMG}" "${VERSION}":"${REPOSITORY}"
 
-./scripts/create-install-iso.sh --netinstall --srcurl http://mirrors.xcp-ng.org/8/${VERSION} -V "${MNTVOL}" -o ${NAMEISONI} ${VERSION}:${REPOSITORY} ${NAMEIMG}
+./scripts/create-install-iso.sh --netinstall --srcurl "https://updates.xcp-ng.org/8/${VERSION}" -V "${MNTVOL}" -o "${NAMEISONI}" "${VERSION}":"${REPOSITORY}" "${NAMEIMG}"
 
-./scripts/create-install-iso.sh --srcurl http://mirrors.xcp-ng.org/8/${VERSION} -V "${MNTVOL}" -o ${NAMEISO} ${VERSION}:${REPOSITORY} ${NAMEIMG}
+./scripts/create-install-iso.sh --srcurl "https://updates.xcp-ng.org/8/${VERSION}" -V "${MNTVOL}" -o "${NAMEISO}" "${VERSION}":"${REPOSITORY}" "${NAMEIMG}"
