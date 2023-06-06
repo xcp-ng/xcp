@@ -22,12 +22,14 @@ Options:
                               add yum repo with name <NICK> and base URL <URL>
     --netinstall              do not include repository in ISO
     --sign <NICK> <KEYID>     sign repomd with default gpg key <KEYID>, with readable <NICK>
+    --force-overwrite         don't abort if output file already exists
     --verbose		      be talkative
 EOF
 }
 
 VERBOSE=
 OUTISO=
+FORCE_OVERWRITE=0
 DOREPO=1
 KEYID=
 KEYNICK=
@@ -47,6 +49,9 @@ while [ $# -ge 1 ]; do
             [ $# -ge 2 ] || die_usage "$1 needs an argument"
             OUTISO="$2"
             shift
+            ;;
+        --force-overwrite)
+            FORCE_OVERWRITE=1
             ;;
         -V)
             [ $# -ge 2 ] || die_usage "$1 needs an argument"
@@ -94,6 +99,11 @@ done
 [ $# = 2 ] || die_usage "need exactly 2 non-option arguments"
 [ -n "$VOLID" ] || die_usage "volume ID must be specified (-V)"
 [ -n "$OUTISO" ] || die_usage "output filename must be specified (--output)"
+if [ "$FORCE_OVERWRITE" = 0 -a -e "$OUTISO" ]; then
+    die "'$OUTISO' exists, use --force-overwrite to proceed regardless"
+fi
+[ ! -d "$OUTISO" ] || die "'$OUTISO' exists and is a directory"
+
 if [ $DOREPO = 0 -a -n "$KEYID" ]; then
     die_usage "signing key is useless on netinstall media"
 fi

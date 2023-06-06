@@ -16,12 +16,14 @@ Options:
     -D|--define-repo <NICK>!<URL>
                               add yum repo with name <NICK> and base URL <URL>
     --output|-o <OUTPUT.IMG>  choose a different output name
+    --force-overwrite         don't abort if output file already exists
     -v|--verbose	      be talkative
 EOF
 }
 
 VERBOSE=
 OUTPUT_IMG=
+FORCE_OVERWRITE=0
 SRCURL=
 declare -A CUSTOM_REPOS=()
 RPMARCH="x86_64"
@@ -58,6 +60,9 @@ while [ $# -ge 1 ]; do
             OUTPUT_IMG="$2"
             shift
             ;;
+        --force-overwrite)
+            FORCE_OVERWRITE=1
+            ;;
         -*)
             die_usage "unknown flag '$1'"
             ;;
@@ -76,6 +81,10 @@ DIST="$(basename ${CFG_SEARCH_PATH[0]})"
 
 maybe_set_srcurl "$DIST"
 [ -n "$OUTPUT_IMG" ] || die_usage "output filename must be specified (--output)"
+if [ "$FORCE_OVERWRITE" = 0 -a -e "$OUTPUT_IMG" ]; then
+    die "'$OUTPUT_IMG' exists, use --force-overwrite to proceed regardless"
+fi
+[ ! -d "$OUTPUT_IMG" ] || die "'$OUTPUT_IMG' exists and is a directory"
 
 command -v yum >/dev/null || die "required tool not found: yum"
 #command -v fakeroot >/dev/null || die "required tool not found: fakeroot"
