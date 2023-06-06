@@ -11,9 +11,10 @@ topdir=$mydir/..
 
 usage() {
     cat <<EOF
-Usage: $0 [<options>] <base-config>[:<config-overlay>]* <install.img> <output-iso>
+Usage: $0 [<options>] <base-config>[:<config-overlay>]* <install.img>
 
 Options:
+    -o|--output <output-iso>  (mandatory) output filename
     -V <VOLID>                (mandatory) ISO volume ID
     --srcurl <URL>            get RPMs from base-config and overlays from <URL>
                               default: https://updates.xcp-ng.org/<MAJOR>/<DIST>
@@ -26,6 +27,7 @@ EOF
 }
 
 VERBOSE=
+OUTISO=
 DOREPO=1
 KEYID=
 KEYNICK=
@@ -40,6 +42,11 @@ while [ $# -ge 1 ]; do
             ;;
         --verbose|-v)
             VERBOSE=-v
+            ;;
+        --output|-o)
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
+            OUTISO="$2"
+            shift
             ;;
         -V)
             [ $# -ge 2 ] || die_usage "$1 needs an argument"
@@ -84,8 +91,9 @@ while [ $# -ge 1 ]; do
     shift
 done
 
-[ $# = 3 ] || die_usage "need exactly 3 non-option arguments"
+[ $# = 2 ] || die_usage "need exactly 2 non-option arguments"
 [ -n "$VOLID" ] || die_usage "volume ID must be specified (-V)"
+[ -n "$OUTISO" ] || die_usage "output filename must be specified (--output)"
 if [ $DOREPO = 0 -a -n "$KEYID" ]; then
     die_usage "signing key is useless on netinstall media"
 fi
@@ -93,7 +101,6 @@ fi
 parse_config_search_path "$1"
 DIST="$(basename ${CFG_SEARCH_PATH[0]})"
 INSTALLIMG="$2"
-OUTISO="$3"
 
 [ -z "$VERBOSE" ] || set -x
 

@@ -37,7 +37,8 @@ test_expect_success "build ISO for 8.3:testing" "
     $TOPDIR/scripts/create-install-iso.sh \
         --srcurl $XCPTEST_REPOROOT/8.3 \
         -V 'XCP-NG_TEST' \
-        8.3:testing install-8.3-x86_64.img xcp-ng-8.3-install.iso &&
+        -o xcp-ng-8.3-install.iso \
+        8.3:testing install-8.3-x86_64.img &&
 
     test -r xcp-ng-8.3-install.iso
 "

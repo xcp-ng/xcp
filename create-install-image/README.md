@@ -80,8 +80,9 @@ sudo ./scripts/create-installimg.sh \
 
 ./scripts/create-install-iso.sh \
     --srcurl file://$HOME/mirrors/xcpng/8.3 \
+    --output xcp-ng-8.3.testing.iso \
     -V "XCP-NG_830_TEST" \
-    8.3:testing install-8.3-testing.img xcp-ng-8.3-testing.iso
+    8.3:testing install-8.3-testing.img
 ```
 
 ### tip of 8.2 (8.2 + updates)
@@ -96,8 +97,9 @@ sudo ./scripts/create-installimg.sh \
 
 ./scripts/create-install-iso.sh \
     --srcurl file://$HOME/mirrors/xcpng/8.2 \
+    --output xcp-ng-8.2.updates.iso \
     -V "XCP-NG_82_TEST" \
-    8.2:updates install-8.2.updates.img xcp-ng-8.2.updates.iso
+    8.2:updates install-8.2.updates.img
 ```
 
 ### testing boot modes in qemu
