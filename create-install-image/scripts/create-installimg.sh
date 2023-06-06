@@ -75,7 +75,7 @@ DIST="$(basename ${CFG_SEARCH_PATH[0]})"
 [ -z "$VERBOSE" ] || set -x
 
 maybe_set_srcurl "$DIST"
-[ -n "$OUTPUT_IMG" ] || OUTPUT_IMG="install-$DIST-$RPMARCH.img"
+[ -n "$OUTPUT_IMG" ] || die_usage "output filename must be specified (--output)"
 
 command -v yum >/dev/null || die "required tool not found: yum"
 #command -v fakeroot >/dev/null || die "required tool not found: fakeroot"

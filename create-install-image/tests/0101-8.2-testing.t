@@ -24,6 +24,7 @@ test_expect_success EXPENSIVE "build install.img for 8.2:testing" "
 
         $TOPDIR/scripts/create-installimg.sh \
             --srcurl $XCPTEST_REPOROOT/8.2 \
+            --output install-8.2-x86_64.img \
             8.2:testing
     ' &&
 
