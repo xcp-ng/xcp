@@ -174,6 +174,11 @@ ln -sf /sbin/init $ROOTFS/init
 # files specific to the install image
 (cd "$topdir/templates/installimg/$DIST" && find . | cpio -o) | (cd $ROOTFS && cpio -idm --owner=root:root ${VERBOSE})
 
+# generate depmod cache, as 8.2 template adds support for "override"
+for version in $(cd "$ROOTFS/lib/modules" && ls); do
+    /sbin/depmod -a --config "$ROOTFS/etc/depmod.d/" --basedir "$ROOTFS" "$version"
+done
+
 # FIXME ignored
 : > $ROOTFS/etc/yum/yum.conf
 
