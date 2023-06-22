@@ -198,8 +198,11 @@ VOLID=$(isoinfo -i "$INISO" -d | grep "Volume id"| sed "s/Volume id: //")
 "${FAKEROOT[@]}" genisoimage \
     -o "$OUTISO" \
     -v -r -J --joliet-long -V "$VOLID" -input-charset utf-8 \
-    -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin \
-    -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/efiboot.img \
+    -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin -no-emul-boot \
+    -boot-load-size 4 -boot-info-table \
+    \
+    -eltorito-alt-boot -e boot/efiboot.img \
     -no-emul-boot \
+    \
     $RWISO
 isohybrid --uefi "$OUTISO"
