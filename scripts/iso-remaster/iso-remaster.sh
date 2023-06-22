@@ -1,5 +1,6 @@
 #! /bin/bash
 set -eE
+set -o pipefail
 
 # TODO:
 # - new mode using `udiskctl loop-setup` instead of `fuseiso`
@@ -29,6 +30,7 @@ Options:
          before repacking output ISO.
          Forces "--mode copy" to avoid fuse-overlay bug
          https://github.com/containers/fuse-overlayfs/issues/377
+  -V <volume-id>  Use specified volume id instead of reusing the original one
 EOF
 }
 
@@ -49,9 +51,11 @@ command -v 7z >/dev/null || die "required tool not found: 7z (e.g. p7zip-plugins
 command -v fakeroot >/dev/null || die "required tool not found: fakeroot"
 command -v genisoimage >/dev/null || die "required tool not found: genisoimage"
 command -v isohybrid >/dev/null || die "required tool not found: isohybrid (package syslinux)"
+command -v isoinfo >/dev/null || die "required tool not found: isoinfo (package cdrkit-isotools?)"
 
 ISOPATCHER=""
 IMGPATCHER=""
+VOLID=""
 while [ $# -ge 1 ]; do
     case "$1" in
         --mode)
@@ -69,6 +73,11 @@ while [ $# -ge 1 ]; do
         --install-patcher|-l)
             [ $# -ge 2 ] || die_usage "--install-patcher needs an argument"
             IMGPATCHER="$2"
+            shift
+            ;;
+        -V)
+            [ $# -ge 2 ] || die_usage "-V needs an argument"
+            VOLID="$2"
             shift
             ;;
         --help|-h)
@@ -191,13 +200,17 @@ if [ -n "$ISOPATCHER" ]; then
     "${FAKEROOT[@]}" "$ISOPATCHER" "$RWISO" || die "ISO patcher exited in error: $?"
 fi
 
-VOLID=$(isoinfo -i "$INISO" -d | grep "Volume id"| sed "s/Volume id: //")
+# default value for volume id
+: ${VOLID:=$(isoinfo -i "$INISO" -d | grep "Volume id" | sed "s/Volume id: //")}
 
 "${FAKEROOT[@]}" genisoimage \
     -o "$OUTISO" \
     -v -r -J --joliet-long -V "$VOLID" -input-charset utf-8 \
-    -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin \
-    -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e boot/efiboot.img \
+    -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin -no-emul-boot \
+    -boot-load-size 4 -boot-info-table \
+    \
+    -eltorito-alt-boot -e boot/efiboot.img \
     -no-emul-boot \
+    \
     $RWISO
 isohybrid --uefi "$OUTISO"
