@@ -1,5 +1,6 @@
 #! /bin/bash
 set -eE
+set -o pipefail
 
 # TODO:
 # - new mode using `udiskctl loop-setup` instead of `fuseiso`
