@@ -30,6 +30,7 @@ Options:
          before repacking output ISO.
          Forces "--mode copy" to avoid fuse-overlay bug
          https://github.com/containers/fuse-overlayfs/issues/377
+  -V <volume-id>  Use specified volume id instead of reusing the original one
 EOF
 }
 
@@ -54,6 +55,7 @@ command -v isoinfo >/dev/null || die "required tool not found: isoinfo (package 
 
 ISOPATCHER=""
 IMGPATCHER=""
+VOLID=""
 while [ $# -ge 1 ]; do
     case "$1" in
         --mode)
@@ -71,6 +73,11 @@ while [ $# -ge 1 ]; do
         --install-patcher|-l)
             [ $# -ge 2 ] || die_usage "--install-patcher needs an argument"
             IMGPATCHER="$2"
+            shift
+            ;;
+        -V)
+            [ $# -ge 2 ] || die_usage "-V needs an argument"
+            VOLID="$2"
             shift
             ;;
         --help|-h)
@@ -193,7 +200,8 @@ if [ -n "$ISOPATCHER" ]; then
     "${FAKEROOT[@]}" "$ISOPATCHER" "$RWISO" || die "ISO patcher exited in error: $?"
 fi
 
-VOLID=$(isoinfo -i "$INISO" -d | grep "Volume id"| sed "s/Volume id: //")
+# default value for volume id
+: ${VOLID:=$(isoinfo -i "$INISO" -d | grep "Volume id" | sed "s/Volume id: //")}
 
 "${FAKEROOT[@]}" genisoimage \
     -o "$OUTISO" \
