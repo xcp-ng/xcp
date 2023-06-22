@@ -50,6 +50,7 @@ command -v 7z >/dev/null || die "required tool not found: 7z (e.g. p7zip-plugins
 command -v fakeroot >/dev/null || die "required tool not found: fakeroot"
 command -v genisoimage >/dev/null || die "required tool not found: genisoimage"
 command -v isohybrid >/dev/null || die "required tool not found: isohybrid (package syslinux)"
+command -v isoinfo >/dev/null || die "required tool not found: isoinfo (package cdrkit-isotools?)"
 
 ISOPATCHER=""
 IMGPATCHER=""
