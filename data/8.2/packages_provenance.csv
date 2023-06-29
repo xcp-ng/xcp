@@ -379,6 +379,7 @@ qlogic-fastlinq;XS;;;
 qlogic-netxtreme2;XS;;;
 qlogic-netxtreme2-alt;XCP-ng;additional driver;;
 qlogic-qla2xxx;XS;;;
+qlogic-qla2xxx-alt;XCP-ng;additional driver;;
 qlogic-qla2xxx-firmware;XS;;;
 qrencode;XS;;;
 quota;XS;;;
