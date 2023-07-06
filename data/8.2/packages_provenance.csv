@@ -376,6 +376,7 @@ pyxattr;XS;;;
 qemu;XS;;;
 qemu-dp;XS;;;
 qlogic-fastlinq;XS;;;
+qlogic-fastlinq-alt;XCP-ng;additional driver;;
 qlogic-netxtreme2;XS;;;
 qlogic-netxtreme2-alt;XCP-ng;additional driver;;
 qlogic-qla2xxx;XS;;;
