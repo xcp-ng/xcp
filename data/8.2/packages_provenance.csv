@@ -275,6 +275,7 @@ microsemi-smartpqi;XS;;;
 microsemi-smartpqi-alt;XCP-ng;alternate driver;;
 mtr;XCP-ng;extra tool;;
 nano;XS;;;
+nbd;XS;;;
 nbdkit;XCP-ng;added as dependency for XOSTOR;;
 ncurses;XS;;;
 net-snmp;XS;;;
