@@ -132,6 +132,7 @@ intel-fm10k;XS;;;
 intel-i40e;XS;;;
 intel-i40e-alt;XCP-ng;alternate driver;;
 intel-ice;XS;;;
+intel-ice-alt;XCP-ng;alternate driver;;
 intel-igb;XS;;;
 intel-igb-alt;XCP-ng;alternate driver;;
 intel-ixgbe;XS;;;
