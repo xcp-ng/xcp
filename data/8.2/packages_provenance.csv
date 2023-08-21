@@ -164,6 +164,7 @@ intel-e1000e;XS;;;
 intel-e1000e-alt;XCP-ng;alternate driver;;
 intel-fm10k;XS;;;
 intel-i40e;XS;;;
+intel-i40e-alt;XCP-ng;alternate driver;;
 intel-igb;XS;;;
 intel-igb-alt;XCP-ng;alternate driver;;
 intel-ixgbe;XS;;;
