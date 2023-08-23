@@ -119,8 +119,10 @@ def main():
     for f in glob.glob('/etc/yum.repos.d/*.repo'):
         os.unlink(f)
 
-    for repo in ['base', 'updates', 'testing', 'ci']:
-        with open('/etc/yum.repos.d/xcp-ng.repo', 'a') as f:
+    repofilepath = '/etc/yum.repos.d/xcp-ng-rpmwatcher.repo'
+
+    with open(repofilepath, 'w') as f:
+        for repo in ['base', 'updates', 'testing', 'ci']:
             f.write("""
 [xcp-ng-{repo}]
 name = XCP-ng {repo} Repository
@@ -143,11 +145,12 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
     # Prepare temporary directory that will serve as installroot
     install_root = tempfile.mkdtemp()
 
-    # Install GPG keys again just once and then keep using this directory without altering it
-    # This will save us much time afterwards.
+    # Install GPG keys inside the install_root
+    print("\n*** Installing GPG keys in install_root ***")
     subprocess.check_call(['yumdownloader', '-q', '-y', '--urls', 'xcp-ng-deps', '--installroot=%s' % install_root])
 
     # Get the list of RPMs that are installed by default (deps of xcp-ng-deps)
+    print("\n*** Get list of RPMs installed by default on XCP-ng (deps of xcp-ng-deps) ***")
     installable, rpms_installed_by_default = get_all_runtime_deps('xcp-ng-deps', install_root, include_self=True)
     if not installable:
         raise Exception("What? xcp-ng-deps is not installable?")
@@ -157,30 +160,24 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
     # Note: this simple command pulls more than 100 base packages :o
     # This could be either a very good thing or a bad one...
     a_few_base_packages = ['kernel']
+    print("\n*** Install base packages in install root (kernel and its deps) ***")
     subprocess.check_call(['yum', 'install', '-q', '-y', ' '.join(a_few_base_packages), '--installroot=%s' % install_root])
 
-    # Enable all repos, including testing
-    # Needs to be re-done now since xcp-ng-release was one of the installed packages and replaced the repo file
-    subprocess.check_call(['sed', '-i', 's/enabled=0/enabled=1/', os.path.join(install_root, 'etc/yum.repos.d/xcp-ng.repo')])
-    # Also add the ci repo
-    with open(os.path.join(install_root, 'etc/yum.repos.d/xcp-ng.repo'), 'a') as f:
-        f.write("""
-[xcp-ng-ci]
-name = XCP-ng CI Repository
-baseurl = http://mirrors.xcp-ng.org/{xcp_major}/{xcp_version}/ci/x86_64/ http://updates.xcp-ng.org/{xcp_major}/{xcp_version}/ci/x86_64/
-enabled = 1
-gpgcheck = 1
-repo_gpgcheck = 1
-gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
-""".format(xcp_major=xcp_major,xcp_version=xcp_version))
+    # Remove any yum repo file that may have been installed inside the install root.
+    # We don't want them to interfere / take precedence over our /etc/yum.repos.d/xcp-ng-rpmwatcher.repo,
+    # which is outside the install root.
+    print("\n*** Remove extraneous repo files ***")
+    subprocess.check_call(['rm', '-rf', install_root + '/etc/yum.repos.d'])
 
     # Install GPG keys again, becomes needed again after installing the 100+ packages above
     # We do it now, after actually installing packages in installroot.
+    print("\n*** Install GPG keys again in install_root ***")
     subprocess.check_call(['yumdownloader', '-y', '--urls', 'xcp-ng-deps', '--installroot=%s' % install_root])
 
 
     # For every SRPM built by ourselves, get its build dependencies
     # We use our local RPMs directory as target directory to avoid downloads
+    print("\n*** Get build deps for every SRPM built by XCP-ng ***")
     for srpm_nvr, build_info in xcp_builds.iteritems():
         if build_info['built-by'] == 'xcp-ng':
             build_info['build-deps'] = get_build_deps(os.path.join(xcp_srpm_repo, srpm_nvr + ".src.rpm"),
@@ -192,6 +189,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
     xcp_rpms = {}
 
     # For each RPM from our repos, get its runtime dependencies, and add info from xcp_ng_rpms_srpms
+    print("\n*** Get runtime deps for all RPMs ***")
     for srpm_nvr, build_info in xcp_builds.iteritems():
         for rpm_nvra in build_info['rpms']:
             installable, deps = get_all_runtime_deps(rpm_nvra, install_root)
@@ -210,6 +208,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
         f.write(json.dumps(rpms_installed_by_default, sort_keys=True, indent=4))
 
     # Get the list of extra installable RPMs, as RPM NVRA.
+    print("\n*** Get list of extra_installable packages ***")
     with open(os.path.join(work_dir, 'extra_installable.txt')) as f:
         extra_installable = f.read().splitlines()
     rpms_extra_installable = [get_latest_rpm_nvra(name, install_root) for name in extra_installable]
