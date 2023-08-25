@@ -230,6 +230,7 @@ lm_sensors;XS;;;
 logrotate;XS;;;
 lshw;XCP-ng;extra tool;;
 lsof;XS;;;
+lsscsi;XCP-ng;extra tool;;
 lua;XS;;;
 lvm2;XS;;;
 lz4;XS;;;
