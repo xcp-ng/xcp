@@ -183,6 +183,7 @@ libempserver;XS;;;
 libestr;XS;;;
 libev;XS;;;
 libevent;XS;;;
+libfaketime;XCP-ng;Used for installer ISO generation;;
 libfastjson;XS;;;
 libffi;XS;;;
 libgcrypt;XS;;;
