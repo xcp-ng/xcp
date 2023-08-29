@@ -46,7 +46,7 @@ else
     MNTVOL="XCP-NG"
 fi
 
-sudo yum install -y genisoimage syslinux grub-tools createrepo_c
+sudo yum install -y genisoimage syslinux grub-tools createrepo_c libfaketime
 
 cd /data
 
