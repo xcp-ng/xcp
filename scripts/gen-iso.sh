@@ -38,13 +38,7 @@ NAMEIMG="install-${VERSION}-${REPOSITORY}.img"
 NAMEISO="xcp-ng-${VERSION}-${REPOSITORY}-nightly-${THEDATE}.iso"
 NAMEISONI="xcp-ng-${VERSION}-${REPOSITORY}-netinstall-nightly-${THEDATE}.iso"
 
-if [ "$VERSION" = "8.3" ]; then
-    MNTVOL="XCP-NG_83"
-elif [ "$VERSION" = "8.2" ]; then
-    MNTVOL="XCP-NG_82"
-else
-    MNTVOL="XCP-NG"
-fi
+MNTVOL="XCP-ng ${VERSION} ${REPOSITORY} ${THEDATE}"
 
 sudo yum install -y genisoimage syslinux grub-tools createrepo_c libfaketime
 
