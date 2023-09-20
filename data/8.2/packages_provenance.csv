@@ -9,6 +9,7 @@ audit;XS;;;
 autoconf-archive;XCP-ng;build dep for netdata;;
 avago-megaraid-sas;XS;;;
 avago-mpt3sas;XS;;;
+avago-mpt3sas-alt;XCP-ng;alternate driver;;
 avahi;XS;;;
 basesystem;XS;;;
 bash;XS;;;
