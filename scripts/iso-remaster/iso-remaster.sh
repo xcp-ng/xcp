@@ -105,6 +105,7 @@ umountrm() {
     rmdir "$1"
 }
 
+USERMOUNTS=()
 exitcleanup() {
     set +e
     case $OPMODE in
@@ -112,8 +113,9 @@ exitcleanup() {
             rm -rf "$RWISO"
             ;;
         fuse)
-            umountrm "$MNT"
-            umountrm "$RWISO"
+            for MOUNT in "${USERMOUNTS[@]}"; do
+                umountrm "$MOUNT"
+            done
             rm -rf "$OVLRW" "$OVLWD"
             ;;
         *)
@@ -155,6 +157,7 @@ fuse)
     OVLRW=$(mktemp -d ovlfs-upper.XXXXXX)
     OVLWD=$(mktemp -d ovlfs-work.XXXXXX)
     fuseiso "$INISO" "$MNT"
+    MOUNTS+=("$MNT")
 
     # genisoimage apparently needs write access to those
     mkdir -p "$OVLRW/boot/isolinux"
@@ -190,6 +193,7 @@ copy)
 fuse)
     # produce a merged iso tree
     fuse-overlayfs -o lowerdir="$MNT" -o upperdir="$OVLRW" -o workdir="$OVLWD" "$RWISO"
+    MOUNTS+=("$RWISO")
     ;;
 *)
     die "unknown mode '$OPMODE'"
