@@ -1,67 +1,35 @@
-# XCP-ng: A turnkey open source virtualization platform
+<h3 align="center"><b>XCP-ng</b></h3>
+<p align="center"><b>Turnkey Open Source Virtualization Platform</b></p>
 
+![](https://repository-images.githubusercontent.com/115137464/d31efd36-b148-4d9b-a2a3-fea9663fedf7)
 
-* [What is XCP-ng?](#what-is-xcp-ng)
-  * [Genesis](#genesis)
-  * [Key points](#key-points)
-	
-* [Documentation](#documentation)
-* [Contribution & community](#contribution-and-community)
-* [Pro support](#pro-support)
+XCP-ng: the user-friendly, high-performance virtualization solution, developed collaboratively for unrestricted features and open-source accessibility.
 
-![](misc/assets/logo-glossy-small.png)
+## ⚡️ Quick start
 
-## What is XCP-ng?
+Download [the ISO here](https://mirrors.xcp-ng.org/isos/8.2/xcp-ng-8.2.1.iso?https=1), and [install it](https://xcp-ng.org/#easy-to-install) on your own hardware.
 
-XCP-ng is a virtualization platform based on **Xen Source** and **Citrix® Hypervisor** (formerly XenServer).
-XCP-ng stands for **Xen Cloud Platform - New Generation** and is a *tribute* to the old Open Source project XCP, which was abandoned when XenServer was open-sourced in 2013. 
+## 📚 Documentation
 
-### Genesis
+The official documentation is available at https://xcp-ng.org/docs
 
-* 2003 : Xen project birth, first open source hypervisor
-* 2007 : Xen Source Inc. acquired by Citrix, birth of XenServer (closed source) 
-* 2010 : Citrix strategy focused on virtual desktop (XenApp/XenDesktop) instead of server virtualization
-* 2011 : XCP 1.0 (Xen Cloud Platform, Open Source XenServer)
-* 2013 : XenServer becomes Open (end of XCP). Birth of Xen Orchestra
-* 2017 (Dec) : Citrix changes their pricing strategy regarding XenServer and removes essential features from free XenServer versions. New features developed are (mostly) no longer open source
-* 2018 (Jan) : XenServer forked, birth of XCP-ng
-* 2019 (Jul): XCP-ng 8.0 is released
+## 🚀 Features
 
+- **Powerful virtualization platform**: run, snapshot, live migrate & grow any kind of workload/Operating system on top of XCP-ng, even containers!
+- **Turnkey:** no complicated setup, XCP-ng is a true appliance with everything pre-configured and ready to run your VMs!
+- **Security:** based on the Xen hypervisor technology, XCP-ng is one of the most secure virtualization platform on the market, both technologically and with a really [serious security workflow](https://xcp-ng.org/docs/security.html).
+- **Manageable at scale:** there's many integrated ways to manage your XCP-ng host, both locally and remotely with a CLI, GUI and API. [Xen Orchestra](https://vates.tech/xen-orchestra/) is the de facto administration & backup platform for it.
+- **Fully Open Source:** no paywalls or complicated licenses, all the features are free
+- **Pro supported:** want to run in production? XCP-ng is part of the [Vates VMS](https://vates.tech/) stack that got you covered from the virtualization platform to the administration & backup tools.
 
-### Key points
+## 📸 Screenshots
 
-XCP-ng is a turnkey open source virtualization platform.
+![](https://vates.tech/assets/img/misc/XOLite_Pool_dashboard_mockup_dashes_light_2.png.avif)
 
-![](misc/assets/xcp-ng-hiw.png)
+![](https://xen-orchestra.com/blog/content/images/size/w1600/2023/05/Desktop---Pool-dashboard---Default.png)
 
-#### Platform
-
-A combination of multiple components to deliver a cohesive solution
-
-**Compute** + **Network** + **Storage** + **API** (Xen API) = **XCP-ng**
-
-#### Open Source
-
-XCP-ng is open source (mostly GPLv2), but also, all the components, documentation, repositories and dev process are publicly available and easily accessible. 
-
-#### Turnkey
-
-* XCP-ng is intended to be easy to download and easy to install
-* We are aiming to have the largest possible hardware compatibility
-* XCP-ng embeds a complete API and comes with a friendly web-UI: [Xen Orchestra](https://xen-orchestra.com/#!/xo-home)
-
-### Documentation
-
-We have extensive documentation for the XCP-ng project available [here](https://github.com/xcp-ng/xcp/wiki)
-
-### Contribution and community
+## 🧑‍🚀 Community
 
 XCP-ng has a living community that you can join on our [forum](https://xcp-ng.org/forum/). 
 
-The project is open to [contributions](https://github.com/xcp-ng/xcp/wiki/Development-process-tour), [bug reports](https://github.com/xcp-ng/xcp/wiki/How-to-report-bugs) and you can also [host a mirror](https://github.com/xcp-ng/xcp/wiki/Mirrors) for XCP-ng
-
-### Pro support
-
-For production environments and companies, we recommend obtaining pro support to cover your infrastructure. Pro support is delivered directly by the XCP-ng project dev team and pricing is per host, not per core! 
-
-Learn more about pro support for XCP-ng on the [dedicated website](https://xcp-ng.com/). 
+The project is open to [contributions](https://github.com/xcp-ng/xcp/wiki/Development-process-tour), [bug reports](https://github.com/xcp-ng/xcp/wiki/How-to-report-bugs) and you can also [host a mirror](https://github.com/xcp-ng/xcp/wiki/Mirrors) for XCP-ng.
