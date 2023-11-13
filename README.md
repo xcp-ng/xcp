@@ -11,13 +11,13 @@ Download [the ISO here](https://mirrors.xcp-ng.org/isos/8.2/xcp-ng-8.2.1.iso?htt
 
 ## 📚 Documentation
 
-The official documentation is available at https://xcp-ng.org/docs
+The official documentation is available at https://docs.xcp-ng.org
 
 ## 🚀 Features
 
 - **Powerful virtualization platform**: run, snapshot, live migrate & grow any kind of workload/Operating system on top of XCP-ng, even containers!
 - **Turnkey:** no complicated setup, XCP-ng is a true appliance with everything pre-configured and ready to run your VMs!
-- **Security:** based on the Xen hypervisor technology, XCP-ng is one of the most secure virtualization platform on the market, both technologically and with a really [serious security workflow](https://xcp-ng.org/docs/security.html).
+- **Security:** based on the Xen hypervisor technology, XCP-ng is one of the most secure virtualization platform on the market, both technologically and with a really [serious security workflow](https://docs.xcp-ng.org/project/security).
 - **Manageable at scale:** there's many integrated ways to manage your XCP-ng host, both locally and remotely with a CLI, GUI and API. [Xen Orchestra](https://vates.tech/xen-orchestra/) is the de facto administration & backup platform for it.
 - **Fully Open Source:** no paywalls or complicated licenses, all the features are free
 - **Pro supported:** want to run in production? XCP-ng is part of the [Vates VMS](https://vates.tech/) stack that got you covered from the virtualization platform to the administration & backup tools.
