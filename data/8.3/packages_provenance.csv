@@ -407,6 +407,7 @@ tcpdump;XS;;;
 telnet;XS;;;
 test-ring0;XS;;;
 texinfo;XS;;;
+tg3-module-alt;XCP-ng;additional driver;;
 time;XS;;;
 tmux;XCP-ng;extra tool;;
 traceroute;XCP-ng;extra tool;;
