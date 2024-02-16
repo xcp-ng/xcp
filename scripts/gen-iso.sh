@@ -46,6 +46,6 @@ cd /data
 
 sudo ./scripts/create-installimg.sh --srcurl "https://updates.xcp-ng.org/8/${VERSION}" -o "${NAMEIMG}" "${VERSION}":"${REPOSITORY}"
 
-./scripts/create-install-iso.sh --netinstall --srcurl "https://updates.xcp-ng.org/8/${VERSION}" -V "${MNTVOL}" -o "${NAMEISONI}" "${VERSION}":"${REPOSITORY}" "${NAMEIMG}"
+./scripts/create-iso.sh --netinstall --srcurl "https://updates.xcp-ng.org/8/${VERSION}" -V "${MNTVOL}" -o "${NAMEISONI}" "${VERSION}":"${REPOSITORY}" "${NAMEIMG}"
 
-./scripts/create-install-iso.sh --srcurl "https://updates.xcp-ng.org/8/${VERSION}" -V "${MNTVOL}" -o "${NAMEISO}" "${VERSION}":"${REPOSITORY}" "${NAMEIMG}"
+./scripts/create-iso.sh --srcurl "https://updates.xcp-ng.org/8/${VERSION}" -V "${MNTVOL}" -o "${NAMEISO}" "${VERSION}":"${REPOSITORY}" "${NAMEIMG}"
