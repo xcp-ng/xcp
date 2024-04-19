@@ -60,12 +60,14 @@ def main():
             if name not in rpms1:
                 print("*** %s added" % info['filename'])
                 print("Summary: %s" % info['summary'])
+                print("SRPM: %s" % info['sourcerpm'])
                 print("License: %s" % info['license'])
                 print(subprocess.check_output(['rpm', '-qlp', info['filepath']]).decode('utf-8'))
             elif info.get('removed', False):
                 print("*** %s removed" % info['filename'])
                 if info['vendor'] not in ['CentOS', 'Fedora Project']:
                     print("Summary: %s" % info['summary'])
+                    print("SRPM: %s" % info['sourcerpm'])
                     print("License: %s" % info['license'])
                     print(subprocess.check_output(['rpm', '-qlp', info['filepath']]).decode('utf-8'))
             else:
@@ -87,6 +89,7 @@ def main():
                     print("Summary: %s" % info['summary'])
                     if info['license'] != rpms1[name]['license']:
                         print("License (previous): %s" % rpms1[name]['license'])
+                    print("SRPM: %s" % info['sourcerpm'])
                     print("License: %s" % info['license'])
 
                 print(subprocess.check_output("rpmdiff -iT %s %s 2>&1 || echo" % (rpms1[name]['filepath'], info['filepath']),
