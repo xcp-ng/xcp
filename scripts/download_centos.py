@@ -73,7 +73,7 @@ def main():
         local_epel=os.path.abspath(args.local_epel)
 
     srpms_to_rpms = {}
-    with open(args.centos_rpms_and_srpms, 'rb') as csvfile:
+    with open(args.centos_rpms_and_srpms, 'r') as csvfile:
         for row in csv.reader(csvfile, delimiter=','):
             if row[1] not in srpms_to_rpms:
                 srpms_to_rpms[row[1]] = []
