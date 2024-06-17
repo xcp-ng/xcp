@@ -279,6 +279,7 @@ message-switch;XS;;;
 microcode_ctl;XS;;;
 microsemi-smartpqi;XS;;;
 microsemi-smartpqi-alt;XCP-ng;alternate driver;;
+mlx4-modules-alt;XCP-ng;additional driver;;
 mtr;XCP-ng;extra tool;;
 nano;XS;;;
 nbd;XS;;;

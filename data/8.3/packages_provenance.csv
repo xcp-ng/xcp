@@ -266,6 +266,7 @@ meson;XCP-ng;dep of qemu-dp;;
 microsemi-aacraid;XS;;;
 microsemi-smartpqi;XS;;;
 microsemi-smartpqi-alt;XCP-ng;alternate driver;;
+mlx4-modules-alt;XCP-ng;additional driver;;
 mpi3mr-module;XCP-ng;additional driver;;
 mtr;XCP-ng;extra tool;;
 nano;XS;;;
