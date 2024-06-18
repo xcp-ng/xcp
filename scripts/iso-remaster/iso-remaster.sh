@@ -50,7 +50,7 @@ command -v fuse-overlayfs >/dev/null || { echo >&2 "fuse-overlayfs not found"; O
 command -v 7z >/dev/null || die "required tool not found: 7z (e.g. p7zip-plugins in EPEL)"
 command -v fakeroot >/dev/null || die "required tool not found: fakeroot"
 command -v genisoimage >/dev/null || die "required tool not found: genisoimage"
-command -v isohybrid >/dev/null || die "required tool not found: isohybrid (package syslinux)"
+command -v isohybrid >/dev/null || die "required tool not found: isohybrid (package syslinux-utils or syslinux)"
 command -v isoinfo >/dev/null || die "required tool not found: isoinfo (package cdrkit-isotools?)"
 
 ISOPATCHER=""
