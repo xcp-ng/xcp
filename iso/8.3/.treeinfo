@@ -1,3 +1,11 @@
+[platform]
+name = XCP
+version = 3.4.0
+
+[branding]
+name = XCP-ng
+version = 8.3.0
+
 [system-v1]
 platform_name = XCP
 platform_version = 3.3.0
