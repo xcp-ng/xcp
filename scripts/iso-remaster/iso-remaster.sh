@@ -99,6 +99,8 @@ done
 INISO="$1"
 OUTISO="$2"
 
+[ -r "$INISO" ] || die_usage "input ISO '$INISO' cannot be read"
+
 umountrm() {
     sync "$1"
     fusermount -u -z "$1"
