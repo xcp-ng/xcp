@@ -7,7 +7,7 @@
 # *** remove old scratch builds ***
 
 TOPDIR=/mnt/koji
-TIMEARG="+90"
+TIMEARG="+30"
 IFS=$'\n'
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
