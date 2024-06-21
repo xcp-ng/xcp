@@ -47,8 +47,12 @@ def get_all_runtime_deps(name, install_root, include_self=False):
         deps = deps[1:]
     return installable, deps
 
-def get_latest_rpm_nvra(name, install_root):
-    output = subprocess.check_output(['yumdownloader', '--quiet', '--urls', '--installroot=%s' % install_root, name])
+def get_latest_rpm_nvra(name, install_root, allow_missing=False):
+    try:
+        output = subprocess.check_output(['yumdownloader', '--quiet', '--urls', '--installroot=%s' % install_root, name])
+    except Exception:
+        if allow_missing:
+            return None
     rpm_nvra = output.splitlines()[0].split('/')[-1][:-4]
     return rpm_nvra
 
@@ -211,7 +215,14 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
     print("\n*** Get list of extra_installable packages ***")
     with open(os.path.join(work_dir, 'extra_installable.txt')) as f:
         extra_installable = f.read().splitlines()
-    rpms_extra_installable = [get_latest_rpm_nvra(name, install_root) for name in extra_installable]
+    rpms_extra_installable = []
+    for name in extra_installable:
+        nvra = get_latest_rpm_nvra(name, install_root, allow_missing=True)
+        # the package may be missing if it's still in xcp-ng-incoming and already listed
+        # there's an xcp-ng-tests test which will verify all extra packages are actually installable
+        # so let's not fail here.
+        if nvra:
+            rpms_extra_installable.append(nvra)
     with open(os.path.join(work_dir, 'extra_installable_nvra.json'), 'w') as f:
         f.write(json.dumps(rpms_extra_installable, sort_keys=True, indent=4))
 
