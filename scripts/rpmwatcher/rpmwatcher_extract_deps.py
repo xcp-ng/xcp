@@ -126,7 +126,7 @@ def main():
     repofilepath = '/etc/yum.repos.d/xcp-ng-rpmwatcher.repo'
 
     with open(repofilepath, 'w') as f:
-        for repo in ['base', 'updates', 'testing', 'ci']:
+        for repo in ['base', 'updates', 'candidates', 'testing', 'ci']:
             f.write("""
 [xcp-ng-{repo}]
 name = XCP-ng {repo} Repository
