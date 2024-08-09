@@ -1,5 +1,4 @@
-#!/usr/bin/env python2
-from __future__ import print_function
+#!/usr/bin/env python3
 import argparse
 import os
 import subprocess
@@ -27,10 +26,10 @@ def get_repo_and_commit_info(dirpath):
     cwd = os.getcwd()
     os.chdir(dirpath)
 
-    remote = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url']).strip()
+    remote = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url']).decode().strip()
 
     # We want the exact hash for accurate build history
-    hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip()
+    hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
 
     os.chdir(cwd)
     return remote, hash
