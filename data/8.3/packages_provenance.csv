@@ -396,7 +396,7 @@ redhat-lsb;XS;;;
 rootfiles;XS;;;
 rpcbind;XS;;;
 rpm;XS;;;
-rrd-client-lib;XS;;;
+rrd-client-lib;XS;dependency of proprietary pvsproxy;;
 rsync;XS;;;
 rsyslog;XS;updated by us to rsyslog-8.24.0-52.el7_8.2 for memory leak fixes. Dependency libfastjson not updated but would need to be if we used the mm-normalize plugin (RHBZ #1591493);;
 samba;XS;;;
