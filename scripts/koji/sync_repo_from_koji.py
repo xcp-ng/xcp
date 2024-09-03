@@ -101,7 +101,7 @@ def sign_rpm(rpm):
         os.chdir(tmpdir)
 
         # download from koji
-        subprocess.check_call(['koji', 'download-build', '--debuginfo', '--rpm', rpm])
+        subprocess.check_call(['koji', 'download-build', '--debuginfo', '--noprogress', '--rpm', rpm])
 
         # sign: requires a sign-rpm executable or alias in the PATH
         subprocess.check_call(['sign-rpm', rpm], stdout=DEVNULL)
