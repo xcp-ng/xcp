@@ -61,6 +61,12 @@ RELEASE_TAGS = [
     'v8.2-base',
 ]
 
+# tags for which we want to export a stripped repo for offline updates
+OFFLINE_TAGS = [
+    'v8.2-updates',
+    'v8.2-v-linstor',
+]
+
 # Additional "user" tags. For them, repos are generated at a different place.
 # Initialized empty: user tags are autodetected based on their name
 U_TAGS = []
@@ -238,6 +244,9 @@ def main():
             return v_dest_dir
         return dest_dir
 
+    def offline_repo_dir():
+        return os.path.join(v_dest_dir, 'offline')
+
     for version in VERSIONS:
         for tag in TAGS + U_TAGS + V_TAGS:
             if version_from_tag(tag) != version:
@@ -285,6 +294,12 @@ def main():
 
                 # write repository to the appropriate destination directory for the tag
                 write_repo(tag, dest_dir_for_tag(tag), tmp_root_dir)
+
+                if tag in OFFLINE_TAGS:
+                    # Also generate a stripped repo for offline updates
+                    sys.stdout.flush()
+                    subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e', '--noinherit'])
+                    write_repo(tag, offline_repo_dir(), tmp_root_dir)
 
                 # update data
                 with open(tag_builds_filepath, 'w') as f:
