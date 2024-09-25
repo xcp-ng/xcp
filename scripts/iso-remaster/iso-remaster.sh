@@ -223,14 +223,29 @@ fi
 # default value for volume id
 : ${VOLID:=$(isoinfo -i "$INISO" -d | grep "Volume id" | sed "s/Volume id: //")}
 
+if [ -e "$RWISO/boot/efiboot.img" ]; then
+    GENISOIMAGE_EXTRA_ARGS=(
+        -eltorito-alt-boot
+        -e boot/efiboot.img
+        -no-emul-boot
+    )
+    ISOHYBRID_EXTRA_ARGS=(--uefi)
+    is_efi=1
+else
+    echo >&2 "WARNING: no UEFI boot support"
+    GENISOIMAGE_EXTRA_ARGS=()
+    ISOHYBRID_EXTRA_ARGS=()
+    is_efi=0
+fi
+
 "${FAKEROOT[@]}" genisoimage \
     -o "$OUTISO" \
     -v -r -J --joliet-long -V "$VOLID" -input-charset utf-8 \
     -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin -no-emul-boot \
     -boot-load-size 4 -boot-info-table \
     \
-    -eltorito-alt-boot -e boot/efiboot.img \
-    -no-emul-boot \
+    "${GENISOIMAGE_EXTRA_ARGS[@]}" \
     \
-    $RWISO
-isohybrid --uefi "$OUTISO"
+    "$RWISO"
+
+isohybrid "${ISOHYBRID_EXTRA_ARGS[@]}" "$OUTISO"
