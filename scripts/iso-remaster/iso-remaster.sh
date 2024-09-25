@@ -30,6 +30,8 @@ Options:
          before repacking output ISO.
          Forces "--mode copy" to avoid fuse-overlay bug
          https://github.com/containers/fuse-overlayfs/issues/377
+  -z [bzip2|gzip]
+         Compression method used by install.img (default: bzip2)
   -V <volume-id>  Use specified volume id instead of reusing the original one
 EOF
 }
@@ -56,6 +58,7 @@ command -v isoinfo >/dev/null || die "required tool not found: isoinfo (package 
 ISOPATCHER=""
 IMGPATCHER=""
 VOLID=""
+COMPRESS="bzip2"
 while [ $# -ge 1 ]; do
     case "$1" in
         --mode)
@@ -80,6 +83,11 @@ while [ $# -ge 1 ]; do
             VOLID="$2"
             shift
             ;;
+        -z)
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
+            COMPRESS="$2"
+            shift
+            ;;
         --help|-h)
             usage
             exit 0
@@ -93,6 +101,12 @@ while [ $# -ge 1 ]; do
     esac
     shift
 done
+
+case "$COMPRESS" in
+    bzip2) ZCAT=bzcat; ZIP=bzip2 ;;
+    gzip) ZCAT=zcat; ZIP=gzip ;;
+    *) die_usage "unsupported compression method" ;;
+esac
 
 [ $# = 2 ] || die_usage "need exactly 2 non-option arguments"
 
