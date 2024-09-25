@@ -59,24 +59,24 @@ VOLID=""
 while [ $# -ge 1 ]; do
     case "$1" in
         --mode)
-            [ $# -ge 2 ] || die_usage "--mode needs an argument"
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
             OPMODE="$2"
             shift
             ;;
         --iso-patcher|-s)
-            [ $# -ge 2 ] || die_usage "--iso-patcher needs an argument"
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
             ISOPATCHER="$2"
             echo >&2 "NOTE: iso-patcher use, forcing 'copy' mode"
             OPMODE=copy
             shift
             ;;
         --install-patcher|-l)
-            [ $# -ge 2 ] || die_usage "--install-patcher needs an argument"
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
             IMGPATCHER="$2"
             shift
             ;;
         -V)
-            [ $# -ge 2 ] || die_usage "-V needs an argument"
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
             VOLID="$2"
             shift
             ;;
