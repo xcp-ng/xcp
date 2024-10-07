@@ -15,10 +15,10 @@ RELEASE_VERSIONS = [
     '8.0',
     '8.1',
     '8.2',
+    '8.3',
 ]
 
 DEV_VERSIONS = [
-    '8.3'
 ]
 
 VERSIONS = DEV_VERSIONS + RELEASE_VERSIONS
@@ -59,12 +59,15 @@ RELEASE_TAGS = [
     'v8.0-base',
     'v8.1-base',
     'v8.2-base',
+    'v8.3-base',
 ]
 
 # tags for which we want to export a stripped repo for offline updates
 OFFLINE_TAGS = [
     'v8.2-updates',
     'v8.2-v-linstor',
+    'v8.3-updates',
+    'v8.3-v-linstor',
 ]
 
 # Additional "user" tags. For them, repos are generated at a different place.
