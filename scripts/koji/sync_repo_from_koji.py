@@ -10,6 +10,8 @@ import shutil
 import tempfile
 import atexit
 
+from datetime import datetime
+
 RELEASE_VERSIONS = [
     '7.6',
     '8.0',
@@ -95,6 +97,14 @@ def repo_name_from_tag(tag):
         name = name[2:]
     return name
 
+def build_path_to_version(parent_dir, tag):
+    version = version_from_tag(tag)
+    major = version.split('.')[0]
+    return os.path.join(parent_dir, major, version)
+
+def build_path_to_repo(parent_dir, tag):
+    return os.path.join(build_path_to_version(parent_dir, tag), repo_name_from_tag(tag))
+
 def sign_rpm(rpm):
     # create temporary work directory
     tmpdir = tempfile.mkdtemp(prefix=rpm)
@@ -119,7 +129,6 @@ def sign_rpm(rpm):
 
 def write_repo(tag, dest_dir, tmp_root_dir):
     version = version_from_tag(tag)
-    major = version.split('.')[0]
     repo_name = repo_name_from_tag(tag)
 
     # Hack for 7.6 because koji only handles its updates and updates_testing repos:
@@ -129,8 +138,8 @@ def write_repo(tag, dest_dir, tmp_root_dir):
         elif repo_name != 'updates':
             raise Exception("Fatal: koji should not have any changes outside testing and updates for 7.6!")
 
-    path_to_repo = os.path.join(dest_dir, major, version, repo_name)
-    path_to_tmp_repo = os.path.join(tmp_root_dir, major, version, repo_name)
+    path_to_repo = build_path_to_repo(dest_dir, tag)
+    path_to_tmp_repo = build_path_to_repo(tmp_root_dir, tag)
 
     # remove temporary repo if exists
     if os.path.isdir(path_to_tmp_repo):
@@ -290,7 +299,7 @@ def main():
                 sign_unsigned_rpms(tag)
 
                 # export the RPMs from koji
-                print ("\n-- Make koji write the repository for tag %s" % tag)
+                print("\n-- Make koji write the repository for tag %s" % tag)
                 with_non_latest = [] if tag in RELEASE_TAGS else ['--non-latest']
                 sys.stdout.flush()
                 subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'] + with_non_latest)
@@ -299,10 +308,44 @@ def main():
                 write_repo(tag, dest_dir_for_tag(tag), tmp_root_dir)
 
                 if tag in OFFLINE_TAGS:
+                    print("\n-- Make koji write the offline repository for tag %s" % tag)
                     # Also generate a stripped repo for offline updates
                     sys.stdout.flush()
                     subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e', '--noinherit'])
                     write_repo(tag, offline_repo_dir(), tmp_root_dir)
+
+                    # Wrap it up in a tarball
+                    offline_repo_path = build_path_to_repo(offline_repo_dir(), tag)
+                    offline_repo_path_parent = os.path.dirname(offline_repo_path)
+                    offline_tarball_path_prefix = os.path.join(
+                        offline_repo_path_parent,
+                        "xcpng-%s-offline-%s" % (version.replace('.', '_'), repo_name_from_tag(tag))
+                    )
+                    offline_tarball = "%s-%s.tar" % (offline_tarball_path_prefix, datetime.now().strftime("%Y%m%d"))
+                    print("\n-- Generate offline update tarball: %s" % offline_tarball)
+                    subprocess.check_call(['rm', '-f', offline_tarball])
+                    subprocess.check_call([
+                        'tar',
+                        '-cf', offline_tarball,
+                        '-C', offline_repo_path_parent,
+                        os.path.basename(offline_repo_path)
+                    ])
+
+                    # Point the "latest" symlink at the tarball
+                    latest_symlink = "%s-latest.tar" % offline_tarball_path_prefix
+                    if os.path.exists(latest_symlink):
+                        os.unlink(latest_symlink)
+                    # relative symlink
+                    os.symlink(os.path.basename(offline_tarball), latest_symlink)
+
+                    # And remove older tarballs
+                    tarballs = glob.glob("%s-*.tar" % offline_tarball_path_prefix)
+                    tarballs.remove(latest_symlink)
+                    tarballs_sorted_by_mtime = sorted(tarballs, key=os.path.getmtime, reverse=True)
+                    # Remove all but the latest three tarballs
+                    for old_tarball in tarballs_sorted_by_mtime[3:]:
+                        print("Removing old tarball: %s" % old_tarball)
+                        os.remove(old_tarball)
 
                 # update data
                 with open(tag_builds_filepath, 'w') as f:
