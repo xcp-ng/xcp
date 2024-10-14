@@ -1,0 +1,155 @@
+#!/usr/bin/env python
+from __future__ import print_function, unicode_literals
+
+import argparse
+import io # Ensures consistent file handling in python2 and python3
+import logging
+import os
+import re
+import tarfile
+import shutil  # For removing directories
+import subprocess
+import sys
+
+try:
+    from subprocess import DEVNULL # python 3
+except ImportError:
+    DEVNULL = open(os.devnull, 'wb') # python 2
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+REPOS_DIR = "/var/local/xcp-ng-repos"
+
+# Parse command-line argument
+parser = argparse.ArgumentParser(description="Setup offline repositories.")
+parser.add_argument("archive_path", help="Path to the tar archive file")
+args = parser.parse_args()
+archive_path = args.archive_path
+
+# Check if file exists
+if not os.path.exists(archive_path):
+    logging.error("The specified file does not exist.")
+    sys.exit(1)
+
+# Check if file is a tar archive
+if not tarfile.is_tarfile(archive_path):
+    logging.error("The file is not a valid tar archive.")
+    sys.exit(1)
+
+# Check if tar archive is corrupted
+try:
+    with tarfile.open(archive_path, 'r') as tar:
+        tar.getmembers()  # Attempt to read the contents to detect corruption
+        logging.info("Tar archive seems valid.")
+except tarfile.TarError:
+    logging.error("The tar archive is corrupted.")
+    sys.exit(1)
+
+# Check for repository paths
+reponames = []
+with tarfile.open(archive_path, 'r') as tar:
+    for member in tar.getnames():
+        if re.match(r'^[a-zA-Z0-9_-]+/x86_64/repodata$', member):
+            reponames.append(member.split('/')[0])
+
+if not reponames:
+    logging.error("No valid repository paths found in the tar archive.")
+    sys.exit(1)
+
+# Process each repository path
+for reponame in reponames:
+    logging.info("Processing repo: %s", reponame)
+    repo_path = os.path.join(REPOS_DIR, reponame)
+
+    # Remove existing reponame directory if it exists
+    if os.path.exists(repo_path):
+        logging.info("Removing existing directory: %s", repo_path)
+        shutil.rmtree(repo_path)
+
+    # Create REPOS_DIR if it doesn't exist
+    if not os.path.exists(REPOS_DIR):
+        logging.info("Creating directory: %s", REPOS_DIR)
+        os.makedirs(REPOS_DIR)
+
+    # Extract the reponame directory from the tar archive
+    logging.info("Extracting archive...")
+    with tarfile.open(archive_path, 'r') as tar:
+        members_to_extract = [member for member in tar.getmembers() if member.name.startswith(reponame + '/')]
+        tar.extractall(path=REPOS_DIR, members=members_to_extract)
+
+    # Fix the owner and group
+    subprocess.check_call(['chown', 'root.root', repo_path, '-R'])
+    logging.info("Extracted %s to %s", reponame, REPOS_DIR)
+
+    # Determine the repository file to use
+    if 'linstor' in reponame:
+        repofilename = '/etc/yum.repos.d/xcp-ng-linstor.repo'
+    else:
+        repofilename = '/etc/yum.repos.d/xcp-ng.repo'
+
+    # Check and update the repository file
+    content = ""
+    if os.path.exists(repofilename):
+        with io.open(repofilename, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        if "# --- OFFLINE UPDATES v1 ---" not in content:
+            logging.info("Deleting existing repository file: %s", repofilename)
+            os.remove(repofilename)
+            content = ""  # Reset content after deletion
+
+    # Create or update repository file
+    if not os.path.exists(repofilename):
+        logging.info("Creating repository file: %s", repofilename)
+        with io.open(repofilename, 'w', encoding='utf-8') as f:
+            f.write("# --- OFFLINE UPDATES v1 --- DO NOT DELETE THIS LINE\n")
+
+    # Refresh content after creation
+    with io.open(repofilename, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    reponame_yum = 'xcp-ng-%s' % reponame
+    reponame_section = '[%s]' % reponame_yum
+    baseurl_line = 'baseurl=file://%s/%s/x86_64/' % (REPOS_DIR, reponame)
+    name_line = 'name=XCP-ng Offline %s Repository' % reponame.capitalize()
+
+    if reponame_section in content:
+        if baseurl_line not in content:
+            # Use `yum-config-manager` to set or update the baseurl
+            try:
+                logging.info("Setting baseurl for %s to %s", reponame_section, baseurl_line)
+                subprocess.check_call(
+                    [
+                        'yum-config-manager',
+                        '--setopt',
+                        '%s.%s' % (reponame_yum, baseurl_line),
+                        '--save'
+                    ],
+                    stdout=DEVNULL
+                )
+            except subprocess.CalledProcessError as e:
+                logging.error("Failed to set baseurl for %s. Details: %s", reponame_section, e)
+                exit(1)
+    else:
+        logging.info("Appending repository definition for %s to %s", reponame_section, repofilename)
+        with io.open(repofilename, 'a', encoding='utf-8') as file:
+            file.write("""
+%s
+%s
+%s
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
+""" % (reponame_section, name_line, baseurl_line))
+
+# Delete yum cache
+try:
+    yum_cache = '/var/cache/yum'
+    if os.path.exists(yum_cache):
+        logging.info("Deleting yum cache: %s", yum_cache)
+        subprocess.check_call(['rm', '-r', yum_cache])
+except subprocess.CalledProcessError as e:
+    logging.error("Failed to clear yum cache. Details: %s", e)
+    exit(1)
