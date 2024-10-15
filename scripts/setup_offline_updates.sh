@@ -57,6 +57,7 @@ name=XCP-ng Offline ${REPO_TYPE^} Repository
 baseurl=file://$REPOS_DIR/$REPO_TYPE/x86_64/
 enabled=1
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
 EOF
 
