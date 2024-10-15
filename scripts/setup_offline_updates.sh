@@ -29,9 +29,15 @@ if [ ! -e "$TAR_FILE" ]; then
     exit 2
 fi
 
+echo "- Checking the integrity of $TAR_FILE"
+if ! tar xOf "$TAR_FILE" >/dev/null 2>&1; then
+    echo "Error: Tar file $TAR_FILE failed the integrity check."
+    exit 3
+fi
+
 if ! tar -tf "$TAR_FILE" | grep -q "^${REPO_TYPE}/$"; then
     echo "Error: directory $REPO_TYPE/ not found in archive $TAR_FILE."
-    exit 3
+    exit 4
 fi
 
 mkdir -p "$REPOS_DIR"
