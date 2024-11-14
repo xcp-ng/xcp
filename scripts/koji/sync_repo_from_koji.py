@@ -61,7 +61,7 @@ RELEASE_TAGS = [
     'v8.0-base',
     'v8.1-base',
     'v8.2-base',
-    'v8.3-base',
+#    'v8.3-base', # special case: we have a history of pre-release builds that users might need for troubleshooting
 ]
 
 # tags for which we want to export a stripped repo for offline updates
@@ -127,7 +127,7 @@ def sign_rpm(rpm):
         os.chdir(current_dir)
         shutil.rmtree(tmpdir)
 
-def write_repo(tag, dest_dir, tmp_root_dir):
+def write_repo(tag, dest_dir, tmp_root_dir, offline=False):
     version = version_from_tag(tag)
     repo_name = repo_name_from_tag(tag)
 
@@ -147,8 +147,9 @@ def write_repo(tag, dest_dir, tmp_root_dir):
 
     # create empty structure
     print("\n-- Copy the RPMs from %s to %s" % (KOJI_ROOT_DIR, path_to_tmp_repo))
-    for d in ['x86_64/Packages', 'Source/SPackages']:
-        os.makedirs(os.path.join(path_to_tmp_repo, d))
+    os.makedirs(os.path.join(path_to_tmp_repo, 'x86_64/Packages'))
+    if not offline:
+        os.makedirs(os.path.join(path_to_tmp_repo, 'Source/SPackages'))
 
     print("Link to latest dist-repo: %s" % os.readlink('%s/repos-dist/%s/latest' % (KOJI_ROOT_DIR, tag)))
 
@@ -156,12 +157,31 @@ def write_repo(tag, dest_dir, tmp_root_dir):
     for f in glob.glob('%s/repos-dist/%s/latest/x86_64/Packages/*/*.rpm' % (KOJI_ROOT_DIR, tag)):
         shutil.copy(f, os.path.join(path_to_tmp_repo, 'x86_64', 'Packages'))
 
-    # and source RPMs
-    for f in glob.glob('%s/repos-dist/%s/latest/src/Packages/*/*.rpm' % (KOJI_ROOT_DIR, tag)):
-        shutil.copy(f, os.path.join(path_to_tmp_repo, 'Source', 'SPackages'))
+    if not offline:
+        # and source RPMs
+        for f in glob.glob('%s/repos-dist/%s/latest/src/Packages/*/*.rpm' % (KOJI_ROOT_DIR, tag)):
+            shutil.copy(f, os.path.join(path_to_tmp_repo, 'Source', 'SPackages'))
+
+    if offline:
+        # For offline update repos, in order to reduce the size, let's remove debuginfo packages
+        # and other big useless packages.
+        delete_patterns = [
+            '*-debuginfo-*.rpm',
+            'xs-opam-repo-*.rpm', # big and only used for builds
+            'java-1.8.0-*.rpm', # old java, used to be pulled by linstor
+        ]
+        for delete_pattern in delete_patterns:
+            subprocess.check_call([
+                'find', os.path.join(path_to_tmp_repo, 'x86_64', 'Packages'),
+                '-name', delete_pattern,
+                '-delete',
+            ])
 
     # generate repodata and sign
-    for path in [os.path.join(path_to_tmp_repo, 'x86_64'), os.path.join(path_to_tmp_repo, 'Source')]:
+    paths = [os.path.join(path_to_tmp_repo, 'x86_64')]
+    if not offline:
+        paths.append(os.path.join(path_to_tmp_repo, 'Source'))
+    for path in paths:
         print("\n-- Generate repodata for %s" % path)
         subprocess.check_call(['createrepo_c', path], stdout=DEVNULL)
         subprocess.check_call(['sign-file', os.path.join(path, 'repodata', 'repomd.xml')], stdout=DEVNULL)
@@ -312,7 +332,7 @@ def main():
                     # Also generate a stripped repo for offline updates
                     sys.stdout.flush()
                     subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e', '--noinherit'])
-                    write_repo(tag, offline_repo_dir(), tmp_root_dir)
+                    write_repo(tag, offline_repo_dir(), tmp_root_dir, offline=True)
 
                     # Wrap it up in a tarball
                     offline_repo_path = build_path_to_repo(offline_repo_dir(), tag)
@@ -346,6 +366,20 @@ def main():
                     for old_tarball in tarballs_sorted_by_mtime[3:]:
                         print("Removing old tarball: %s" % old_tarball)
                         os.remove(old_tarball)
+
+                    # Update SHA256SUMs
+                    subprocess.check_call(
+                        'sha256sum *.tar > SHA256SUMS',
+                        shell=True,
+                        cwd=offline_repo_path_parent
+                    )
+
+                    # And sign them
+                    subprocess.check_call(
+                        ['sign-file', 'SHA256SUMS'],
+                        cwd=offline_repo_path_parent,
+                        stdout=DEVNULL
+                    )
 
                 # update data
                 with open(tag_builds_filepath, 'w') as f:
