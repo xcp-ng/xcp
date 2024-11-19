@@ -8,19 +8,23 @@ from github import Github
 def main():
     parser = argparse.ArgumentParser(description='Creates a git repository in current directory for RPM spec file and sources')
     parser.add_argument('name', help='name of repository')
+    parser.add_argument('--local',
+                        help='do not create github repository',
+                        action='store_true')
     parser.add_argument('token_file',
                         help='file containing github authentication token',
                         nargs='?',
                         default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'github.txt'))
     args = parser.parse_args()
 
-    # authenticate to Github
-    token = open(args.token_file).read().strip()
-    g = Github(token)
+    if not args.local:
+        # authenticate to Github
+        token = open(args.token_file).read().strip()
+        g = Github(token)
 
-    # create repository
-    org = g.get_organization('xcp-ng-rpms')
-    org.create_repo(args.name, "RPM sources for %s" % args.name)
+        # create repository
+        org = g.get_organization('xcp-ng-rpms')
+        org.create_repo(args.name, "RPM sources for %s" % args.name)
 
     # initial commit to master
     gitignore = """BUILD
@@ -39,7 +43,13 @@ Branches:
 
 Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
 """ % args.name
-    subprocess.check_call(['git', 'clone', 'https://github.com/xcp-ng-rpms/%s.git' % args.name])
+    if args.local:
+        subprocess.check_call(['git', 'init', args.name])
+        subprocess.check_call(['git', '-C', args.name,
+                               'remote', 'add', 'origin',
+                               'https://github.com/xcp-ng-rpms/%s.git' % args.name])
+    else:
+        subprocess.check_call(['git', 'clone', 'https://github.com/xcp-ng-rpms/%s.git' % args.name])
     os.chdir(args.name)
     if "git@github.com" not in subprocess.check_output(
             ['git', 'remote', 'get-url', '--push', 'origin'],
@@ -61,7 +71,8 @@ Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
     subprocess.check_call(['git', 'lfs', 'track', '*.tbz'])
     subprocess.check_call(['git', 'add', '.gitattributes'])
     subprocess.check_call(['git', 'commit', '-s', '-m', 'Initial commit'])
-    subprocess.check_call(['git', 'push'])
+    if not args.local:
+        subprocess.check_call(['git', 'push'])
 
 if __name__ == "__main__":
     main()
