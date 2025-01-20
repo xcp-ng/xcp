@@ -12,6 +12,8 @@ import atexit
 
 from datetime import datetime
 
+USER_REPO_HTTPS = "https://koji.xcp-ng.org/repos/user/"
+
 RELEASE_VERSIONS = [
     '7.6',
     '8.0',
@@ -387,6 +389,35 @@ def main():
             elif not quiet:
                 print('\n'.join(msgs))
                 print("Already up to date")
+
+    # Write repo files for U_TAGS
+    for version in VERSIONS:
+        contents = "# User repositories from XCP-ng developers. Meant for testing and troubleshooting purposes.\n"
+        last_tag = None
+        for tag in U_TAGS:
+            if version_from_tag(tag) != version:
+                continue
+
+            last_tag = tag
+            repo_name = repo_name_from_tag(tag)
+            repo_path_https = build_path_to_repo(USER_REPO_HTTPS, tag)
+            contents += """[xcp-ng-{repo_name}]
+name=xcp-ng-{repo_name}
+baseurl={repo_path_https}/x86_64/
+enabled=0
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
+
+""".format(repo_name=repo_name, repo_path_https=repo_path_https)
+
+        if last_tag is not None:
+            repo_filename = os.path.join(
+                build_path_to_version(dest_dir_for_tag(last_tag), last_tag),
+                'xcpng-users.repo'
+            )
+            with open(repo_filename, 'w') as f:
+                f.write(contents)
 
 if __name__ == "__main__":
     main()
