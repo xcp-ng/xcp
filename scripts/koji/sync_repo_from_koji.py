@@ -407,6 +407,7 @@ baseurl={repo_path_https}/x86_64/
 enabled=0
 gpgcheck=1
 repo_gpgcheck=1
+metadata_expire=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
 
 """.format(repo_name=repo_name, repo_path_https=repo_path_https)
