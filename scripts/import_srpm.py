@@ -38,12 +38,14 @@ def main():
     if len(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard'])):
         parser.error("There are untracked files.")
 
-    # checkout parent ref
+    print(" checking out parent ref...")
+
     subprocess.check_call(['git', 'fetch'])
     subprocess.check_call(['git', 'checkout', args.parent_branch])
     subprocess.check_call(['git', 'pull'])
 
-    # remove everything from SOURCES and SPECS
+    print(" removing everything from SOURCES and SPECS...")
+
     if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
         subprocess.check_call(['git', 'rm', 'SOURCES/*', '-r'])
     if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
@@ -55,13 +57,15 @@ def main():
         subprocess.check_call(['git', 'rm', 'SPECS/*', '-r'])
     os.mkdir('SPECS')
 
-    # extract SRPM
+    print(" extracting SRPM...")
+
     os.chdir('SOURCES')
     os.system('rpm2cpio "%s" | cpio -idmv' % source_rpm_abs)
     os.chdir('..')
     os.system('mv SOURCES/*.spec SPECS/')
 
-    # remove trademarked or copyrighted files
+    print(" removing trademarked or copyrighted files...")
+
     sources = os.listdir('SOURCES')
     deletemsg = "File deleted from the original sources for trademark-related or copyright-related legal reasons.\n"
     deleted = []
@@ -71,13 +75,13 @@ def main():
             open(os.path.join('SOURCES', "%s.deleted-by-XCP-ng.txt" % f), 'w').write(deletemsg)
             deleted.append(f)
 
-    # commit
     if subprocess.call(['git', 'rev-parse', '--quiet', '--verify', args.branch]) != 0:
         subprocess.check_call(['git', 'checkout', '-b', args.branch])
     else:
         subprocess.check_call(['git', 'checkout', args.branch])
     subprocess.check_call(['git', 'add', '--all'])
     if args.commit or args.push:
+        print(" committing...")
         has_changes = False
         try:
             subprocess.check_call(['git', 'diff-index', '--quiet',  'HEAD', '--'])
@@ -102,11 +106,13 @@ def main():
             if args.tag is not None:
                 subprocess.check_call(['git', 'push', 'origin', args.tag])
 
-    # switch to master before leaving
+    print(" switching to master before leaving...")
+
     subprocess.check_call(['git', 'checkout', 'master'])
 
     # merge to master if needed
     if args.push and args.master:
+        print(" merging to master...")
         subprocess.check_call(['git', 'push', 'origin', '%s:master' % args.branch])
         subprocess.check_call(['git', 'pull'])
 
