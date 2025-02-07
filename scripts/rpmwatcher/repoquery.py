@@ -12,22 +12,59 @@ failovermethod=priority
 skip_if_unavailable=False
 """
 
+XCPNG_YUMREPO_USER_TMPL = """
+[xcpng-{section}{suffix}]
+name=xcpng - {section}{suffix}
+baseurl=https://koji.xcp-ng.org/repos/user/8/{version}/{section}/{rpmarch}/
+gpgkey=https://xcp-ng.org/RPM-GPG-KEY-xcpng
+failovermethod=priority
+skip_if_unavailable=False
+"""
+
 def setup_xcpng_yum_repos(*, yum_repo_d, sections, bin_arch, version):
     with open(os.path.join(yum_repo_d, "xcpng.repo"), "w") as yumrepoconf:
         for section in sections:
+            # HACK: use USER_TMPL if section ends with a number
+            if section[-1].isdigit():
+                tmpl = XCPNG_YUMREPO_USER_TMPL
+            else:
+                tmpl = XCPNG_YUMREPO_TMPL
+
             # binaries
-            block = XCPNG_YUMREPO_TMPL.format(rpmarch=bin_arch,
-                                              section=section,
-                                              version=version,
-                                              suffix='',
-                                              )
-            yumrepoconf.write(block)
+            if bin_arch:
+                block = tmpl.format(rpmarch=bin_arch,
+                                    section=section,
+                                    version=version,
+                                    suffix='',
+                                    )
+                yumrepoconf.write(block)
             # sources
-            block = XCPNG_YUMREPO_TMPL.format(rpmarch='Source',
-                                              section=section,
-                                              version=version,
-                                              suffix='-src',
-                                              )
+            block = tmpl.format(rpmarch='Source',
+                                section=section,
+                                version=version,
+                                suffix='-src',
+                                )
+            yumrepoconf.write(block)
+
+
+XS8_YUMREPO_TMPL = """
+[xs8-{section}]
+name=XS8 - {section}
+baseurl=http://10.1.0.94/repos/XS8/{section}/xs8p-{section}/
+failovermethod=priority
+skip_if_unavailable=False
+
+[xs8-{section}-src]
+name=XS8 - {section} source
+baseurl=http://10.1.0.94/repos/XS8/{section}/xs8p-{section}-source/
+failovermethod=priority
+skip_if_unavailable=False
+"""
+
+def setup_xs8_yum_repos(*, yum_repo_d, sections):
+    with open(os.path.join(yum_repo_d, "xs8.repo"), "w") as yumrepoconf:
+        for section in sections:
+            block = XS8_YUMREPO_TMPL.format(section=section)
             yumrepoconf.write(block)
 
 DNF_BASE_CMD = None
@@ -47,7 +84,7 @@ def run_repoquery(args):
     cmd = DNF_BASE_CMD + ['repoquery'] + args
     logging.debug('$ %s', ' '.join(cmd))
     ret = subprocess.check_output(cmd, universal_newlines=True).strip().split()
-    logging.debug('> %s', ret)
+    logging.debug('> %s', '\n'.join(ret))
     return ret
 
 SRPM_BINRPMS_CACHE = {}         # binrpm-nevr -> srpm-nevr
@@ -141,3 +178,36 @@ def is_pristine_upstream(rpmname):
     if re.search(UPSTREAM_REGEX, rpmname):
         return True
     return False
+
+def rpm_parse_nevr(nevr, suffix):
+    "Parse into (name, epoch:version, release) stripping suffix from release"
+    m = re.match(RPM_NVR_SPLIT_REGEX, nevr)
+    assert m, f"{nevr} does not match NEVR pattern"
+    n, ev, r = m.groups()
+    if ":" in ev:
+        e, v = ev.split(":")
+    else:
+        e, v = "0", ev
+    if r.endswith(suffix):
+        r = r[:-len(suffix)]
+    return (n, e, v, r)
+
+def all_binrpms():
+    args = [
+        '--disablerepo=*-src',
+        '--qf=%{name}-%{evr}', # to avoid getting the arch
+        '--latest-limit=1',    # only most recent for each package
+        '*',
+    ]
+    ret = set(run_repoquery(args))
+    return ret
+
+def all_srpms():
+    args = [
+        '--disablerepo=*', '--enablerepo=*-src',
+        '--qf=%{name}-%{evr}', # to avoid getting the arch
+        '--latest-limit=1',    # only most recent for each package
+        '*',
+    ]
+    ret = set(run_repoquery(args))
+    return ret
