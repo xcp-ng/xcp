@@ -26,5 +26,5 @@ apt-get install fakeroot genisoimage syslinux-utils p7zip-full
 ```
 
 ```
-dnf install fakeroot genisoimage syslinux cdrkit-isotools p7zip-plugins
+dnf install --enablerepo=epel fakeroot genisoimage syslinux cdrkit-isotools p7zip-plugins
 ```

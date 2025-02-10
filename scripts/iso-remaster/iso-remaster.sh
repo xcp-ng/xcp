@@ -30,6 +30,8 @@ Options:
          before repacking output ISO.
          Forces "--mode copy" to avoid fuse-overlay bug
          https://github.com/containers/fuse-overlayfs/issues/377
+  -z [bzip2|gzip]
+         Compression method used by install.img (default: bzip2)
   -V <volume-id>  Use specified volume id instead of reusing the original one
 EOF
 }
@@ -56,28 +58,34 @@ command -v isoinfo >/dev/null || die "required tool not found: isoinfo (package 
 ISOPATCHER=""
 IMGPATCHER=""
 VOLID=""
+COMPRESS="bzip2"
 while [ $# -ge 1 ]; do
     case "$1" in
         --mode)
-            [ $# -ge 2 ] || die_usage "--mode needs an argument"
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
             OPMODE="$2"
             shift
             ;;
         --iso-patcher|-s)
-            [ $# -ge 2 ] || die_usage "--iso-patcher needs an argument"
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
             ISOPATCHER="$2"
             echo >&2 "NOTE: iso-patcher use, forcing 'copy' mode"
             OPMODE=copy
             shift
             ;;
         --install-patcher|-l)
-            [ $# -ge 2 ] || die_usage "--install-patcher needs an argument"
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
             IMGPATCHER="$2"
             shift
             ;;
         -V)
-            [ $# -ge 2 ] || die_usage "-V needs an argument"
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
             VOLID="$2"
+            shift
+            ;;
+        -z)
+            [ $# -ge 2 ] || die_usage "$1 needs an argument"
+            COMPRESS="$2"
             shift
             ;;
         --help|-h)
@@ -93,6 +101,12 @@ while [ $# -ge 1 ]; do
     esac
     shift
 done
+
+case "$COMPRESS" in
+    bzip2) ZCAT=bzcat; ZIP=bzip2 ;;
+    gzip) ZCAT=zcat; ZIP=gzip ;;
+    *) die_usage "unsupported compression method" ;;
+esac
 
 [ $# = 2 ] || die_usage "need exactly 2 non-option arguments"
 
@@ -209,14 +223,29 @@ fi
 # default value for volume id
 : ${VOLID:=$(isoinfo -i "$INISO" -d | grep "Volume id" | sed "s/Volume id: //")}
 
+if [ -e "$RWISO/boot/efiboot.img" ]; then
+    GENISOIMAGE_EXTRA_ARGS=(
+        -eltorito-alt-boot
+        -e boot/efiboot.img
+        -no-emul-boot
+    )
+    ISOHYBRID_EXTRA_ARGS=(--uefi)
+    is_efi=1
+else
+    echo >&2 "WARNING: no UEFI boot support"
+    GENISOIMAGE_EXTRA_ARGS=()
+    ISOHYBRID_EXTRA_ARGS=()
+    is_efi=0
+fi
+
 "${FAKEROOT[@]}" genisoimage \
     -o "$OUTISO" \
     -v -r -J --joliet-long -V "$VOLID" -input-charset utf-8 \
     -c boot/isolinux/boot.cat -b boot/isolinux/isolinux.bin -no-emul-boot \
     -boot-load-size 4 -boot-info-table \
     \
-    -eltorito-alt-boot -e boot/efiboot.img \
-    -no-emul-boot \
+    "${GENISOIMAGE_EXTRA_ARGS[@]}" \
     \
-    $RWISO
-isohybrid --uefi "$OUTISO"
+    "$RWISO"
+
+isohybrid "${ISOHYBRID_EXTRA_ARGS[@]}" "$OUTISO"
