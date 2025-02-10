@@ -1,0 +1,35 @@
+#! /usr/bin/env python3
+
+import logging
+import sys
+import tempfile
+
+import repoquery
+
+ARCH = "x86_64"
+XCP_VERSION = "8.3"
+
+# Use `repoquery` on xs8 and xcpng8.3 repos
+def main() -> int:
+    logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.INFO)
+
+    args = sys.argv[1:]
+
+    with (tempfile.NamedTemporaryFile() as dnfconf,
+          tempfile.TemporaryDirectory() as yumrepod):
+
+        repoquery.setup_xcpng_yum_repos(yum_repo_d=yumrepod,
+                                        sections=['base', 'updates'],
+                                        bin_arch=ARCH,
+                                        version=XCP_VERSION)
+        repoquery.setup_xs8_yum_repos(yum_repo_d=yumrepod,
+                                      sections=['base', 'normal', 'earlyaccess'],
+                                      )
+        repoquery.dnf_setup(dnf_conf=dnfconf.name, yum_repo_d=yumrepod)
+
+        print(repoquery.run_repoquery(args, split=False))
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
