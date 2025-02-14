@@ -42,7 +42,8 @@ def main():
 
     subprocess.check_call(['git', 'fetch'])
     subprocess.check_call(['git', 'checkout', args.parent_branch])
-    subprocess.check_call(['git', 'pull'])
+    if args.push:
+        subprocess.check_call(['git', 'pull'])
 
     print(" removing everything from SOURCES and SPECS...")
 
