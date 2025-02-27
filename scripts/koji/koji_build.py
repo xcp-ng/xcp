@@ -3,6 +3,18 @@ import argparse
 import os
 import subprocess
 import re
+from contextlib import contextmanager
+
+
+@contextmanager
+def cd(dir):
+    """Change to a directory temporarily. To be used in a with statement"""
+    prevdir = os.getcwd()
+    os.chdir(dir)
+    try:
+        yield os.path.realpath(dir)
+    finally:
+        os.chdir(prevdir)
 
 def check_dir(dirpath):
     if not os.path.isdir(dirpath):
@@ -10,28 +22,20 @@ def check_dir(dirpath):
     return dirpath
 
 def check_git_repo(dirpath):
-    cwd = os.getcwd()
-    os.chdir(dirpath)
-    # check that the working copy is a working directory and is clean
-    try:
-        subprocess.check_call(['git', 'diff-index', '--quiet',  'HEAD', '--'])
-        ret = True
-    except:
-        ret = False
-
-    os.chdir(cwd)
+    with cd(dirpath):
+        # check that the working copy is a working directory and is clean
+        try:
+            subprocess.check_call(['git', 'diff-index', '--quiet',  'HEAD', '--'])
+            ret = True
+        except:
+            ret = False
     return ret
 
 def get_repo_and_commit_info(dirpath):
-    cwd = os.getcwd()
-    os.chdir(dirpath)
-
-    remote = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url']).decode().strip()
-
-    # We want the exact hash for accurate build history
-    hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
-
-    os.chdir(cwd)
+    with cd(dirpath):
+        remote = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url']).decode().strip()
+        # We want the exact hash for accurate build history
+        hash = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
     return remote, hash
 
 def koji_url(remote, hash):
