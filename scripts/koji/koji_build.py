@@ -112,6 +112,8 @@ def main():
         urls = []
         for d in git_repos:
             remote, hash = get_repo_and_commit_info(d)
+            if test_build:
+                hash = push_bumped_release(d, test_build)
             urls.append(koji_url(remote, hash))
         command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ') +  (['--nowait'] if is_nowait else [])
         print('  '.join(command), flush=True)
