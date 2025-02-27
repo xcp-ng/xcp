@@ -73,7 +73,7 @@ def main():
         remote, hash = get_repo_and_commit_info(git_repos[0])
         url = koji_url(remote, hash)
         command = ['koji', 'build'] + (['--scratch'] if is_scratch else []) + [target, url] + (['--nowait'] if is_nowait else [])
-        subprocess.check_call(['echo'] + command)
+        print('  '.join(command), flush=True)
         subprocess.check_call(command)
     else:
         urls = []
@@ -81,7 +81,7 @@ def main():
             remote, hash = get_repo_and_commit_info(d)
             urls.append(koji_url(remote, hash))
         command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ') +  (['--nowait'] if is_nowait else [])
-        subprocess.check_call(['echo'] + command)
+        print('  '.join(command), flush=True)
         subprocess.check_call(command)
 
 if __name__ == "__main__":
