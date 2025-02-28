@@ -4,10 +4,11 @@ import os
 import subprocess
 import re
 from contextlib import contextmanager
-from uuid import uuid4
+from datetime import datetime, timedelta
 
 from specfile import Specfile
 
+TIME_FORMAT = '%Y-%m-%d-%H-%M-%S'
 
 @contextmanager
 def cd(dir):
@@ -59,12 +60,24 @@ def local_branch(branch):
     finally:
         subprocess.check_call(['git', 'checkout', prev_branch])
         subprocess.check_call(['git', 'branch', '-D', branch])
-        subprocess.check_call(['git', 'push', '--delete', 'origin', branch])
+
+def is_old_branch(b):
+    branch_time = datetime.strptime(b.split('/')[-1], TIME_FORMAT)
+    return branch_time < datetime.now() - timedelta(hours=3)
 
 def push_bumped_release(git_repo, test_build_id):
-    uuid = uuid4()
-    branch = f'koji/test/{uuid}'
+    t = datetime.now().strftime(TIME_FORMAT)
+    branch = f'koji/test/{test_build_id}/{t}'
     with cd(git_repo), local_branch(branch):
+        # clean up the old branches
+        subprocess.check_call(['git', 'fetch'])
+        remote_branches = subprocess.check_output(['git', 'branch', '-rl', 'origin/koji/test/*/*']).decode().splitlines()
+        remote_branches = [b.strip()[len('origin/'):] for b in remote_branches]
+        old_branches = [b for b in remote_branches if is_old_branch(b)]
+        for b in old_branches:
+            print(f"removing outdated remote branch {b}", flush=True)
+            subprocess.check_call(['git', 'push', '--delete', 'origin', b])
+        # locate the specfile
         spec_paths = subprocess.check_output(['git', 'ls-files', 'SPECS/*.spec']).decode().splitlines()
         assert len(spec_paths) == 1
         spec_path = spec_paths[0]
