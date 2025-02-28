@@ -5,6 +5,7 @@ import subprocess
 import re
 from contextlib import contextmanager
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from specfile import Specfile
 
@@ -82,8 +83,16 @@ def push_bumped_release(git_repo, test_build_id):
         assert len(spec_paths) == 1
         spec_path = spec_paths[0]
         with Specfile(spec_path) as spec:
-            # TODO: check koji build to use another final number when needed
-            spec.release = f'{spec.release}.0.{test_build_id}.1'
+            # find the next build number
+            package = Path(spec_path).stem
+            builds = subprocess.check_output(['koji', 'list-builds', '--package', package]).decode().splitlines()[2:]
+            base_nvr = f'{package}-{spec.version}-{spec.release}.0.{test_build_id}.'
+            # use a regex to match %{macro} without actually expanding the macros
+            base_nvr_re = re.escape(re.sub('%{.+}', "@@@", base_nvr)).replace('@@@', '.*') + r'(\d+)'
+            build_matches = [re.match(base_nvr_re, b) for b in builds]
+            build_ids = [int(m.group(1)) for m in build_matches if m]
+            next_build_id = sorted(build_ids)[-1] + 1 if build_ids else 1
+            spec.release = f'{spec.release}.0.{test_build_id}.{next_build_id}'
         subprocess.check_call(['git', 'commit', '-m', "bump release for test build", spec_path])
         subprocess.check_call(['git', 'push', 'origin', branch])
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
