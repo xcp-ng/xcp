@@ -55,12 +55,12 @@ def koji_url(remote, hash):
 @contextmanager
 def local_branch(branch):
     prev_branch = subprocess.check_output(['git', 'branch', '--show-current']).strip()
-    subprocess.check_call(['git', 'checkout', '-b', branch])
+    commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+    subprocess.check_call(['git', 'checkout', '--quiet', commit])
     try:
         yield branch
     finally:
         subprocess.check_call(['git', 'checkout', prev_branch])
-        subprocess.check_call(['git', 'branch', '-D', branch])
 
 def is_old_branch(b):
     branch_time = datetime.strptime(b.split('/')[-1], TIME_FORMAT)
@@ -94,8 +94,8 @@ def push_bumped_release(git_repo, test_build_id):
             build_ids = [int(m.group(1)) for m in build_matches if m]
             next_build_id = sorted(build_ids)[-1] + 1 if build_ids else 1
             spec.release = f'{spec.release}.0.{test_build_id}.{next_build_id}'
-        subprocess.check_call(['git', 'commit', '-m', "bump release for test build", spec_path])
-        subprocess.check_call(['git', 'push', 'origin', branch])
+        subprocess.check_call(['git', 'commit', '--quiet', '-m', "bump release for test build", spec_path])
+        subprocess.check_call(['git', 'push', 'origin', f'HEAD:refs/heads/{branch}'])
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
         return commit
 
