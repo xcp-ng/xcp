@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 import argparse
+import logging
 import os
 import subprocess
+
+def call_process(args):
+    logging.debug("$ %s", args)
+    subprocess.check_call(args)
 
 def main():
     parser = argparse.ArgumentParser(description='Imports the contents of a source RPM into a git repository')
@@ -10,10 +15,19 @@ def main():
     parser.add_argument('parent_branch', help='git parent branch from which to branch')
     parser.add_argument('branch', help='destination branch')
     parser.add_argument('tag', nargs='?', help='tag')
+    parser.add_argument('-v', '--verbose', action='count', default=0)
     parser.add_argument('-c', '--commit', action='store_true', help='commit the changes')
     parser.add_argument('-p', '--push', action='store_true', help='commit and push')
     parser.add_argument('-m', '--master', action='store_true', help='merge to master afterwards')
     args = parser.parse_args()
+
+    if args.verbose > 2:
+        args.verbose = 2
+    loglevel = {0: logging.WARNING,
+                1: logging.INFO,
+                2: logging.DEBUG,
+                }[args.verbose]
+    logging.basicConfig(format='[%(levelname)s] %(message)s', level=loglevel)
 
     # check that the source RPM file exists
     if not os.path.isfile(args.source_rpm):
@@ -29,9 +43,10 @@ def main():
 
     # check that the working copy is clean
     try:
-        subprocess.check_call(['git', 'diff-index', '--quiet',  'HEAD', '--'])
+        call_process(['git', 'diff-index', '--quiet',  'HEAD', '--'])
         print("Working copy is clean.")
     except:
+        raise
         parser.error("Git repository seems to have local modifications.")
 
     # check that there are no untracked files
@@ -40,22 +55,22 @@ def main():
 
     print(" checking out parent ref...")
 
-    subprocess.check_call(['git', 'fetch'])
-    subprocess.check_call(['git', 'checkout', args.parent_branch])
+    call_process(['git', 'fetch'])
+    call_process(['git', 'checkout', args.parent_branch])
     if args.push:
-        subprocess.check_call(['git', 'pull'])
+        call_process(['git', 'pull'])
 
     print(" removing everything from SOURCES and SPECS...")
 
     if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
-        subprocess.check_call(['git', 'rm', 'SOURCES/*', '-r'])
+        call_process(['git', 'rm', 'SOURCES/*', '-r'])
     if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
         parser.error("Files remaining in SOURCES/ after removing the tracked ones. ")
         parser.error("Delete them (including hidden files), reset --hard.")
     os.mkdir('SOURCES')
 
     if os.path.isdir('SPECS'):
-        subprocess.check_call(['git', 'rm', 'SPECS/*', '-r'])
+        call_process(['git', 'rm', 'SPECS/*', '-r'])
     os.mkdir('SPECS')
 
     print(" extracting SRPM...")
@@ -77,15 +92,15 @@ def main():
             deleted.append(f)
 
     if subprocess.call(['git', 'rev-parse', '--quiet', '--verify', args.branch]) != 0:
-        subprocess.check_call(['git', 'checkout', '-b', args.branch])
+        call_process(['git', 'checkout', '-b', args.branch])
     else:
-        subprocess.check_call(['git', 'checkout', args.branch])
-    subprocess.check_call(['git', 'add', '--all'])
+        call_process(['git', 'checkout', args.branch])
+    call_process(['git', 'add', '--all'])
     if args.commit or args.push:
         print(" committing...")
         has_changes = False
         try:
-            subprocess.check_call(['git', 'diff-index', '--quiet',  'HEAD', '--'])
+            call_process(['git', 'diff-index', '--quiet',  'HEAD', '--'])
         except:
             has_changes = True
 
@@ -95,27 +110,27 @@ def main():
             msg = 'Import %s' % os.path.basename(args.source_rpm)
             if deleted:
                 msg += "\n\nFiles deleted for legal reasons:\n - " + '\n - '.join(deleted)
-            subprocess.check_call(['git', 'commit', '-s', '-m', msg])
+            call_process(['git', 'commit', '-s', '-m', msg])
 
         # tag
         if args.tag is not None:
-            subprocess.check_call(['git', 'tag', args.tag])
+            call_process(['git', 'tag', args.tag])
 
         # push to remote
         if args.push:
-            subprocess.check_call(['git', 'push', '--set-upstream', 'origin', args.branch])
+            call_process(['git', 'push', '--set-upstream', 'origin', args.branch])
             if args.tag is not None:
-                subprocess.check_call(['git', 'push', 'origin', args.tag])
+                call_process(['git', 'push', 'origin', args.tag])
 
     print(" switching to master before leaving...")
 
-    subprocess.check_call(['git', 'checkout', 'master'])
+    call_process(['git', 'checkout', 'master'])
 
     # merge to master if needed
     if args.push and args.master:
         print(" merging to master...")
-        subprocess.check_call(['git', 'push', 'origin', '%s:master' % args.branch])
-        subprocess.check_call(['git', 'pull'])
+        call_process(['git', 'push', 'origin', '%s:master' % args.branch])
+        call_process(['git', 'pull'])
 
 
 if __name__ == "__main__":
