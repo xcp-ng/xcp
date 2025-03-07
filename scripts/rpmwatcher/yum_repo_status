@@ -94,6 +94,10 @@ def collect_data_xs8():
                                 in filter_best_evr(repoquery.rpm_parse_nevr(nevr, f".xs8")
                                                    for nevr in xs8_rpms_sources)}
 
+        logging.debug("get XS waves SRPM versions")
+        xs8_waves_srpms = {nevr for nevr in repoquery.all_srpms(all_versions=True)
+                           if not FILTER_UPSTREAM or not repoquery.is_pristine_upstream(nevr)}
+
     logging.info(f"xs8 src: {len(xs8_srpms_set)}")
     logging.info(f"xs8 bin: {len(xs8_rpms_sources_set)}")
 

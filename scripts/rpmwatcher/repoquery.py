@@ -212,12 +212,13 @@ def all_binrpms() -> set[str]:
     ret = set(run_repoquery(args))
     return ret
 
-def all_srpms() -> set[str]:
+def all_srpms(all_versions: bool = False) -> set[str]:
     args = [
         '--disablerepo=*', '--enablerepo=*-src',
         '--qf=%{name}-%{evr}' + QFNL, # to avoid getting the arch
-        '--latest-limit=1',    # only most recent for each package
         '*',
     ]
+    if not all_versions:
+        args.append('--latest-limit=1')    # only most recent for each package
     ret = set(run_repoquery(args))
     return ret
