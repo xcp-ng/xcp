@@ -16,8 +16,7 @@ def main():
     parser.add_argument('branch', help='destination branch')
     parser.add_argument('tag', nargs='?', help='tag')
     parser.add_argument('-v', '--verbose', action='count', default=0)
-    parser.add_argument('-c', '--commit', action='store_true', help='commit the changes')
-    parser.add_argument('-p', '--push', action='store_true', help='commit and push')
+    parser.add_argument('-p', '--push', action='store_true', help='pull and push')
     parser.add_argument('-m', '--master', action='store_true', help='merge to master afterwards')
     args = parser.parse_args()
 
@@ -96,31 +95,31 @@ def main():
     else:
         call_process(['git', 'checkout', args.branch])
     call_process(['git', 'add', '--all'])
-    if args.commit or args.push:
-        print(" committing...")
-        has_changes = False
-        try:
-            call_process(['git', 'diff-index', '--quiet',  'HEAD', '--'])
-        except:
-            has_changes = True
 
-        if not has_changes:
-            print("\nWorking copy has no modifications. Nothing to commit. No changes from previous release?\n")
-        else:
-            msg = 'Import %s' % os.path.basename(args.source_rpm)
-            if deleted:
-                msg += "\n\nFiles deleted for legal reasons:\n - " + '\n - '.join(deleted)
-            call_process(['git', 'commit', '-s', '-m', msg])
+    print(" committing...")
+    has_changes = False
+    try:
+        call_process(['git', 'diff-index', '--quiet',  'HEAD', '--'])
+    except:
+        has_changes = True
 
-        # tag
+    if not has_changes:
+        print("\nWorking copy has no modifications. Nothing to commit. No changes from previous release?\n")
+    else:
+        msg = 'Import %s' % os.path.basename(args.source_rpm)
+        if deleted:
+            msg += "\n\nFiles deleted for legal reasons:\n - " + '\n - '.join(deleted)
+        call_process(['git', 'commit', '-s', '-m', msg])
+
+    # tag
+    if args.tag is not None:
+        call_process(['git', 'tag', args.tag])
+
+    # push to remote
+    if args.push:
+        call_process(['git', 'push', '--set-upstream', 'origin', args.branch])
         if args.tag is not None:
-            call_process(['git', 'tag', args.tag])
-
-        # push to remote
-        if args.push:
-            call_process(['git', 'push', '--set-upstream', 'origin', args.branch])
-            if args.tag is not None:
-                call_process(['git', 'push', 'origin', args.tag])
+            call_process(['git', 'push', 'origin', args.tag])
 
     print(" switching to master before leaving...")
 
