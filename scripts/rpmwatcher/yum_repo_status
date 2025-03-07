@@ -179,6 +179,9 @@ def main() -> int:
           </head>
           <body>
             <table>
+              <col/>
+              <col/>
+              <col/>
               <tr class="header">
                 <th rowspan="2">package
                 <th class="xs" colspan="3">XenServer 8
