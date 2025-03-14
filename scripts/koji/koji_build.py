@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import logging
 import os
 import subprocess
 import re
@@ -115,6 +116,9 @@ def main():
     is_scratch = args.scratch
     is_nowait = args.nowait
     test_build = args.test_build
+    if re.match('^[a-zA-Z0-9]{1,16}$', test_build) is None:
+        logging.error("The test build id must be 16 characters long maximum and only contain letters and digits")
+        exit(1)
 
     if len(git_repos) > 1 and is_scratch:
         parser.error("--scratch is not compatible with chained builds.")
