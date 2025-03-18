@@ -54,7 +54,8 @@ def main():
 
     print(" checking out parent ref...")
 
-    call_process(['git', 'fetch'])
+    if args.push:
+        call_process(['git', 'fetch'])
     call_process(['git', 'checkout', args.parent_branch])
     if args.push:
         call_process(['git', 'pull'])
