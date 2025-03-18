@@ -5,10 +5,11 @@ set -e
 INSTALLIMG="$1"
 
 ## Include a locally-modified version of the installer for testing
-## - copies a few files too much until we can "make install", but that's harmless
-#
-#HOSTINSTALLER=$HOME/src/host-installer
+#HOSTINSTALLER=$HOME/src/xs/host-installer
+## - if 8.2: copies a few files too much until we can "make install", but that's harmless
 #cp -rv "$HOSTINSTALLER"/* "$INSTALLIMG/opt/xensource/installer/"
+## - if 8.3
+#make -C "$HOSTINSTALLER" DESTDIR="$INSTALLIMG" XS_MPATH_CONF="$HOME/src/xapi/sm/multipath/multipath.conf"
 
 ## Install extra packages - use `rpm` not `yum`, as we had to use `rpm
 ## --nodeps` during image creation and `yum` will now go on strike.
