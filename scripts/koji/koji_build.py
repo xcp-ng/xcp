@@ -8,7 +8,11 @@ from contextlib import contextmanager
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from specfile import Specfile
+try:
+    from specfile import Specfile
+except ImportError:
+    print("error: specfile module can't be imported. Please install it with 'pip install --user specfile'.")
+    exit(1)
 
 TIME_FORMAT = '%Y-%m-%d-%H-%M-%S'
 
