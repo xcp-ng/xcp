@@ -22,9 +22,15 @@ some, but you may want to install those first. Depending on your OS
 you may use something like:
 
 ```
-apt-get install fakeroot genisoimage syslinux-utils p7zip-full
+apt-get install fakeroot genisoimage syslinux-utils p7zip-full bzip2
 ```
 
+el8 and newer:
 ```
-dnf install --enablerepo=epel fakeroot genisoimage syslinux cdrkit-isotools p7zip-plugins
+dnf install --enablerepo=epel fakeroot genisoimage syslinux p7zip-plugins bzip2
+```
+
+el7:
+```
+yum install --enablerepo=epel fakeroot genisoimage syslinux cdrkit-isotools p7zip-plugins bzip2
 ```

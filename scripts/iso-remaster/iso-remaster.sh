@@ -50,10 +50,11 @@ command -v fuseiso >/dev/null || { echo >&2 "fuseiso not found"; OPMODE=copy; }
 command -v fuse-overlayfs >/dev/null || { echo >&2 "fuse-overlayfs not found"; OPMODE=copy; }
 
 command -v 7z >/dev/null || die "required tool not found: 7z (e.g. p7zip-plugins in EPEL)"
+command -v bzcat >/dev/null || die "required tool not found: bzip2"
 command -v fakeroot >/dev/null || die "required tool not found: fakeroot"
 command -v genisoimage >/dev/null || die "required tool not found: genisoimage"
 command -v isohybrid >/dev/null || die "required tool not found: isohybrid (package syslinux-utils or syslinux)"
-command -v isoinfo >/dev/null || die "required tool not found: isoinfo (package cdrkit-isotools?)"
+command -v isoinfo >/dev/null || die "required tool not found: isoinfo (package cdrkit-isotools or genisoimage?)"
 
 ISOPATCHER=""
 IMGPATCHER=""
