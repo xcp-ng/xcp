@@ -1,0 +1,2798 @@
+{
+    "GConf2": {
+        "maintainer": "OS Platform & Release",
+        "package": "GConf2"
+    },
+    "GeoIP": {
+        "maintainer": "OS Platform & Release",
+        "package": "GeoIP"
+    },
+    "ImageMagick": {
+        "maintainer": "OS Platform & Release",
+        "package": "ImageMagick"
+    },
+    "Judy": {
+        "maintainer": "OS Platform & Release",
+        "package": "Judy"
+    },
+    "OpenEXR": {
+        "maintainer": "OS Platform & Release",
+        "package": "OpenEXR"
+    },
+    "OpenIPMI": {
+        "maintainer": "OS Platform & Release",
+        "package": "OpenIPMI"
+    },
+    "SDL": {
+        "maintainer": "OS Platform & Release",
+        "package": "SDL"
+    },
+    "acl": {
+        "maintainer": "OS Platform & Release",
+        "package": "acl"
+    },
+    "acpica-tools": {
+        "maintainer": "OS Platform & Release",
+        "package": "acpica-tools"
+    },
+    "adwaita-icon-theme": {
+        "maintainer": "OS Platform & Release",
+        "package": "adwaita-icon-theme"
+    },
+    "aic94xx-firmware": {
+        "maintainer": "OS Platform & Release",
+        "package": "aic94xx-firmware"
+    },
+    "alsa-lib": {
+        "maintainer": "OS Platform & Release",
+        "package": "alsa-lib"
+    },
+    "amd-microcode": {
+        "maintainer": "OS Platform & Release",
+        "package": "amd-microcode"
+    },
+    "apr": {
+        "maintainer": "OS Platform & Release",
+        "package": "apr"
+    },
+    "apr-util": {
+        "maintainer": "OS Platform & Release",
+        "package": "apr-util"
+    },
+    "aqc111u-module": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "aqc111u-module"
+    },
+    "arptables": {
+        "maintainer": "OS Platform & Release",
+        "package": "arptables"
+    },
+    "asciidoc": {
+        "maintainer": "OS Platform & Release",
+        "package": "asciidoc"
+    },
+    "at": {
+        "maintainer": "OS Platform & Release",
+        "package": "at"
+    },
+    "at-spi2-atk": {
+        "maintainer": "OS Platform & Release",
+        "package": "at-spi2-atk"
+    },
+    "at-spi2-core": {
+        "maintainer": "OS Platform & Release",
+        "package": "at-spi2-core"
+    },
+    "atk": {
+        "maintainer": "OS Platform & Release",
+        "package": "atk"
+    },
+    "atlantic-module-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "atlantic-module-alt"
+    },
+    "attr": {
+        "maintainer": "OS Platform & Release",
+        "package": "attr"
+    },
+    "audit": {
+        "maintainer": "OS Platform & Release",
+        "package": "audit"
+    },
+    "autoconf": {
+        "maintainer": "OS Platform & Release",
+        "package": "autoconf"
+    },
+    "autoconf-archive": {
+        "maintainer": "OS Platform & Release",
+        "package": "autoconf-archive"
+    },
+    "autogen": {
+        "maintainer": "OS Platform & Release",
+        "package": "autogen"
+    },
+    "automake": {
+        "maintainer": "OS Platform & Release",
+        "package": "automake"
+    },
+    "avago-megaraid-sas": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "avago-megaraid-sas"
+    },
+    "avago-mpt3sas": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "avago-mpt3sas"
+    },
+    "avahi": {
+        "maintainer": "OS Platform & Release",
+        "package": "avahi"
+    },
+    "basesystem": {
+        "maintainer": "OS Platform & Release",
+        "package": "basesystem"
+    },
+    "bash": {
+        "maintainer": "OS Platform & Release",
+        "package": "bash"
+    },
+    "bash-completion": {
+        "maintainer": "OS Platform & Release",
+        "package": "bash-completion"
+    },
+    "bc": {
+        "maintainer": "OS Platform & Release",
+        "package": "bc"
+    },
+    "bind": {
+        "maintainer": "OS Platform & Release",
+        "package": "bind"
+    },
+    "binutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "binutils"
+    },
+    "biosdevname": {
+        "maintainer": "OS Platform & Release",
+        "package": "biosdevname"
+    },
+    "bison": {
+        "maintainer": "OS Platform & Release",
+        "package": "bison"
+    },
+    "blktap": {
+        "maintainer": "Storage",
+        "package": "blktap"
+    },
+    "boost": {
+        "maintainer": "OS Platform & Release",
+        "package": "boost"
+    },
+    "branding-xcp-ng": {
+        "maintainer": "OS Platform & Release",
+        "package": "branding-xcp-ng"
+    },
+    "bridge-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "bridge-utils"
+    },
+    "broadcom-bnxt-en": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "broadcom-bnxt-en"
+    },
+    "broadcom-bnxt-en-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "broadcom-bnxt-en-alt"
+    },
+    "bubblewrap": {
+        "maintainer": "OS Platform & Release",
+        "package": "bubblewrap"
+    },
+    "busybox": {
+        "maintainer": "XAPI & Network",
+        "package": "busybox"
+    },
+    "bzip2": {
+        "maintainer": "OS Platform & Release",
+        "package": "bzip2"
+    },
+    "ca-certificates": {
+        "maintainer": "OS Platform & Release",
+        "package": "ca-certificates"
+    },
+    "cairo": {
+        "maintainer": "OS Platform & Release",
+        "package": "cairo"
+    },
+    "cdrkit": {
+        "maintainer": "OS Platform & Release",
+        "package": "cdrkit"
+    },
+    "centos-indexhtml": {
+        "maintainer": "OS Platform & Release",
+        "package": "centos-indexhtml"
+    },
+    "centos-logos": {
+        "maintainer": "OS Platform & Release",
+        "package": "centos-logos"
+    },
+    "ceph-common": {
+        "maintainer": "OS Platform & Release",
+        "package": "ceph-common"
+    },
+    "checkpolicy": {
+        "maintainer": "OS Platform & Release",
+        "package": "checkpolicy"
+    },
+    "chelsio-cxgb4": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "chelsio-cxgb4"
+    },
+    "chkconfig": {
+        "maintainer": "OS Platform & Release",
+        "package": "chkconfig"
+    },
+    "chrony": {
+        "maintainer": "OS Platform & Release",
+        "package": "chrony"
+    },
+    "chrpath": {
+        "maintainer": "OS Platform & Release",
+        "package": "chrpath"
+    },
+    "cifs-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "cifs-utils"
+    },
+    "cisco-enic": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "cisco-enic"
+    },
+    "cisco-enic-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "cisco-enic-alt"
+    },
+    "cisco-fnic": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "cisco-fnic"
+    },
+    "cisco-fnic-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "cisco-fnic-alt"
+    },
+    "cmake3": {
+        "maintainer": "OS Platform & Release",
+        "package": "cmake3"
+    },
+    "cmocka": {
+        "maintainer": "OS Platform & Release",
+        "package": "cmocka"
+    },
+    "colord": {
+        "maintainer": "OS Platform & Release",
+        "package": "colord"
+    },
+    "compat-db": {
+        "maintainer": "OS Platform & Release",
+        "package": "compat-db"
+    },
+    "compat-gcc-32": {
+        "maintainer": "OS Platform & Release",
+        "package": "compat-gcc-32"
+    },
+    "control-slice": {
+        "maintainer": "OS Platform & Release",
+        "package": "control-slice"
+    },
+    "coretemp-module-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "coretemp-module-alt"
+    },
+    "coreutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "coreutils"
+    },
+    "cpio": {
+        "maintainer": "OS Platform & Release",
+        "package": "cpio"
+    },
+    "cracklib": {
+        "maintainer": "OS Platform & Release",
+        "package": "cracklib"
+    },
+    "crash": {
+        "maintainer": "OS Platform & Release",
+        "package": "crash"
+    },
+    "createrepo_c": {
+        "maintainer": "OS Platform & Release",
+        "package": "createrepo_c"
+    },
+    "cronie": {
+        "maintainer": "OS Platform & Release",
+        "package": "cronie"
+    },
+    "crontabs": {
+        "maintainer": "OS Platform & Release",
+        "package": "crontabs"
+    },
+    "cryptsetup": {
+        "maintainer": "OS Platform & Release",
+        "package": "cryptsetup"
+    },
+    "ctags": {
+        "maintainer": "OS Platform & Release",
+        "package": "ctags"
+    },
+    "cups": {
+        "maintainer": "OS Platform & Release",
+        "package": "cups"
+    },
+    "curl": {
+        "maintainer": "OS Platform & Release",
+        "package": "curl"
+    },
+    "cyrus-sasl": {
+        "maintainer": "OS Platform & Release",
+        "package": "cyrus-sasl"
+    },
+    "dbus": {
+        "maintainer": "OS Platform & Release",
+        "package": "dbus"
+    },
+    "dbus-glib": {
+        "maintainer": "OS Platform & Release",
+        "package": "dbus-glib"
+    },
+    "dconf": {
+        "maintainer": "OS Platform & Release",
+        "package": "dconf"
+    },
+    "dejagnu": {
+        "maintainer": "OS Platform & Release",
+        "package": "dejagnu"
+    },
+    "dejavu-fonts": {
+        "maintainer": "OS Platform & Release",
+        "package": "dejavu-fonts"
+    },
+    "dell-rbu-module": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "dell-rbu-module"
+    },
+    "desktop-file-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "desktop-file-utils"
+    },
+    "dev86": {
+        "maintainer": "OS Platform & Release",
+        "package": "dev86"
+    },
+    "device-mapper-multipath": {
+        "maintainer": "Storage",
+        "package": "device-mapper-multipath"
+    },
+    "device-mapper-persistent-data": {
+        "maintainer": "OS Platform & Release",
+        "package": "device-mapper-persistent-data"
+    },
+    "devtoolset-10": {
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-10"
+    },
+    "devtoolset-10-binutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-10-binutils"
+    },
+    "devtoolset-10-gcc": {
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-10-gcc"
+    },
+    "devtoolset-11": {
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-11"
+    },
+    "devtoolset-11-binutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-11-binutils"
+    },
+    "devtoolset-11-gcc": {
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-11-gcc"
+    },
+    "devtoolset-11-gdb": {
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-11-gdb"
+    },
+    "dhcp": {
+        "maintainer": "OS Platform & Release",
+        "package": "dhcp"
+    },
+    "diffutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "diffutils"
+    },
+    "ding-libs": {
+        "maintainer": "OS Platform & Release",
+        "package": "ding-libs"
+    },
+    "dmidecode": {
+        "maintainer": "OS Platform & Release",
+        "package": "dmidecode"
+    },
+    "docbook-dtds": {
+        "maintainer": "OS Platform & Release",
+        "package": "docbook-dtds"
+    },
+    "docbook-style-dsssl": {
+        "maintainer": "OS Platform & Release",
+        "package": "docbook-style-dsssl"
+    },
+    "docbook-style-xsl": {
+        "maintainer": "OS Platform & Release",
+        "package": "docbook-style-xsl"
+    },
+    "docbook-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "docbook-utils"
+    },
+    "doxygen": {
+        "maintainer": "OS Platform & Release",
+        "package": "doxygen"
+    },
+    "dpkg": {
+        "maintainer": "OS Platform & Release",
+        "package": "dpkg"
+    },
+    "dracut": {
+        "maintainer": "OS Platform & Release",
+        "package": "dracut"
+    },
+    "dstat": {
+        "maintainer": "OS Platform & Release",
+        "package": "dstat"
+    },
+    "dwarves": {
+        "maintainer": "OS Platform & Release",
+        "package": "dwarves"
+    },
+    "dwz": {
+        "maintainer": "OS Platform & Release",
+        "package": "dwz"
+    },
+    "dyninst": {
+        "maintainer": "OS Platform & Release",
+        "package": "dyninst"
+    },
+    "e2fsprogs": {
+        "maintainer": "OS Platform & Release",
+        "package": "e2fsprogs"
+    },
+    "ebtables": {
+        "maintainer": "OS Platform & Release",
+        "package": "ebtables"
+    },
+    "ed": {
+        "maintainer": "OS Platform & Release",
+        "package": "ed"
+    },
+    "edk2": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "edk2"
+    },
+    "efibootmgr": {
+        "maintainer": "OS Platform & Release",
+        "package": "efibootmgr"
+    },
+    "efivar": {
+        "maintainer": "OS Platform & Release",
+        "package": "efivar"
+    },
+    "elfutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "elfutils"
+    },
+    "emacs": {
+        "maintainer": "OS Platform & Release",
+        "package": "emacs"
+    },
+    "emulex-lpfc": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "emulex-lpfc"
+    },
+    "epel-rpm-macros": {
+        "maintainer": "OS Platform & Release",
+        "package": "epel-rpm-macros"
+    },
+    "ethtool": {
+        "maintainer": "OS Platform & Release",
+        "package": "ethtool"
+    },
+    "expat": {
+        "maintainer": "OS Platform & Release",
+        "package": "expat"
+    },
+    "expect": {
+        "maintainer": "OS Platform & Release",
+        "package": "expect"
+    },
+    "fakeroot": {
+        "maintainer": "OS Platform & Release",
+        "package": "fakeroot"
+    },
+    "fcoe-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "fcoe-utils"
+    },
+    "figlet": {
+        "maintainer": "OS Platform & Release",
+        "package": "figlet"
+    },
+    "file": {
+        "maintainer": "OS Platform & Release",
+        "package": "file"
+    },
+    "filesystem": {
+        "maintainer": "OS Platform & Release",
+        "package": "filesystem"
+    },
+    "findutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "findutils"
+    },
+    "fipscheck": {
+        "maintainer": "OS Platform & Release",
+        "package": "fipscheck"
+    },
+    "flex": {
+        "maintainer": "OS Platform & Release",
+        "package": "flex"
+    },
+    "fontconfig": {
+        "maintainer": "OS Platform & Release",
+        "package": "fontconfig"
+    },
+    "fontpackages": {
+        "maintainer": "OS Platform & Release",
+        "package": "fontpackages"
+    },
+    "freeipmi": {
+        "maintainer": "OS Platform & Release",
+        "package": "freeipmi"
+    },
+    "freetype": {
+        "maintainer": "OS Platform & Release",
+        "package": "freetype"
+    },
+    "fuse": {
+        "maintainer": "OS Platform & Release",
+        "package": "fuse"
+    },
+    "future": {
+        "maintainer": "OS Platform & Release",
+        "package": "future"
+    },
+    "gawk": {
+        "maintainer": "OS Platform & Release",
+        "package": "gawk"
+    },
+    "gc": {
+        "maintainer": "OS Platform & Release",
+        "package": "gc"
+    },
+    "gcc": {
+        "maintainer": "OS Platform & Release",
+        "package": "gcc"
+    },
+    "gcc-libraries": {
+        "maintainer": "OS Platform & Release",
+        "package": "gcc-libraries"
+    },
+    "gd": {
+        "maintainer": "OS Platform & Release",
+        "package": "gd"
+    },
+    "gdb": {
+        "maintainer": "OS Platform & Release",
+        "package": "gdb"
+    },
+    "gdbm": {
+        "maintainer": "OS Platform & Release",
+        "package": "gdbm"
+    },
+    "gdisk": {
+        "maintainer": "OS Platform & Release",
+        "package": "gdisk"
+    },
+    "gdk-pixbuf2": {
+        "maintainer": "OS Platform & Release",
+        "package": "gdk-pixbuf2"
+    },
+    "gettext": {
+        "maintainer": "OS Platform & Release",
+        "package": "gettext"
+    },
+    "ghostscript": {
+        "maintainer": "OS Platform & Release",
+        "package": "ghostscript"
+    },
+    "ghostscript-fonts": {
+        "maintainer": "OS Platform & Release",
+        "package": "ghostscript-fonts"
+    },
+    "giflib": {
+        "maintainer": "OS Platform & Release",
+        "package": "giflib"
+    },
+    "git": {
+        "maintainer": "OS Platform & Release",
+        "package": "git"
+    },
+    "glib-networking": {
+        "maintainer": "OS Platform & Release",
+        "package": "glib-networking"
+    },
+    "glib2": {
+        "maintainer": "OS Platform & Release",
+        "package": "glib2"
+    },
+    "glibc": {
+        "maintainer": "OS Platform & Release",
+        "package": "glibc"
+    },
+    "glusterfs": {
+        "maintainer": "OS Platform & Release",
+        "package": "glusterfs"
+    },
+    "gmp": {
+        "maintainer": "OS Platform & Release",
+        "package": "gmp"
+    },
+    "gnu-free-fonts": {
+        "maintainer": "OS Platform & Release",
+        "package": "gnu-free-fonts"
+    },
+    "gnupg2": {
+        "maintainer": "OS Platform & Release",
+        "package": "gnupg2"
+    },
+    "gnutls": {
+        "maintainer": "OS Platform & Release",
+        "package": "gnutls"
+    },
+    "gobject-introspection": {
+        "maintainer": "OS Platform & Release",
+        "package": "gobject-introspection"
+    },
+    "golang": {
+        "maintainer": "OS Platform & Release",
+        "package": "golang"
+    },
+    "golang-github-golang-sys": {
+        "maintainer": "OS Platform & Release",
+        "package": "golang-github-golang-sys"
+    },
+    "gperf": {
+        "maintainer": "OS Platform & Release",
+        "package": "gperf"
+    },
+    "gpgme": {
+        "maintainer": "OS Platform & Release",
+        "package": "gpgme"
+    },
+    "gpm": {
+        "maintainer": "OS Platform & Release",
+        "package": "gpm"
+    },
+    "gpumon": {
+        "maintainer": "XAPI & Network",
+        "package": "gpumon"
+    },
+    "graphite2": {
+        "maintainer": "OS Platform & Release",
+        "package": "graphite2"
+    },
+    "graphviz": {
+        "maintainer": "OS Platform & Release",
+        "package": "graphviz"
+    },
+    "grep": {
+        "maintainer": "OS Platform & Release",
+        "package": "grep"
+    },
+    "groff": {
+        "maintainer": "OS Platform & Release",
+        "package": "groff"
+    },
+    "grub": {
+        "maintainer": "OS Platform & Release",
+        "package": "grub"
+    },
+    "grubby": {
+        "maintainer": "OS Platform & Release",
+        "package": "grubby"
+    },
+    "gsettings-desktop-schemas": {
+        "maintainer": "OS Platform & Release",
+        "package": "gsettings-desktop-schemas"
+    },
+    "gssproxy": {
+        "maintainer": "OS Platform & Release",
+        "package": "gssproxy"
+    },
+    "gtk-doc": {
+        "maintainer": "OS Platform & Release",
+        "package": "gtk-doc"
+    },
+    "gtk2": {
+        "maintainer": "OS Platform & Release",
+        "package": "gtk2"
+    },
+    "gtk3": {
+        "maintainer": "OS Platform & Release",
+        "package": "gtk3"
+    },
+    "guest-templates-json": {
+        "maintainer": "XAPI & Network",
+        "package": "guest-templates-json"
+    },
+    "guile": {
+        "maintainer": "OS Platform & Release",
+        "package": "guile"
+    },
+    "gzip": {
+        "maintainer": "OS Platform & Release",
+        "package": "gzip"
+    },
+    "hardlink": {
+        "maintainer": "OS Platform & Release",
+        "package": "hardlink"
+    },
+    "harfbuzz": {
+        "maintainer": "OS Platform & Release",
+        "package": "harfbuzz"
+    },
+    "hdparm": {
+        "maintainer": "OS Platform & Release",
+        "package": "hdparm"
+    },
+    "help2man": {
+        "maintainer": "OS Platform & Release",
+        "package": "help2man"
+    },
+    "hicolor-icon-theme": {
+        "maintainer": "OS Platform & Release",
+        "package": "hicolor-icon-theme"
+    },
+    "host-upgrade-plugin": {
+        "maintainer": "XAPI & Network",
+        "package": "host-upgrade-plugin"
+    },
+    "hostname": {
+        "maintainer": "OS Platform & Release",
+        "package": "hostname"
+    },
+    "htop": {
+        "maintainer": "OS Platform & Release",
+        "package": "htop"
+    },
+    "hwdata": {
+        "maintainer": "OS Platform & Release",
+        "package": "hwdata"
+    },
+    "icu": {
+        "maintainer": "OS Platform & Release",
+        "package": "icu"
+    },
+    "iftop": {
+        "maintainer": "OS Platform & Release",
+        "package": "iftop"
+    },
+    "igc-module": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "igc-module"
+    },
+    "ilmbase": {
+        "maintainer": "OS Platform & Release",
+        "package": "ilmbase"
+    },
+    "initscripts": {
+        "maintainer": "OS Platform & Release",
+        "package": "initscripts"
+    },
+    "intel-e1000e": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-e1000e"
+    },
+    "intel-e1000e-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-e1000e-alt"
+    },
+    "intel-fm10k": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-fm10k"
+    },
+    "intel-i40e": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-i40e"
+    },
+    "intel-i40e-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-i40e-alt"
+    },
+    "intel-ice": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-ice"
+    },
+    "intel-ice-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-ice-alt"
+    },
+    "intel-igb": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-igb"
+    },
+    "intel-igb-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-igb-alt"
+    },
+    "intel-igc": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-igc"
+    },
+    "intel-ixgbe": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-ixgbe"
+    },
+    "intel-ixgbe-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-ixgbe-alt"
+    },
+    "intel-microcode": {
+        "maintainer": "OS Platform & Release",
+        "package": "intel-microcode"
+    },
+    "interface-rename": {
+        "maintainer": "XAPI & Network",
+        "package": "interface-rename"
+    },
+    "intltool": {
+        "maintainer": "OS Platform & Release",
+        "package": "intltool"
+    },
+    "iotop": {
+        "maintainer": "OS Platform & Release",
+        "package": "iotop"
+    },
+    "iperf": {
+        "maintainer": "OS Platform & Release",
+        "package": "iperf"
+    },
+    "iperf3": {
+        "maintainer": "OS Platform & Release",
+        "package": "iperf3"
+    },
+    "ipmitool": {
+        "maintainer": "OS Platform & Release",
+        "package": "ipmitool"
+    },
+    "iproute": {
+        "maintainer": "OS Platform & Release",
+        "package": "iproute"
+    },
+    "ipset": {
+        "maintainer": "OS Platform & Release",
+        "package": "ipset"
+    },
+    "iptables": {
+        "maintainer": "OS Platform & Release",
+        "package": "iptables"
+    },
+    "iputils": {
+        "maintainer": "OS Platform & Release",
+        "package": "iputils"
+    },
+    "ipxe": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "ipxe"
+    },
+    "ipxe-efi": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "ipxe-efi"
+    },
+    "irqbalance": {
+        "maintainer": "OS Platform & Release",
+        "package": "irqbalance"
+    },
+    "iscsi-initiator-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "iscsi-initiator-utils"
+    },
+    "jansson": {
+        "maintainer": "OS Platform & Release",
+        "package": "jansson"
+    },
+    "jasper": {
+        "maintainer": "OS Platform & Release",
+        "package": "jasper"
+    },
+    "jbigkit": {
+        "maintainer": "OS Platform & Release",
+        "package": "jbigkit"
+    },
+    "jemalloc": {
+        "maintainer": "OS Platform & Release",
+        "package": "jemalloc"
+    },
+    "joe": {
+        "maintainer": "OS Platform & Release",
+        "package": "joe"
+    },
+    "json-c": {
+        "maintainer": "OS Platform & Release",
+        "package": "json-c"
+    },
+    "json-glib": {
+        "maintainer": "OS Platform & Release",
+        "package": "json-glib"
+    },
+    "kbd": {
+        "maintainer": "OS Platform & Release",
+        "package": "kbd"
+    },
+    "kernel": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "kernel"
+    },
+    "kernel-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "kernel-alt"
+    },
+    "kexec-tools": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "kexec-tools"
+    },
+    "keyutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "keyutils"
+    },
+    "kmod": {
+        "maintainer": "OS Platform & Release",
+        "package": "kmod"
+    },
+    "kpatch": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "kpatch"
+    },
+    "krb5": {
+        "maintainer": "OS Platform & Release",
+        "package": "krb5"
+    },
+    "lcms2": {
+        "maintainer": "OS Platform & Release",
+        "package": "lcms2"
+    },
+    "lcov": {
+        "maintainer": "OS Platform & Release",
+        "package": "lcov"
+    },
+    "ldns": {
+        "maintainer": "XAPI & Network",
+        "package": "ldns"
+    },
+    "less": {
+        "maintainer": "OS Platform & Release",
+        "package": "less"
+    },
+    "libICE": {
+        "maintainer": "OS Platform & Release",
+        "package": "libICE"
+    },
+    "libSM": {
+        "maintainer": "OS Platform & Release",
+        "package": "libSM"
+    },
+    "libX11": {
+        "maintainer": "OS Platform & Release",
+        "package": "libX11"
+    },
+    "libXau": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXau"
+    },
+    "libXaw": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXaw"
+    },
+    "libXcomposite": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXcomposite"
+    },
+    "libXcursor": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXcursor"
+    },
+    "libXdamage": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXdamage"
+    },
+    "libXext": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXext"
+    },
+    "libXfixes": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXfixes"
+    },
+    "libXfont": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXfont"
+    },
+    "libXft": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXft"
+    },
+    "libXi": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXi"
+    },
+    "libXinerama": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXinerama"
+    },
+    "libXmu": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXmu"
+    },
+    "libXpm": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXpm"
+    },
+    "libXrandr": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXrandr"
+    },
+    "libXrender": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXrender"
+    },
+    "libXt": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXt"
+    },
+    "libXtst": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXtst"
+    },
+    "libXxf86vm": {
+        "maintainer": "OS Platform & Release",
+        "package": "libXxf86vm"
+    },
+    "libaio": {
+        "maintainer": "OS Platform & Release",
+        "package": "libaio"
+    },
+    "libarchive": {
+        "maintainer": "OS Platform & Release",
+        "package": "libarchive"
+    },
+    "libassuan": {
+        "maintainer": "OS Platform & Release",
+        "package": "libassuan"
+    },
+    "libcap": {
+        "maintainer": "OS Platform & Release",
+        "package": "libcap"
+    },
+    "libcap-ng": {
+        "maintainer": "OS Platform & Release",
+        "package": "libcap-ng"
+    },
+    "libcgroup": {
+        "maintainer": "OS Platform & Release",
+        "package": "libcgroup"
+    },
+    "libconfig": {
+        "maintainer": "OS Platform & Release",
+        "package": "libconfig"
+    },
+    "libcroco": {
+        "maintainer": "OS Platform & Release",
+        "package": "libcroco"
+    },
+    "libdaemon": {
+        "maintainer": "OS Platform & Release",
+        "package": "libdaemon"
+    },
+    "libdb": {
+        "maintainer": "OS Platform & Release",
+        "package": "libdb"
+    },
+    "libdrm": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "libdrm"
+    },
+    "libdwarf": {
+        "maintainer": "OS Platform & Release",
+        "package": "libdwarf"
+    },
+    "libedit": {
+        "maintainer": "OS Platform & Release",
+        "package": "libedit"
+    },
+    "libempserver": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "libempserver"
+    },
+    "libepoxy": {
+        "maintainer": "OS Platform & Release",
+        "package": "libepoxy"
+    },
+    "libestr": {
+        "maintainer": "OS Platform & Release",
+        "package": "libestr"
+    },
+    "libev": {
+        "maintainer": "OS Platform & Release",
+        "package": "libev"
+    },
+    "libevent": {
+        "maintainer": "OS Platform & Release",
+        "package": "libevent"
+    },
+    "libfastjson": {
+        "maintainer": "OS Platform & Release",
+        "package": "libfastjson"
+    },
+    "libffi": {
+        "maintainer": "OS Platform & Release",
+        "package": "libffi"
+    },
+    "libfontenc": {
+        "maintainer": "OS Platform & Release",
+        "package": "libfontenc"
+    },
+    "libgcrypt": {
+        "maintainer": "OS Platform & Release",
+        "package": "libgcrypt"
+    },
+    "libgnome-keyring": {
+        "maintainer": "OS Platform & Release",
+        "package": "libgnome-keyring"
+    },
+    "libgpg-error": {
+        "maintainer": "OS Platform & Release",
+        "package": "libgpg-error"
+    },
+    "libgusb": {
+        "maintainer": "OS Platform & Release",
+        "package": "libgusb"
+    },
+    "libidn": {
+        "maintainer": "OS Platform & Release",
+        "package": "libidn"
+    },
+    "libjpeg-turbo": {
+        "maintainer": "OS Platform & Release",
+        "package": "libjpeg-turbo"
+    },
+    "libldb": {
+        "maintainer": "OS Platform & Release",
+        "package": "libldb"
+    },
+    "liblockfile": {
+        "maintainer": "OS Platform & Release",
+        "package": "liblockfile"
+    },
+    "libmicrohttpd": {
+        "maintainer": "OS Platform & Release",
+        "package": "libmicrohttpd"
+    },
+    "libmnl": {
+        "maintainer": "OS Platform & Release",
+        "package": "libmnl"
+    },
+    "libmodman": {
+        "maintainer": "OS Platform & Release",
+        "package": "libmodman"
+    },
+    "libmpc": {
+        "maintainer": "OS Platform & Release",
+        "package": "libmpc"
+    },
+    "libnetfilter_conntrack": {
+        "maintainer": "OS Platform & Release",
+        "package": "libnetfilter_conntrack"
+    },
+    "libnfnetlink": {
+        "maintainer": "OS Platform & Release",
+        "package": "libnfnetlink"
+    },
+    "libnfsidmap": {
+        "maintainer": "OS Platform & Release",
+        "package": "libnfsidmap"
+    },
+    "libnl3": {
+        "maintainer": "OS Platform & Release",
+        "package": "libnl3"
+    },
+    "libotf": {
+        "maintainer": "OS Platform & Release",
+        "package": "libotf"
+    },
+    "libpcap": {
+        "maintainer": "OS Platform & Release",
+        "package": "libpcap"
+    },
+    "libpciaccess": {
+        "maintainer": "OS Platform & Release",
+        "package": "libpciaccess"
+    },
+    "libpipeline": {
+        "maintainer": "OS Platform & Release",
+        "package": "libpipeline"
+    },
+    "libpng": {
+        "maintainer": "OS Platform & Release",
+        "package": "libpng"
+    },
+    "libproxy": {
+        "maintainer": "OS Platform & Release",
+        "package": "libproxy"
+    },
+    "libpwquality": {
+        "maintainer": "OS Platform & Release",
+        "package": "libpwquality"
+    },
+    "libreport": {
+        "maintainer": "OS Platform & Release",
+        "package": "libreport"
+    },
+    "libreswan": {
+        "maintainer": "XAPI & Network",
+        "package": "libreswan"
+    },
+    "librsvg2": {
+        "maintainer": "OS Platform & Release",
+        "package": "librsvg2"
+    },
+    "libseccomp": {
+        "maintainer": "OS Platform & Release",
+        "package": "libseccomp"
+    },
+    "libselinux": {
+        "maintainer": "OS Platform & Release",
+        "package": "libselinux"
+    },
+    "libsemanage": {
+        "maintainer": "OS Platform & Release",
+        "package": "libsemanage"
+    },
+    "libsepol": {
+        "maintainer": "OS Platform & Release",
+        "package": "libsepol"
+    },
+    "libsoup": {
+        "maintainer": "OS Platform & Release",
+        "package": "libsoup"
+    },
+    "libssh2": {
+        "maintainer": "OS Platform & Release",
+        "package": "libssh2"
+    },
+    "libtalloc": {
+        "maintainer": "OS Platform & Release",
+        "package": "libtalloc"
+    },
+    "libtasn1": {
+        "maintainer": "OS Platform & Release",
+        "package": "libtasn1"
+    },
+    "libtdb": {
+        "maintainer": "OS Platform & Release",
+        "package": "libtdb"
+    },
+    "libtevent": {
+        "maintainer": "OS Platform & Release",
+        "package": "libtevent"
+    },
+    "libthai": {
+        "maintainer": "OS Platform & Release",
+        "package": "libthai"
+    },
+    "libtiff": {
+        "maintainer": "OS Platform & Release",
+        "package": "libtiff"
+    },
+    "libtirpc": {
+        "maintainer": "OS Platform & Release",
+        "package": "libtirpc"
+    },
+    "libtool": {
+        "maintainer": "OS Platform & Release",
+        "package": "libtool"
+    },
+    "libtpms": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "libtpms"
+    },
+    "libunistring": {
+        "maintainer": "OS Platform & Release",
+        "package": "libunistring"
+    },
+    "libunwind": {
+        "maintainer": "OS Platform & Release",
+        "package": "libunwind"
+    },
+    "libusb": {
+        "maintainer": "OS Platform & Release",
+        "package": "libusb"
+    },
+    "libusbx": {
+        "maintainer": "OS Platform & Release",
+        "package": "libusbx"
+    },
+    "libuser": {
+        "maintainer": "OS Platform & Release",
+        "package": "libuser"
+    },
+    "libutempter": {
+        "maintainer": "OS Platform & Release",
+        "package": "libutempter"
+    },
+    "libuv": {
+        "maintainer": "OS Platform & Release",
+        "package": "libuv"
+    },
+    "libverto": {
+        "maintainer": "OS Platform & Release",
+        "package": "libverto"
+    },
+    "libwmf": {
+        "maintainer": "OS Platform & Release",
+        "package": "libwmf"
+    },
+    "libxcb": {
+        "maintainer": "OS Platform & Release",
+        "package": "libxcb"
+    },
+    "libxkbcommon": {
+        "maintainer": "OS Platform & Release",
+        "package": "libxkbcommon"
+    },
+    "libxml2": {
+        "maintainer": "OS Platform & Release",
+        "package": "libxml2"
+    },
+    "libxshmfence": {
+        "maintainer": "OS Platform & Release",
+        "package": "libxshmfence"
+    },
+    "libxslt": {
+        "maintainer": "OS Platform & Release",
+        "package": "libxslt"
+    },
+    "libyaml": {
+        "maintainer": "OS Platform & Release",
+        "package": "libyaml"
+    },
+    "linux-firmware": {
+        "maintainer": "OS Platform & Release",
+        "package": "linux-firmware"
+    },
+    "linuxconsoletools": {
+        "maintainer": "OS Platform & Release",
+        "package": "linuxconsoletools"
+    },
+    "lksctp-tools": {
+        "maintainer": "OS Platform & Release",
+        "package": "lksctp-tools"
+    },
+    "lldpad": {
+        "maintainer": "OS Platform & Release",
+        "package": "lldpad"
+    },
+    "lm_sensors": {
+        "maintainer": "OS Platform & Release",
+        "package": "lm_sensors"
+    },
+    "logrotate": {
+        "maintainer": "OS Platform & Release",
+        "package": "logrotate"
+    },
+    "lshw": {
+        "maintainer": "OS Platform & Release",
+        "package": "lshw"
+    },
+    "lsof": {
+        "maintainer": "OS Platform & Release",
+        "package": "lsof"
+    },
+    "lua": {
+        "maintainer": "OS Platform & Release",
+        "package": "lua"
+    },
+    "lvm2": {
+        "maintainer": "Storage",
+        "package": "lvm2"
+    },
+    "lynx": {
+        "maintainer": "OS Platform & Release",
+        "package": "lynx"
+    },
+    "lz4": {
+        "maintainer": "OS Platform & Release",
+        "package": "lz4"
+    },
+    "lzo": {
+        "maintainer": "OS Platform & Release",
+        "package": "lzo"
+    },
+    "m17n-db": {
+        "maintainer": "OS Platform & Release",
+        "package": "m17n-db"
+    },
+    "m17n-lib": {
+        "maintainer": "OS Platform & Release",
+        "package": "m17n-lib"
+    },
+    "m4": {
+        "maintainer": "OS Platform & Release",
+        "package": "m4"
+    },
+    "mailx": {
+        "maintainer": "OS Platform & Release",
+        "package": "mailx"
+    },
+    "make": {
+        "maintainer": "OS Platform & Release",
+        "package": "make"
+    },
+    "makedumpfile": {
+        "maintainer": "OS Platform & Release",
+        "package": "makedumpfile"
+    },
+    "man-db": {
+        "maintainer": "OS Platform & Release",
+        "package": "man-db"
+    },
+    "mariadb": {
+        "maintainer": "OS Platform & Release",
+        "package": "mariadb"
+    },
+    "mc": {
+        "maintainer": "OS Platform & Release",
+        "package": "mc"
+    },
+    "mcelog": {
+        "maintainer": "OS Platform & Release",
+        "package": "mcelog"
+    },
+    "mdadm": {
+        "maintainer": "OS Platform & Release",
+        "package": "mdadm"
+    },
+    "mellanox-mlnxen": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "mellanox-mlnxen"
+    },
+    "mellanox-mlnxen-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "mellanox-mlnxen-alt"
+    },
+    "memtest86+": {
+        "maintainer": "OS Platform & Release",
+        "package": "memtest86+"
+    },
+    "mercurial": {
+        "maintainer": "OS Platform & Release",
+        "package": "mercurial"
+    },
+    "mesa": {
+        "maintainer": "OS Platform & Release",
+        "package": "mesa"
+    },
+    "microsemi-aacraid": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "microsemi-aacraid"
+    },
+    "microsemi-smartpqi": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "microsemi-smartpqi"
+    },
+    "microsemi-smartpqi-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "microsemi-smartpqi-alt"
+    },
+    "mlx4-modules-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "mlx4-modules-alt"
+    },
+    "mozjs17": {
+        "maintainer": "OS Platform & Release",
+        "package": "mozjs17"
+    },
+    "mpfr": {
+        "maintainer": "OS Platform & Release",
+        "package": "mpfr"
+    },
+    "mpi3mr-module": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "mpi3mr-module"
+    },
+    "mtools": {
+        "maintainer": "OS Platform & Release",
+        "package": "mtools"
+    },
+    "mtr": {
+        "maintainer": "OS Platform & Release",
+        "package": "mtr"
+    },
+    "nano": {
+        "maintainer": "OS Platform & Release",
+        "package": "nano"
+    },
+    "nasm": {
+        "maintainer": "OS Platform & Release",
+        "package": "nasm"
+    },
+    "nbd": {
+        "maintainer": "Storage",
+        "package": "nbd"
+    },
+    "ncompress": {
+        "maintainer": "OS Platform & Release",
+        "package": "ncompress"
+    },
+    "ncurses": {
+        "maintainer": "OS Platform & Release",
+        "package": "ncurses"
+    },
+    "neon": {
+        "maintainer": "OS Platform & Release",
+        "package": "neon"
+    },
+    "net-snmp": {
+        "maintainer": "OS Platform & Release",
+        "package": "net-snmp"
+    },
+    "net-tools": {
+        "maintainer": "OS Platform & Release",
+        "package": "net-tools"
+    },
+    "netdata": {
+        "maintainer": "OS Platform & Release",
+        "package": "netdata"
+    },
+    "nettle": {
+        "maintainer": "OS Platform & Release",
+        "package": "nettle"
+    },
+    "newt": {
+        "maintainer": "OS Platform & Release",
+        "package": "newt"
+    },
+    "nfs-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "nfs-utils"
+    },
+    "nload": {
+        "maintainer": "OS Platform & Release",
+        "package": "nload"
+    },
+    "nmap": {
+        "maintainer": "OS Platform & Release",
+        "package": "nmap"
+    },
+    "nspr": {
+        "maintainer": "OS Platform & Release",
+        "package": "nspr"
+    },
+    "nss": {
+        "maintainer": "OS Platform & Release",
+        "package": "nss"
+    },
+    "nss-pem": {
+        "maintainer": "OS Platform & Release",
+        "package": "nss-pem"
+    },
+    "nss-softokn": {
+        "maintainer": "OS Platform & Release",
+        "package": "nss-softokn"
+    },
+    "nss-util": {
+        "maintainer": "OS Platform & Release",
+        "package": "nss-util"
+    },
+    "numactl": {
+        "maintainer": "OS Platform & Release",
+        "package": "numactl"
+    },
+    "nvme-cli": {
+        "maintainer": "OS Platform & Release",
+        "package": "nvme-cli"
+    },
+    "ocaml": {
+        "maintainer": "XAPI & Network",
+        "package": "ocaml"
+    },
+    "ocaml-findlib": {
+        "maintainer": "XAPI & Network",
+        "package": "ocaml-findlib"
+    },
+    "opam": {
+        "maintainer": "XAPI & Network",
+        "package": "opam"
+    },
+    "openjade": {
+        "maintainer": "OS Platform & Release",
+        "package": "openjade"
+    },
+    "openldap": {
+        "maintainer": "OS Platform & Release",
+        "package": "openldap"
+    },
+    "opensp": {
+        "maintainer": "OS Platform & Release",
+        "package": "opensp"
+    },
+    "openssh": {
+        "maintainer": "OS Platform & Release",
+        "package": "openssh"
+    },
+    "openssl": {
+        "maintainer": "OS Platform & Release",
+        "package": "openssl"
+    },
+    "openvswitch": {
+        "maintainer": "XAPI & Network",
+        "package": "openvswitch"
+    },
+    "os-prober": {
+        "maintainer": "OS Platform & Release",
+        "package": "os-prober"
+    },
+    "p11-kit": {
+        "maintainer": "OS Platform & Release",
+        "package": "p11-kit"
+    },
+    "pakchois": {
+        "maintainer": "OS Platform & Release",
+        "package": "pakchois"
+    },
+    "pam": {
+        "maintainer": "OS Platform & Release",
+        "package": "pam"
+    },
+    "pango": {
+        "maintainer": "OS Platform & Release",
+        "package": "pango"
+    },
+    "parted": {
+        "maintainer": "OS Platform & Release",
+        "package": "parted"
+    },
+    "passwd": {
+        "maintainer": "OS Platform & Release",
+        "package": "passwd"
+    },
+    "patch": {
+        "maintainer": "OS Platform & Release",
+        "package": "patch"
+    },
+    "pciutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "pciutils"
+    },
+    "pcre": {
+        "maintainer": "OS Platform & Release",
+        "package": "pcre"
+    },
+    "perl": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl"
+    },
+    "perl-Carp": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Carp"
+    },
+    "perl-Compress-Raw-Bzip2": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Compress-Raw-Bzip2"
+    },
+    "perl-Compress-Raw-Zlib": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Compress-Raw-Zlib"
+    },
+    "perl-Data-Dumper": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Data-Dumper"
+    },
+    "perl-Devel-CheckLib": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Devel-CheckLib"
+    },
+    "perl-Digest": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest"
+    },
+    "perl-Digest-MD5": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest-MD5"
+    },
+    "perl-Digest-SHA": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest-SHA"
+    },
+    "perl-Digest-SHA1": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest-SHA1"
+    },
+    "perl-Digest-SHA3": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest-SHA3"
+    },
+    "perl-Email-Date-Format": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Email-Date-Format"
+    },
+    "perl-Encode": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Encode"
+    },
+    "perl-Env": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Env"
+    },
+    "perl-Error": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Error"
+    },
+    "perl-Exporter": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Exporter"
+    },
+    "perl-ExtUtils-MakeMaker": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-ExtUtils-MakeMaker"
+    },
+    "perl-ExtUtils-Manifest": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-ExtUtils-Manifest"
+    },
+    "perl-ExtUtils-ParseXS": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-ExtUtils-ParseXS"
+    },
+    "perl-File-Path": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-File-Path"
+    },
+    "perl-File-Temp": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-File-Temp"
+    },
+    "perl-Filter": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Filter"
+    },
+    "perl-GD": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-GD"
+    },
+    "perl-Getopt-Long": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Getopt-Long"
+    },
+    "perl-HTTP-Tiny": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-HTTP-Tiny"
+    },
+    "perl-IO-Compress": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-IO-Compress"
+    },
+    "perl-Locale-Maketext": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Locale-Maketext"
+    },
+    "perl-MIME-Lite": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-MIME-Lite"
+    },
+    "perl-MIME-Types": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-MIME-Types"
+    },
+    "perl-Module-Load": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Module-Load"
+    },
+    "perl-Module-Load-Conditional": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Module-Load-Conditional"
+    },
+    "perl-Module-Metadata": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Module-Metadata"
+    },
+    "perl-Params-Check": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Params-Check"
+    },
+    "perl-Parse-Yapp": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Parse-Yapp"
+    },
+    "perl-PathTools": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-PathTools"
+    },
+    "perl-Pod-Perldoc": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Pod-Perldoc"
+    },
+    "perl-Pod-Simple": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Pod-Simple"
+    },
+    "perl-Pod-Usage": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Pod-Usage"
+    },
+    "perl-SGMLSpm": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-SGMLSpm"
+    },
+    "perl-Scalar-List-Utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Scalar-List-Utils"
+    },
+    "perl-Socket": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Socket"
+    },
+    "perl-Storable": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Storable"
+    },
+    "perl-TermReadKey": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-TermReadKey"
+    },
+    "perl-Test-Harness": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Test-Harness"
+    },
+    "perl-Test-Simple": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Test-Simple"
+    },
+    "perl-Text-ParseWords": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Text-ParseWords"
+    },
+    "perl-Text-Unidecode": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Text-Unidecode"
+    },
+    "perl-Thread-Queue": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Thread-Queue"
+    },
+    "perl-Time-HiRes": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Time-HiRes"
+    },
+    "perl-Time-Local": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Time-Local"
+    },
+    "perl-TimeDate": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-TimeDate"
+    },
+    "perl-WWW-Curl": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-WWW-Curl"
+    },
+    "perl-XML-Parser": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-XML-Parser"
+    },
+    "perl-constant": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-constant"
+    },
+    "perl-generators": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-generators"
+    },
+    "perl-libintl": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-libintl"
+    },
+    "perl-parent": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-parent"
+    },
+    "perl-podlators": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-podlators"
+    },
+    "perl-srpm-macros": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-srpm-macros"
+    },
+    "perl-threads": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-threads"
+    },
+    "perl-threads-shared": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-threads-shared"
+    },
+    "perl-version": {
+        "maintainer": "OS Platform & Release",
+        "package": "perl-version"
+    },
+    "pinentry": {
+        "maintainer": "OS Platform & Release",
+        "package": "pinentry"
+    },
+    "pixman": {
+        "maintainer": "OS Platform & Release",
+        "package": "pixman"
+    },
+    "pkgconfig": {
+        "maintainer": "OS Platform & Release",
+        "package": "pkgconfig"
+    },
+    "plymouth": {
+        "maintainer": "OS Platform & Release",
+        "package": "plymouth"
+    },
+    "policycoreutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "policycoreutils"
+    },
+    "polkit": {
+        "maintainer": "OS Platform & Release",
+        "package": "polkit"
+    },
+    "polkit-pkla-compat": {
+        "maintainer": "OS Platform & Release",
+        "package": "polkit-pkla-compat"
+    },
+    "poppler-data": {
+        "maintainer": "OS Platform & Release",
+        "package": "poppler-data"
+    },
+    "popt": {
+        "maintainer": "OS Platform & Release",
+        "package": "popt"
+    },
+    "portreserve": {
+        "maintainer": "OS Platform & Release",
+        "package": "portreserve"
+    },
+    "procps-ng": {
+        "maintainer": "OS Platform & Release",
+        "package": "procps-ng"
+    },
+    "protobuf": {
+        "maintainer": "OS Platform & Release",
+        "package": "protobuf"
+    },
+    "protobuf-c": {
+        "maintainer": "OS Platform & Release",
+        "package": "protobuf-c"
+    },
+    "psmisc": {
+        "maintainer": "OS Platform & Release",
+        "package": "psmisc"
+    },
+    "pth": {
+        "maintainer": "OS Platform & Release",
+        "package": "pth"
+    },
+    "pyOpenSSL": {
+        "maintainer": "OS Platform & Release",
+        "package": "pyOpenSSL"
+    },
+    "pygpgme": {
+        "maintainer": "OS Platform & Release",
+        "package": "pygpgme"
+    },
+    "pyliblzma": {
+        "maintainer": "OS Platform & Release",
+        "package": "pyliblzma"
+    },
+    "pylint": {
+        "maintainer": "OS Platform & Release",
+        "package": "pylint"
+    },
+    "pyparsing": {
+        "maintainer": "OS Platform & Release",
+        "package": "pyparsing"
+    },
+    "pyserial": {
+        "maintainer": "OS Platform & Release",
+        "package": "pyserial"
+    },
+    "pytest": {
+        "maintainer": "OS Platform & Release",
+        "package": "pytest"
+    },
+    "python": {
+        "maintainer": "OS Platform & Release",
+        "package": "python"
+    },
+    "python-IPy": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-IPy"
+    },
+    "python-astroid": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-astroid"
+    },
+    "python-backports": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-backports"
+    },
+    "python-backports-ssl_match_hostname": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-backports-ssl_match_hostname"
+    },
+    "python-beaker": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-beaker"
+    },
+    "python-bitarray": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-bitarray"
+    },
+    "python-cffi": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-cffi"
+    },
+    "python-chardet": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-chardet"
+    },
+    "python-cryptography": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-cryptography"
+    },
+    "python-defusedxml": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-defusedxml"
+    },
+    "python-demjson": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-demjson"
+    },
+    "python-dns": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-dns"
+    },
+    "python-enum34": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-enum34"
+    },
+    "python-fasteners": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-fasteners"
+    },
+    "python-idna": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-idna"
+    },
+    "python-iniparse": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-iniparse"
+    },
+    "python-ipaddress": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-ipaddress"
+    },
+    "python-iso8601": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-iso8601"
+    },
+    "python-isort": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-isort"
+    },
+    "python-kitchen": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-kitchen"
+    },
+    "python-lazy-object-proxy": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-lazy-object-proxy"
+    },
+    "python-libarchive-c": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-libarchive-c"
+    },
+    "python-linstor": {
+        "maintainer": "Storage",
+        "package": "python-linstor"
+    },
+    "python-lxml": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-lxml"
+    },
+    "python-mako": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-mako"
+    },
+    "python-markupsafe": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-markupsafe"
+    },
+    "python-mccabe": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-mccabe"
+    },
+    "python-mock": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-mock"
+    },
+    "python-packaging": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-packaging"
+    },
+    "python-pam": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-pam"
+    },
+    "python-paramiko": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-paramiko"
+    },
+    "python-paste": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-paste"
+    },
+    "python-pbr": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-pbr"
+    },
+    "python-pip": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-pip"
+    },
+    "python-ply": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-ply"
+    },
+    "python-py": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-py"
+    },
+    "python-pyasn1": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-pyasn1"
+    },
+    "python-pycparser": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-pycparser"
+    },
+    "python-pycurl": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-pycurl"
+    },
+    "python-pyudev": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-pyudev"
+    },
+    "python-rpm-generators": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-rpm-generators"
+    },
+    "python-rpm-macros": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-rpm-macros"
+    },
+    "python-setuptools": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-setuptools"
+    },
+    "python-six": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-six"
+    },
+    "python-tempita": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-tempita"
+    },
+    "python-urlgrabber": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-urlgrabber"
+    },
+    "python-wrapt": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-wrapt"
+    },
+    "python3": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3"
+    },
+    "python3-cffi": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-cffi"
+    },
+    "python3-coverage": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-coverage"
+    },
+    "python3-mock": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-mock"
+    },
+    "python3-ply": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-ply"
+    },
+    "python3-pycparser": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-pycparser"
+    },
+    "python3-pyparsing": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-pyparsing"
+    },
+    "python3-setuptools": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-setuptools"
+    },
+    "python3-six": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-six"
+    },
+    "pyxattr": {
+        "maintainer": "OS Platform & Release",
+        "package": "pyxattr"
+    },
+    "qemu": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qemu"
+    },
+    "qlogic-fastlinq": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-fastlinq"
+    },
+    "qlogic-fastlinq-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-fastlinq-alt"
+    },
+    "qlogic-netxtreme2": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-netxtreme2"
+    },
+    "qlogic-netxtreme2-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-netxtreme2-alt"
+    },
+    "qlogic-qla2xxx": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-qla2xxx"
+    },
+    "qlogic-qla2xxx-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-qla2xxx-alt"
+    },
+    "qlogic-qla2xxx-firmware": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-qla2xxx-firmware"
+    },
+    "qrencode": {
+        "maintainer": "OS Platform & Release",
+        "package": "qrencode"
+    },
+    "quota": {
+        "maintainer": "OS Platform & Release",
+        "package": "quota"
+    },
+    "r8125-module": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "r8125-module"
+    },
+    "r8169-module-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "r8169-module-alt"
+    },
+    "readline": {
+        "maintainer": "OS Platform & Release",
+        "package": "readline"
+    },
+    "redhat-lsb": {
+        "maintainer": "OS Platform & Release",
+        "package": "redhat-lsb"
+    },
+    "redhat-rpm-config": {
+        "maintainer": "OS Platform & Release",
+        "package": "redhat-rpm-config"
+    },
+    "rest": {
+        "maintainer": "OS Platform & Release",
+        "package": "rest"
+    },
+    "rootfiles": {
+        "maintainer": "OS Platform & Release",
+        "package": "rootfiles"
+    },
+    "rpcbind": {
+        "maintainer": "OS Platform & Release",
+        "package": "rpcbind"
+    },
+    "rpm": {
+        "maintainer": "OS Platform & Release",
+        "package": "rpm"
+    },
+    "rsync": {
+        "maintainer": "OS Platform & Release",
+        "package": "rsync"
+    },
+    "rsyslog": {
+        "maintainer": "OS Platform & Release",
+        "package": "rsyslog"
+    },
+    "samba": {
+        "maintainer": "OS Platform & Release",
+        "package": "samba"
+    },
+    "scapy": {
+        "maintainer": "OS Platform & Release",
+        "package": "scapy"
+    },
+    "scl-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "scl-utils"
+    },
+    "screen": {
+        "maintainer": "OS Platform & Release",
+        "package": "screen"
+    },
+    "sed": {
+        "maintainer": "OS Platform & Release",
+        "package": "sed"
+    },
+    "setools": {
+        "maintainer": "OS Platform & Release",
+        "package": "setools"
+    },
+    "setup": {
+        "maintainer": "OS Platform & Release",
+        "package": "setup"
+    },
+    "sg3_utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "sg3_utils"
+    },
+    "sgml-common": {
+        "maintainer": "OS Platform & Release",
+        "package": "sgml-common"
+    },
+    "shadow-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "shadow-utils"
+    },
+    "shared-mime-info": {
+        "maintainer": "OS Platform & Release",
+        "package": "shared-mime-info"
+    },
+    "sharutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "sharutils"
+    },
+    "slang": {
+        "maintainer": "OS Platform & Release",
+        "package": "slang"
+    },
+    "sm": {
+        "maintainer": "Storage",
+        "package": "sm"
+    },
+    "smartmontools": {
+        "maintainer": "OS Platform & Release",
+        "package": "smartmontools"
+    },
+    "snappy": {
+        "maintainer": "OS Platform & Release",
+        "package": "snappy"
+    },
+    "socat": {
+        "maintainer": "OS Platform & Release",
+        "package": "socat"
+    },
+    "softhsm": {
+        "maintainer": "OS Platform & Release",
+        "package": "softhsm"
+    },
+    "source-highlight": {
+        "maintainer": "OS Platform & Release",
+        "package": "source-highlight"
+    },
+    "sqlite": {
+        "maintainer": "OS Platform & Release",
+        "package": "sqlite"
+    },
+    "ssmtp": {
+        "maintainer": "OS Platform & Release",
+        "package": "ssmtp"
+    },
+    "star": {
+        "maintainer": "OS Platform & Release",
+        "package": "star"
+    },
+    "strace": {
+        "maintainer": "OS Platform & Release",
+        "package": "strace"
+    },
+    "stunnel": {
+        "maintainer": "XAPI & Network",
+        "package": "stunnel"
+    },
+    "subversion": {
+        "maintainer": "OS Platform & Release",
+        "package": "subversion"
+    },
+    "sudo": {
+        "maintainer": "OS Platform & Release",
+        "package": "sudo"
+    },
+    "swig": {
+        "maintainer": "OS Platform & Release",
+        "package": "swig"
+    },
+    "swtpm": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "swtpm"
+    },
+    "sysfsutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "sysfsutils"
+    },
+    "syslinux": {
+        "maintainer": "OS Platform & Release",
+        "package": "syslinux"
+    },
+    "sysstat": {
+        "maintainer": "OS Platform & Release",
+        "package": "sysstat"
+    },
+    "system-config-firewall": {
+        "maintainer": "OS Platform & Release",
+        "package": "system-config-firewall"
+    },
+    "systemd": {
+        "maintainer": "OS Platform & Release",
+        "package": "systemd"
+    },
+    "systemtap": {
+        "maintainer": "OS Platform & Release",
+        "package": "systemtap"
+    },
+    "sysvinit": {
+        "maintainer": "OS Platform & Release",
+        "package": "sysvinit"
+    },
+    "tar": {
+        "maintainer": "OS Platform & Release",
+        "package": "tar"
+    },
+    "tcl": {
+        "maintainer": "OS Platform & Release",
+        "package": "tcl"
+    },
+    "tcp_wrappers": {
+        "maintainer": "OS Platform & Release",
+        "package": "tcp_wrappers"
+    },
+    "tcpdump": {
+        "maintainer": "OS Platform & Release",
+        "package": "tcpdump"
+    },
+    "telnet": {
+        "maintainer": "OS Platform & Release",
+        "package": "telnet"
+    },
+    "test-ring0": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "test-ring0"
+    },
+    "texinfo": {
+        "maintainer": "OS Platform & Release",
+        "package": "texinfo"
+    },
+    "tg3-module-alt": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "tg3-module-alt"
+    },
+    "time": {
+        "maintainer": "OS Platform & Release",
+        "package": "time"
+    },
+    "tmux": {
+        "maintainer": "OS Platform & Release",
+        "package": "tmux"
+    },
+    "traceroute": {
+        "maintainer": "OS Platform & Release",
+        "package": "traceroute"
+    },
+    "tree": {
+        "maintainer": "OS Platform & Release",
+        "package": "tree"
+    },
+    "trousers": {
+        "maintainer": "OS Platform & Release",
+        "package": "trousers"
+    },
+    "tzdata": {
+        "maintainer": "OS Platform & Release",
+        "package": "tzdata"
+    },
+    "unbound": {
+        "maintainer": "OS Platform & Release",
+        "package": "unbound"
+    },
+    "unzip": {
+        "maintainer": "OS Platform & Release",
+        "package": "unzip"
+    },
+    "update-package": {
+        "maintainer": "OS Platform & Release",
+        "package": "update-package"
+    },
+    "urw-fonts": {
+        "maintainer": "OS Platform & Release",
+        "package": "urw-fonts"
+    },
+    "usbutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "usbutils"
+    },
+    "userspace-rcu": {
+        "maintainer": "OS Platform & Release",
+        "package": "userspace-rcu"
+    },
+    "ustr": {
+        "maintainer": "OS Platform & Release",
+        "package": "ustr"
+    },
+    "util-linux": {
+        "maintainer": "OS Platform & Release",
+        "package": "util-linux"
+    },
+    "valgrind": {
+        "maintainer": "OS Platform & Release",
+        "package": "valgrind"
+    },
+    "varstored": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "varstored"
+    },
+    "vconfig": {
+        "maintainer": "OS Platform & Release",
+        "package": "vconfig"
+    },
+    "vcputune": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "vcputune"
+    },
+    "vendor-drivers": {
+        "maintainer": "OS Platform & Release",
+        "package": "vendor-drivers"
+    },
+    "vendor-update-keys": {
+        "maintainer": "OS Platform & Release",
+        "package": "vendor-update-keys"
+    },
+    "vim": {
+        "maintainer": "OS Platform & Release",
+        "package": "vim"
+    },
+    "vmss": {
+        "maintainer": "XAPI & Network",
+        "package": "vmss"
+    },
+    "vncsnapshot": {
+        "maintainer": "OS Platform & Release",
+        "package": "vncsnapshot"
+    },
+    "vncterm": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "vncterm"
+    },
+    "wayland": {
+        "maintainer": "OS Platform & Release",
+        "package": "wayland"
+    },
+    "wget": {
+        "maintainer": "OS Platform & Release",
+        "package": "wget"
+    },
+    "which": {
+        "maintainer": "OS Platform & Release",
+        "package": "which"
+    },
+    "wpa_supplicant": {
+        "maintainer": "OS Platform & Release",
+        "package": "wpa_supplicant"
+    },
+    "xapi": {
+        "maintainer": "XAPI & Network",
+        "package": "xapi"
+    },
+    "xcp-clipboardd": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xcp-clipboardd"
+    },
+    "xcp-emu-manager": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xcp-emu-manager"
+    },
+    "xcp-featured": {
+        "maintainer": "XAPI & Network",
+        "package": "xcp-featured"
+    },
+    "xcp-ng-deps": {
+        "maintainer": "OS Platform & Release",
+        "package": "xcp-ng-deps"
+    },
+    "xcp-ng-generic-lib": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xcp-ng-generic-lib"
+    },
+    "xcp-ng-plymouth-theme": {
+        "maintainer": "OS Platform & Release",
+        "package": "xcp-ng-plymouth-theme"
+    },
+    "xcp-ng-pv-tools": {
+        "maintainer": "OS Platform & Release",
+        "package": "xcp-ng-pv-tools"
+    },
+    "xcp-ng-release": {
+        "maintainer": "OS Platform & Release",
+        "package": "xcp-ng-release"
+    },
+    "xcp-ng-release-linstor": {
+        "maintainer": "Storage",
+        "package": "xcp-ng-release-linstor"
+    },
+    "xcp-ng-xapi-plugins": {
+        "maintainer": "XAPI & Network",
+        "package": "xcp-ng-xapi-plugins"
+    },
+    "xcp-python-libs": {
+        "maintainer": "XAPI & Network",
+        "package": "xcp-python-libs"
+    },
+    "xcp-python-libs-compat": {
+        "maintainer": "XAPI & Network",
+        "package": "xcp-python-libs-compat"
+    },
+    "xdelta": {
+        "maintainer": "OS Platform & Release",
+        "package": "xdelta"
+    },
+    "xen": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xen"
+    },
+    "xen-crashdump-analyser": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xen-crashdump-analyser"
+    },
+    "xengt-userspace": {
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xengt-userspace"
+    },
+    "xenserver-dracut": {
+        "maintainer": "OS Platform & Release",
+        "package": "xenserver-dracut"
+    },
+    "xenserver-hwdata": {
+        "maintainer": "OS Platform & Release",
+        "package": "xenserver-hwdata"
+    },
+    "xenserver-status-report": {
+        "maintainer": "XAPI & Network",
+        "package": "xenserver-status-report"
+    },
+    "xfsprogs": {
+        "maintainer": "OS Platform & Release",
+        "package": "xfsprogs"
+    },
+    "xha": {
+        "maintainer": "XAPI & Network",
+        "package": "xha"
+    },
+    "xkeyboard-config": {
+        "maintainer": "OS Platform & Release",
+        "package": "xkeyboard-config"
+    },
+    "xmlto": {
+        "maintainer": "OS Platform & Release",
+        "package": "xmlto"
+    },
+    "xo-lite": {
+        "maintainer": "OS Platform & Release",
+        "package": "xo-lite"
+    },
+    "xorg-x11-font-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "xorg-x11-font-utils"
+    },
+    "xorg-x11-proto-devel": {
+        "maintainer": "OS Platform & Release",
+        "package": "xorg-x11-proto-devel"
+    },
+    "xorg-x11-util-macros": {
+        "maintainer": "OS Platform & Release",
+        "package": "xorg-x11-util-macros"
+    },
+    "xs-opam-repo": {
+        "maintainer": "XAPI & Network",
+        "package": "xs-opam-repo"
+    },
+    "xs-opam-src": {
+        "maintainer": "XAPI & Network",
+        "package": "xs-opam-src"
+    },
+    "xs-openssl": {
+        "maintainer": "OS Platform & Release",
+        "package": "xs-openssl"
+    },
+    "xsconsole": {
+        "maintainer": "XAPI & Network",
+        "package": "xsconsole"
+    },
+    "xxhash": {
+        "maintainer": "OS Platform & Release",
+        "package": "xxhash"
+    },
+    "xz": {
+        "maintainer": "OS Platform & Release",
+        "package": "xz"
+    },
+    "yajl": {
+        "maintainer": "OS Platform & Release",
+        "package": "yajl"
+    },
+    "yum": {
+        "maintainer": "OS Platform & Release",
+        "package": "yum"
+    },
+    "yum-metadata-parser": {
+        "maintainer": "OS Platform & Release",
+        "package": "yum-metadata-parser"
+    },
+    "yum-utils": {
+        "maintainer": "OS Platform & Release",
+        "package": "yum-utils"
+    },
+    "zfs": {
+        "maintainer": "OS Platform & Release",
+        "package": "zfs"
+    },
+    "zfs-kmod": {
+        "maintainer": "OS Platform & Release",
+        "package": "zfs-kmod"
+    },
+    "zip": {
+        "maintainer": "OS Platform & Release",
+        "package": "zip"
+    },
+    "zlib": {
+        "maintainer": "OS Platform & Release",
+        "package": "zlib"
+    },
+    "zstd": {
+        "maintainer": "OS Platform & Release",
+        "package": "zstd"
+    }
+}
