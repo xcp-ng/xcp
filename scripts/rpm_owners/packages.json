@@ -1,0 +1,5586 @@
+{
+    "GConf2": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "GConf2",
+        "role": "extra_builddep_dep"
+    },
+    "GeoIP": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "GeoIP",
+        "role": "main"
+    },
+    "ImageMagick": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ImageMagick",
+        "role": "extra_builddep_dep"
+    },
+    "Judy": {
+        "added_by": "xcp-ng",
+        "built_by": "epel",
+        "import_reason": "dependency of netdata",
+        "maintainer": "OS Platform & Release",
+        "package": "Judy",
+        "role": "extra_builddep"
+    },
+    "OpenEXR": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "OpenEXR",
+        "role": "extra_builddep_dep"
+    },
+    "OpenIPMI": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "OpenIPMI",
+        "role": "main"
+    },
+    "SDL": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "SDL",
+        "role": "main_builddep_dep"
+    },
+    "acl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "acl",
+        "role": "main"
+    },
+    "acpica-tools": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "acpica-tools",
+        "role": "main"
+    },
+    "adwaita-icon-theme": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "adwaita-icon-theme",
+        "role": "extra_builddep_dep"
+    },
+    "aic94xx-firmware": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "aic94xx-firmware",
+        "role": "main"
+    },
+    "alsa-lib": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "alsa-lib",
+        "role": "extra_builddep_dep"
+    },
+    "amd-microcode": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "amd-microcode",
+        "role": "main"
+    },
+    "apr": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "apr",
+        "role": "main_builddep_dep"
+    },
+    "apr-util": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "apr-util",
+        "role": "main_builddep_dep"
+    },
+    "aqc111u-module": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "aqc111u-module",
+        "role": "extra"
+    },
+    "arptables": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "arptables",
+        "role": "main"
+    },
+    "asciidoc": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "asciidoc",
+        "role": "main_builddep"
+    },
+    "at": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "at",
+        "role": "main"
+    },
+    "at-spi2-atk": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "at-spi2-atk",
+        "role": "extra_builddep_dep"
+    },
+    "at-spi2-core": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "at-spi2-core",
+        "role": "extra_builddep_dep"
+    },
+    "atk": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "atk",
+        "role": "main_builddep_dep"
+    },
+    "atlantic-module-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "atlantic-module-alt",
+        "role": "extra"
+    },
+    "attr": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "attr",
+        "role": "main"
+    },
+    "audit": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "audit",
+        "role": "main"
+    },
+    "autoconf": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "autoconf",
+        "role": "main_builddep"
+    },
+    "autoconf-archive": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "autoconf-archive",
+        "role": "extra_builddep"
+    },
+    "autogen": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "autogen",
+        "role": "main"
+    },
+    "automake": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "automake",
+        "role": "main_builddep"
+    },
+    "avago-megaraid-sas": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "avago-megaraid-sas",
+        "role": "main"
+    },
+    "avago-mpt3sas": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "avago-mpt3sas",
+        "role": "main"
+    },
+    "avahi": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "avahi",
+        "role": "main"
+    },
+    "basesystem": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "basesystem",
+        "role": "main"
+    },
+    "bash": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "bash",
+        "role": "main"
+    },
+    "bash-completion": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "bash-completion",
+        "role": "main"
+    },
+    "bc": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "bc",
+        "role": "main"
+    },
+    "bind": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "bind",
+        "role": "main"
+    },
+    "binutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "binutils",
+        "role": "main"
+    },
+    "biosdevname": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "biosdevname",
+        "role": "main"
+    },
+    "bison": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "bison",
+        "role": "main_builddep"
+    },
+    "blktap": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "blktap",
+        "role": "main"
+    },
+    "boost": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "boost",
+        "role": "main"
+    },
+    "branding-xcp-ng": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "replaces branding-xenserver",
+        "maintainer": "OS Platform & Release",
+        "package": "branding-xcp-ng",
+        "role": "main_builddep"
+    },
+    "bridge-utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "bridge-utils",
+        "role": "main"
+    },
+    "broadcom-bnxt-en": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "broadcom-bnxt-en",
+        "role": "main"
+    },
+    "broadcom-bnxt-en-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "broadcom-bnxt-en-alt",
+        "role": "extra"
+    },
+    "bubblewrap": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "bubblewrap",
+        "role": "main_builddep_dep"
+    },
+    "busybox": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "busybox",
+        "role": "main"
+    },
+    "bzip2": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "bzip2",
+        "role": "main"
+    },
+    "ca-certificates": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ca-certificates",
+        "role": "main"
+    },
+    "cairo": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cairo",
+        "role": "main_builddep_dep"
+    },
+    "cdrkit": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cdrkit",
+        "role": "main_builddep"
+    },
+    "centos-indexhtml": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "centos-indexhtml",
+        "role": "main_builddep_dep"
+    },
+    "centos-logos": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "centos-logos",
+        "role": "main"
+    },
+    "ceph-common": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ceph-common",
+        "role": "main_builddep"
+    },
+    "checkpolicy": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "checkpolicy",
+        "role": "main_builddep_dep"
+    },
+    "chelsio-cxgb4": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "chelsio-cxgb4",
+        "role": "main"
+    },
+    "chkconfig": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "chkconfig",
+        "role": "main"
+    },
+    "chrony": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "chrony",
+        "role": "main"
+    },
+    "chrpath": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "chrpath",
+        "role": "main_builddep"
+    },
+    "cifs-utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cifs-utils",
+        "role": "main"
+    },
+    "cisco-enic": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "cisco-enic",
+        "role": "main"
+    },
+    "cisco-enic-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "cisco-enic-alt",
+        "role": "extra"
+    },
+    "cisco-fnic": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "cisco-fnic",
+        "role": "main"
+    },
+    "cisco-fnic-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "cisco-fnic-alt",
+        "role": "extra"
+    },
+    "cmake3": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "Initially imported by us, XS started using it. For XS 8, they forked cmake-3.26.4-4.fc37.src.rpm. At first, we keep ours because we found nothing that would require cmake3 in recent updates",
+        "maintainer": "OS Platform & Release",
+        "package": "cmake3",
+        "role": "main_builddep"
+    },
+    "cmocka": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cmocka",
+        "role": "main_builddep"
+    },
+    "colord": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "colord",
+        "role": "extra_builddep_dep"
+    },
+    "compat-db": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "compat-db",
+        "role": "main"
+    },
+    "compat-gcc-32": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "compat-gcc-32",
+        "role": "main"
+    },
+    "control-slice": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "control-slice",
+        "role": "main"
+    },
+    "coretemp-module-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "added to workaround missing CPU temperature sensors in dom0",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "coretemp-module-alt",
+        "role": "extra"
+    },
+    "coreutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "coreutils",
+        "role": "main"
+    },
+    "cpio": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cpio",
+        "role": "main"
+    },
+    "cracklib": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cracklib",
+        "role": "main"
+    },
+    "crash": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "crash",
+        "role": "main_builddep"
+    },
+    "createrepo_c": {
+        "added_by": "xs",
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "createrepo_c",
+        "role": "main"
+    },
+    "cronie": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cronie",
+        "role": "main"
+    },
+    "crontabs": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "crontabs",
+        "role": "main"
+    },
+    "cryptsetup": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cryptsetup",
+        "role": "main"
+    },
+    "ctags": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ctags",
+        "role": "main_builddep_dep"
+    },
+    "cups": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cups",
+        "role": "main"
+    },
+    "curl": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "curl",
+        "role": "main"
+    },
+    "cyrus-sasl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "cyrus-sasl",
+        "role": "main"
+    },
+    "dbus": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dbus",
+        "role": "main"
+    },
+    "dbus-glib": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dbus-glib",
+        "role": "extra_builddep_dep"
+    },
+    "dconf": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dconf",
+        "role": "extra_builddep_dep"
+    },
+    "dejagnu": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dejagnu",
+        "role": "main_indirect_builddep"
+    },
+    "dejavu-fonts": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dejavu-fonts",
+        "role": "main_builddep_dep"
+    },
+    "dell-rbu-module": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "dell_rbu driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "dell-rbu-module",
+        "role": "extra"
+    },
+    "desktop-file-utils": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "desktop-file-utils",
+        "role": "main_builddep"
+    },
+    "dev86": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dev86",
+        "role": "main_builddep"
+    },
+    "device-mapper-multipath": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "device-mapper-multipath",
+        "role": "main"
+    },
+    "device-mapper-persistent-data": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "device-mapper-persistent-data",
+        "role": "main"
+    },
+    "devtoolset-10": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-10",
+        "role": "main_builddep_dep"
+    },
+    "devtoolset-10-binutils": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-10-binutils",
+        "role": "main_builddep_dep"
+    },
+    "devtoolset-10-gcc": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-10-gcc",
+        "role": "main_builddep"
+    },
+    "devtoolset-11": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-11",
+        "role": "main_builddep_dep"
+    },
+    "devtoolset-11-binutils": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-11-binutils",
+        "role": "main_builddep"
+    },
+    "devtoolset-11-gcc": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-11-gcc",
+        "role": "main_builddep"
+    },
+    "devtoolset-11-gdb": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "devtoolset-11-gdb",
+        "role": "main_indirect_builddep"
+    },
+    "dhcp": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dhcp",
+        "role": "main"
+    },
+    "diffutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "diffutils",
+        "role": "main"
+    },
+    "ding-libs": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ding-libs",
+        "role": "main"
+    },
+    "dmidecode": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dmidecode",
+        "role": "main"
+    },
+    "docbook-dtds": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "docbook-dtds",
+        "role": "main_builddep"
+    },
+    "docbook-style-dsssl": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "docbook-style-dsssl",
+        "role": "main_builddep_dep"
+    },
+    "docbook-style-xsl": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "docbook-style-xsl",
+        "role": "main_builddep"
+    },
+    "docbook-utils": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "docbook-utils",
+        "role": "main_builddep_dep"
+    },
+    "doxygen": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "doxygen",
+        "role": "extra_builddep"
+    },
+    "dpkg": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dpkg",
+        "role": "main_builddep"
+    },
+    "dracut": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dracut",
+        "role": "main"
+    },
+    "dstat": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "dstat",
+        "role": "extra"
+    },
+    "dwarves": {
+        "added_by": null,
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dwarves",
+        "role": "main_builddep"
+    },
+    "dwz": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dwz",
+        "role": "main_builddep_dep"
+    },
+    "dyninst": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "dyninst",
+        "role": "main"
+    },
+    "e2fsprogs": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "e2fsprogs",
+        "role": "main"
+    },
+    "ebtables": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ebtables",
+        "role": "main"
+    },
+    "ed": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ed",
+        "role": "main"
+    },
+    "edk2": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "edk2",
+        "role": "main"
+    },
+    "efibootmgr": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "efibootmgr",
+        "role": "main"
+    },
+    "efivar": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "efivar",
+        "role": "main"
+    },
+    "elfutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "elfutils",
+        "role": "main"
+    },
+    "emacs": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "emacs",
+        "role": "main_builddep_dep"
+    },
+    "emulex-lpfc": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "emulex-lpfc",
+        "role": "main"
+    },
+    "epel-rpm-macros": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "epel-rpm-macros",
+        "role": "main_builddep"
+    },
+    "ethtool": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ethtool",
+        "role": "main"
+    },
+    "expat": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "expat",
+        "role": "main"
+    },
+    "expect": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "expect",
+        "role": "main"
+    },
+    "fakeroot": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "fakeroot",
+        "role": "main_builddep"
+    },
+    "fcoe-utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "fcoe-utils",
+        "role": "main"
+    },
+    "figlet": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "figlet",
+        "role": "main_builddep"
+    },
+    "file": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "file",
+        "role": "main"
+    },
+    "filesystem": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "filesystem",
+        "role": "main"
+    },
+    "findutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "findutils",
+        "role": "main"
+    },
+    "fipscheck": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "fipscheck",
+        "role": "main"
+    },
+    "flex": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "flex",
+        "role": "main_builddep"
+    },
+    "fontconfig": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "fontconfig",
+        "role": "main"
+    },
+    "fontpackages": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "fontpackages",
+        "role": "main"
+    },
+    "freeipmi": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "freeipmi",
+        "role": "extra_builddep"
+    },
+    "freetype": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "freetype",
+        "role": "main"
+    },
+    "fuse": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "fuse",
+        "role": "main"
+    },
+    "future": {
+        "added_by": "xs",
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "future",
+        "role": "main"
+    },
+    "gawk": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gawk",
+        "role": "main"
+    },
+    "gc": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gc",
+        "role": "main_builddep"
+    },
+    "gcc": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gcc",
+        "role": "main"
+    },
+    "gcc-libraries": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gcc-libraries",
+        "role": "main_indirect_builddep"
+    },
+    "gd": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gd",
+        "role": "main_builddep_dep"
+    },
+    "gdb": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "dep of update-package",
+        "maintainer": "OS Platform & Release",
+        "package": "gdb",
+        "role": "extra_dep"
+    },
+    "gdbm": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gdbm",
+        "role": "main"
+    },
+    "gdisk": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gdisk",
+        "role": "main"
+    },
+    "gdk-pixbuf2": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gdk-pixbuf2",
+        "role": "main_builddep_dep"
+    },
+    "gettext": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gettext",
+        "role": "main"
+    },
+    "ghostscript": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ghostscript",
+        "role": "main_builddep_dep"
+    },
+    "ghostscript-fonts": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ghostscript-fonts",
+        "role": "main_builddep_dep"
+    },
+    "giflib": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "giflib",
+        "role": "extra_builddep_dep"
+    },
+    "git": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "git",
+        "role": "main_builddep"
+    },
+    "glib-networking": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "glib-networking",
+        "role": "extra_builddep_dep"
+    },
+    "glib2": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "glib2",
+        "role": "main"
+    },
+    "glibc": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "glibc",
+        "role": "main"
+    },
+    "glusterfs": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional glusterfs package",
+        "maintainer": "OS Platform & Release",
+        "package": "glusterfs",
+        "role": "extra"
+    },
+    "gmp": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gmp",
+        "role": "main"
+    },
+    "gnu-free-fonts": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gnu-free-fonts",
+        "role": "main"
+    },
+    "gnupg2": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gnupg2",
+        "role": "main"
+    },
+    "gnutls": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gnutls",
+        "role": "main"
+    },
+    "gobject-introspection": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gobject-introspection",
+        "role": "main_builddep"
+    },
+    "golang": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "golang",
+        "role": "main_builddep"
+    },
+    "golang-github-golang-sys": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "golang-github-golang-sys",
+        "role": "main_builddep"
+    },
+    "gperf": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gperf",
+        "role": "main_builddep"
+    },
+    "gpgme": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gpgme",
+        "role": "main"
+    },
+    "gpm": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gpm",
+        "role": "main_builddep"
+    },
+    "gpumon": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "gpumon",
+        "role": "main"
+    },
+    "graphite2": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "graphite2",
+        "role": "main_builddep_dep"
+    },
+    "graphviz": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "graphviz",
+        "role": "main_builddep_dep"
+    },
+    "grep": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "grep",
+        "role": "main"
+    },
+    "groff": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "groff",
+        "role": "main"
+    },
+    "grub": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "grub",
+        "role": "main"
+    },
+    "grubby": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "grubby",
+        "role": "main"
+    },
+    "gsettings-desktop-schemas": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gsettings-desktop-schemas",
+        "role": "extra_builddep_dep"
+    },
+    "gssproxy": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gssproxy",
+        "role": "main"
+    },
+    "gtk-doc": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gtk-doc",
+        "role": "main_builddep"
+    },
+    "gtk2": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gtk2",
+        "role": "main_builddep_dep"
+    },
+    "gtk3": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gtk3",
+        "role": "main_builddep_dep"
+    },
+    "guest-templates-json": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "guest-templates-json",
+        "role": "main"
+    },
+    "guile": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "guile",
+        "role": "main_builddep_dep"
+    },
+    "gzip": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "gzip",
+        "role": "main"
+    },
+    "hardlink": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "hardlink",
+        "role": "main"
+    },
+    "harfbuzz": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "harfbuzz",
+        "role": "main_builddep_dep"
+    },
+    "hdparm": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "hdparm",
+        "role": "main"
+    },
+    "help2man": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "help2man",
+        "role": "main_builddep"
+    },
+    "hicolor-icon-theme": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "hicolor-icon-theme",
+        "role": "main_builddep_dep"
+    },
+    "host-upgrade-plugin": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "host-upgrade-plugin",
+        "role": "main"
+    },
+    "hostname": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "hostname",
+        "role": "main"
+    },
+    "htop": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "added to default install",
+        "maintainer": "OS Platform & Release",
+        "package": "htop",
+        "role": "main"
+    },
+    "hwdata": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "hwdata",
+        "role": "main"
+    },
+    "icu": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "icu",
+        "role": "main_builddep_dep"
+    },
+    "iftop": {
+        "added_by": "xcp-ng",
+        "built_by": "epel",
+        "import_reason": "added to default install",
+        "maintainer": "OS Platform & Release",
+        "package": "iftop",
+        "role": "main"
+    },
+    "igc-module": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "extra driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "igc-module",
+        "role": "extra"
+    },
+    "ilmbase": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ilmbase",
+        "role": "extra_builddep_dep"
+    },
+    "initscripts": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "initscripts",
+        "role": "main"
+    },
+    "intel-e1000e": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-e1000e",
+        "role": "main"
+    },
+    "intel-e1000e-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-e1000e-alt",
+        "role": "extra"
+    },
+    "intel-fm10k": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-fm10k",
+        "role": "main"
+    },
+    "intel-i40e": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-i40e",
+        "role": "main"
+    },
+    "intel-i40e-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-i40e-alt",
+        "role": "extra"
+    },
+    "intel-ice": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-ice",
+        "role": "main"
+    },
+    "intel-ice-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-ice-alt",
+        "role": "extra"
+    },
+    "intel-igb": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-igb",
+        "role": "main"
+    },
+    "intel-igb-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-igb-alt",
+        "role": "extra"
+    },
+    "intel-igc": {
+        "added_by": null,
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-igc",
+        "role": "main"
+    },
+    "intel-ixgbe": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-ixgbe",
+        "role": "main"
+    },
+    "intel-ixgbe-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "intel-ixgbe-alt",
+        "role": "extra"
+    },
+    "intel-microcode": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "intel-microcode",
+        "role": "main"
+    },
+    "interface-rename": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "interface-rename",
+        "role": "main"
+    },
+    "intltool": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "intltool",
+        "role": "main_builddep"
+    },
+    "iotop": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "iotop",
+        "role": "extra"
+    },
+    "iperf": {
+        "added_by": "xcp-ng",
+        "built_by": "epel",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "iperf",
+        "role": "extra"
+    },
+    "iperf3": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "iperf3",
+        "role": "extra"
+    },
+    "ipmitool": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ipmitool",
+        "role": "main"
+    },
+    "iproute": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "iproute",
+        "role": "main"
+    },
+    "ipset": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ipset",
+        "role": "main"
+    },
+    "iptables": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "iptables",
+        "role": "main"
+    },
+    "iputils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "iputils",
+        "role": "main"
+    },
+    "ipxe": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "ipxe",
+        "role": "main"
+    },
+    "ipxe-efi": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "ipxe-efi",
+        "role": "main_builddep"
+    },
+    "irqbalance": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "irqbalance",
+        "role": "main"
+    },
+    "iscsi-initiator-utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "iscsi-initiator-utils",
+        "role": "main"
+    },
+    "jansson": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "jansson",
+        "role": "main"
+    },
+    "jasper": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "jasper",
+        "role": "main_builddep_dep"
+    },
+    "jbigkit": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "jbigkit",
+        "role": "main_builddep_dep"
+    },
+    "jemalloc": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "jemalloc",
+        "role": "main"
+    },
+    "joe": {
+        "added_by": "xcp-ng",
+        "built_by": "epel",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "joe",
+        "role": "extra"
+    },
+    "json-c": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "json-c",
+        "role": "main"
+    },
+    "json-glib": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "json-glib",
+        "role": "main"
+    },
+    "kbd": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "kbd",
+        "role": "main"
+    },
+    "kernel": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "kernel",
+        "role": "main"
+    },
+    "kernel-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate kernel",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "kernel-alt",
+        "role": "extra"
+    },
+    "kexec-tools": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "kexec-tools",
+        "role": "main"
+    },
+    "keyutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "keyutils",
+        "role": "main"
+    },
+    "kmod": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "kmod",
+        "role": "main"
+    },
+    "kpatch": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "kpatch",
+        "role": "main"
+    },
+    "krb5": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "krb5",
+        "role": "main"
+    },
+    "lcms2": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lcms2",
+        "role": "main_builddep_dep"
+    },
+    "lcov": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lcov",
+        "role": "main_builddep"
+    },
+    "ldns": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "ldns",
+        "role": "extra_dep"
+    },
+    "less": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "less",
+        "role": "main"
+    },
+    "libICE": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libICE",
+        "role": "main_builddep_dep"
+    },
+    "libSM": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libSM",
+        "role": "main_builddep_dep"
+    },
+    "libX11": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libX11",
+        "role": "main_builddep_dep"
+    },
+    "libXau": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXau",
+        "role": "main_builddep_dep"
+    },
+    "libXaw": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXaw",
+        "role": "main_builddep_dep"
+    },
+    "libXcomposite": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXcomposite",
+        "role": "main_builddep_dep"
+    },
+    "libXcursor": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXcursor",
+        "role": "main_builddep_dep"
+    },
+    "libXdamage": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXdamage",
+        "role": "main_builddep_dep"
+    },
+    "libXext": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXext",
+        "role": "main_builddep_dep"
+    },
+    "libXfixes": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXfixes",
+        "role": "main_builddep_dep"
+    },
+    "libXfont": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXfont",
+        "role": "main_builddep_dep"
+    },
+    "libXft": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXft",
+        "role": "main_builddep_dep"
+    },
+    "libXi": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXi",
+        "role": "main_builddep_dep"
+    },
+    "libXinerama": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXinerama",
+        "role": "main_builddep_dep"
+    },
+    "libXmu": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXmu",
+        "role": "main_builddep_dep"
+    },
+    "libXpm": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXpm",
+        "role": "main_builddep_dep"
+    },
+    "libXrandr": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXrandr",
+        "role": "main_builddep_dep"
+    },
+    "libXrender": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXrender",
+        "role": "main_builddep_dep"
+    },
+    "libXt": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXt",
+        "role": "main_builddep_dep"
+    },
+    "libXtst": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXtst",
+        "role": "extra_builddep_dep"
+    },
+    "libXxf86vm": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libXxf86vm",
+        "role": "main_builddep_dep"
+    },
+    "libaio": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libaio",
+        "role": "main"
+    },
+    "libarchive": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libarchive",
+        "role": "main"
+    },
+    "libassuan": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libassuan",
+        "role": "main"
+    },
+    "libcap": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libcap",
+        "role": "main"
+    },
+    "libcap-ng": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libcap-ng",
+        "role": "main"
+    },
+    "libcgroup": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libcgroup",
+        "role": "main"
+    },
+    "libconfig": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libconfig",
+        "role": "main"
+    },
+    "libcroco": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libcroco",
+        "role": "main"
+    },
+    "libdaemon": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libdaemon",
+        "role": "main_builddep_dep"
+    },
+    "libdb": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libdb",
+        "role": "main"
+    },
+    "libdrm": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "libdrm",
+        "role": "main"
+    },
+    "libdwarf": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libdwarf",
+        "role": "main"
+    },
+    "libedit": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libedit",
+        "role": "main"
+    },
+    "libempserver": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "libempserver",
+        "role": "main"
+    },
+    "libepoxy": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libepoxy",
+        "role": "extra_builddep_dep"
+    },
+    "libestr": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libestr",
+        "role": "main"
+    },
+    "libev": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libev",
+        "role": "main"
+    },
+    "libevent": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libevent",
+        "role": "main"
+    },
+    "libfastjson": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libfastjson",
+        "role": "main"
+    },
+    "libffi": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libffi",
+        "role": "main"
+    },
+    "libfontenc": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libfontenc",
+        "role": "main_builddep_dep"
+    },
+    "libgcrypt": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libgcrypt",
+        "role": "main"
+    },
+    "libgnome-keyring": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libgnome-keyring",
+        "role": "main_builddep_dep"
+    },
+    "libgpg-error": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libgpg-error",
+        "role": "main"
+    },
+    "libgusb": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libgusb",
+        "role": "extra_builddep_dep"
+    },
+    "libidn": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libidn",
+        "role": "main"
+    },
+    "libjpeg-turbo": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libjpeg-turbo",
+        "role": "main"
+    },
+    "libldb": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libldb",
+        "role": "main"
+    },
+    "liblockfile": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "liblockfile",
+        "role": "extra_builddep_dep"
+    },
+    "libmicrohttpd": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libmicrohttpd",
+        "role": "main_builddep"
+    },
+    "libmnl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libmnl",
+        "role": "main"
+    },
+    "libmodman": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libmodman",
+        "role": "main_builddep_dep"
+    },
+    "libmpc": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libmpc",
+        "role": "main_builddep_dep"
+    },
+    "libnetfilter_conntrack": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libnetfilter_conntrack",
+        "role": "main"
+    },
+    "libnfnetlink": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libnfnetlink",
+        "role": "main"
+    },
+    "libnfsidmap": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libnfsidmap",
+        "role": "main"
+    },
+    "libnl3": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libnl3",
+        "role": "main"
+    },
+    "libotf": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libotf",
+        "role": "extra_builddep_dep"
+    },
+    "libpcap": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libpcap",
+        "role": "main"
+    },
+    "libpciaccess": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libpciaccess",
+        "role": "main"
+    },
+    "libpipeline": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libpipeline",
+        "role": "main"
+    },
+    "libpng": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libpng",
+        "role": "main"
+    },
+    "libproxy": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libproxy",
+        "role": "main_builddep_dep"
+    },
+    "libpwquality": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libpwquality",
+        "role": "main"
+    },
+    "libreport": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libreport",
+        "role": "main"
+    },
+    "libreswan": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "libreswan",
+        "role": "extra_dep"
+    },
+    "librsvg2": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "librsvg2",
+        "role": "main_builddep_dep"
+    },
+    "libseccomp": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libseccomp",
+        "role": "main"
+    },
+    "libselinux": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libselinux",
+        "role": "main"
+    },
+    "libsemanage": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libsemanage",
+        "role": "main"
+    },
+    "libsepol": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libsepol",
+        "role": "main"
+    },
+    "libsoup": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libsoup",
+        "role": "extra_builddep_dep"
+    },
+    "libssh2": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libssh2",
+        "role": "main"
+    },
+    "libtalloc": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libtalloc",
+        "role": "main"
+    },
+    "libtasn1": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libtasn1",
+        "role": "main"
+    },
+    "libtdb": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libtdb",
+        "role": "main"
+    },
+    "libtevent": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libtevent",
+        "role": "main"
+    },
+    "libthai": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libthai",
+        "role": "main_builddep_dep"
+    },
+    "libtiff": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libtiff",
+        "role": "main_builddep_dep"
+    },
+    "libtirpc": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libtirpc",
+        "role": "main"
+    },
+    "libtool": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libtool",
+        "role": "main_builddep"
+    },
+    "libtpms": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "libtpms",
+        "role": "main"
+    },
+    "libunistring": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libunistring",
+        "role": "main"
+    },
+    "libunwind": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libunwind",
+        "role": "main_builddep"
+    },
+    "libusb": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libusb",
+        "role": "main_builddep"
+    },
+    "libusbx": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libusbx",
+        "role": "main"
+    },
+    "libuser": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libuser",
+        "role": "main"
+    },
+    "libutempter": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libutempter",
+        "role": "main"
+    },
+    "libuv": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libuv",
+        "role": "extra_dep"
+    },
+    "libverto": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libverto",
+        "role": "main"
+    },
+    "libwmf": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libwmf",
+        "role": "extra_builddep_dep"
+    },
+    "libxcb": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libxcb",
+        "role": "main_builddep"
+    },
+    "libxkbcommon": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libxkbcommon",
+        "role": "extra_builddep_dep"
+    },
+    "libxml2": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libxml2",
+        "role": "main"
+    },
+    "libxshmfence": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libxshmfence",
+        "role": "main_builddep_dep"
+    },
+    "libxslt": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libxslt",
+        "role": "main_builddep"
+    },
+    "libyaml": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "libyaml",
+        "role": "extra_dep"
+    },
+    "linux-firmware": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "linux-firmware",
+        "role": "main"
+    },
+    "linuxconsoletools": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "linuxconsoletools",
+        "role": "main_builddep_dep"
+    },
+    "lksctp-tools": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lksctp-tools",
+        "role": "main_builddep"
+    },
+    "lldpad": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lldpad",
+        "role": "main"
+    },
+    "lm_sensors": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lm_sensors",
+        "role": "main"
+    },
+    "logrotate": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "logrotate",
+        "role": "main"
+    },
+    "lshw": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "lshw",
+        "role": "extra"
+    },
+    "lsof": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lsof",
+        "role": "main"
+    },
+    "lua": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lua",
+        "role": "main"
+    },
+    "lvm2": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "lvm2",
+        "role": "main"
+    },
+    "lynx": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lynx",
+        "role": "main_builddep_dep"
+    },
+    "lz4": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lz4",
+        "role": "main"
+    },
+    "lzo": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "lzo",
+        "role": "main"
+    },
+    "m17n-db": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "m17n-db",
+        "role": "extra_builddep_dep"
+    },
+    "m17n-lib": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "m17n-lib",
+        "role": "extra_builddep_dep"
+    },
+    "m4": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "m4",
+        "role": "main"
+    },
+    "mailx": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mailx",
+        "role": "main"
+    },
+    "make": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "make",
+        "role": "main"
+    },
+    "makedumpfile": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "makedumpfile",
+        "role": "main"
+    },
+    "man-db": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "man-db",
+        "role": "main"
+    },
+    "mariadb": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mariadb",
+        "role": "main"
+    },
+    "mc": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "mc",
+        "role": "extra"
+    },
+    "mcelog": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mcelog",
+        "role": "main"
+    },
+    "mdadm": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mdadm",
+        "role": "main"
+    },
+    "mellanox-mlnxen": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "mellanox-mlnxen",
+        "role": "main"
+    },
+    "mellanox-mlnxen-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "mellanox-mlnxen-alt",
+        "role": "extra"
+    },
+    "memtest86+": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "memtest86+",
+        "role": "main"
+    },
+    "mercurial": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mercurial",
+        "role": "main_builddep_dep"
+    },
+    "mesa": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mesa",
+        "role": "main_builddep_dep"
+    },
+    "microsemi-aacraid": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "microsemi-aacraid",
+        "role": "main"
+    },
+    "microsemi-smartpqi": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "microsemi-smartpqi",
+        "role": "main"
+    },
+    "microsemi-smartpqi-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "alternate driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "microsemi-smartpqi-alt",
+        "role": "extra"
+    },
+    "mlx4-modules-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "mlx4-modules-alt",
+        "role": "extra"
+    },
+    "mozjs17": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mozjs17",
+        "role": "extra_builddep_dep"
+    },
+    "mpfr": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mpfr",
+        "role": "main_builddep_dep"
+    },
+    "mpi3mr-module": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "mpi3mr-module",
+        "role": "main"
+    },
+    "mtools": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "mtools",
+        "role": "main_builddep"
+    },
+    "mtr": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "mtr",
+        "role": "extra"
+    },
+    "nano": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nano",
+        "role": "main"
+    },
+    "nasm": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nasm",
+        "role": "main_builddep"
+    },
+    "nbd": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "nbd",
+        "role": "main"
+    },
+    "ncompress": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ncompress",
+        "role": "extra_builddep"
+    },
+    "ncurses": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ncurses",
+        "role": "main"
+    },
+    "neon": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "neon",
+        "role": "main_builddep_dep"
+    },
+    "net-snmp": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "net-snmp",
+        "role": "main"
+    },
+    "net-tools": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "net-tools",
+        "role": "main"
+    },
+    "netdata": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "netdata package for XO, netdata-ui for users",
+        "maintainer": "OS Platform & Release",
+        "package": "netdata",
+        "role": "extra"
+    },
+    "nettle": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nettle",
+        "role": "main"
+    },
+    "newt": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "newt",
+        "role": "main"
+    },
+    "nfs-utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nfs-utils",
+        "role": "main"
+    },
+    "nload": {
+        "added_by": "xcp-ng",
+        "built_by": "epel",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "nload",
+        "role": "extra"
+    },
+    "nmap": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "nmap",
+        "role": "main_builddep"
+    },
+    "nspr": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nspr",
+        "role": "main"
+    },
+    "nss": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nss",
+        "role": "main"
+    },
+    "nss-pem": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nss-pem",
+        "role": "main"
+    },
+    "nss-softokn": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nss-softokn",
+        "role": "main"
+    },
+    "nss-util": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "nss-util",
+        "role": "main"
+    },
+    "numactl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "numactl",
+        "role": "main"
+    },
+    "nvme-cli": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "nvme-cli",
+        "role": "extra"
+    },
+    "ocaml": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "ocaml",
+        "role": "main_builddep"
+    },
+    "ocaml-findlib": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "ocaml-findlib",
+        "role": "main_builddep"
+    },
+    "opam": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "opam",
+        "role": "main_builddep_dep"
+    },
+    "openjade": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "openjade",
+        "role": "main_builddep_dep"
+    },
+    "openldap": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "openldap",
+        "role": "main"
+    },
+    "opensp": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "opensp",
+        "role": "main_builddep_dep"
+    },
+    "openssh": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "openssh",
+        "role": "main"
+    },
+    "openssl": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "openssl",
+        "role": "main"
+    },
+    "openvswitch": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "openvswitch",
+        "role": "main"
+    },
+    "os-prober": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "os-prober",
+        "role": "main"
+    },
+    "p11-kit": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "p11-kit",
+        "role": "main"
+    },
+    "pakchois": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pakchois",
+        "role": "main_builddep_dep"
+    },
+    "pam": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pam",
+        "role": "main"
+    },
+    "pango": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pango",
+        "role": "main_builddep_dep"
+    },
+    "parted": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "parted",
+        "role": "main"
+    },
+    "passwd": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "passwd",
+        "role": "main"
+    },
+    "patch": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "patch",
+        "role": "main"
+    },
+    "pciutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pciutils",
+        "role": "main"
+    },
+    "pcre": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pcre",
+        "role": "main"
+    },
+    "perl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl",
+        "role": "main"
+    },
+    "perl-Carp": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Carp",
+        "role": "main"
+    },
+    "perl-Compress-Raw-Bzip2": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Compress-Raw-Bzip2",
+        "role": "main_builddep_dep"
+    },
+    "perl-Compress-Raw-Zlib": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Compress-Raw-Zlib",
+        "role": "main_builddep_dep"
+    },
+    "perl-Data-Dumper": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Data-Dumper",
+        "role": "main"
+    },
+    "perl-Devel-CheckLib": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Devel-CheckLib",
+        "role": "extra_builddep"
+    },
+    "perl-Digest": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest",
+        "role": "main_builddep_dep"
+    },
+    "perl-Digest-MD5": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest-MD5",
+        "role": "main_builddep"
+    },
+    "perl-Digest-SHA": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest-SHA",
+        "role": "main_builddep"
+    },
+    "perl-Digest-SHA1": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest-SHA1",
+        "role": "main_builddep_dep"
+    },
+    "perl-Digest-SHA3": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Digest-SHA3",
+        "role": "main_builddep_dep"
+    },
+    "perl-Email-Date-Format": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Email-Date-Format",
+        "role": "main_builddep_dep"
+    },
+    "perl-Encode": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Encode",
+        "role": "main"
+    },
+    "perl-Env": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Env",
+        "role": "main_indirect_builddep"
+    },
+    "perl-Error": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Error",
+        "role": "main_builddep_dep"
+    },
+    "perl-Exporter": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Exporter",
+        "role": "main"
+    },
+    "perl-ExtUtils-MakeMaker": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-ExtUtils-MakeMaker",
+        "role": "main_builddep"
+    },
+    "perl-ExtUtils-Manifest": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-ExtUtils-Manifest",
+        "role": "main_builddep_dep"
+    },
+    "perl-ExtUtils-ParseXS": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-ExtUtils-ParseXS",
+        "role": "main_builddep_dep"
+    },
+    "perl-File-Path": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-File-Path",
+        "role": "main"
+    },
+    "perl-File-Temp": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-File-Temp",
+        "role": "main"
+    },
+    "perl-Filter": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Filter",
+        "role": "main"
+    },
+    "perl-GD": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-GD",
+        "role": "main_builddep_dep"
+    },
+    "perl-Getopt-Long": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Getopt-Long",
+        "role": "main"
+    },
+    "perl-HTTP-Tiny": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-HTTP-Tiny",
+        "role": "main"
+    },
+    "perl-IO-Compress": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-IO-Compress",
+        "role": "main_builddep"
+    },
+    "perl-Locale-Maketext": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Locale-Maketext",
+        "role": "main_builddep_dep"
+    },
+    "perl-MIME-Lite": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-MIME-Lite",
+        "role": "main_builddep_dep"
+    },
+    "perl-MIME-Types": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-MIME-Types",
+        "role": "main_builddep_dep"
+    },
+    "perl-Module-Load": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Module-Load",
+        "role": "main_builddep_dep"
+    },
+    "perl-Module-Load-Conditional": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Module-Load-Conditional",
+        "role": "main_builddep"
+    },
+    "perl-Module-Metadata": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Module-Metadata",
+        "role": "main_builddep_dep"
+    },
+    "perl-Params-Check": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Params-Check",
+        "role": "main_builddep_dep"
+    },
+    "perl-Parse-Yapp": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Parse-Yapp",
+        "role": "main_builddep"
+    },
+    "perl-PathTools": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-PathTools",
+        "role": "main"
+    },
+    "perl-Pod-Perldoc": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Pod-Perldoc",
+        "role": "main"
+    },
+    "perl-Pod-Simple": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Pod-Simple",
+        "role": "main"
+    },
+    "perl-Pod-Usage": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Pod-Usage",
+        "role": "main"
+    },
+    "perl-SGMLSpm": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-SGMLSpm",
+        "role": "main_builddep_dep"
+    },
+    "perl-Scalar-List-Utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Scalar-List-Utils",
+        "role": "main"
+    },
+    "perl-Socket": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Socket",
+        "role": "main"
+    },
+    "perl-Storable": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Storable",
+        "role": "main"
+    },
+    "perl-TermReadKey": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-TermReadKey",
+        "role": "main_builddep_dep"
+    },
+    "perl-Test-Harness": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Test-Harness",
+        "role": "main_builddep"
+    },
+    "perl-Test-Simple": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Test-Simple",
+        "role": "main_builddep"
+    },
+    "perl-Text-ParseWords": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Text-ParseWords",
+        "role": "main"
+    },
+    "perl-Text-Unidecode": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Text-Unidecode",
+        "role": "main_builddep_dep"
+    },
+    "perl-Thread-Queue": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Thread-Queue",
+        "role": "main_builddep_dep"
+    },
+    "perl-Time-HiRes": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Time-HiRes",
+        "role": "main"
+    },
+    "perl-Time-Local": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-Time-Local",
+        "role": "main"
+    },
+    "perl-TimeDate": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-TimeDate",
+        "role": "main_builddep_dep"
+    },
+    "perl-WWW-Curl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-WWW-Curl",
+        "role": "main"
+    },
+    "perl-XML-Parser": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-XML-Parser",
+        "role": "main_builddep_dep"
+    },
+    "perl-constant": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-constant",
+        "role": "main"
+    },
+    "perl-generators": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-generators",
+        "role": "main_builddep"
+    },
+    "perl-libintl": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-libintl",
+        "role": "main_builddep_dep"
+    },
+    "perl-parent": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-parent",
+        "role": "main"
+    },
+    "perl-podlators": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-podlators",
+        "role": "main"
+    },
+    "perl-srpm-macros": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-srpm-macros",
+        "role": "main_builddep_dep"
+    },
+    "perl-threads": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-threads",
+        "role": "main"
+    },
+    "perl-threads-shared": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-threads-shared",
+        "role": "main"
+    },
+    "perl-version": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "perl-version",
+        "role": "main_builddep_dep"
+    },
+    "pinentry": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pinentry",
+        "role": "main"
+    },
+    "pixman": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pixman",
+        "role": "main"
+    },
+    "pkgconfig": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pkgconfig",
+        "role": "main"
+    },
+    "plymouth": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "plymouth",
+        "role": "main"
+    },
+    "policycoreutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "policycoreutils",
+        "role": "main"
+    },
+    "polkit": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "polkit",
+        "role": "extra_builddep_dep"
+    },
+    "polkit-pkla-compat": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "polkit-pkla-compat",
+        "role": "extra_builddep_dep"
+    },
+    "poppler-data": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "poppler-data",
+        "role": "main_builddep_dep"
+    },
+    "popt": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "popt",
+        "role": "main"
+    },
+    "portreserve": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "portreserve",
+        "role": "main"
+    },
+    "procps-ng": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "procps-ng",
+        "role": "main"
+    },
+    "protobuf": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "dep and builddep for netdata, which needs protobuf 3",
+        "maintainer": "OS Platform & Release",
+        "package": "protobuf",
+        "role": "extra_dep"
+    },
+    "protobuf-c": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "dep and builddep for netdata, which needs a version of protobuf-c compatible with protobuf 3",
+        "maintainer": "OS Platform & Release",
+        "package": "protobuf-c",
+        "role": "extra_dep"
+    },
+    "psmisc": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "psmisc",
+        "role": "main"
+    },
+    "pth": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pth",
+        "role": "main"
+    },
+    "pyOpenSSL": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pyOpenSSL",
+        "role": "main_builddep_dep"
+    },
+    "pygpgme": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pygpgme",
+        "role": "main"
+    },
+    "pyliblzma": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pyliblzma",
+        "role": "main"
+    },
+    "pylint": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pylint",
+        "role": "main_builddep"
+    },
+    "pyparsing": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pyparsing",
+        "role": "main_builddep_dep"
+    },
+    "pyserial": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pyserial",
+        "role": "main"
+    },
+    "pytest": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pytest",
+        "role": "extra_builddep"
+    },
+    "python": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python",
+        "role": "main"
+    },
+    "python-IPy": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-IPy",
+        "role": "main_builddep_dep"
+    },
+    "python-astroid": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-astroid",
+        "role": "main_builddep_dep"
+    },
+    "python-backports": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-backports",
+        "role": "main_builddep_dep"
+    },
+    "python-backports-ssl_match_hostname": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-backports-ssl_match_hostname",
+        "role": "main_builddep_dep"
+    },
+    "python-beaker": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-beaker",
+        "role": "main_builddep_dep"
+    },
+    "python-bitarray": {
+        "added_by": "xs",
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-bitarray",
+        "role": "main"
+    },
+    "python-cffi": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-cffi",
+        "role": "extra_dep"
+    },
+    "python-chardet": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-chardet",
+        "role": "main"
+    },
+    "python-cryptography": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-cryptography",
+        "role": "extra_dep"
+    },
+    "python-defusedxml": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-defusedxml",
+        "role": "main"
+    },
+    "python-demjson": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-demjson",
+        "role": "main_builddep"
+    },
+    "python-dns": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-dns",
+        "role": "main_builddep"
+    },
+    "python-enum34": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-enum34",
+        "role": "extra_dep"
+    },
+    "python-fasteners": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-fasteners",
+        "role": "main"
+    },
+    "python-idna": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-idna",
+        "role": "extra_dep"
+    },
+    "python-iniparse": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-iniparse",
+        "role": "main"
+    },
+    "python-ipaddress": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-ipaddress",
+        "role": "main_builddep_dep"
+    },
+    "python-iso8601": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-iso8601",
+        "role": "main_builddep"
+    },
+    "python-isort": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-isort",
+        "role": "main_builddep_dep"
+    },
+    "python-kitchen": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-kitchen",
+        "role": "main"
+    },
+    "python-lazy-object-proxy": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-lazy-object-proxy",
+        "role": "main_builddep_dep"
+    },
+    "python-libarchive-c": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "dep of update-package",
+        "maintainer": "OS Platform & Release",
+        "package": "python-libarchive-c",
+        "role": "extra_dep"
+    },
+    "python-lxml": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-lxml",
+        "role": "main_builddep"
+    },
+    "python-mako": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-mako",
+        "role": "main_builddep_dep"
+    },
+    "python-markupsafe": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-markupsafe",
+        "role": "main_builddep_dep"
+    },
+    "python-mccabe": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-mccabe",
+        "role": "main_builddep_dep"
+    },
+    "python-mock": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-mock",
+        "role": "main_builddep"
+    },
+    "python-packaging": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-packaging",
+        "role": "extra_builddep"
+    },
+    "python-pam": {
+        "added_by": null,
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-pam",
+        "role": "main"
+    },
+    "python-paramiko": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-paramiko",
+        "role": "extra_dep"
+    },
+    "python-paste": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-paste",
+        "role": "main_builddep_dep"
+    },
+    "python-pbr": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-pbr",
+        "role": "main_builddep_dep"
+    },
+    "python-pip": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-pip",
+        "role": "main"
+    },
+    "python-ply": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-ply",
+        "role": "extra_dep"
+    },
+    "python-py": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-py",
+        "role": "extra_builddep_dep"
+    },
+    "python-pyasn1": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-pyasn1",
+        "role": "extra_dep"
+    },
+    "python-pycparser": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-pycparser",
+        "role": "extra_dep"
+    },
+    "python-pycurl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-pycurl",
+        "role": "main"
+    },
+    "python-pyudev": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-pyudev",
+        "role": "main"
+    },
+    "python-rpm-generators": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-rpm-generators",
+        "role": "main_builddep_dep"
+    },
+    "python-rpm-macros": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-rpm-macros",
+        "role": "main_builddep"
+    },
+    "python-setuptools": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-setuptools",
+        "role": "main_builddep"
+    },
+    "python-six": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-six",
+        "role": "main"
+    },
+    "python-tempita": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-tempita",
+        "role": "main_builddep_dep"
+    },
+    "python-urlgrabber": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-urlgrabber",
+        "role": "main"
+    },
+    "python-wrapt": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python-wrapt",
+        "role": "main_builddep_dep"
+    },
+    "python3": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3",
+        "role": "main"
+    },
+    "python3-cffi": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3-cffi",
+        "role": "extra_builddep"
+    },
+    "python3-coverage": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3-coverage",
+        "role": "main_builddep"
+    },
+    "python3-mock": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3-mock",
+        "role": "main_builddep"
+    },
+    "python3-ply": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3-ply",
+        "role": "extra_builddep_dep"
+    },
+    "python3-pycparser": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3-pycparser",
+        "role": "extra_builddep_dep"
+    },
+    "python3-pyparsing": {
+        "added_by": null,
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3-pyparsing",
+        "role": "extra_builddep_dep"
+    },
+    "python3-setuptools": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3-setuptools",
+        "role": "main"
+    },
+    "python3-six": {
+        "added_by": "xs",
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "python3-six",
+        "role": "main"
+    },
+    "pyxattr": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "pyxattr",
+        "role": "main"
+    },
+    "qemu": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qemu",
+        "role": "main"
+    },
+    "qlogic-fastlinq": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-fastlinq",
+        "role": "main"
+    },
+    "qlogic-fastlinq-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-fastlinq-alt",
+        "role": "extra"
+    },
+    "qlogic-netxtreme2": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-netxtreme2",
+        "role": "main"
+    },
+    "qlogic-netxtreme2-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-netxtreme2-alt",
+        "role": "extra"
+    },
+    "qlogic-qla2xxx": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-qla2xxx",
+        "role": "main"
+    },
+    "qlogic-qla2xxx-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-qla2xxx-alt",
+        "role": "extra"
+    },
+    "qlogic-qla2xxx-firmware": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "qlogic-qla2xxx-firmware",
+        "role": "main"
+    },
+    "qrencode": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "qrencode",
+        "role": "main"
+    },
+    "quota": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "quota",
+        "role": "main"
+    },
+    "r8125-module": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "r8125-module",
+        "role": "main"
+    },
+    "r8169-module-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "r8169-module-alt",
+        "role": "extra"
+    },
+    "readline": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "readline",
+        "role": "main"
+    },
+    "redhat-lsb": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "redhat-lsb",
+        "role": "main"
+    },
+    "redhat-rpm-config": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "redhat-rpm-config",
+        "role": "main_builddep_dep"
+    },
+    "rest": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "rest",
+        "role": "extra_builddep_dep"
+    },
+    "rootfiles": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "rootfiles",
+        "role": "main"
+    },
+    "rpcbind": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "rpcbind",
+        "role": "main"
+    },
+    "rpm": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "rpm",
+        "role": "main"
+    },
+    "rsync": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "rsync",
+        "role": "main"
+    },
+    "rsyslog": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": "updated by us to rsyslog-8.24.0-52.el7_8.2 for memory leak fixes. Dependency libfastjson not updated but would need to be if we used the mm-normalize plugin (RHBZ #1591493)",
+        "maintainer": "OS Platform & Release",
+        "package": "rsyslog",
+        "role": "main"
+    },
+    "samba": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "samba",
+        "role": "main"
+    },
+    "scapy": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "scapy",
+        "role": "main"
+    },
+    "scl-utils": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "scl-utils",
+        "role": "main_builddep_dep"
+    },
+    "screen": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "screen",
+        "role": "main"
+    },
+    "sed": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sed",
+        "role": "main"
+    },
+    "setools": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "setools",
+        "role": "main_builddep_dep"
+    },
+    "setup": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "setup",
+        "role": "main"
+    },
+    "sg3_utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sg3_utils",
+        "role": "main"
+    },
+    "sgml-common": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sgml-common",
+        "role": "main_builddep_dep"
+    },
+    "shadow-utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "shadow-utils",
+        "role": "main"
+    },
+    "shared-mime-info": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "shared-mime-info",
+        "role": "main"
+    },
+    "sharutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sharutils",
+        "role": "main"
+    },
+    "slang": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "slang",
+        "role": "main"
+    },
+    "sm": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "sm",
+        "role": "main"
+    },
+    "smartmontools": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "smartmontools",
+        "role": "main"
+    },
+    "snappy": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "snappy",
+        "role": "main_builddep_dep"
+    },
+    "socat": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "socat",
+        "role": "main_builddep"
+    },
+    "softhsm": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "softhsm",
+        "role": "main_builddep"
+    },
+    "source-highlight": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "source-highlight",
+        "role": "main_builddep_dep"
+    },
+    "sqlite": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sqlite",
+        "role": "main"
+    },
+    "ssmtp": {
+        "added_by": "xs",
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ssmtp",
+        "role": "main"
+    },
+    "star": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "star",
+        "role": "main"
+    },
+    "strace": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "strace",
+        "role": "main"
+    },
+    "stunnel": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "stunnel",
+        "role": "main"
+    },
+    "subversion": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "subversion",
+        "role": "main_builddep_dep"
+    },
+    "sudo": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sudo",
+        "role": "main"
+    },
+    "swig": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "swig",
+        "role": "extra_builddep"
+    },
+    "swtpm": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "swtpm",
+        "role": "main"
+    },
+    "sysfsutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sysfsutils",
+        "role": "main"
+    },
+    "syslinux": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "syslinux",
+        "role": "main_builddep"
+    },
+    "sysstat": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sysstat",
+        "role": "main"
+    },
+    "system-config-firewall": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "system-config-firewall",
+        "role": "main"
+    },
+    "systemd": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "systemd",
+        "role": "main"
+    },
+    "systemtap": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "systemtap",
+        "role": "main"
+    },
+    "sysvinit": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "sysvinit",
+        "role": "main"
+    },
+    "tar": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "tar",
+        "role": "main"
+    },
+    "tcl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "tcl",
+        "role": "main"
+    },
+    "tcp_wrappers": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "tcp_wrappers",
+        "role": "main"
+    },
+    "tcpdump": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "tcpdump",
+        "role": "main"
+    },
+    "telnet": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "telnet",
+        "role": "main"
+    },
+    "test-ring0": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "test-ring0",
+        "role": "extra"
+    },
+    "texinfo": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "texinfo",
+        "role": "main"
+    },
+    "tg3-module-alt": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "additional driver",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "tg3-module-alt",
+        "role": "extra"
+    },
+    "time": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "time",
+        "role": "main"
+    },
+    "tmux": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "tmux",
+        "role": "extra"
+    },
+    "traceroute": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "traceroute",
+        "role": "extra"
+    },
+    "tree": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "tree",
+        "role": "extra"
+    },
+    "trousers": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "trousers",
+        "role": "main"
+    },
+    "tzdata": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "tzdata",
+        "role": "main"
+    },
+    "unbound": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "unbound",
+        "role": "main"
+    },
+    "unzip": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "unzip",
+        "role": "main"
+    },
+    "update-package": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "needed to build driver disks",
+        "maintainer": "OS Platform & Release",
+        "package": "update-package",
+        "role": "extra"
+    },
+    "urw-fonts": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "urw-fonts",
+        "role": "main_builddep_dep"
+    },
+    "usbutils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "usbutils",
+        "role": "main"
+    },
+    "userspace-rcu": {
+        "added_by": "xcp-ng",
+        "built_by": "epel",
+        "import_reason": "builddep and dep for glusterfs",
+        "maintainer": "OS Platform & Release",
+        "package": "userspace-rcu",
+        "role": "extra_dep"
+    },
+    "ustr": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "ustr",
+        "role": "main"
+    },
+    "util-linux": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "util-linux",
+        "role": "main"
+    },
+    "valgrind": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "valgrind",
+        "role": "main_builddep"
+    },
+    "varstored": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "varstored",
+        "role": "main"
+    },
+    "vconfig": {
+        "added_by": "xs",
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "vconfig",
+        "role": "main"
+    },
+    "vcputune": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "vcputune",
+        "role": "main"
+    },
+    "vendor-drivers": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "vendor-drivers",
+        "role": "main"
+    },
+    "vendor-update-keys": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "replaces proprietary vendor-update-keys",
+        "maintainer": "OS Platform & Release",
+        "package": "vendor-update-keys",
+        "role": "main"
+    },
+    "vim": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "vim",
+        "role": "main"
+    },
+    "vmss": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "vmss",
+        "role": "main"
+    },
+    "vncsnapshot": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "vncsnapshot",
+        "role": "main"
+    },
+    "vncterm": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "vncterm",
+        "role": "main"
+    },
+    "wayland": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "wayland",
+        "role": "main_builddep_dep"
+    },
+    "wget": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "wget",
+        "role": "main"
+    },
+    "which": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "which",
+        "role": "main"
+    },
+    "wpa_supplicant": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": "extra tool",
+        "maintainer": "OS Platform & Release",
+        "package": "wpa_supplicant",
+        "role": "extra"
+    },
+    "xapi": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "xapi",
+        "role": "main"
+    },
+    "xcp-clipboardd": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "replaces proprietary xs-clipboardd",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xcp-clipboardd",
+        "role": "main"
+    },
+    "xcp-emu-manager": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "replaces proprietary emu-manager",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xcp-emu-manager",
+        "role": "main"
+    },
+    "xcp-featured": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "replaces proprietary v6d-citrix",
+        "maintainer": "XAPI & Network",
+        "package": "xcp-featured",
+        "role": "main"
+    },
+    "xcp-ng-deps": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "meta package that defines default installation",
+        "maintainer": "OS Platform & Release",
+        "package": "xcp-ng-deps",
+        "role": "main"
+    },
+    "xcp-ng-generic-lib": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "lib for other packages",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xcp-ng-generic-lib",
+        "role": "main"
+    },
+    "xcp-ng-plymouth-theme": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "replaces xenserver-plymouth-theme",
+        "maintainer": "OS Platform & Release",
+        "package": "xcp-ng-plymouth-theme",
+        "role": "main"
+    },
+    "xcp-ng-pv-tools": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xcp-ng-pv-tools",
+        "role": "main"
+    },
+    "xcp-ng-release": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "replaces xenserver-release",
+        "maintainer": "OS Platform & Release",
+        "package": "xcp-ng-release",
+        "role": "main"
+    },
+    "xcp-ng-release-linstor": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "xcp-ng-release-linstor",
+        "role": "extra"
+    },
+    "xcp-ng-xapi-plugins": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "XAPI plugins",
+        "maintainer": "XAPI & Network",
+        "package": "xcp-ng-xapi-plugins",
+        "role": "main"
+    },
+    "xcp-python-libs": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "xcp-python-libs",
+        "role": "main"
+    },
+    "xcp-python-libs-compat": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "xcp-python-libs-compat",
+        "role": "main"
+    },
+    "xdelta": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xdelta",
+        "role": "main"
+    },
+    "xen": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xen",
+        "role": "main"
+    },
+    "xen-crashdump-analyser": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xen-crashdump-analyser",
+        "role": "main"
+    },
+    "xengt-userspace": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xengt-userspace",
+        "role": "main"
+    },
+    "xenserver-dracut": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xenserver-dracut",
+        "role": "main"
+    },
+    "xenserver-hwdata": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xenserver-hwdata",
+        "role": "main"
+    },
+    "xenserver-status-report": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "xenserver-status-report",
+        "role": "main"
+    },
+    "xfsprogs": {
+        "added_by": "xcp-ng",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xfsprogs",
+        "role": "main_builddep"
+    },
+    "xha": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "xha",
+        "role": "main"
+    },
+    "xkeyboard-config": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xkeyboard-config",
+        "role": "extra_builddep_dep"
+    },
+    "xmlto": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xmlto",
+        "role": "main_builddep"
+    },
+    "xo-lite": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xo-lite",
+        "role": "main"
+    },
+    "xorg-x11-font-utils": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xorg-x11-font-utils",
+        "role": "main_builddep_dep"
+    },
+    "xorg-x11-proto-devel": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xorg-x11-proto-devel",
+        "role": "main_builddep_dep"
+    },
+    "xorg-x11-util-macros": {
+        "added_by": null,
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xorg-x11-util-macros",
+        "role": "main_builddep"
+    },
+    "xs-opam-repo": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "xs-opam-repo",
+        "role": "main_builddep"
+    },
+    "xs-opam-src": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "xs-opam-src",
+        "role": "main_indirect_builddep"
+    },
+    "xs-openssl": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xs-openssl",
+        "role": "main"
+    },
+    "xsconsole": {
+        "added_by": "xs",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "XAPI & Network",
+        "package": "xsconsole",
+        "role": "main"
+    },
+    "xxhash": {
+        "added_by": "xs",
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xxhash",
+        "role": "main"
+    },
+    "xz": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "xz",
+        "role": "main"
+    },
+    "yajl": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "yajl",
+        "role": "main"
+    },
+    "yum": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "yum",
+        "role": "main"
+    },
+    "yum-metadata-parser": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "yum-metadata-parser",
+        "role": "main"
+    },
+    "yum-utils": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "yum-utils",
+        "role": "main"
+    },
+    "zfs": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "ZFS support",
+        "maintainer": "OS Platform & Release",
+        "package": "zfs",
+        "role": "extra"
+    },
+    "zfs-kmod": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": "ZFS dep",
+        "maintainer": "OS Platform & Release",
+        "package": "zfs-kmod",
+        "role": "extra_dep"
+    },
+    "zip": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "zip",
+        "role": "main"
+    },
+    "zlib": {
+        "added_by": "xs",
+        "built_by": "centos",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "zlib",
+        "role": "main"
+    },
+    "zstd": {
+        "added_by": "xs",
+        "built_by": "epel",
+        "import_reason": null,
+        "maintainer": "OS Platform & Release",
+        "package": "zstd",
+        "role": "main"
+    }
+}
