@@ -2,6 +2,7 @@
 
 import json
 import sys
+
 import polars as pl
 
 df = pl.read_csv("rpm.csv")
