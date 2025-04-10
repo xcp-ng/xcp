@@ -267,6 +267,10 @@
         "maintainer": "OS Platform & Release",
         "package": "cmocka"
     },
+    "coccinelle": {
+        "maintainer": "Storage",
+        "package": "coccinelle"
+    },
     "colord": {
         "maintainer": "OS Platform & Release",
         "package": "colord"
@@ -442,6 +446,10 @@
     "dpkg": {
         "maintainer": "OS Platform & Release",
         "package": "dpkg"
+    },
+    "drbd": {
+        "maintainer": "Storage",
+        "package": "drbd"
     },
     "dracut": {
         "maintainer": "OS Platform & Release",
@@ -1374,6 +1382,10 @@
     "libyaml": {
         "maintainer": "OS Platform & Release",
         "package": "libyaml"
+    },
+    "linstor-client": {
+        "maintainer": "Storage",
+        "package": "linstor-client"
     },
     "linux-firmware": {
         "maintainer": "OS Platform & Release",
@@ -2646,6 +2658,10 @@
     "xcp-ng-generic-lib": {
         "maintainer": "Hypervisor & Kernel",
         "package": "xcp-ng-generic-lib"
+    },
+    "xcp-ng-linstor": {
+        "maintainer": "Storage",
+        "package": "xcp-ng-linstor"
     },
     "xcp-ng-plymouth-theme": {
         "maintainer": "OS Platform & Release",
