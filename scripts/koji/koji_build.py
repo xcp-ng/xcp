@@ -129,7 +129,7 @@ def main():
     is_scratch = args.scratch
     is_nowait = args.nowait
     test_build = args.test_build
-    if re.match('^[a-zA-Z0-9]{1,16}$', test_build) is None:
+    if test_build is not None and re.match('^[a-zA-Z0-9]{1,16}$', test_build) is None:
         logging.error("The test build id must be 16 characters long maximum and only contain letters and digits")
         exit(1)
 
