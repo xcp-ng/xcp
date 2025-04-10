@@ -535,6 +535,14 @@
         "package": "cmocka",
         "role": "main_builddep"
     },
+    "coccinelle": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "coccinelle",
+        "role": "?"
+    },
     "colord": {
         "added_by": null,
         "built_by": "centos",
@@ -886,6 +894,14 @@
         "maintainer": "OS Platform & Release",
         "package": "dpkg",
         "role": "main_builddep"
+    },
+    "drbd": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "drbd",
+        "role": "?"
     },
     "dracut": {
         "added_by": "xs",
@@ -2750,6 +2766,14 @@
         "maintainer": "OS Platform & Release",
         "package": "libyaml",
         "role": "extra_dep"
+    },
+    "linstore-client": {
+        "added_by": null,
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "linstore-client",
+        "role": "?"
     },
     "linux-firmware": {
         "added_by": "xs",
@@ -5286,6 +5310,14 @@
         "maintainer": "Hypervisor & Kernel",
         "package": "xcp-ng-generic-lib",
         "role": "main"
+    },
+    "xcp-ng-linstor": {
+        "added_by": "xcp-ng",
+        "built_by": "xcp-ng",
+        "import_reason": null,
+        "maintainer": "Storage",
+        "package": "xcp-ng-linstor",
+        "role": "?"
     },
     "xcp-ng-plymouth-theme": {
         "added_by": "xcp-ng",
