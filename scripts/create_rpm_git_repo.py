@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 from __future__ import print_function
+
 import argparse
 import os
 import subprocess
+
 from github import Github
 
+
 def main():
-    parser = argparse.ArgumentParser(description='Creates a git repository in current directory for RPM spec file and sources')
+    parser = argparse.ArgumentParser(description='Creates a git repository in current directory for RPM spec file and'
+                                                 ' sources')
     parser.add_argument('name', help='name of repository')
     parser.add_argument('--local',
                         help='do not create github repository',
@@ -19,7 +23,8 @@ def main():
 
     if not args.local:
         # authenticate to Github
-        token = open(args.token_file).read().strip()
+        with open(args.token_file) as f:
+            token = f.read().strip()
         g = Github(token)
 
         # create repository
@@ -39,7 +44,8 @@ Make sure to have `git-lfs` installed before cloning. It is used for handling so
 Branches:
 * `master` contains sources for the next `x.y` release of XCP-ng.
 * `x.y` (e.g. `7.5`) contains sources for the `x.y` release of XCP-ng, with their bugfix and/or security updates.
-* `XS-x.y` (e.g. `XS-7.5`), when they exist, contain sources from the `x.y` release of XenServer, with trademarked or copyrighted material stripped if needed.
+* `XS-x.y` (e.g. `XS-7.5`), when they exist, contain sources from the `x.y` release of XenServer, with trademarked
+  or copyrighted material stripped if needed.
 
 Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
 """ % args.name
@@ -57,9 +63,11 @@ Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
         # only set if pushInsteadOf was not configured
         subprocess.check_call(['git', 'remote', 'set-url', '--push', 'origin',
                                'git@github.com:xcp-ng-rpms/%s.git' % args.name])
-    open('.gitignore', 'w').write(gitignore)
+    with open('.gitignore', 'w') as f:
+        f.write(gitignore)
     subprocess.check_call(['git', 'add', '.gitignore'])
-    open('README.md', 'w').write(readme)
+    with open('README.md', 'w') as f:
+        f.write(readme)
     subprocess.check_call(['git', 'add', 'README.md'])
     subprocess.check_call(['git', 'lfs', 'install'])
     subprocess.check_call(['git', 'lfs', 'track', '*.gz'])
