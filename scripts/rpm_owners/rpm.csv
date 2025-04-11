@@ -1,0 +1,756 @@
+SRPM name,Maintained by,built by,added by,import reason,main role
+biosdevname,OS Platform,xcp-ng,xs,,main
+control-slice,?,xcp-ng,xs,,main
+guest-templates-json,XAPI & Network,xcp-ng,xs,,main
+vmss,?,xcp-ng,xs,,main
+xscontainer,?,xcp-ng,xcp-ng,Not present in XS 8.3 anymore,extra
+avago-megaraid-sas,Hypervisor & Kernel,xcp-ng,xs,,main
+avago-mpt3sas,Hypervisor & Kernel,xcp-ng,xs,,main
+broadcom-bnxt-en,Hypervisor & Kernel,xcp-ng,xs,,main
+chelsio-cxgb4,Hypervisor & Kernel,xcp-ng,xs,,main
+cisco-enic,Hypervisor & Kernel,xcp-ng,xs,,main
+cisco-fnic,Hypervisor & Kernel,xcp-ng,xs,,main
+edk2,Hypervisor & Kernel,xcp-ng,xs,,main
+emulex-lpfc,Hypervisor & Kernel,xcp-ng,xs,,main
+intel-e1000e,Hypervisor & Kernel,xcp-ng,xs,,main
+intel-fm10k,Hypervisor & Kernel,xcp-ng,xs,,main
+intel-i40e,Hypervisor & Kernel,xcp-ng,xs,,main
+intel-ice,Hypervisor & Kernel,xcp-ng,xs,,main
+intel-igb,Hypervisor & Kernel,xcp-ng,xs,,main
+intel-igc,Hypervisor & Kernel,xcp-ng,,,main
+intel-ixgbe,Hypervisor & Kernel,xcp-ng,xs,,main
+ipxe,Hypervisor & Kernel,xcp-ng,xs,,main
+kernel,Hypervisor & Kernel,xcp-ng,xs,,main
+kexec-tools,Hypervisor & Kernel,xcp-ng,xs,,main
+kpatch,Hypervisor & Kernel,xcp-ng,xs,,main
+libdrm,Hypervisor & Kernel,xcp-ng,xs,,main
+libempserver,Hypervisor & Kernel,xcp-ng,xs,,main
+libtpms,Hypervisor & Kernel,xcp-ng,xs,,main
+mellanox-mlnxen,Hypervisor & Kernel,xcp-ng,xs,,main
+microsemi-aacraid,Hypervisor & Kernel,xcp-ng,xs,,main
+microsemi-smartpqi,Hypervisor & Kernel,xcp-ng,xs,,main
+mpi3mr-module,Hypervisor & Kernel,xcp-ng,xcp-ng,additional driver,main
+qemu,Hypervisor & Kernel,xcp-ng,xs,,main
+qlogic-fastlinq,Hypervisor & Kernel,xcp-ng,xs,,main
+qlogic-netxtreme2,Hypervisor & Kernel,xcp-ng,xs,,main
+qlogic-qla2xxx,Hypervisor & Kernel,xcp-ng,xs,,main
+qlogic-qla2xxx-firmware,Hypervisor & Kernel,xcp-ng,xs,,main
+r8125-module,Hypervisor & Kernel,xcp-ng,xcp-ng,additional driver,main
+swtpm,Hypervisor & Kernel,xcp-ng,xs,,main
+varstored,Hypervisor & Kernel,xcp-ng,xs,,main
+vcputune,Hypervisor & Kernel,xcp-ng,xs,,main
+vncterm,Hypervisor & Kernel,xcp-ng,xs,,main
+xcp-clipboardd,Hypervisor & Kernel,xcp-ng,xcp-ng,replaces proprietary xs-clipboardd,main
+xcp-emu-manager,Hypervisor & Kernel,xcp-ng,xcp-ng,replaces proprietary emu-manager,main
+xcp-ng-generic-lib,Hypervisor & Kernel,xcp-ng,xcp-ng,lib for other packages,main
+xen,Hypervisor & Kernel,xcp-ng,xs,,main
+xen-crashdump-analyser,Hypervisor & Kernel,xcp-ng,xs,,main
+xengt-userspace,Hypervisor & Kernel,xcp-ng,xs,,main
+ipxe-efi,Hypervisor & Kernel,xcp-ng,xs,,main_builddep
+aqc111u-module,Hypervisor & Kernel,xcp-ng,xcp-ng,,extra
+broadcom-bnxt-en-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+cisco-enic-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+cisco-fnic-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+coretemp-module-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,added to workaround missing CPU temperature sensors in dom0,extra
+dell-rbu-module,Hypervisor & Kernel,xcp-ng,xcp-ng,dell_rbu driver,extra
+igc-module,Hypervisor & Kernel,xcp-ng,xcp-ng,extra driver,extra
+intel-e1000e-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+intel-i40e-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+intel-ice-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+intel-igb-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+intel-ixgbe-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,,extra
+kernel-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate kernel,extra
+mellanox-mlnxen-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+microsemi-smartpqi-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,alternate driver,extra
+mlx4-modules-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,additional driver,extra
+qlogic-fastlinq-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,additional driver,extra
+qlogic-netxtreme2-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,additional driver,extra
+qlogic-qla2xxx-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,additional driver,extra
+r8169-module-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,additional driver,extra
+test-ring0,Hypervisor & Kernel,xcp-ng,xs,,extra
+tg3-module-alt,Hypervisor & Kernel,xcp-ng,xcp-ng,additional driver,extra
+kernel-livepatch,Hypervisor & Kernel,xcp-ng,xs,,None
+xen-livepatch,Hypervisor & Kernel,xcp-ng,xs,,None
+amd-microcode,OS Platform,xcp-ng,xcp-ng,,main
+curl,OS Platform,xcp-ng,xs,,main
+dracut,OS Platform,xcp-ng,xs,,main
+e2fsprogs,OS Platform,xcp-ng,xs,,main
+ethtool,OS Platform,xcp-ng,xs,,main
+fuse,OS Platform,xcp-ng,xs,,main
+gdisk,OS Platform,xcp-ng,xs,,main
+grub,OS Platform,xcp-ng,xs,,main
+htop,OS Platform,xcp-ng,xcp-ng,added to default install,main
+initscripts,OS Platform,xcp-ng,xs,,main
+intel-microcode,OS Platform,xcp-ng,xcp-ng,,main
+iproute,OS Platform,xcp-ng,xs,,main
+irqbalance,OS Platform,xcp-ng,xs,,main
+jemalloc,OS Platform,xcp-ng,xs,,main
+libarchive,OS Platform,xcp-ng,xs,,main
+linux-firmware,OS Platform,xcp-ng,xs,,main
+lldpad,OS Platform,xcp-ng,xs,,main
+logrotate,OS Platform,xcp-ng,xs,,main
+makedumpfile,OS Platform,xcp-ng,xs,,main
+mcelog,OS Platform,xcp-ng,xs,,main
+memtest86+,OS Platform,xcp-ng,xs,,main
+ncurses,OS Platform,xcp-ng,xs,,main
+net-snmp,OS Platform,xcp-ng,xs,,main
+newt,OS Platform,xcp-ng,xs,,main
+openssh,OS Platform,xcp-ng,xs,,main
+openssl,OS Platform,xcp-ng,xs,,main
+python-defusedxml,OS Platform,xcp-ng,xs,,main
+python-fasteners,OS Platform,xcp-ng,xs,,main
+python-pam,OS Platform,xcp-ng,,,main
+python-pyudev,OS Platform,xcp-ng,xs,,main
+samba,OS Platform,xcp-ng,xs,,main
+scapy,OS Platform,xcp-ng,xs,,main
+setup,OS Platform,xcp-ng,xs,,main
+slang,OS Platform,xcp-ng,xs,,main
+sudo,OS Platform,xcp-ng,xs,,main
+systemd,OS Platform,xcp-ng,xs,,main
+systemtap,OS Platform,xcp-ng,xs,,main
+util-linux,OS Platform,xcp-ng,xs,,main
+vendor-drivers,OS Platform,xcp-ng,xs,,main
+vendor-update-keys,OS Platform,xcp-ng,xcp-ng,replaces proprietary vendor-update-keys,main
+vncsnapshot,OS Platform,xcp-ng,xs,,main
+xcp-ng-deps,OS Platform,xcp-ng,xcp-ng,meta package that defines default installation,main
+xcp-ng-plymouth-theme,OS Platform,xcp-ng,xcp-ng,replaces xenserver-plymouth-theme,main
+xcp-ng-release,OS Platform,xcp-ng,xcp-ng,replaces xenserver-release,main
+xenserver-dracut,OS Platform,xcp-ng,xs,,main
+xenserver-hwdata,OS Platform,xcp-ng,xs,,main
+xo-lite,OS Platform,xcp-ng,xcp-ng,,main
+xs-openssl,OS Platform,xcp-ng,xs,,main
+GeoIP,OS Platform,centos,xs,,main
+OpenIPMI,OS Platform,centos,xs,,main
+acl,OS Platform,centos,xs,,main
+acpica-tools,OS Platform,centos,xs,,main
+aic94xx-firmware,OS Platform,centos,xs,,main
+arptables,OS Platform,centos,xs,,main
+at,OS Platform,centos,xs,,main
+attr,OS Platform,centos,xs,,main
+audit,OS Platform,centos,xs,,main
+autogen,OS Platform,centos,xs,,main
+avahi,OS Platform,centos,xs,,main
+basesystem,OS Platform,centos,xs,,main
+bash,OS Platform,centos,xs,,main
+bash-completion,OS Platform,centos,xs,,main
+bc,OS Platform,centos,xs,,main
+bind,OS Platform,centos,xs,,main
+binutils,OS Platform,centos,xs,,main
+boost,OS Platform,centos,xs,,main
+bridge-utils,OS Platform,centos,xs,,main
+bzip2,OS Platform,centos,xs,,main
+ca-certificates,OS Platform,centos,xs,,main
+centos-logos,OS Platform,centos,xs,,main
+chkconfig,OS Platform,centos,xs,,main
+chrony,OS Platform,centos,xs,,main
+cifs-utils,OS Platform,centos,xs,,main
+compat-db,OS Platform,centos,xs,,main
+compat-gcc-32,OS Platform,centos,xs,,main
+coreutils,OS Platform,centos,xs,,main
+cpio,OS Platform,centos,xs,,main
+cracklib,OS Platform,centos,xs,,main
+cronie,OS Platform,centos,xs,,main
+crontabs,OS Platform,centos,xs,,main
+cryptsetup,OS Platform,centos,xs,,main
+cups,OS Platform,centos,xs,,main
+cyrus-sasl,OS Platform,centos,xs,,main
+dbus,OS Platform,centos,xs,,main
+device-mapper-persistent-data,OS Platform,centos,xs,,main
+dhcp,OS Platform,centos,xs,,main
+diffutils,OS Platform,centos,xs,,main
+ding-libs,OS Platform,centos,xs,,main
+dmidecode,OS Platform,centos,xs,,main
+dyninst,OS Platform,centos,xs,,main
+ebtables,OS Platform,centos,xs,,main
+ed,OS Platform,centos,xs,,main
+efibootmgr,OS Platform,centos,xs,,main
+efivar,OS Platform,centos,xs,,main
+elfutils,OS Platform,centos,xs,,main
+expat,OS Platform,centos,xs,,main
+expect,OS Platform,centos,xs,,main
+fcoe-utils,OS Platform,centos,xs,,main
+file,OS Platform,centos,xs,,main
+filesystem,OS Platform,centos,xs,,main
+findutils,OS Platform,centos,xs,,main
+fipscheck,OS Platform,centos,xs,,main
+fontconfig,OS Platform,centos,xs,,main
+fontpackages,OS Platform,centos,xs,,main
+freetype,OS Platform,centos,xs,,main
+gawk,OS Platform,centos,xs,,main
+gcc,OS Platform,centos,xs,,main
+gdbm,OS Platform,centos,xs,,main
+gettext,OS Platform,centos,xs,,main
+glib2,OS Platform,centos,xs,,main
+glibc,OS Platform,centos,xs,,main
+gmp,OS Platform,centos,xs,,main
+gnu-free-fonts,OS Platform,centos,xs,,main
+gnupg2,OS Platform,centos,xs,,main
+gnutls,OS Platform,centos,xs,,main
+gpgme,OS Platform,centos,xs,,main
+grep,OS Platform,centos,xs,,main
+groff,OS Platform,centos,xs,,main
+grubby,OS Platform,centos,xs,,main
+gssproxy,OS Platform,centos,xs,,main
+gzip,OS Platform,centos,xs,,main
+hardlink,OS Platform,centos,xs,,main
+hdparm,OS Platform,centos,xs,,main
+hostname,OS Platform,centos,xs,,main
+hwdata,OS Platform,centos,xs,,main
+ipmitool,OS Platform,centos,xs,,main
+ipset,OS Platform,centos,xs,,main
+iptables,OS Platform,centos,xs,,main
+iputils,OS Platform,centos,xs,,main
+iscsi-initiator-utils,OS Platform,centos,xs,,main
+jansson,OS Platform,centos,xs,,main
+json-c,OS Platform,centos,xs,,main
+json-glib,OS Platform,centos,xs,,main
+kbd,OS Platform,centos,xs,,main
+keyutils,OS Platform,centos,xs,,main
+kmod,OS Platform,centos,xs,,main
+krb5,OS Platform,centos,xs,,main
+less,OS Platform,centos,xs,,main
+libaio,OS Platform,centos,xs,,main
+libassuan,OS Platform,centos,xs,,main
+libcap,OS Platform,centos,xs,,main
+libcap-ng,OS Platform,centos,xs,,main
+libcgroup,OS Platform,centos,xs,,main
+libconfig,OS Platform,centos,xs,,main
+libcroco,OS Platform,centos,xs,,main
+libdb,OS Platform,centos,xs,,main
+libdwarf,OS Platform,centos,xs,,main
+libedit,OS Platform,centos,xs,,main
+libestr,OS Platform,centos,xs,,main
+libev,OS Platform,centos,xs,,main
+libevent,OS Platform,centos,xs,,main
+libfastjson,OS Platform,centos,xs,,main
+libffi,OS Platform,centos,xs,,main
+libgcrypt,OS Platform,centos,xs,,main
+libgpg-error,OS Platform,centos,xs,,main
+libidn,OS Platform,centos,xs,,main
+libjpeg-turbo,OS Platform,centos,xs,,main
+libldb,OS Platform,centos,xs,,main
+libmnl,OS Platform,centos,xs,,main
+libnetfilter_conntrack,OS Platform,centos,xs,,main
+libnfnetlink,OS Platform,centos,xs,,main
+libnfsidmap,OS Platform,centos,xs,,main
+libnl3,OS Platform,centos,xs,,main
+libpcap,OS Platform,centos,xs,,main
+libpciaccess,OS Platform,centos,xs,,main
+libpipeline,OS Platform,centos,xs,,main
+libpng,OS Platform,centos,xs,,main
+libpwquality,OS Platform,centos,xs,,main
+libreport,OS Platform,centos,xs,,main
+libseccomp,OS Platform,centos,xs,,main
+libselinux,OS Platform,centos,xs,,main
+libsemanage,OS Platform,centos,xs,,main
+libsepol,OS Platform,centos,xs,,main
+libssh2,OS Platform,centos,xs,,main
+libtalloc,OS Platform,centos,xs,,main
+libtasn1,OS Platform,centos,xs,,main
+libtdb,OS Platform,centos,xs,,main
+libtevent,OS Platform,centos,xs,,main
+libtirpc,OS Platform,centos,xs,,main
+libunistring,OS Platform,centos,xs,,main
+libusbx,OS Platform,centos,xs,,main
+libuser,OS Platform,centos,xs,,main
+libutempter,OS Platform,centos,xs,,main
+libverto,OS Platform,centos,xs,,main
+libxml2,OS Platform,centos,xs,,main
+lm_sensors,OS Platform,centos,xs,,main
+lsof,OS Platform,centos,xs,,main
+lua,OS Platform,centos,xs,,main
+lz4,OS Platform,centos,xs,,main
+lzo,OS Platform,centos,xs,,main
+m4,OS Platform,centos,xs,,main
+mailx,OS Platform,centos,xs,,main
+make,OS Platform,centos,xs,,main
+man-db,OS Platform,centos,xs,,main
+mariadb,OS Platform,centos,xs,,main
+mdadm,OS Platform,centos,xs,,main
+nano,OS Platform,centos,xs,,main
+net-tools,OS Platform,centos,xs,,main
+nettle,OS Platform,centos,xs,,main
+nfs-utils,OS Platform,centos,xs,,main
+nspr,OS Platform,centos,xs,,main
+nss,OS Platform,centos,xs,,main
+nss-pem,OS Platform,centos,xs,,main
+nss-softokn,OS Platform,centos,xs,,main
+nss-util,OS Platform,centos,xs,,main
+numactl,OS Platform,centos,xs,,main
+openldap,OS Platform,centos,xs,,main
+os-prober,OS Platform,centos,xs,,main
+p11-kit,OS Platform,centos,xs,,main
+pam,OS Platform,centos,xs,,main
+parted,OS Platform,centos,xs,,main
+passwd,OS Platform,centos,xs,,main
+patch,OS Platform,centos,xs,,main
+pciutils,OS Platform,centos,xs,,main
+pcre,OS Platform,centos,xs,,main
+perl,OS Platform,centos,xs,,main
+perl-Carp,OS Platform,centos,xs,,main
+perl-Data-Dumper,OS Platform,centos,xs,,main
+perl-Encode,OS Platform,centos,xs,,main
+perl-Exporter,OS Platform,centos,xs,,main
+perl-File-Path,OS Platform,centos,xs,,main
+perl-File-Temp,OS Platform,centos,xs,,main
+perl-Filter,OS Platform,centos,xs,,main
+perl-Getopt-Long,OS Platform,centos,xs,,main
+perl-HTTP-Tiny,OS Platform,centos,xs,,main
+perl-PathTools,OS Platform,centos,xs,,main
+perl-Pod-Perldoc,OS Platform,centos,xs,,main
+perl-Pod-Simple,OS Platform,centos,xs,,main
+perl-Pod-Usage,OS Platform,centos,xs,,main
+perl-Scalar-List-Utils,OS Platform,centos,xs,,main
+perl-Socket,OS Platform,centos,xs,,main
+perl-Storable,OS Platform,centos,xs,,main
+perl-Text-ParseWords,OS Platform,centos,xs,,main
+perl-Time-HiRes,OS Platform,centos,xs,,main
+perl-Time-Local,OS Platform,centos,xs,,main
+perl-WWW-Curl,OS Platform,centos,xs,,main
+perl-constant,OS Platform,centos,xs,,main
+perl-parent,OS Platform,centos,xs,,main
+perl-podlators,OS Platform,centos,xs,,main
+perl-threads,OS Platform,centos,xs,,main
+perl-threads-shared,OS Platform,centos,xs,,main
+pinentry,OS Platform,centos,xs,,main
+pixman,OS Platform,centos,xs,,main
+pkgconfig,OS Platform,centos,xs,,main
+plymouth,OS Platform,centos,xs,,main
+policycoreutils,OS Platform,centos,xs,,main
+popt,OS Platform,centos,xs,,main
+portreserve,OS Platform,centos,xs,,main
+procps-ng,OS Platform,centos,xs,,main
+psmisc,OS Platform,centos,xs,,main
+pth,OS Platform,centos,xs,,main
+pygpgme,OS Platform,centos,xs,,main
+pyliblzma,OS Platform,centos,xs,,main
+pyserial,OS Platform,centos,xs,,main
+python,OS Platform,centos,xs,,main
+python-chardet,OS Platform,centos,xs,,main
+python-iniparse,OS Platform,centos,xs,,main
+python-kitchen,OS Platform,centos,xs,,main
+python-pip,OS Platform,centos,xs,,main
+python-pycurl,OS Platform,centos,xs,,main
+python-six,OS Platform,centos,xs,,main
+python-urlgrabber,OS Platform,centos,xs,,main
+python3,OS Platform,centos,xs,,main
+python3-setuptools,OS Platform,centos,xs,,main
+pyxattr,OS Platform,centos,xs,,main
+qrencode,OS Platform,centos,xs,,main
+quota,OS Platform,centos,xs,,main
+readline,OS Platform,centos,xs,,main
+redhat-lsb,OS Platform,centos,xs,,main
+rootfiles,OS Platform,centos,xs,,main
+rpcbind,OS Platform,centos,xs,,main
+rpm,OS Platform,centos,xs,,main
+rsync,OS Platform,centos,xs,,main
+rsyslog,OS Platform,centos,xs,updated by us to rsyslog-8.24.0-52.el7_8.2 for memory leak fixes. Dependency libfastjson not updated but would need to be if we used the mm-normalize plugin (RHBZ #1591493),main
+screen,OS Platform,centos,xs,,main
+sed,OS Platform,centos,xs,,main
+sg3_utils,OS Platform,centos,xs,,main
+shadow-utils,OS Platform,centos,xs,,main
+shared-mime-info,OS Platform,centos,xs,,main
+sharutils,OS Platform,centos,xs,,main
+smartmontools,OS Platform,centos,xs,,main
+sqlite,OS Platform,centos,xs,,main
+star,OS Platform,centos,xs,,main
+strace,OS Platform,centos,xs,,main
+sysfsutils,OS Platform,centos,xs,,main
+sysstat,OS Platform,centos,xs,,main
+system-config-firewall,OS Platform,centos,xs,,main
+sysvinit,OS Platform,centos,xs,,main
+tar,OS Platform,centos,xs,,main
+tcl,OS Platform,centos,xs,,main
+tcp_wrappers,OS Platform,centos,xs,,main
+tcpdump,OS Platform,centos,xs,,main
+telnet,OS Platform,centos,xs,,main
+texinfo,OS Platform,centos,xs,,main
+time,OS Platform,centos,xs,,main
+trousers,OS Platform,centos,xs,,main
+tzdata,OS Platform,centos,xs,,main
+unbound,OS Platform,centos,xs,,main
+unzip,OS Platform,centos,xs,,main
+usbutils,OS Platform,centos,xs,,main
+ustr,OS Platform,centos,xs,,main
+vim,OS Platform,centos,xs,,main
+wget,OS Platform,centos,xs,,main
+which,OS Platform,centos,xs,,main
+xdelta,OS Platform,centos,xs,,main
+xz,OS Platform,centos,xs,,main
+yajl,OS Platform,centos,xs,,main
+yum,OS Platform,centos,xs,,main
+yum-metadata-parser,OS Platform,centos,xs,,main
+yum-utils,OS Platform,centos,xs,,main
+zip,OS Platform,centos,xs,,main
+zlib,OS Platform,centos,xs,,main
+createrepo_c,OS Platform,epel,xs,,main
+future,OS Platform,epel,xs,,main
+iftop,OS Platform,epel,xcp-ng,added to default install,main
+python-bitarray,OS Platform,epel,xs,,main
+python3-six,OS Platform,epel,xs,,main
+ssmtp,OS Platform,epel,xs,,main
+vconfig,OS Platform,epel,xs,,main
+xxhash,OS Platform,epel,xs,,main
+zstd,OS Platform,epel,xs,,main
+branding-xcp-ng,OS Platform,xcp-ng,xcp-ng,replaces branding-xenserver,main_builddep
+cmake3,OS Platform,xcp-ng,xcp-ng,"Initially imported by us, XS started using it. For XS 8, they forked cmake-3.26.4-4.fc37.src.rpm. At first, we keep ours because we found nothing that would require cmake3 in recent updates",main_builddep
+devtoolset-11-binutils,OS Platform,xcp-ng,xs,,main_builddep
+devtoolset-11-gcc,OS Platform,xcp-ng,xs,,main_builddep
+dwarves,OS Platform,xcp-ng,,,main_builddep
+nasm,OS Platform,xcp-ng,xs,,main_builddep
+python3-coverage,OS Platform,xcp-ng,xs,,main_builddep
+socat,OS Platform,xcp-ng,xcp-ng,extra tool,main_builddep
+asciidoc,OS Platform,centos,,,main_builddep
+autoconf,OS Platform,centos,,,main_builddep
+automake,OS Platform,centos,,,main_builddep
+bison,OS Platform,centos,,,main_builddep
+cdrkit,OS Platform,centos,,,main_builddep
+ceph-common,OS Platform,centos,xs,,main_builddep
+chrpath,OS Platform,centos,,,main_builddep
+crash,OS Platform,centos,,,main_builddep
+desktop-file-utils,OS Platform,centos,,,main_builddep
+devtoolset-10-gcc,OS Platform,centos,,,main_builddep
+docbook-dtds,OS Platform,centos,,,main_builddep
+docbook-style-xsl,OS Platform,centos,,,main_builddep
+flex,OS Platform,centos,,,main_builddep
+gc,OS Platform,centos,,,main_builddep
+git,OS Platform,centos,,,main_builddep
+gobject-introspection,OS Platform,centos,,,main_builddep
+gperf,OS Platform,centos,,,main_builddep
+gpm,OS Platform,centos,xcp-ng,,main_builddep
+gtk-doc,OS Platform,centos,,,main_builddep
+help2man,OS Platform,centos,,,main_builddep
+intltool,OS Platform,centos,,,main_builddep
+libmicrohttpd,OS Platform,centos,,,main_builddep
+libtool,OS Platform,centos,,,main_builddep
+libunwind,OS Platform,centos,,,main_builddep
+libusb,OS Platform,centos,,,main_builddep
+libxcb,OS Platform,centos,,,main_builddep
+libxslt,OS Platform,centos,xs,,main_builddep
+lksctp-tools,OS Platform,centos,,,main_builddep
+mtools,OS Platform,centos,,,main_builddep
+nmap,OS Platform,centos,xcp-ng,extra tool,main_builddep
+perl-Digest-MD5,OS Platform,centos,,,main_builddep
+perl-Digest-SHA,OS Platform,centos,,,main_builddep
+perl-ExtUtils-MakeMaker,OS Platform,centos,,,main_builddep
+perl-IO-Compress,OS Platform,centos,,,main_builddep
+perl-Module-Load-Conditional,OS Platform,centos,,,main_builddep
+perl-Parse-Yapp,OS Platform,centos,,,main_builddep
+perl-Test-Harness,OS Platform,centos,,,main_builddep
+perl-Test-Simple,OS Platform,centos,,,main_builddep
+python-dns,OS Platform,centos,,,main_builddep
+python-lxml,OS Platform,centos,,,main_builddep
+python-rpm-macros,OS Platform,centos,,,main_builddep
+python-setuptools,OS Platform,centos,,,main_builddep
+softhsm,OS Platform,centos,,,main_builddep
+syslinux,OS Platform,centos,,,main_builddep
+valgrind,OS Platform,centos,,,main_builddep
+xfsprogs,OS Platform,centos,xcp-ng,,main_builddep
+xmlto,OS Platform,centos,,,main_builddep
+xorg-x11-util-macros,OS Platform,centos,,,main_builddep
+cmocka,OS Platform,epel,,,main_builddep
+dev86,OS Platform,epel,,,main_builddep
+dpkg,OS Platform,epel,,,main_builddep
+epel-rpm-macros,OS Platform,epel,,,main_builddep
+fakeroot,OS Platform,epel,,,main_builddep
+figlet,OS Platform,epel,,,main_builddep
+golang,OS Platform,epel,,,main_builddep
+golang-github-golang-sys,OS Platform,epel,,,main_builddep
+lcov,OS Platform,epel,,,main_builddep
+perl-generators,OS Platform,epel,,,main_builddep
+pylint,OS Platform,epel,,,main_builddep
+python-demjson,OS Platform,epel,,,main_builddep
+python-iso8601,OS Platform,epel,,,main_builddep
+python-mock,OS Platform,epel,,,main_builddep
+python3-mock,OS Platform,epel,,,main_builddep
+devtoolset-11,OS Platform,xcp-ng,xs,,main_builddep_dep
+SDL,OS Platform,centos,,,main_builddep_dep
+apr,OS Platform,centos,,,main_builddep_dep
+apr-util,OS Platform,centos,,,main_builddep_dep
+atk,OS Platform,centos,,,main_builddep_dep
+cairo,OS Platform,centos,,,main_builddep_dep
+centos-indexhtml,OS Platform,centos,,,main_builddep_dep
+checkpolicy,OS Platform,centos,,,main_builddep_dep
+ctags,OS Platform,centos,,,main_builddep_dep
+dejavu-fonts,OS Platform,centos,,,main_builddep_dep
+devtoolset-10,OS Platform,centos,,,main_builddep_dep
+devtoolset-10-binutils,OS Platform,centos,,,main_builddep_dep
+docbook-style-dsssl,OS Platform,centos,,,main_builddep_dep
+docbook-utils,OS Platform,centos,,,main_builddep_dep
+dwz,OS Platform,centos,,,main_builddep_dep
+emacs,OS Platform,centos,,,main_builddep_dep
+gd,OS Platform,centos,,,main_builddep_dep
+gdk-pixbuf2,OS Platform,centos,,,main_builddep_dep
+ghostscript,OS Platform,centos,,,main_builddep_dep
+ghostscript-fonts,OS Platform,centos,,,main_builddep_dep
+graphite2,OS Platform,centos,,,main_builddep_dep
+graphviz,OS Platform,centos,,,main_builddep_dep
+gtk2,OS Platform,centos,,,main_builddep_dep
+gtk3,OS Platform,centos,,,main_builddep_dep
+guile,OS Platform,centos,,,main_builddep_dep
+harfbuzz,OS Platform,centos,,,main_builddep_dep
+hicolor-icon-theme,OS Platform,centos,,,main_builddep_dep
+icu,OS Platform,centos,xs,,main_builddep_dep
+jasper,OS Platform,centos,,,main_builddep_dep
+jbigkit,OS Platform,centos,,,main_builddep_dep
+lcms2,OS Platform,centos,,,main_builddep_dep
+libICE,OS Platform,centos,,,main_builddep_dep
+libSM,OS Platform,centos,,,main_builddep_dep
+libX11,OS Platform,centos,,,main_builddep_dep
+libXau,OS Platform,centos,,,main_builddep_dep
+libXaw,OS Platform,centos,,,main_builddep_dep
+libXcomposite,OS Platform,centos,,,main_builddep_dep
+libXcursor,OS Platform,centos,,,main_builddep_dep
+libXdamage,OS Platform,centos,,,main_builddep_dep
+libXext,OS Platform,centos,,,main_builddep_dep
+libXfixes,OS Platform,centos,,,main_builddep_dep
+libXfont,OS Platform,centos,,,main_builddep_dep
+libXft,OS Platform,centos,,,main_builddep_dep
+libXi,OS Platform,centos,,,main_builddep_dep
+libXinerama,OS Platform,centos,,,main_builddep_dep
+libXmu,OS Platform,centos,,,main_builddep_dep
+libXpm,OS Platform,centos,,,main_builddep_dep
+libXrandr,OS Platform,centos,,,main_builddep_dep
+libXrender,OS Platform,centos,,,main_builddep_dep
+libXt,OS Platform,centos,,,main_builddep_dep
+libXxf86vm,OS Platform,centos,,,main_builddep_dep
+libdaemon,OS Platform,centos,,,main_builddep_dep
+libfontenc,OS Platform,centos,,,main_builddep_dep
+libgnome-keyring,OS Platform,centos,,,main_builddep_dep
+libmodman,OS Platform,centos,,,main_builddep_dep
+libmpc,OS Platform,centos,,,main_builddep_dep
+libproxy,OS Platform,centos,,,main_builddep_dep
+librsvg2,OS Platform,centos,,,main_builddep_dep
+libthai,OS Platform,centos,,,main_builddep_dep
+libtiff,OS Platform,centos,,,main_builddep_dep
+libxshmfence,OS Platform,centos,,,main_builddep_dep
+linuxconsoletools,OS Platform,centos,,,main_builddep_dep
+lynx,OS Platform,centos,,,main_builddep_dep
+mercurial,OS Platform,centos,,,main_builddep_dep
+mesa,OS Platform,centos,,,main_builddep_dep
+mpfr,OS Platform,centos,,,main_builddep_dep
+neon,OS Platform,centos,,,main_builddep_dep
+openjade,OS Platform,centos,,,main_builddep_dep
+opensp,OS Platform,centos,,,main_builddep_dep
+pakchois,OS Platform,centos,,,main_builddep_dep
+pango,OS Platform,centos,,,main_builddep_dep
+perl-Compress-Raw-Bzip2,OS Platform,centos,,,main_builddep_dep
+perl-Compress-Raw-Zlib,OS Platform,centos,,,main_builddep_dep
+perl-Digest,OS Platform,centos,,,main_builddep_dep
+perl-Digest-SHA1,OS Platform,centos,,,main_builddep_dep
+perl-Error,OS Platform,centos,,,main_builddep_dep
+perl-ExtUtils-Manifest,OS Platform,centos,,,main_builddep_dep
+perl-ExtUtils-ParseXS,OS Platform,centos,,,main_builddep_dep
+perl-GD,OS Platform,centos,,,main_builddep_dep
+perl-Locale-Maketext,OS Platform,centos,,,main_builddep_dep
+perl-Module-Load,OS Platform,centos,,,main_builddep_dep
+perl-Module-Metadata,OS Platform,centos,,,main_builddep_dep
+perl-Params-Check,OS Platform,centos,,,main_builddep_dep
+perl-SGMLSpm,OS Platform,centos,,,main_builddep_dep
+perl-TermReadKey,OS Platform,centos,,,main_builddep_dep
+perl-Text-Unidecode,OS Platform,centos,,,main_builddep_dep
+perl-Thread-Queue,OS Platform,centos,,,main_builddep_dep
+perl-TimeDate,OS Platform,centos,,,main_builddep_dep
+perl-XML-Parser,OS Platform,centos,,,main_builddep_dep
+perl-libintl,OS Platform,centos,,,main_builddep_dep
+perl-srpm-macros,OS Platform,centos,,,main_builddep_dep
+perl-version,OS Platform,centos,,,main_builddep_dep
+poppler-data,OS Platform,centos,,,main_builddep_dep
+pyOpenSSL,OS Platform,centos,,,main_builddep_dep
+pyparsing,OS Platform,centos,,,main_builddep_dep
+python-IPy,OS Platform,centos,,,main_builddep_dep
+python-backports,OS Platform,centos,,,main_builddep_dep
+python-backports-ssl_match_hostname,OS Platform,centos,,,main_builddep_dep
+python-beaker,OS Platform,centos,,,main_builddep_dep
+python-ipaddress,OS Platform,centos,,,main_builddep_dep
+python-mako,OS Platform,centos,,,main_builddep_dep
+python-markupsafe,OS Platform,centos,,,main_builddep_dep
+python-paste,OS Platform,centos,,,main_builddep_dep
+python-rpm-generators,OS Platform,centos,,,main_builddep_dep
+python-tempita,OS Platform,centos,,,main_builddep_dep
+redhat-rpm-config,OS Platform,centos,,,main_builddep_dep
+scl-utils,OS Platform,centos,,,main_builddep_dep
+setools,OS Platform,centos,,,main_builddep_dep
+sgml-common,OS Platform,centos,,,main_builddep_dep
+snappy,OS Platform,centos,,,main_builddep_dep
+source-highlight,OS Platform,centos,,,main_builddep_dep
+subversion,OS Platform,centos,,,main_builddep_dep
+urw-fonts,OS Platform,centos,,,main_builddep_dep
+wayland,OS Platform,centos,,,main_builddep_dep
+xorg-x11-font-utils,OS Platform,centos,,,main_builddep_dep
+xorg-x11-proto-devel,OS Platform,centos,,,main_builddep_dep
+bubblewrap,OS Platform,epel,,,main_builddep_dep
+perl-Digest-SHA3,OS Platform,epel,,,main_builddep_dep
+perl-Email-Date-Format,OS Platform,epel,,,main_builddep_dep
+perl-MIME-Lite,OS Platform,epel,,,main_builddep_dep
+perl-MIME-Types,OS Platform,epel,,,main_builddep_dep
+python-astroid,OS Platform,epel,,,main_builddep_dep
+python-isort,OS Platform,epel,,,main_builddep_dep
+python-lazy-object-proxy,OS Platform,epel,,,main_builddep_dep
+python-mccabe,OS Platform,epel,,,main_builddep_dep
+python-pbr,OS Platform,epel,,,main_builddep_dep
+python-wrapt,OS Platform,epel,,,main_builddep_dep
+devtoolset-11-gdb,OS Platform,xcp-ng,xs,,main_indirect_builddep
+dejagnu,OS Platform,centos,,,main_indirect_builddep
+gcc-libraries,OS Platform,centos,,,main_indirect_builddep
+perl-Env,OS Platform,centos,,,main_indirect_builddep
+glusterfs,OS Platform,xcp-ng,xcp-ng,additional glusterfs package,extra
+iperf3,OS Platform,xcp-ng,xcp-ng,extra tool,extra
+nvme-cli,OS Platform,xcp-ng,xcp-ng,extra tool,extra
+traceroute,OS Platform,xcp-ng,xcp-ng,extra tool,extra
+update-package,OS Platform,xcp-ng,xcp-ng,needed to build driver disks,extra
+zfs,OS Platform,xcp-ng,xcp-ng,ZFS support,extra
+dstat,OS Platform,centos,xcp-ng,extra tool,extra
+iotop,OS Platform,centos,xcp-ng,extra tool,extra
+lshw,OS Platform,centos,xcp-ng,extra tool,extra
+mc,OS Platform,centos,xcp-ng,extra tool,extra
+mtr,OS Platform,centos,xcp-ng,extra tool,extra
+tmux,OS Platform,centos,xcp-ng,extra tool,extra
+tree,OS Platform,centos,xcp-ng,extra tool,extra
+wpa_supplicant,OS Platform,centos,xcp-ng,extra tool,extra
+iperf,OS Platform,epel,xcp-ng,extra tool,extra
+joe,OS Platform,epel,xcp-ng,extra tool,extra
+nload,OS Platform,epel,xcp-ng,extra tool,extra
+protobuf,OS Platform,xcp-ng,xcp-ng,"dep and builddep for netdata, which needs protobuf 3",extra_dep
+protobuf-c,OS Platform,xcp-ng,xcp-ng,"dep and builddep for netdata, which needs a version of protobuf-c compatible with protobuf 3",extra_dep
+python-libarchive-c,OS Platform,xcp-ng,xcp-ng,dep of update-package,extra_dep
+zfs-kmod,OS Platform,xcp-ng,xcp-ng,ZFS dep,extra_dep
+gdb,OS Platform,centos,xcp-ng,dep of update-package,extra_dep
+libyaml,OS Platform,centos,,,extra_dep
+python-cffi,OS Platform,centos,xcp-ng,,extra_dep
+python-cryptography,OS Platform,centos,xcp-ng,,extra_dep
+python-enum34,OS Platform,centos,xcp-ng,,extra_dep
+python-idna,OS Platform,centos,xcp-ng,,extra_dep
+python-paramiko,OS Platform,centos,xcp-ng,,extra_dep
+python-ply,OS Platform,centos,xcp-ng,,extra_dep
+python-pyasn1,OS Platform,centos,xcp-ng,,extra_dep
+python-pycparser,OS Platform,centos,xcp-ng,,extra_dep
+libuv,OS Platform,epel,,,extra_dep
+userspace-rcu,OS Platform,epel,xcp-ng,builddep and dep for glusterfs,extra_dep
+autoconf-archive,OS Platform,centos,,,extra_builddep
+doxygen,OS Platform,centos,xs,,extra_builddep
+freeipmi,OS Platform,centos,xcp-ng,,extra_builddep
+ncompress,OS Platform,centos,,,extra_builddep
+perl-Devel-CheckLib,OS Platform,centos,,,extra_builddep
+pytest,OS Platform,centos,,,extra_builddep
+swig,OS Platform,centos,,,extra_builddep
+Judy,OS Platform,epel,xcp-ng,dependency of netdata,extra_builddep
+python-packaging,OS Platform,epel,,,extra_builddep
+python3-cffi,OS Platform,epel,,,extra_builddep
+GConf2,OS Platform,centos,,,extra_builddep_dep
+ImageMagick,OS Platform,centos,,,extra_builddep_dep
+OpenEXR,OS Platform,centos,,,extra_builddep_dep
+adwaita-icon-theme,OS Platform,centos,,,extra_builddep_dep
+alsa-lib,OS Platform,centos,,,extra_builddep_dep
+at-spi2-atk,OS Platform,centos,,,extra_builddep_dep
+at-spi2-core,OS Platform,centos,,,extra_builddep_dep
+colord,OS Platform,centos,,,extra_builddep_dep
+dbus-glib,OS Platform,centos,,,extra_builddep_dep
+dconf,OS Platform,centos,,,extra_builddep_dep
+giflib,OS Platform,centos,,,extra_builddep_dep
+glib-networking,OS Platform,centos,,,extra_builddep_dep
+gsettings-desktop-schemas,OS Platform,centos,,,extra_builddep_dep
+ilmbase,OS Platform,centos,,,extra_builddep_dep
+libXtst,OS Platform,centos,,,extra_builddep_dep
+libepoxy,OS Platform,centos,,,extra_builddep_dep
+libgusb,OS Platform,centos,,,extra_builddep_dep
+liblockfile,OS Platform,centos,,,extra_builddep_dep
+libotf,OS Platform,centos,,,extra_builddep_dep
+libsoup,OS Platform,centos,,,extra_builddep_dep
+libwmf,OS Platform,centos,,,extra_builddep_dep
+libxkbcommon,OS Platform,centos,,,extra_builddep_dep
+m17n-db,OS Platform,centos,,,extra_builddep_dep
+m17n-lib,OS Platform,centos,,,extra_builddep_dep
+mozjs17,OS Platform,centos,,,extra_builddep_dep
+polkit,OS Platform,centos,,,extra_builddep_dep
+polkit-pkla-compat,OS Platform,centos,,,extra_builddep_dep
+python-py,OS Platform,centos,,,extra_builddep_dep
+rest,OS Platform,centos,,,extra_builddep_dep
+xkeyboard-config,OS Platform,centos,,,extra_builddep_dep
+python3-ply,OS Platform,epel,,,extra_builddep_dep
+python3-pycparser,OS Platform,epel,,,extra_builddep_dep
+python3-pyparsing,OS Platform,epel,,,extra_builddep_dep
+dtc,OS Platform,xcp-ng,xcp-ng,dep of xcp-ng-xapi-storage,other_builddep
+livepatch-build-tools,OS Platform,xcp-ng,xs,Used to be a dep for livepatch-utils which is proprietary,other_builddep
+meson,OS Platform,xcp-ng,xcp-ng,dep of qemu-dp,other_builddep
+libqb,OS Platform,centos,xs,,other_builddep
+iso-codes,OS Platform,centos,,,other_builddep_dep
+ninja-build,OS Platform,epel,,,other_builddep_dep
+copy-jdk-configs,OS Platform,centos,,,other_dep
+dosfstools,OS Platform,centos,,,other_dep
+javapackages-tools,OS Platform,centos,,,other_dep
+libhbaapi,OS Platform,centos,,,other_dep
+lsscsi,OS Platform,centos,xcp-ng,extra tool,other_dep
+pcsc-lite,OS Platform,centos,,,other_dep
+sanlock,OS Platform,centos,,,other_dep
+sdparm,OS Platform,centos,,,other_dep
+ttmkfdir,OS Platform,centos,,,other_dep
+xorg-x11-fonts,OS Platform,centos,,,other_dep
+ndisc6,OS Platform,epel,,,other_dep
+python-backports-functools_lru_cache,OS Platform,epel,,,other_dep
+python-configparser,OS Platform,epel,,,other_dep
+python-simplejson,OS Platform,epel,,,other_dep
+python-singledispatch,OS Platform,epel,,,other_dep
+dummypkg,OS Platform,xcp-ng,xcp-ng,,None
+host-installer,OS Platform,xcp-ng,xcp-ng,,None
+java-11-openjdk,OS Platform,centos,xcp-ng,Dependency of XOSTOR,None
+libfaketime,OS Platform,epel,xcp-ng,Used for installer ISO generation,None
+netdata,OS Platform :’(,xcp-ng,xcp-ng,"netdata package for XO, netdata-ui for users",extra
+xcp-ng-pv-tools,OS Platform for the packaging part,xcp-ng,xcp-ng,,main
+blktap,Storage,xcp-ng,xs,,main
+device-mapper-multipath,Storage,xcp-ng,xs,,main
+lvm2,Storage,xcp-ng,xs,,main
+nbd,Storage,xcp-ng,xs,,main
+sm,Storage,xcp-ng,xs,,main
+xcp-ng-release-linstor,Storage,xcp-ng,xcp-ng,,extra
+nbdkit,Storage,centos,xcp-ng,added as dependency for XOSTOR,other_builddep
+http-nbd-transfer,Storage,xcp-ng,xcp-ng,XOSTOR dep,None
+plug-late-sr,Storage,xcp-ng,,,None
+python-linstor,Storage,xcp-ng,,,None
+xcp-ng-xapi-storage,Storage,xcp-ng,xcp-ng,"SMAPIv3 implementation, replaces proprietary implementation",None
+busybox,XAPI & Network,xcp-ng,xs,,main
+gpumon,XAPI & Network,xcp-ng,xs,,main
+host-upgrade-plugin,XAPI & Network,xcp-ng,xs,,main
+interface-rename,XAPI & Network,xcp-ng,xs,,main
+openvswitch,XAPI & Network,xcp-ng,xs,,main
+stunnel,XAPI & Network,xcp-ng,xs,,main
+xapi,XAPI & Network,xcp-ng,xs,,main
+xcp-featured,XAPI & Network,xcp-ng,xcp-ng,replaces proprietary v6d-citrix,main
+xcp-ng-xapi-plugins,XAPI & Network,xcp-ng,xcp-ng,XAPI plugins,main
+xcp-python-libs,XAPI & Network,xcp-ng,xs,,main
+xcp-python-libs-compat,XAPI & Network,xcp-ng,xs,,main
+xenserver-status-report,XAPI & Network,xcp-ng,xs,,main
+xha,XAPI & Network,xcp-ng,xs,,main
+xsconsole,XAPI & Network,xcp-ng,xs,,main
+ocaml,XAPI & Network,xcp-ng,xs,,main_builddep
+ocaml-findlib,XAPI & Network,xcp-ng,xs,,main_builddep
+xs-opam-repo,XAPI & Network,xcp-ng,xs,,main_builddep
+opam,XAPI & Network,xcp-ng,xs,,main_builddep_dep
+xs-opam-src,XAPI & Network,xcp-ng,xs,,main_indirect_builddep
+ldns,XAPI & Network,xcp-ng,xcp-ng,,extra_dep
+libreswan,XAPI & Network,xcp-ng,xcp-ng,,extra_dep
+corosync,,xcp-ng,xs,"Required for clustering, a feature we don't support. Was also required to build lvm2's lvm2-cluster subpackage. lvm2 rebuilt without cvcluster support and corosync removed from dom0, along with dlm",None
+devtoolset-11-elfutils,,xcp-ng,xs,Not really used?,None
+linux-guest-loader,,xcp-ng,xs,,None
+qemu-dp,,xcp-ng,xs,,None
+rrd-client-lib,,xcp-ng,xs,dependency of proprietary pvsproxy,None
+sm-core-libs,,xcp-ng,xs,deps for proprietary sm-transport-libs,None
+PyPAM,,centos,xs,,None
+cmake,,centos,,,None
+dlm,,centos,xs,"Was a requirement of corosync, but we don't include corosync anymore in dom0. Was also a build dep for one of lvm2's subpackages, that we don't build anymore to remove the build dependency towards dlm. We also removed dlm from xs-opam-repo.",None
+java-1.8.0-openjdk,,centos,xcp-ng,Former dependency of XOSTOR,None
+libhbalinux,,centos,xs,why still here?,None
+libvirt,,centos,xs,"Used to be a dependency for systemtap, in 8.2",None
+llvm,,centos,,,None
+m2crypto,,centos,xs,,None
+oprofile,,centos,xs,,None
+python-coverage,,centos,,,None
+python-nose,,centos,,,None
+capstone,,epel,,,None
+jsoncpp,,epel,,,None
+python-asn1crypto,,epel,xs,Used to be dep for proprietary secureboot-certificates. Unneeded.,None
+python-monotonic,,epel,xs,,None
+python-psutil,,epel,xcp-ng,,None
+python2-enum34,,epel,xs,dep for proprietary secureboot-certificates. Drop?,None
+re2c,,epel,,,None
+rhash,,epel,,,None
