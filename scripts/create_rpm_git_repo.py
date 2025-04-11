@@ -3,9 +3,27 @@ from __future__ import print_function
 
 import argparse
 import os
+import re
 import subprocess
+import sys
 
 from github import Github
+
+TEAMS = {
+    "Hypervisor & Kernel": ['hk', 'hypervisor'],
+    "OS Platform & Release": ['opr', 'platform'],
+    'Security': ['security'],
+    'Storage': ['storage'],
+    'XAPI & Network': ['xn', 'network', 'xapi'],
+}
+
+TEAM_CHOICES = list(TEAMS.keys()) + [n for ns in TEAMS.values() for n in ns]
+TEAM_ALIASES = dict([(alias, team) for team, aliases in TEAMS.items() for alias in aliases]
+                    + [(team, team) for team in TEAMS])
+
+
+def to_gh_team(maintainer: str):
+    return 'xcp-ng-rpms/' + re.sub(r'\W+', '-', maintainer.lower())
 
 
 def main():
@@ -15,11 +33,17 @@ def main():
     parser.add_argument('--local',
                         help='do not create github repository',
                         action='store_true')
+    parser.add_argument('-m', '--maintainer', choices=TEAM_CHOICES, help='Configure code owners to this team')
     parser.add_argument('token_file',
                         help='file containing github authentication token',
                         nargs='?',
                         default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'github.txt'))
     args = parser.parse_args()
+
+    if args.maintainer is None:
+        print('error: please assign a team with --maintainer', file=sys.stderr)
+        exit(1)
+    maintainer = TEAM_ALIASES[args.maintainer]
 
     if not args.local:
         # authenticate to Github
@@ -74,6 +98,16 @@ Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
     subprocess.check_call(['git', 'add', '.gitignore'])
     with open('README.md', 'w') as f:
         f.write(readme)
+    subprocess.check_call(['git', 'add', 'README.md'])
+    # create the CODEOWNERS file
+    content = f"* {to_gh_team(maintainer)}\n"
+    # make sure the platform team is owner of all the repositories
+    if maintainer != TEAM_ALIASES['platform']:
+        content += f"* {to_gh_team(TEAM_ALIASES['platform'])}\n"
+    os.mkdir('.github')
+    with open('.github/CODEOWNERS', 'w') as f:
+        f.write(content)
+    subprocess.check_call(['git', 'add', '.github'])
     subprocess.check_call(['git', 'add', 'README.md'])
     subprocess.check_call(['git', 'lfs', 'install'])
     subprocess.check_call(['git', 'lfs', 'track', '*.gz'])
