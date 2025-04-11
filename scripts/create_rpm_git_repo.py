@@ -23,8 +23,14 @@ def main():
 
     if not args.local:
         # authenticate to Github
-        with open(args.token_file) as f:
-            token = f.read().strip()
+        if os.access(args.token_file, os.R_OK):
+            with open(args.token_file) as f:
+                token = f.read().strip()
+        elif 'GITHUB_TOKEN' in os.environ:
+            token = os.environ['GITHUB_TOKEN']
+        else:
+            print('error: please provide a github access token', file=sys.stderr)
+            exit(1)
         g = Github(token)
 
         # create repository
