@@ -50,7 +50,7 @@ Branches:
 Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
 """ % args.name
     if args.local:
-        subprocess.check_call(['git', 'init', args.name])
+        subprocess.check_call(['git', 'init', '-b', 'master', args.name])
         subprocess.check_call(['git', '-C', args.name,
                                'remote', 'add', 'origin',
                                'https://github.com/xcp-ng-rpms/%s.git' % args.name])
