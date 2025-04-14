@@ -1,25 +1,60 @@
 #!/usr/bin/env python3
 from __future__ import print_function
+
 import argparse
 import os
+import re
 import subprocess
+import sys
+
 from github import Github
 
+TEAMS = {
+    "Hypervisor & Kernel": ['hk', 'hypervisor'],
+    "OS Platform & Release": ['opr', 'platform'],
+    'Security': ['security'],
+    'Storage': ['storage'],
+    'XAPI & Network': ['xn', 'network', 'xapi'],
+}
+
+TEAM_CHOICES = list(TEAMS.keys()) + [n for ns in TEAMS.values() for n in ns]
+TEAM_ALIASES = dict([(alias, team) for team, aliases in TEAMS.items() for alias in aliases]
+                    + [(team, team) for team in TEAMS])
+
+
+def to_gh_team(maintainer: str):
+    return 'xcp-ng-rpms/' + re.sub(r'\W+', '-', maintainer.lower())
+
+
 def main():
-    parser = argparse.ArgumentParser(description='Creates a git repository in current directory for RPM spec file and sources')
+    parser = argparse.ArgumentParser(description='Creates a git repository in current directory for RPM spec file and'
+                                                 ' sources')
     parser.add_argument('name', help='name of repository')
     parser.add_argument('--local',
                         help='do not create github repository',
                         action='store_true')
+    parser.add_argument('-m', '--maintainer', choices=TEAM_CHOICES, help='Configure code owners to this team')
     parser.add_argument('token_file',
                         help='file containing github authentication token',
                         nargs='?',
                         default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'github.txt'))
     args = parser.parse_args()
 
+    if args.maintainer is None:
+        print('error: please assign a team with --maintainer', file=sys.stderr)
+        exit(1)
+    maintainer = TEAM_ALIASES[args.maintainer]
+
     if not args.local:
         # authenticate to Github
-        token = open(args.token_file).read().strip()
+        if os.access(args.token_file, os.R_OK):
+            with open(args.token_file) as f:
+                token = f.read().strip()
+        elif 'GITHUB_TOKEN' in os.environ:
+            token = os.environ['GITHUB_TOKEN']
+        else:
+            print('error: please provide a github access token', file=sys.stderr)
+            exit(1)
         g = Github(token)
 
         # create repository
@@ -39,12 +74,13 @@ Make sure to have `git-lfs` installed before cloning. It is used for handling so
 Branches:
 * `master` contains sources for the next `x.y` release of XCP-ng.
 * `x.y` (e.g. `7.5`) contains sources for the `x.y` release of XCP-ng, with their bugfix and/or security updates.
-* `XS-x.y` (e.g. `XS-7.5`), when they exist, contain sources from the `x.y` release of XenServer, with trademarked or copyrighted material stripped if needed.
+* `XS-x.y` (e.g. `XS-7.5`), when they exist, contain sources from the `x.y` release of XenServer, with trademarked
+  or copyrighted material stripped if needed.
 
 Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
 """ % args.name
     if args.local:
-        subprocess.check_call(['git', 'init', args.name])
+        subprocess.check_call(['git', 'init', '-b', 'master', args.name])
         subprocess.check_call(['git', '-C', args.name,
                                'remote', 'add', 'origin',
                                'https://github.com/xcp-ng-rpms/%s.git' % args.name])
@@ -57,9 +93,21 @@ Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
         # only set if pushInsteadOf was not configured
         subprocess.check_call(['git', 'remote', 'set-url', '--push', 'origin',
                                'git@github.com:xcp-ng-rpms/%s.git' % args.name])
-    open('.gitignore', 'w').write(gitignore)
+    with open('.gitignore', 'w') as f:
+        f.write(gitignore)
     subprocess.check_call(['git', 'add', '.gitignore'])
-    open('README.md', 'w').write(readme)
+    with open('README.md', 'w') as f:
+        f.write(readme)
+    subprocess.check_call(['git', 'add', 'README.md'])
+    # create the CODEOWNERS file
+    content = f"* {to_gh_team(maintainer)}\n"
+    # make sure the platform team is owner of all the repositories
+    if maintainer != TEAM_ALIASES['platform']:
+        content += f"* {to_gh_team(TEAM_ALIASES['platform'])}\n"
+    os.mkdir('.github')
+    with open('.github/CODEOWNERS', 'w') as f:
+        f.write(content)
+    subprocess.check_call(['git', 'add', '.github'])
     subprocess.check_call(['git', 'add', 'README.md'])
     subprocess.check_call(['git', 'lfs', 'install'])
     subprocess.check_call(['git', 'lfs', 'track', '*.gz'])
