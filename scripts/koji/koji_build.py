@@ -84,9 +84,13 @@ def xcpng_version(target):
         raise Exception(f"Can't find XCP-ng version in {target}")
     return xcpng_version_match.group(1)
 
-def find_next_build_number(package, spec, target, test_build_id):
+def find_next_release(package, spec, target, test_build_id, pre_build_id):
+    assert test_build_id is not None or pre_build_id is not None
     builds = subprocess.check_output(['koji', 'list-builds', '--quiet', '--package', package]).decode().splitlines()
-    base_nvr = f'{package}-{spec.version}-{spec.release}.0.{test_build_id}.'
+    if test_build_id:
+        base_nvr = f'{package}-{spec.version}-{spec.release}.0.{test_build_id}.'
+    else:
+        base_nvr = f'{package}-{spec.version}-{spec.release}~{pre_build_id}.'
     # use a regex to match %{macro} without actually expanding the macros
     base_nvr_re = (
         re.escape(re.sub('%{.+}', "@@@", base_nvr)).replace('@@@', '.*')
@@ -95,11 +99,15 @@ def find_next_build_number(package, spec, target, test_build_id):
     )
     build_matches = [re.match(base_nvr_re, b) for b in builds]
     build_nbs = [int(m.group(1)) for m in build_matches if m]
-    return sorted(build_nbs)[-1] + 1 if build_nbs else 1
+    build_nb = sorted(build_nbs)[-1] + 1 if build_nbs else 1
+    if test_build_id:
+        return f'{spec.release}.0.{test_build_id}.{build_nb}'
+    else:
+        return f'{spec.release}~{pre_build_id}.{build_nb}'
 
-def push_bumped_release(git_repo, target, test_build_id):
+def push_bumped_release(git_repo, target, test_build_id, pre_build_id):
     t = datetime.now().strftime(TIME_FORMAT)
-    branch = f'koji/test/{test_build_id}/{t}'
+    branch = f'koji/test/{test_build_id or pre_build_id}/{t}'
     with cd(git_repo), local_branch(branch):
         spec_paths = subprocess.check_output(['git', 'ls-files', 'SPECS/*.spec']).decode().splitlines()
         assert len(spec_paths) == 1
@@ -107,8 +115,7 @@ def push_bumped_release(git_repo, target, test_build_id):
         with Specfile(spec_path) as spec:
             # find the next build number
             package = Path(spec_path).stem
-            next_build_nb = find_next_build_number(package, spec, target, test_build_id)
-            spec.release = f'{spec.release}.0.{test_build_id}.{next_build_nb}'
+            spec.release = find_next_release(package, spec, target, test_build_id, pre_build_id)
         subprocess.check_call(['git', 'commit', '--quiet', '-m', "bump release for test build", spec_path])
         subprocess.check_call(['git', 'push', 'origin', f'HEAD:refs/heads/{branch}'])
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
@@ -129,6 +136,11 @@ def main():
         metavar="ID",
         help='Run a test build. The provided ID will be used to build a unique release tag.',
     )
+    parser.add_argument(
+        '--pre-build',
+        metavar="ID",
+        help='Run a pre build. The provided ID will be used to build a unique release tag.',
+    )
     args = parser.parse_args()
 
     target = args.target
@@ -136,8 +148,15 @@ def main():
     is_scratch = args.scratch
     is_nowait = args.nowait
     test_build = args.test_build
+    pre_build = args.pre_build
+    if test_build and pre_build:
+        logging.error("--pre-build and --test-build can't be used together")
+        exit(1)
     if test_build is not None and re.match('^[a-zA-Z0-9]{1,16}$', test_build) is None:
         logging.error("The test build id must be 16 characters long maximum and only contain letters and digits")
+        exit(1)
+    if pre_build is not None and re.match('^[a-zA-Z0-9]{1,16}$', pre_build) is None:
+        logging.error("The pre build id must be 16 characters long maximum and only contain letters and digits")
         exit(1)
 
     if len(git_repos) > 1 and is_scratch:
@@ -150,8 +169,8 @@ def main():
     if len(git_repos) == 1:
         clean_old_branches(git_repos[0])
         remote, hash = get_repo_and_commit_info(git_repos[0])
-        if test_build:
-            hash = push_bumped_release(git_repos[0], target, test_build)
+        if test_build or pre_build:
+            hash = push_bumped_release(git_repos[0], target, test_build, pre_build)
         url = koji_url(remote, hash)
         command = (
             ['koji', 'build']
@@ -166,8 +185,8 @@ def main():
         for d in git_repos:
             clean_old_branches(d)
             remote, hash = get_repo_and_commit_info(d)
-            if test_build:
-                hash = push_bumped_release(d, target, test_build)
+            if test_build or pre_build:
+                hash = push_bumped_release(d, target, test_build, pre_build)
             urls.append(koji_url(remote, hash))
         command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ') + (['--nowait'] if is_nowait else [])
         print('  '.join(command), flush=True)
