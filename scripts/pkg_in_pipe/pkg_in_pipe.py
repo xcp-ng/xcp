@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import io
 import os
 from datetime import datetime
 from textwrap import dedent
@@ -21,6 +22,33 @@ def print_header(out):
         </head>
         <body class="bg-gray-400 text-center">
         '''), file=out)
+
+def print_plane_warning(out):
+    print(dedent('''
+        <div class="px-3 py-3">
+        <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+            <p class="font-bold">Plane malfunction</p>
+            <p>The issues could not be retrieved from plane.</p>
+        </div>
+        </div>'''), file=out)
+
+def print_koji_error(out):
+    print(dedent('''
+        <div class="px-3 py-3">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Koji error!</strong>
+            <span class="block sm:inline">The report can't be generated.</span>
+        </div>
+        </div>'''), file=out)
+
+def print_generic_error(out):
+    print(dedent('''
+        <div class="px-3 py-3">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Unknown error!</strong>
+            <span class="block sm:inline">The report can't be generated.</span>
+        </div>
+        </div>'''), file=out)
 
 def print_footer(out, generated_info):
     now = datetime.now()
@@ -95,26 +123,38 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-# open koji session
-config = koji.read_config("koji")
-session = koji.ClientSession('https://kojihub.xcp-ng.org', config)
-session.ssl_login(config['cert'], None, config['serverca'])
-
 # load the issues from plane, so we can search for the plane card related to a build
 resp = requests.get(
     'https://project.vates.tech/api/v1/workspaces/vates-global/projects/43438eec-1335-4fc2-8804-5a4c32f4932d/issues/',
     headers={'x-api-key': args.plane_token},
 )
-project_issues = resp.json()
+issues = resp.json().get('results', [])
 
+ok = True
 with open(args.output, 'w') as out:
     print_header(out)
+    if not issues:
+        print_plane_warning(out)
     tags = [f'v{v}-{p}' for v in ['8.2', '8.3'] for p in ['incoming', 'ci', 'testing', 'candidates', 'lab']]
-    for tag in tags:
-        print_table_header(out, tag)
-        for build in session.listTagged(tag):
-            build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={build['build_id']}'
-            build_issues = [i for i in project_issues['results'] if f'href="{build_url}"' in i['description_html']]
-            print_table_line(out, build['nvr'], build_url, build_issues, build['owner_name'])
-        print_table_footer(out)
-    print_footer(out, args.generated_info)
+    temp_out = io.StringIO()
+    try:
+        # open koji session
+        config = koji.read_config("koji")
+        session = koji.ClientSession('https://kojihub.xcp-ng.org', config)
+        session.ssl_login(config['cert'], None, config['serverca'])
+        for tag in tags:
+            print_table_header(temp_out, tag)
+            for build in session.listTagged(tag):
+                build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={build['build_id']}'
+                build_issues = [i for i in issues if f'href="{build_url}"' in i['description_html']]
+                print_table_line(temp_out, build['nvr'], build_url, build_issues, build['owner_name'])
+            print_table_footer(temp_out)
+        out.write(temp_out.getvalue())
+    except koji.GenericError:
+        print_koji_error(out)
+        raise
+    except Exception:
+        print_generic_error(out)
+        raise
+    finally:
+        print_footer(out, args.generated_info)
