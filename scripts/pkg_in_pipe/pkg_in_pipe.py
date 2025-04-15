@@ -144,7 +144,7 @@ with open(args.output, 'w') as out:
         session.ssl_login(config['cert'], None, config['serverca'])
         for tag in tags:
             print_table_header(temp_out, tag)
-            for build in session.listTagged(tag):
+            for build in sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True):
                 build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={build['build_id']}'
                 build_issues = [i for i in issues if f'href="{build_url}"' in i['description_html']]
                 print_table_line(temp_out, build['nvr'], build_url, build_issues, build['owner_name'])
