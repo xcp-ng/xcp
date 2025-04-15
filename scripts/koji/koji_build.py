@@ -2,8 +2,8 @@
 import argparse
 import logging
 import os
-import subprocess
 import re
+import subprocess
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -18,7 +18,7 @@ TIME_FORMAT = '%Y-%m-%d-%H-%M-%S'
 
 @contextmanager
 def cd(dir):
-    """Change to a directory temporarily. To be used in a with statement"""
+    """Change to a directory temporarily. To be used in a with statement."""
     prevdir = os.getcwd()
     os.chdir(dir)
     try:
@@ -32,14 +32,9 @@ def check_dir(dirpath):
     return dirpath
 
 def check_git_repo(dirpath):
+    """check that the working copy is a working directory and is clean."""
     with cd(dirpath):
-        # check that the working copy is a working directory and is clean
-        try:
-            subprocess.check_call(['git', 'diff-index', '--quiet',  'HEAD', '--'])
-            ret = True
-        except:
-            ret = False
-    return ret
+        return subprocess.run(['git', 'diff-index', '--quiet', 'HEAD', '--']).returncode == 0
 
 def get_repo_and_commit_info(dirpath):
     with cd(dirpath):
@@ -74,7 +69,9 @@ def is_old_branch(b):
 def clean_old_branches(git_repo):
     with cd(git_repo):
         subprocess.check_call(['git', 'fetch'])
-        remote_branches = subprocess.check_output(['git', 'branch', '-rl', 'origin/koji/test/*/*']).decode().splitlines()
+        remote_branches = (
+            subprocess.check_output(['git', 'branch', '-rl', 'origin/koji/test/*/*']).decode().splitlines()
+        )
         remote_branches = [b.strip()[len('origin/'):] for b in remote_branches]
         old_branches = [b for b in remote_branches if is_old_branch(b)]
         if old_branches:
@@ -86,16 +83,20 @@ def xcpng_version(target):
     if xcpng_version_match is None:
         raise Exception(f"Can't find XCP-ng version in {target}")
     return xcpng_version_match.group(1)
-    
+
 def find_next_build_number(package, spec, target, test_build_id):
     builds = subprocess.check_output(['koji', 'list-builds', '--quiet', '--package', package]).decode().splitlines()
     base_nvr = f'{package}-{spec.version}-{spec.release}.0.{test_build_id}.'
     # use a regex to match %{macro} without actually expanding the macros
-    base_nvr_re = re.escape(re.sub('%{.+}', "@@@", base_nvr)).replace('@@@', '.*') + r'(\d+)' + re.escape(f'.xcpng{xcpng_version(target)}')
+    base_nvr_re = (
+        re.escape(re.sub('%{.+}', "@@@", base_nvr)).replace('@@@', '.*')
+        + r'(\d+)'
+        + re.escape(f'.xcpng{xcpng_version(target)}')
+    )
     build_matches = [re.match(base_nvr_re, b) for b in builds]
     build_nbs = [int(m.group(1)) for m in build_matches if m]
     return sorted(build_nbs)[-1] + 1 if build_nbs else 1
-    
+
 def push_bumped_release(git_repo, target, test_build_id):
     t = datetime.now().strftime(TIME_FORMAT)
     branch = f'koji/test/{test_build_id}/{t}'
@@ -114,14 +115,20 @@ def push_bumped_release(git_repo, target, test_build_id):
         return commit
 
 def main():
-    parser = argparse.ArgumentParser(description='Build a package or chain-build several from local git repos for RPM sources')
+    parser = argparse.ArgumentParser(
+        description='Build a package or chain-build several from local git repos for RPM sources'
+    )
     parser.add_argument('target', help='Koji target for the build')
     parser.add_argument('git_repos', nargs='+',
                         help='local path to one or more git repositories. If several are provided, '
                              'a chained build will be started in the order of the arguments')
     parser.add_argument('--scratch', action="store_true", help='Perform scratch build')
     parser.add_argument('--nowait', action="store_true", help='Do not wait for the build to end')
-    parser.add_argument('--test-build', metavar="ID", help='Run a test build. The provided ID will be used to build a unique release tag.')
+    parser.add_argument(
+        '--test-build',
+        metavar="ID",
+        help='Run a test build. The provided ID will be used to build a unique release tag.',
+    )
     args = parser.parse_args()
 
     target = args.target
@@ -146,7 +153,12 @@ def main():
         if test_build:
             hash = push_bumped_release(git_repos[0], target, test_build)
         url = koji_url(remote, hash)
-        command = ['koji', 'build'] + (['--scratch'] if is_scratch else []) + [target, url] + (['--nowait'] if is_nowait else [])
+        command = (
+            ['koji', 'build']
+            + (['--scratch'] if is_scratch else [])
+            + [target, url]
+            + (['--nowait'] if is_nowait else [])
+        )
         print('  '.join(command), flush=True)
         subprocess.check_call(command)
     else:
@@ -157,7 +169,7 @@ def main():
             if test_build:
                 hash = push_bumped_release(d, target, test_build)
             urls.append(koji_url(remote, hash))
-        command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ') +  (['--nowait'] if is_nowait else [])
+        command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ') + (['--nowait'] if is_nowait else [])
         print('  '.join(command), flush=True)
         subprocess.check_call(command)
 
