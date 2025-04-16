@@ -32,10 +32,10 @@ def diff(current, expected):
 
 
 def set_gh_code_owners(repo: Repository, rpm, force: bool) -> bool:
-    owners = {rpm['maintainer']}
+    owners = [rpm['maintainer']]
     # make sure the platform team is owner of all the repositories
     if 'OS Platform & Release' not in owners:
-        owners.add('OS Platform & Release')
+        owners.append('OS Platform & Release')
     content = ''
     for owner in owners:
         content += f'* {to_gh_team(owner)}\n'
