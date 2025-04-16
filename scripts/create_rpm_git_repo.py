@@ -23,7 +23,7 @@ TEAM_ALIASES = dict([(alias, team) for team, aliases in TEAMS.items() for alias 
 
 
 def to_gh_team(maintainer: str):
-    return 'xcp-ng-rpms/' + re.sub(r'\W+', '-', maintainer.lower())
+    return '@xcp-ng-rpms/' + re.sub(r'\W+', '-', maintainer.lower())
 
 
 def main():

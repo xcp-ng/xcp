@@ -16,7 +16,7 @@ CODEOWNERS = '.github/CODEOWNERS'
 
 
 def to_gh_team(maintainer: str):
-    return 'xcp-ng-rpms/' + re.sub(r'\W+', '-', maintainer.lower())
+    return '@xcp-ng-rpms/' + re.sub(r'\W+', '-', maintainer.lower())
 
 
 def diff(current, expected):
