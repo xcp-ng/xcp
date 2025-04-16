@@ -7,13 +7,21 @@ import os
 import re
 import sys
 from contextlib import suppress
+from subprocess import check_output
 
 import github as gh
 from github.Repository import Repository
 
 BRANCHES = ['master']
 CODEOWNERS = '.github/CODEOWNERS'
+USER = check_output(['git', 'config', 'user.name']).decode().strip()
+EMAIL = check_output(['git', 'config', 'user.email']).decode().strip()
+assert USER and len(USER.splitlines()) == 1
+assert EMAIL and len(EMAIL.splitlines()) == 1
+MESSAGE = f"""Set team owner
 
+Signed-off-by: {USER} <{EMAIL}>
+"""
 
 def to_gh_team(maintainer: str):
     return '@xcp-ng-rpms/' + re.sub(r'\W+', '-', maintainer.lower())
@@ -42,17 +50,23 @@ def set_gh_code_owners(repo: Repository, rpm, force: bool) -> bool:
     ok = True
     for branch in BRANCHES:
         current_content = None
+        current_content_sha = ''
         with suppress(gh.UnknownObjectException):
-            current_content = repo.get_contents(CODEOWNERS, branch).decoded_content.decode()  # type: ignore
-        if current_content is None or (force and current_content != content):
-            action = "creating" if current_content is None else "updating"
-            print(f'{action} {pkg} CODEOWNERS file in {branch}...', end='', file=sys.stderr)
-            repo.create_file(CODEOWNERS, "set team owner", content, branch)
+            gh_content = repo.get_contents(CODEOWNERS, branch)
+            current_content_sha = gh_content.sha  # type: ignore
+            current_content = gh_content.decoded_content.decode()  # type: ignore
+        if current_content is None:
+            print(f'creating {pkg} CODEOWNERS file in {branch}...', end='', file=sys.stderr, flush=True)
+            repo.create_file(CODEOWNERS, MESSAGE, content, branch)
+            print(' done', file=sys.stderr)
+        elif force and current_content != content:
+            print(f'updating {pkg} CODEOWNERS file in {branch}...', end='', file=sys.stderr, flush=True)
+            repo.update_file(CODEOWNERS, MESSAGE, content, current_content_sha, branch)
             print(' done', file=sys.stderr)
         elif current_content == content:
-            print(f'{pkg} CODEOWNERS is already OK in {branch}', file=sys.stderr)
+            print(f'{pkg} CODEOWNERS is already OK in {branch}', file=sys.stderr, flush=True)
         else:
-            print(f'error: {pkg} CODEOWNERS is not synced in {branch}', file=sys.stderr)
+            print(f'error: {pkg} CODEOWNERS is not synced in {branch}', file=sys.stderr, flush=True)
             print(diff(current_content, content))
             ok = False
     return ok
