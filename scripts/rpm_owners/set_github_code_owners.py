@@ -44,9 +44,7 @@ def set_gh_code_owners(repo: Repository, rpm, force: bool) -> bool:
     # make sure the platform team is owner of all the repositories
     if 'OS Platform & Release' not in owners:
         owners.append('OS Platform & Release')
-    content = ''
-    for owner in owners:
-        content += f'* {to_gh_team(owner)}\n'
+    content = '* ' + ' '.join(to_gh_team(owner) for owner in owners) + '\n'
     ok = True
     for branch in BRANCHES:
         current_content = None
