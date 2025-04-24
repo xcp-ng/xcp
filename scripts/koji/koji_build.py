@@ -36,6 +36,11 @@ def check_git_repo(dirpath):
     with cd(dirpath):
         return subprocess.run(['git', 'diff-index', '--quiet', 'HEAD', '--']).returncode == 0
 
+def check_commit_is_available_remotely(dirpath, hash):
+    with cd(dirpath):
+        if not subprocess.check_output(['git', 'branch', '-r', '--contains', hash]):
+            raise Exception("The current commit is not available in the remote repository")
+
 def get_repo_and_commit_info(dirpath):
     with cd(dirpath):
         remote = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url']).decode().strip()
@@ -171,6 +176,8 @@ def main():
         remote, hash = get_repo_and_commit_info(git_repos[0])
         if test_build or pre_build:
             hash = push_bumped_release(git_repos[0], target, test_build, pre_build)
+        else:
+            check_commit_is_available_remotely(git_repos[0], hash)
         url = koji_url(remote, hash)
         command = (
             ['koji', 'build']
@@ -187,6 +194,8 @@ def main():
             remote, hash = get_repo_and_commit_info(d)
             if test_build or pre_build:
                 hash = push_bumped_release(d, target, test_build, pre_build)
+            else:
+                check_commit_is_available_remotely(d, hash)
             urls.append(koji_url(remote, hash))
         command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ') + (['--nowait'] if is_nowait else [])
         print('  '.join(command), flush=True)
