@@ -3,11 +3,14 @@
 import argparse
 import io
 import os
+import re
 from datetime import datetime
 from textwrap import dedent
 
+import github
 import koji
 import requests
+from github.PullRequest import PullRequest
 
 
 def print_header(out):
@@ -75,6 +78,9 @@ def print_table_header(out, tag):
                             Cards
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Pull Requests
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             By
                         </th>
                     </tr>
@@ -90,7 +96,7 @@ def print_table_footer(out):
         </div>
         '''), file=out)
 
-def print_table_line(out, build, link, issues, by):
+def print_table_line(out, build, link, issues, by, prs: list[PullRequest]):
     issues_content = '\n'.join([
         f'''<li>
                 <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -98,6 +104,14 @@ def print_table_line(out, build, link, issues, by):
                 </a>
             </li>'''
         for i in issues
+    ])
+    prs_content = '\n'.join([
+        f'''<li>
+                <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                   href="{pr.html_url}">{pr.title} #{pr.number}
+                </a>
+            </li>'''
+        for pr in prs
     ])
     print(f'''    
         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
@@ -110,10 +124,20 @@ def print_table_line(out, build, link, issues, by):
                 </ul>
             </td>
             <td class="px-6 py-4">
+                <ul>
+                {prs_content}
+                </ul>
+            </td>
+            <td class="px-6 py-4">
                 {by}
             </td>
         </tr>
         ''', file=out)  # nopep8
+
+def parse_source(source: str) -> tuple[str, str]:
+    groups = re.match(r'git\+https://github\.com/([\w-]+/[\w-]+)(|\.git)#([0-9a-f]{40})', source)
+    assert groups is not None, "can't match the source to the expected github url"
+    return (groups[1], groups[3])
 
 parser = argparse.ArgumentParser(description='Generate a report of the packages in the pipe')
 parser.add_argument('output', nargs='?', help='Report output path', default='report.html')
@@ -130,6 +154,9 @@ resp = requests.get(
 )
 issues = resp.json().get('results', [])
 
+# connect to github
+gh = github.Github(auth=github.Auth.Token(os.environ['GITHUB_TOKEN']))
+
 ok = True
 with open(args.output, 'w') as out:
     print_header(out)
@@ -144,10 +171,15 @@ with open(args.output, 'w') as out:
         session.ssl_login(config['cert'], None, config['serverca'])
         for tag in tags:
             print_table_header(temp_out, tag)
-            for build in sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True):
-                build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={build['build_id']}'
+            for tagged in sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True):
+                build = session.getBuild(tagged['build_id'])
+                prs: list[PullRequest] = []
+                if build['source'] is not None:
+                    (repo, sha) = parse_source(build['source'])
+                    prs = list(gh.get_repo(repo).get_commit(sha).get_pulls())
+                build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
                 build_issues = [i for i in issues if f'href="{build_url}"' in i['description_html']]
-                print_table_line(temp_out, build['nvr'], build_url, build_issues, build['owner_name'])
+                print_table_line(temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs)
             print_table_footer(temp_out)
         out.write(temp_out.getvalue())
     except koji.GenericError:
