@@ -6,10 +6,13 @@ import os
 import re
 from datetime import datetime
 from textwrap import dedent
+from typing import cast
 
+import diskcache
 import github
 import koji
 import requests
+from github.Commit import Commit
 from github.PullRequest import PullRequest
 
 
@@ -170,14 +173,35 @@ def find_previous_build_commit(session, build_tag, build):
         return None
     return parse_source(previous_build['source'])[1]
 
-def find_pull_requests(gh, repo, start_sha, end_sha):
-    """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
-    prs = set()
+def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
+    """
+    List the commits in the range [start_sha,end_sha[.
+
+    Note: these are the commits listed by Github starting from start_sha up to end_sha excluded.
+    A commit older that the end_sha commit and added by a merge commit won't appear in this list.
+    """
+    cache_key = f'commits-{start_sha}-{end_sha}'
+    if cache_key in CACHE:
+        return cast(list[Commit], CACHE[cache_key])
+    commits = []
     for commit in gh.get_repo(repo).get_commits(start_sha):
         if commit.sha == end_sha:
             break
-        for pr in commit.get_pulls():
-            prs.add(pr)
+        commits.append(commit)
+    CACHE[cache_key] = commits
+    return commits
+
+def find_pull_requests(gh, repo, start_sha, end_sha):
+    """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
+    prs = set()
+    for commit in find_commits(gh, repo, start_sha, end_sha):
+        cache_key = f'commit-prs-{commit.sha}'
+        if cache_key in CACHE:
+            prs.update(cast(list[PullRequest], CACHE[cache_key]))
+        else:
+            commit_prs = list(commit.get_pulls())
+            CACHE[cache_key] = commit_prs
+            prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
 
 parser = argparse.ArgumentParser(description='Generate a report of the packages in the pipe')
@@ -186,7 +210,10 @@ parser.add_argument('--generated-info', help="Add this message about the generat
 parser.add_argument(
     '--plane-token', help="The token used to access the plane api", default=os.environ.get('PLANE_TOKEN')
 )
+parser.add_argument('--cache', help="The cache path", default="/tmp/pkg_in_pipe.cache")
 args = parser.parse_args()
+
+CACHE = diskcache.Cache(args.cache)
 
 # load the issues from plane, so we can search for the plane card related to a build
 resp = requests.get(
