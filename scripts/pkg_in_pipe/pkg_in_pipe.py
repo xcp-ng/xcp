@@ -150,6 +150,36 @@ def filter_issues(issues, urls):
     return res
 
 
+TAG_ORDER = ['incoming', 'ci', 'testing', 'candidates', 'updates', 'base', 'lab']
+
+def tag_priority(tag):
+    # drop the version in the tag — v8.3-incoming -> incoming
+    tag = tag.split('-')[-1]
+    return TAG_ORDER.index(tag)
+
+def find_previous_build_commit(session, build_tag, build):
+    """Find the previous build in an higher priority koji tag and return its commit."""
+    tagged = session.listTagged(build_tag, package=build['package_name'], inherit=True)
+    tagged = sorted(tagged, key=lambda t: tag_priority(t['tag_name']))
+    build_tag_priority = tag_priority(build_tag)
+    tagged = [t for t in tagged if tag_priority(t['tag_name']) > build_tag_priority]
+    if not tagged:
+        return None
+    previous_build = session.getBuild(tagged[0]['build_id'])
+    if not previous_build.get('source'):
+        return None
+    return parse_source(previous_build['source'])[1]
+
+def find_pull_requests(gh, repo, start_sha, end_sha):
+    """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
+    prs = set()
+    for commit in gh.get_repo(repo).get_commits(start_sha):
+        if commit.sha == end_sha:
+            break
+        for pr in commit.get_pulls():
+            prs.add(pr)
+    return sorted(prs, key=lambda p: p.number, reverse=True)
+
 parser = argparse.ArgumentParser(description='Generate a report of the packages in the pipe')
 parser.add_argument('output', nargs='?', help='Report output path', default='report.html')
 parser.add_argument('--generated-info', help="Add this message about the generation in the report")
@@ -185,9 +215,10 @@ with open(args.output, 'w') as out:
             for tagged in sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True):
                 build = session.getBuild(tagged['build_id'])
                 prs: list[PullRequest] = []
+                previous_build_sha = find_previous_build_commit(session, tag, build)
                 if build['source'] is not None:
                     (repo, sha) = parse_source(build['source'])
-                    prs = list(gh.get_repo(repo).get_commit(sha).get_pulls())
+                    prs = find_pull_requests(gh, repo, sha, previous_build_sha)
                 build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
                 build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
                 print_table_line(temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs)
