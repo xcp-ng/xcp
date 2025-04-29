@@ -13,6 +13,7 @@ import github
 import koji
 import requests
 from github.Commit import Commit
+from github.GithubException import BadCredentialsException
 from github.PullRequest import PullRequest
 
 
@@ -35,6 +36,15 @@ def print_plane_warning(out):
         <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
             <p class="font-bold">Plane malfunction</p>
             <p>The issues could not be retrieved from plane.</p>
+        </div>
+        </div>'''), file=out)
+
+def print_github_warning(out):
+    print(dedent('''
+        <div class="px-3 py-3">
+        <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+            <p class="font-bold">Github access problem</p>
+            <p>The pull requests come from the cache and may not be up to date.</p>
         </div>
         </div>'''), file=out)
 
@@ -184,11 +194,12 @@ def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
     if cache_key in CACHE:
         return cast(list[Commit], CACHE[cache_key])
     commits = []
-    for commit in gh.get_repo(repo).get_commits(start_sha):
-        if commit.sha == end_sha:
-            break
-        commits.append(commit)
-    CACHE[cache_key] = commits
+    if gh:
+        for commit in gh.get_repo(repo).get_commits(start_sha):
+            if commit.sha == end_sha:
+                break
+            commits.append(commit)
+        CACHE[cache_key] = commits
     return commits
 
 def find_pull_requests(gh, repo, start_sha, end_sha):
@@ -198,7 +209,7 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
         cache_key = f'commit-prs-{commit.sha}'
         if cache_key in CACHE:
             prs.update(cast(list[PullRequest], CACHE[cache_key]))
-        else:
+        elif gh:
             commit_prs = list(commit.get_pulls())
             CACHE[cache_key] = commit_prs
             prs.update(commit_prs)
@@ -209,6 +220,9 @@ parser.add_argument('output', nargs='?', help='Report output path', default='rep
 parser.add_argument('--generated-info', help="Add this message about the generation in the report")
 parser.add_argument(
     '--plane-token', help="The token used to access the plane api", default=os.environ.get('PLANE_TOKEN')
+)
+parser.add_argument(
+    '--github-token', help="The token used to access the Github api", default=os.environ.get('GITHUB_TOKEN')
 )
 parser.add_argument('--cache', help="The cache path", default="/tmp/pkg_in_pipe.cache")
 args = parser.parse_args()
@@ -223,13 +237,22 @@ resp = requests.get(
 issues = resp.json().get('results', [])
 
 # connect to github
-gh = github.Github(auth=github.Auth.Token(os.environ['GITHUB_TOKEN']))
+if args.github_token:
+    gh = github.Github(auth=github.Auth.Token(args.github_token))
+    try:
+        gh.get_repo('xcp-ng/xcp')  # check that the token is valid
+    except BadCredentialsException:
+        gh = None
+else:
+    gh = None
 
 ok = True
 with open(args.output, 'w') as out:
     print_header(out)
     if not issues:
         print_plane_warning(out)
+    if not gh:
+        print_github_warning(out)
     tags = [f'v{v}-{p}' for v in ['8.2', '8.3'] for p in ['incoming', 'ci', 'testing', 'candidates', 'lab']]
     temp_out = io.StringIO()
     try:
