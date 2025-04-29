@@ -2,11 +2,13 @@
 
 import argparse
 import io
+import json
 import os
 import re
 from datetime import datetime
 from textwrap import dedent
 from typing import cast
+from urllib.request import urlopen
 
 import diskcache
 import github
@@ -94,7 +96,10 @@ def print_table_header(out, tag):
                             Pull Requests
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            By
+                            Built by
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Maintained by
                         </th>
                     </tr>
                 </thead>
@@ -109,7 +114,7 @@ def print_table_footer(out):
         </div>
         '''), file=out)
 
-def print_table_line(out, build, link, issues, by, prs: list[PullRequest]):
+def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest], maintained_by):
     issues_content = '\n'.join([
         f'''<li>
                 <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -142,7 +147,10 @@ def print_table_line(out, build, link, issues, by, prs: list[PullRequest]):
                 </ul>
             </td>
             <td class="px-6 py-4">
-                {by}
+                {built_by}
+            </td>
+            <td class="px-6 py-4">
+                {maintained_by if maintained_by is not None else ''}
             </td>
         </tr>
         ''', file=out)  # nopep8
@@ -246,6 +254,10 @@ if args.github_token:
 else:
     gh = None
 
+# load the packages maintainers
+with urlopen('https://github.com/xcp-ng/xcp/raw/refs/heads/master/scripts/rpm_owners/packages.json') as f:
+    PACKAGES = json.load(f)
+
 ok = True
 with open(args.output, 'w') as out:
     print_header(out)
@@ -265,13 +277,17 @@ with open(args.output, 'w') as out:
             for tagged in sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True):
                 build = session.getBuild(tagged['build_id'])
                 prs: list[PullRequest] = []
+                maintained_by = None
                 previous_build_sha = find_previous_build_commit(session, tag, build)
                 if build['source'] is not None:
                     (repo, sha) = parse_source(build['source'])
                     prs = find_pull_requests(gh, repo, sha, previous_build_sha)
+                    maintained_by = PACKAGES.get(repo.split('/')[-1], {}).get('maintainer')
                 build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
                 build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
-                print_table_line(temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs)
+                print_table_line(
+                    temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs, maintained_by
+                )
             print_table_footer(temp_out)
         out.write(temp_out.getvalue())
     except koji.GenericError:
