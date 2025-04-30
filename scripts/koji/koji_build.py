@@ -73,11 +73,10 @@ def is_old_branch(b):
 
 def clean_old_branches(git_repo):
     with cd(git_repo):
-        subprocess.check_call(['git', 'fetch'])
-        remote_branches = (
-            subprocess.check_output(['git', 'branch', '-rl', 'origin/koji/test/*/*']).decode().splitlines()
-        )
-        remote_branches = [b.strip()[len('origin/'):] for b in remote_branches]
+        remote_branches = [
+            line.split()[-1] for line in subprocess.check_output(['git', 'ls-remote']).decode().splitlines()
+        ]
+        remote_branches = [b for b in remote_branches if b.startswith('refs/heads/koji/test/')]
         old_branches = [b for b in remote_branches if is_old_branch(b)]
         if old_branches:
             print("removing outdated remote branch(es)", flush=True)
