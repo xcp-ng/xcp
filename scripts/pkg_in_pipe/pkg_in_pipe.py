@@ -214,11 +214,20 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
     """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
     prs = set()
     for commit in find_commits(gh, repo, start_sha, end_sha):
-        cache_key = f'commit-prs-{commit.sha}'
+        cache_key = f'commit-prs-2-{commit.sha}'
         if cache_key in CACHE:
             prs.update(cast(list[PullRequest], CACHE[cache_key]))
         elif gh:
             commit_prs = list(commit.get_pulls())
+            if not commit_prs:
+                # github is not properly reporting some PRs. Try to workaround that problem by getting
+                # the PR number from the commit message
+                group = re.match(
+                    r'Merge pull request #(\d+) from ' + repo.split('/')[0] + '/', commit.commit.message
+                )
+                if group:
+                    pr = gh.get_repo(repo).get_pull(int(group[1]))
+                    prs.add(pr)
             CACHE[cache_key] = commit_prs
             prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
