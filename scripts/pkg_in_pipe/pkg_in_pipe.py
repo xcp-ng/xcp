@@ -117,7 +117,7 @@ def print_table_footer(out):
 def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest], maintained_by):
     issues_content = '\n'.join([
         f'''<li>
-                <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                    href="https://project.vates.tech/vates-global/browse/XCPNG-{i['sequence_id']}/">XCPNG-{i['sequence_id']}
                 </a>
             </li>'''
@@ -125,7 +125,7 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
     ])
     prs_content = '\n'.join([
         f'''<li>
-                <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                    href="{pr.html_url}">{pr.title} #{pr.number}
                 </a>
             </li>'''
@@ -134,7 +134,7 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
     print(f'''    
         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{link}">{build}</a>
+                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{link}">{build}</a>
             </th>
             <td class="px-6 py-4">
                 <ul>
