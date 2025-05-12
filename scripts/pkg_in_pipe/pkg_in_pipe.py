@@ -78,27 +78,27 @@ def print_footer(out, generated_info):
 
 def print_table_header(out, tag):
     print(dedent(f'''
-        <div class="px-3 py-3">
+        <div class="px-3 py-2">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <caption class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                <caption class="px-5 py-3 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                     {tag}
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3 w-1/6">
+                        <th scope="col" class="px-6 py-2 w-1/6">
                             Build
                         </th>
-                        <th scope="col" class="px-6 py-3 w-1/6">
+                        <th scope="col" class="px-6 py-2 w-1/6">
                             Cards
                         </th>
-                        <th scope="col" class="px-6 py-3 w-2/6">
+                        <th scope="col" class="px-6 py-2 w-2/6">
                             Pull Requests
                         </th>
-                        <th scope="col" class="px-6 py-3 w-1/6">
+                        <th scope="col" class="px-6 py-2 w-1/6">
                             Built by
                         </th>
-                        <th scope="col" class="px-6 py-3 w-1/6">
+                        <th scope="col" class="px-6 py-2 w-1/6">
                             Maintained by
                         </th>
                     </tr>
@@ -133,23 +133,23 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
     ])
     print(f'''    
         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{link}">{build}</a>
             </th>
-            <td class="px-6 py-4">
+            <td class="px-6 py-2">
                 <ul>
                 {issues_content}
                 </ul>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-2">
                 <ul>
                 {prs_content}
                 </ul>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-2">
                 {built_by}
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-2">
                 {maintained_by if maintained_by is not None else ''}
             </td>
         </tr>
