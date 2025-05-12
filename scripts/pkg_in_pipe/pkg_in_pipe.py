@@ -238,11 +238,15 @@ args = parser.parse_args()
 CACHE = diskcache.Cache(args.cache)
 
 # load the issues from plane, so we can search for the plane card related to a build
-resp = requests.get(
-    'https://project.vates.tech/api/v1/workspaces/vates-global/projects/43438eec-1335-4fc2-8804-5a4c32f4932d/issues/',
-    headers={'x-api-key': args.plane_token},
-)
-issues = resp.json().get('results', [])
+try:
+    resp = requests.get(
+        'https://project.vates.tech/api/v1/workspaces/vates-global/projects/'
+        '43438eec-1335-4fc2-8804-5a4c32f4932d/issues/',
+        headers={'x-api-key': args.plane_token},
+    )
+    issues = resp.json().get('results', [])
+except Exception:
+    issues = []
 
 # connect to github
 if args.github_token:
