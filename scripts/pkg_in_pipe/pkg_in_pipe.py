@@ -86,19 +86,19 @@ def print_table_header(out, tag):
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-2 w-1/6">
+                        <th scope="col" class="px-6 py-2 w-[25.5%]">
                             Build
                         </th>
-                        <th scope="col" class="px-6 py-2 w-1/6">
+                        <th scope="col" class="px-6 py-2 w-[12.5%]">
                             Cards
                         </th>
-                        <th scope="col" class="px-6 py-2 w-2/6">
+                        <th scope="col" class="px-6 py-2 w-[37.5%]">
                             Pull Requests
                         </th>
-                        <th scope="col" class="px-6 py-2 w-1/6">
+                        <th scope="col" class="px-6 py-2 w-[12.5%]">
                             Built by
                         </th>
-                        <th scope="col" class="px-6 py-2 w-1/6">
+                        <th scope="col" class="px-6 py-2 w-[12.5%]">
                             Maintained by
                         </th>
                     </tr>
@@ -133,7 +133,7 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
     ])
     print(f'''    
         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate">
                 <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{link}">{build}</a>
             </th>
             <td class="px-6 py-2">
