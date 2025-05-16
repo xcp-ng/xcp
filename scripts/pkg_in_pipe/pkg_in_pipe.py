@@ -89,11 +89,11 @@ def print_table_header(out, tag):
                         <th scope="col" class="px-6 py-2 w-[25.5%]">
                             Build
                         </th>
-                        <th scope="col" class="px-6 py-2 w-[12.5%]">
-                            Cards
-                        </th>
                         <th scope="col" class="px-6 py-2 w-[37.5%]">
                             Pull Requests
+                        </th>
+                        <th scope="col" class="px-6 py-2 w-[12.5%]">
+                            Cards
                         </th>
                         <th scope="col" class="px-6 py-2 w-[12.5%]">
                             Built by
@@ -114,6 +114,12 @@ def print_table_footer(out):
         </div>
         '''), file=out)
 
+def issue_has_link(issue, url):
+    return f'href="{url}"' in issue['description_html'] or f'href="{url}/"' in issue['description_html']
+
+def issues_have_link(issues, url):
+    return any([issue_has_link(issue, url) for issue in issues])
+
 def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest], maintained_by):
     issues_content = '\n'.join([
         f'''<li>
@@ -127,30 +133,30 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
         f'''<li>
                 <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                    href="{pr.html_url}">{pr.title} #{pr.number}
-                </a>
+                </a> {"" if issues_have_link(issues, pr.html_url) else "⚠️"}
             </li>'''
         for pr in prs
     ])
     print(f'''    
         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
             <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate">
-                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{link}">{build}</a>
+                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{link}">{build}</a> {"" if issues_have_link(issues, link) else "⚠️"}
             </th>
-            <td class="px-6 py-2">
-                <ul>
-                {issues_content}
-                </ul>
-            </td>
             <td class="px-6 py-2">
                 <ul>
                 {prs_content}
                 </ul>
             </td>
             <td class="px-6 py-2">
+                <ul>
+                {issues_content}
+                </ul>
+            </td>
+            <td class="px-6 py-2">
                 {built_by}
             </td>
             <td class="px-6 py-2">
-                {maintained_by if maintained_by is not None else ''}
+                {maintained_by if maintained_by is not None else "⚠️"}
             </td>
         </tr>
         ''', file=out)  # nopep8
