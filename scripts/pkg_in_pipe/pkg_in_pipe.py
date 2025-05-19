@@ -27,6 +27,16 @@ def print_header(out):
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>XCP-ng Package Update</title>
+            <style>
+                .tooltip{
+                  visibility: hidden;
+                  position: absolute;
+                }
+                .has-tooltip:hover .tooltip {
+                  visibility: visible;
+                  z-index: 100;
+                }
+            </style>
             <script src="https://cdn.tailwindcss.com"></script>
         </head>
         <body class="bg-gray-400 text-center">
@@ -129,18 +139,21 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
             </li>'''
         for i in issues
     ])
+    warn_pr = "<span class='has-tooltip'><span class='tooltip p-1 rounded bg-blue-500 text-gray-900'>Pull request not listed in any of the related cards</span>⚠️</span>"  # noqa
     prs_content = '\n'.join([
         f'''<li>
                 <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                    href="{pr.html_url}">{pr.title} #{pr.number}
-                </a> {"" if issues_have_link(issues, pr.html_url) else "⚠️"}
+                </a> {"" if issues_have_link(issues, pr.html_url) else warn_pr}
             </li>'''
         for pr in prs
     ])
+    warn_build = "<span class='has-tooltip'><span class='tooltip p-1 rounded bg-blue-500 text-gray-900'>Build not listed in any of the related cards</span>⚠️</span>"  # noqa
+    warn_maintainer = "<span class='has-tooltip'><span class='tooltip p-1 rounded bg-blue-500 text-gray-900'>Maintainer information missing</span>⚠️</span>"  # noqa
     print(f'''    
         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
             <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate">
-                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{link}">{build}</a> {"" if issues_have_link(issues, link) else "⚠️"}
+                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="{link}">{build}</a> {"" if issues_have_link(issues, link) else warn_build}
             </th>
             <td class="px-6 py-2">
                 <ul>
@@ -156,7 +169,7 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
                 {built_by}
             </td>
             <td class="px-6 py-2">
-                {maintained_by if maintained_by is not None else "⚠️"}
+                {maintained_by if maintained_by is not None else warn_maintainer}
             </td>
         </tr>
         ''', file=out)  # nopep8
