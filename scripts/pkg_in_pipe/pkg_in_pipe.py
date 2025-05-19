@@ -187,9 +187,11 @@ def tag_priority(tag):
 def find_previous_build_commit(session, build_tag, build):
     """Find the previous build in an higher priority koji tag and return its commit."""
     tagged = session.listTagged(build_tag, package=build['package_name'], inherit=True)
-    tagged = sorted(tagged, key=lambda t: tag_priority(t['tag_name']))
+    tagged = sorted(tagged, key=lambda t: (tag_priority(t['tag_name']), -t['build_id']))
     build_tag_priority = tag_priority(build_tag)
-    tagged = [t for t in tagged if tag_priority(t['tag_name']) > build_tag_priority]
+    tagged = [
+        t for t in tagged if tag_priority(t['tag_name']) > build_tag_priority and t['build_id'] < build['build_id']
+    ]
     if not tagged:
         return None
     previous_build = session.getBuild(tagged[0]['build_id'])
