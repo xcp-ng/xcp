@@ -22,6 +22,14 @@ The official documentation is available at https://docs.xcp-ng.org
 - **Fully Open Source:** no paywalls or complicated licenses, all the features are free
 - **Pro supported:** want to run in production? XCP-ng is part of the [Vates VMS](https://vates.tech/) stack that got you covered from the virtualization platform to the administration & backup tools.
 
+## 🌍 Translations
+
+Status of XO Lite (and web-core - common base, it is built upon)
+
+[![Translation status](http://translate.vates.tech/widget/xen-orchestra/multi-auto.svg)](http://translate.vates.tech/engage/xen-orchestra/)
+
+[Help us translate built-in web interface in more languages!](http://translate.vates.tech/engage/xen-orchestra/)
+
 ## 📸 Screenshots
 
 ![](https://vates.tech/assets/img/misc/XOLite_Pool_dashboard_mockup_dashes_light_2.png.avif)
