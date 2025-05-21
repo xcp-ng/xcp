@@ -206,7 +206,7 @@ def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
     Note: these are the commits listed by Github starting from start_sha up to end_sha excluded.
     A commit older that the end_sha commit and added by a merge commit won't appear in this list.
     """
-    cache_key = f'commits-{start_sha}-{end_sha}'
+    cache_key = f'commits-2-{start_sha}-{end_sha}'
     if cache_key in CACHE:
         return cast(list[Commit], CACHE[cache_key])
     commits = []
@@ -215,14 +215,14 @@ def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
             if commit.sha == end_sha:
                 break
             commits.append(commit)
-        CACHE[cache_key] = commits
+        CACHE.set(cache_key, commits, expire=RETENTION_TIME)
     return commits
 
 def find_pull_requests(gh, repo, start_sha, end_sha):
     """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
     prs = set()
     for commit in find_commits(gh, repo, start_sha, end_sha):
-        cache_key = f'commit-prs-2-{commit.sha}'
+        cache_key = f'commit-prs-3-{commit.sha}'
         if cache_key in CACHE:
             prs.update(cast(list[PullRequest], CACHE[cache_key]))
         elif gh:
@@ -236,7 +236,7 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
                 if group:
                     pr = gh.get_repo(repo).get_pull(int(group[1]))
                     prs.add(pr)
-            CACHE[cache_key] = commit_prs
+            CACHE.set(cache_key, commit_prs, expire=RETENTION_TIME)
             prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
 
@@ -253,6 +253,7 @@ parser.add_argument('--cache', help="The cache path", default="/tmp/pkg_in_pipe.
 args = parser.parse_args()
 
 CACHE = diskcache.Cache(args.cache)
+RETENTION_TIME = 24 * 60 * 60  # 24 hours
 
 # load the issues from plane, so we can search for the plane card related to a build
 try:
