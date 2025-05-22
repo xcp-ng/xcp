@@ -22,14 +22,6 @@ The official documentation is available at https://docs.xcp-ng.org
 - **Fully Open Source:** no paywalls or complicated licenses, all the features are free
 - **Pro supported:** want to run in production? XCP-ng is part of the [Vates VMS](https://vates.tech/) stack that got you covered from the virtualization platform to the administration & backup tools.
 
-## 🌍 Translations
-
-Status of XO Lite (and web-core - common base, it is built upon)
-
-[![Translation status](http://translate.vates.tech/widget/xen-orchestra/multi-auto.svg)](http://translate.vates.tech/engage/xen-orchestra/)
-
-[Help us translate built-in web interface in more languages!](http://translate.vates.tech/engage/xen-orchestra/)
-
 ## 📸 Screenshots
 
 ![](https://vates.tech/assets/img/misc/XOLite_Pool_dashboard_mockup_dashes_light_2.png.avif)
@@ -40,4 +32,4 @@ Status of XO Lite (and web-core - common base, it is built upon)
 
 XCP-ng has a living community that you can join on our [forum](https://xcp-ng.org/forum/). 
 
-The project is open to [contributions](https://github.com/xcp-ng/xcp/wiki/Development-process-tour), [bug reports](https://github.com/xcp-ng/xcp/wiki/How-to-report-bugs) and you can also [host a mirror](https://github.com/xcp-ng/xcp/wiki/Mirrors) for XCP-ng.
+The project is open to [contributions](https://docs.xcp-ng.org/project/contributing/), [bug reports](https://github.com/xcp-ng/xcp/wiki/How-to-report-bugs) and you can also [host a mirror](https://github.com/xcp-ng/xcp/wiki/Mirrors) for XCP-ng.
