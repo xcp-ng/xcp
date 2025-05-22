@@ -321,7 +321,7 @@ with io.StringIO() as out:
                     if build['source'] is not None:
                         (repo, sha) = parse_source(build['source'])
                         prs = find_pull_requests(gh, repo, sha, previous_build_sha)
-                        maintained_by = PACKAGES.get(repo.split('/')[-1], {}).get('maintainer')
+                    maintained_by = PACKAGES.get(tagged['package_name'], {}).get('maintainer')
                     build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
                     build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
                     print_table_line(
