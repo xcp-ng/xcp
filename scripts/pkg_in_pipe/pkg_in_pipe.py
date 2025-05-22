@@ -293,43 +293,46 @@ else:
 with urlopen('https://github.com/xcp-ng/xcp/raw/refs/heads/master/scripts/rpm_owners/packages.json') as f:
     PACKAGES = json.load(f)
 
-ok = True
-with open(args.output, 'w') as out:
+with io.StringIO() as out:
     print_header(out)
     if not issues:
         print_plane_warning(out)
     if not gh:
         print_github_warning(out)
     tags = [f'v{v}-{p}' for v in ['8.2', '8.3'] for p in ['incoming', 'ci', 'testing', 'candidates', 'lab']]
-    temp_out = io.StringIO()
-    try:
-        # open koji session
-        config = koji.read_config("koji")
-        session = koji.ClientSession('https://kojihub.xcp-ng.org', config)
-        session.ssl_login(config['cert'], None, config['serverca'])
-        for tag in tags:
-            print_table_header(temp_out, tag)
-            for tagged in sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True):
-                build = session.getBuild(tagged['build_id'])
-                prs: list[PullRequest] = []
-                maintained_by = None
-                previous_build_sha = find_previous_build_commit(session, tag, build)
-                if build['source'] is not None:
-                    (repo, sha) = parse_source(build['source'])
-                    prs = find_pull_requests(gh, repo, sha, previous_build_sha)
-                    maintained_by = PACKAGES.get(repo.split('/')[-1], {}).get('maintainer')
-                build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
-                build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
-                print_table_line(
-                    temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs, maintained_by
-                )
-            print_table_footer(temp_out)
-        out.write(temp_out.getvalue())
-    except koji.GenericError:
-        print_koji_error(out)
-        raise
-    except Exception:
-        print_generic_error(out)
-        raise
-    finally:
-        print_footer(out, args.generated_info)
+    with io.StringIO() as temp_out:
+        try:
+            # open koji session
+            config = koji.read_config("koji")
+            session = koji.ClientSession('https://kojihub.xcp-ng.org', config)
+            session.ssl_login(config['cert'], None, config['serverca'])
+            for tag in tags:
+                print_table_header(temp_out, tag)
+                for tagged in sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True):
+                    build = session.getBuild(tagged['build_id'])
+                    prs: list[PullRequest] = []
+                    maintained_by = None
+                    previous_build_sha = find_previous_build_commit(session, tag, build)
+                    if build['source'] is not None:
+                        (repo, sha) = parse_source(build['source'])
+                        prs = find_pull_requests(gh, repo, sha, previous_build_sha)
+                        maintained_by = PACKAGES.get(repo.split('/')[-1], {}).get('maintainer')
+                    build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
+                    build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
+                    print_table_line(
+                        temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs, maintained_by
+                    )
+                print_table_footer(temp_out)
+            out.write(temp_out.getvalue())
+        except koji.GenericError:
+            print_koji_error(out)
+            raise
+        except Exception:
+            print_generic_error(out)
+            raise
+        finally:
+            print_footer(out, args.generated_info)
+
+    # write the actual output at once, in order to avoid a blank page during the processing
+    with open(args.output, 'w') as f:
+        f.write(out.getvalue())
