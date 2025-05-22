@@ -320,9 +320,14 @@ with io.StringIO() as out:
             session = koji.ClientSession('https://kojihub.xcp-ng.org', config)
             session.ssl_login(config['cert'], None, config['serverca'])
             for tag in tags:
+                tag_history = dict(
+                    (tl['build_id'], tl['create_ts'])
+                    for tl in session.queryHistory(tag=tag, active=True)['tag_listing']
+                )
                 print_table_header(temp_out, tag)
-                taggeds = sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True)
+                taggeds = session.listTagged(tag)
                 taggeds = [t for t in taggeds if t['package_name'] in args.packages or args.packages == []]
+                taggeds = sorted(taggeds, key=lambda t: (tag_history[t['build_id']], t['build_id']), reverse=True)
                 for tagged in taggeds:
                     build = session.getBuild(tagged['build_id'])
                     prs: list[PullRequest] = []
