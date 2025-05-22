@@ -32,4 +32,4 @@ The official documentation is available at https://docs.xcp-ng.org
 
 XCP-ng has a living community that you can join on our [forum](https://xcp-ng.org/forum/). 
 
-The project is open to [contributions](https://github.com/xcp-ng/xcp/wiki/Development-process-tour), [bug reports](https://github.com/xcp-ng/xcp/wiki/How-to-report-bugs) and you can also [host a mirror](https://github.com/xcp-ng/xcp/wiki/Mirrors) for XCP-ng.
+The project is open to [contributions](https://docs.xcp-ng.org/project/contributing/), [bug reports](https://github.com/xcp-ng/xcp/wiki/How-to-report-bugs) and you can also [host a mirror](https://github.com/xcp-ng/xcp/wiki/Mirrors) for XCP-ng.
