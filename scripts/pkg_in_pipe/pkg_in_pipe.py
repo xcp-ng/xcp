@@ -127,6 +127,7 @@ def print_table_footer(out):
         '''), file=out)
 
 def issue_has_link(issue, url):
+    url = url.strip('/')
     return f'href="{url}"' in issue['description_html'] or f'href="{url}/"' in issue['description_html']
 
 def issues_have_link(issues, url):
@@ -135,10 +136,10 @@ def issues_have_link(issues, url):
 def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest], maintained_by):
     issues_content = '\n'.join([
         f'''<li>
-                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                <a target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline {'italic' if issue_has_link(i, link) else ''}"
                    href="https://project.vates.tech/vates-global/browse/XCPNG-{i['sequence_id']}/">XCPNG-{i['sequence_id']}
                 </a>
-            </li>'''
+            </li>'''  # noqa
         for i in issues
     ])
     warn_pr = "<span class='has-tooltip'><span class='tooltip p-1 rounded bg-blue-500 text-gray-900'>Pull request not listed in any of the related cards</span>⚠️</span>"  # noqa
@@ -185,8 +186,7 @@ def filter_issues(issues, urls):
     res = []
     for issue in issues:
         for url in urls:
-            url = url.strip('/')
-            if f'href="{url}"' in issue['description_html'] or f'href="{url}/"' in issue['description_html']:
+            if issue_has_link(issue, url):
                 res.append(issue)
                 break
     return res
