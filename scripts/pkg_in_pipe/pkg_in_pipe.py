@@ -203,7 +203,7 @@ def find_previous_build_commit(session, build_tag, build):
     tagged = sorted(tagged, key=lambda t: (tag_priority(t['tag_name']), -t['build_id']))
     build_tag_priority = tag_priority(build_tag)
     tagged = [
-        t for t in tagged if tag_priority(t['tag_name']) > build_tag_priority and t['build_id'] < build['build_id']
+        t for t in tagged if tag_priority(t['tag_name']) >= build_tag_priority and t['build_id'] < build['build_id']
     ]
     if not tagged:
         return None
