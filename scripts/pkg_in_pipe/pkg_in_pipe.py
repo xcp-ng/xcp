@@ -78,10 +78,12 @@ def print_generic_error(out):
         </div>
         </div>'''), file=out)
 
-def print_footer(out, generated_info):
+def print_footer(out, started_at, generated_info):
     now = datetime.now()
+    duration = now - started_at
     print(dedent(f'''
-        Last generated at {now}. {generated_info or ''}
+        Generated on {now.date()} at {now.time().strftime("%H:%M:%S")} (took {duration.seconds} seconds).
+        {generated_info or ''}
         </body>
         </html>
         '''), file=out)
@@ -253,6 +255,9 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
             prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
 
+
+started_at = datetime.now()
+
 parser = argparse.ArgumentParser(description='Generate a report of the packages in the pipe')
 parser.add_argument('output', nargs='?', help='Report output path', default='report.html')
 parser.add_argument('--generated-info', help="Add this message about the generation in the report")
@@ -331,7 +336,7 @@ with io.StringIO() as out:
             print_generic_error(out)
             raise
         finally:
-            print_footer(out, args.generated_info)
+            print_footer(out, started_at, args.generated_info)
 
     # write the actual output at once, in order to avoid a blank page during the processing
     with open(args.output, 'w') as f:
