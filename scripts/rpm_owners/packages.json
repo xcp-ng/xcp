@@ -459,6 +459,10 @@
         "maintainer": "OS Platform & Release",
         "package": "dstat"
     },
+    "dummypkg": {
+        "maintainer": "OS Platform & Release",
+        "package": "dummypkg"
+    },
     "dwarves": {
         "maintainer": "OS Platform & Release",
         "package": "dwarves"
@@ -635,6 +639,10 @@
         "maintainer": "OS Platform & Release",
         "package": "git"
     },
+    "gl-manpages": {
+        "maintainer": "OS Platform & Release",
+        "package": "gl-manpages"
+    },
     "glib-networking": {
         "maintainer": "OS Platform & Release",
         "package": "glib-networking"
@@ -782,6 +790,10 @@
     "htop": {
         "maintainer": "OS Platform & Release",
         "package": "htop"
+    },
+    "http-nbd-transfer": {
+        "maintainer": "Storage",
+        "package": "http-nbd-transfer"
     },
     "hwdata": {
         "maintainer": "OS Platform & Release",
@@ -1394,6 +1406,10 @@
     "linuxconsoletools": {
         "maintainer": "OS Platform & Release",
         "package": "linuxconsoletools"
+    },
+    "livepatch-build-tools": {
+        "maintainer": "OS Platform & Release",
+        "package": "livepatch-build-tools"
     },
     "lksctp-tools": {
         "maintainer": "OS Platform & Release",
@@ -2027,6 +2043,10 @@
         "maintainer": "OS Platform & Release",
         "package": "pyparsing"
     },
+    "pyproject-rpm-macros": {
+        "maintainer": "OS Platform & Release",
+        "package": "pyproject-rpm-macros"
+    },
     "pyserial": {
         "maintainer": "OS Platform & Release",
         "package": "pyserial"
@@ -2042,6 +2062,10 @@
     "python-IPy": {
         "maintainer": "OS Platform & Release",
         "package": "python-IPy"
+    },
+    "python-aiocontextvars": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-aiocontextvars"
     },
     "python-astroid": {
         "maintainer": "OS Platform & Release",
@@ -2071,6 +2095,14 @@
         "maintainer": "OS Platform & Release",
         "package": "python-chardet"
     },
+    "python-charset-normalizer": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-charset-normalizer"
+    },
+    "python-contextvars": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-contextvars"
+    },
     "python-cryptography": {
         "maintainer": "OS Platform & Release",
         "package": "python-cryptography"
@@ -2082,6 +2114,10 @@
     "python-demjson": {
         "maintainer": "OS Platform & Release",
         "package": "python-demjson"
+    },
+    "python-deprecated": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-deprecated"
     },
     "python-dns": {
         "maintainer": "OS Platform & Release",
@@ -2098,6 +2134,10 @@
     "python-idna": {
         "maintainer": "OS Platform & Release",
         "package": "python-idna"
+    },
+    "python-immutables": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-immutables"
     },
     "python-iniparse": {
         "maintainer": "OS Platform & Release",
@@ -2151,6 +2191,10 @@
         "maintainer": "OS Platform & Release",
         "package": "python-mock"
     },
+    "python-opentelemetry": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-opentelemetry"
+    },
     "python-packaging": {
         "maintainer": "OS Platform & Release",
         "package": "python-packaging"
@@ -2199,6 +2243,10 @@
         "maintainer": "OS Platform & Release",
         "package": "python-pyudev"
     },
+    "python-requests": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-requests"
+    },
     "python-rpm-generators": {
         "maintainer": "OS Platform & Release",
         "package": "python-rpm-generators"
@@ -2219,9 +2267,21 @@
         "maintainer": "OS Platform & Release",
         "package": "python-tempita"
     },
+    "python-typing-extensions": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-typing-extensions"
+    },
     "python-urlgrabber": {
         "maintainer": "OS Platform & Release",
         "package": "python-urlgrabber"
+    },
+    "python-urllib3": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-urllib3"
+    },
+    "python-wheel": {
+        "maintainer": "OS Platform & Release",
+        "package": "python-wheel"
     },
     "python-wrapt": {
         "maintainer": "OS Platform & Release",
@@ -2238,6 +2298,10 @@
     "python3-coverage": {
         "maintainer": "OS Platform & Release",
         "package": "python3-coverage"
+    },
+    "python3-docutils": {
+        "maintainer": "OS Platform & Release",
+        "package": "python3-docutils"
     },
     "python3-mock": {
         "maintainer": "OS Platform & Release",
@@ -2270,6 +2334,10 @@
     "qemu": {
         "maintainer": "Hypervisor & Kernel",
         "package": "qemu"
+    },
+    "qemu-dp": {
+        "maintainer": "Storage",
+        "package": "qemu-dp"
     },
     "qlogic-fastlinq": {
         "maintainer": "Hypervisor & Kernel",
@@ -2406,6 +2474,10 @@
     "sm": {
         "maintainer": "Storage",
         "package": "sm"
+    },
+    "sm-core-libs": {
+        "maintainer": "Storage",
+        "package": "sm-core-libs"
     },
     "smartmontools": {
         "maintainer": "OS Platform & Release",
