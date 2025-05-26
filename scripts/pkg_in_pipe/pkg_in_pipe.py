@@ -94,7 +94,7 @@ def print_table_header(out, tag):
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <caption class="px-5 py-3 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                    {tag}
+                    <a name="{tag}" href="#{tag}">{tag}</a>
                 </caption>
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
