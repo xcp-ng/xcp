@@ -268,10 +268,19 @@ parser.add_argument(
     '--github-token', help="The token used to access the Github api", default=os.environ.get('GITHUB_TOKEN')
 )
 parser.add_argument('--cache', help="The cache path", default="/tmp/pkg_in_pipe.cache")
+parser.add_argument(
+    '--tag', '-t', dest='tags', help="The koji tags to include in the report", action='append', default=[]
+)
+parser.add_argument(
+    '--package', '-p', dest='packages', help="The packages to include in the report", action='append', default=[]
+)
 args = parser.parse_args()
 
 CACHE = diskcache.Cache(args.cache)
 RETENTION_TIME = 24 * 60 * 60  # 24 hours
+
+DEFAULT_TAGS = [f'v{v}-{p}' for v in ['8.2', '8.3'] for p in ['incoming', 'ci', 'testing', 'candidates', 'lab']]
+tags = args.tags or DEFAULT_TAGS
 
 # load the issues from plane, so we can search for the plane card related to a build
 try:
@@ -304,7 +313,6 @@ with io.StringIO() as out:
         print_plane_warning(out)
     if not gh:
         print_github_warning(out)
-    tags = [f'v{v}-{p}' for v in ['8.2', '8.3'] for p in ['incoming', 'ci', 'testing', 'candidates', 'lab']]
     with io.StringIO() as temp_out:
         try:
             # open koji session
@@ -313,7 +321,9 @@ with io.StringIO() as out:
             session.ssl_login(config['cert'], None, config['serverca'])
             for tag in tags:
                 print_table_header(temp_out, tag)
-                for tagged in sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True):
+                taggeds = sorted(session.listTagged(tag), key=lambda build: int(build['build_id']), reverse=True)
+                taggeds = [t for t in taggeds if t['package_name'] in args.packages or args.packages == []]
+                for tagged in taggeds:
                     build = session.getBuild(tagged['build_id'])
                     prs: list[PullRequest] = []
                     maintained_by = None
