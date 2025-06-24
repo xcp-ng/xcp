@@ -30,15 +30,6 @@ except ImportError:
     PLATFORM_VERSION = "9999"  # failsafe value, assume dev build
 
 
-def version_lt(a, b):
-    for ai, bi in zip_longest(a, b, fillvalue=0):
-        if ai < bi:
-            return True
-        elif ai > bi:
-            return False
-    return False
-
-
 def parse_share_link(share_link):
     """
     Parses the Nextcloud/Owncloud share link to extract the base URL and token.
@@ -84,7 +75,7 @@ def upload(base_url, folder_token, password, file):
     ]
     # fmt: on
     platform_version = tuple(int(x) for x in PLATFORM_VERSION.split("."))
-    if version_lt(platform_version, (3, 3, 0)):
+    if platform_version < (3, 3, 0):
         # On 8.2, the default curl ciphersuite setting isn't compatible with most servers.
         # Use the same default ciphersuites as 8.3 /root/.curlrc.
         curl_args += [
