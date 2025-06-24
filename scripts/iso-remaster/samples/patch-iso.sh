@@ -27,6 +27,9 @@ SED_COMMANDS+=(-e "s@^@@")
 # # get an answerfile over the network
 # SED_COMMANDS+=(-e "s@/vmlinuz@/vmlinuz install answerfile=http://pxe/configs/preset.xml@")
 
+# # get an answerfile from the ISO's install.img (also needs to copy preset.xml in patch-installimg.sh)
+# SED_COMMANDS+=(-e "s@/vmlinuz@/vmlinuz install answerfile=file:///preset.xml@")
+
 sed -i "${SED_COMMANDS[@]}" \
     "$ISODIR"/*/*/grub*.cfg \
     "$ISODIR"/boot/isolinux/isolinux.cfg

@@ -6,6 +6,9 @@ set -ex
 # unpacked rootfs to modify
 INSTALLIMG="$1"
 
+# # Include an answerfile (also needs answerfile=file:// in patch-iso.sh)
+# cp ~/my/preset.xml "$INSTALLIMG/"
+
 # # Include a locally-modified version of the installer for testing
 # HOSTINSTALLER=$HOME/src/xs/host-installer
 # if [ -r "$HOSTINSTALLER"/Makefile ]; then
