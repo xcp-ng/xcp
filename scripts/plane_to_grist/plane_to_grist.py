@@ -200,7 +200,7 @@ grist_post('tables/States/records', {'records': [{'fields': filter_columns(state
 grist_post('tables/Issues/data/delete', [r['id'] for r in grist_get('tables/Issues/records')])
 grist_post('tables/IssueLabels/data/delete', [r['id'] for r in grist_get('tables/IssueLabels/records')])
 grist_post('tables/IssueAssignees/data/delete', [r['id'] for r in grist_get('tables/IssueAssignees/records')])
-for subissues in make_chunks(issues, 10):
+for subissues in make_chunks(issues, 100):
     grist_post('tables/Issues/records', {'records': [{'fields': filter_columns(issue)} for issue in subissues]})
     issue_label_records = [
         {'fields': {'issue': issue['id'], 'label': label}} for issue in subissues for label in issue['labels']
