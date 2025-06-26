@@ -36,7 +36,12 @@ def grist_get(path):
     except Exception as e:
         print(resp.json())
         raise e
-    return resp.json()[path]
+    data = resp.json()
+    basename = os.path.basename(path)
+    if basename in data:
+        return data[basename]
+    else:
+        return data
 
 def grist_post(path, data):
     resp = requests.post(f'{GRIST_URL}/{path}', headers={'Authorization': f'Bearer {args.grist_token}'}, json=data)
@@ -177,11 +182,24 @@ if 'ModuleIssues' not in existing_tables:
         ]
     }]})
 
-grist_post('tables/Labels/records', {'records': [{'fields': filter_columns(label)} for label in labels]})
-grist_post('tables/Modules/records', {'records': [{'fields': filter_columns(module)} for module in modules]})
-grist_post('tables/Types/records', {'records': [{'fields': filter_columns(type)} for type in types]})
-grist_post('tables/States/records', {'records': [{'fields': filter_columns(state)} for state in states]})
+grist_post('tables/Members/data/delete', [r['id'] for r in grist_get('tables/Members/records')])
 grist_post('tables/Members/records', {'records': [{'fields': filter_columns(member)} for member in members]})
+
+grist_post('tables/Labels/data/delete', [r['id'] for r in grist_get('tables/Labels/records')])
+grist_post('tables/Labels/records', {'records': [{'fields': filter_columns(label)} for label in labels]})
+
+grist_post('tables/Modules/data/delete', [r['id'] for r in grist_get('tables/Modules/records')])
+grist_post('tables/Modules/records', {'records': [{'fields': filter_columns(module)} for module in modules]})
+
+grist_post('tables/Types/data/delete', [r['id'] for r in grist_get('tables/Types/records')])
+grist_post('tables/Types/records', {'records': [{'fields': filter_columns(type)} for type in types]})
+
+grist_post('tables/States/data/delete', [r['id'] for r in grist_get('tables/States/records')])
+grist_post('tables/States/records', {'records': [{'fields': filter_columns(state)} for state in states]})
+
+grist_post('tables/Issues/data/delete', [r['id'] for r in grist_get('tables/Issues/records')])
+grist_post('tables/IssueLabels/data/delete', [r['id'] for r in grist_get('tables/IssueLabels/records')])
+grist_post('tables/IssueAssignees/data/delete', [r['id'] for r in grist_get('tables/IssueAssignees/records')])
 for subissues in make_chunks(issues, 10):
     grist_post('tables/Issues/records', {'records': [{'fields': filter_columns(issue)} for issue in subissues]})
     issue_label_records = [
@@ -204,6 +222,8 @@ for subissues in make_chunks(issues, 10):
                 'records': issue_assignee_records
             },
         )
+
+grist_post('tables/ModuleIssues/data/delete', [r['id'] for r in grist_get('tables/ModuleIssues/records')])
 grist_post(
     'tables/ModuleIssues/records',
     {'records': [{'fields': filter_columns(module_issue)} for module_issue in module_issues]},
