@@ -1,0 +1,259 @@
+#! /usr/bin/env python3
+
+import argparse
+from collections import namedtuple,  OrderedDict
+import csv
+import logging
+import os
+import rpm                      # type: ignore
+import sys
+import tempfile
+from typing import Iterable, Iterator, Literal, Sequence
+
+import repoquery
+
+ARCH = "x86_64"
+XCP_VERSION = "8.3"
+FILTER_UPSTREAM = False
+
+def evr_format(evr: tuple[str, str, str] | None | Literal['=']) -> str:
+    if evr == "=":              # dirty special case
+        return evr
+    if evr is None:
+        return "-"
+    return (f"{evr[0]}:" if evr[0] != "0" else "") + "-".join(evr[1:])
+
+# Filters an iterator of (n, e, v, r) for newest evr of each `n`.
+# Older versions are allowed to appear before the newer ones.
+def filter_best_evr(nevrs: Iterable[tuple[str, str, str, str]]
+                    ) -> Iterator[tuple[str, str, str, str]]:
+    best: dict[str, tuple[str, str, str]] = {}
+    for (n, e, v, r) in nevrs:
+        if n not in best or rpm.labelCompare(best[n], (e, v, r)) < 0:
+            best[n] = (e, v, r)
+            yield (n, e, v, r)
+        # else (e, v, r) is older than a previously-seen version, drop
+
+def collect_data_xcpng() -> OrderedDict:
+    xcp_sets = OrderedDict()
+    for (label, sections) in (("released", ['base', 'updates']),
+                              ("candidates", ["candidates"]),
+                              ("testing", ["testing"]),
+                              ("ci", ["ci"]),
+                              ("incoming", ["incoming"]),
+                              #("ydi1", ["ydi1"]),
+                              ("dtt1", ["dtt1"]),
+                              ):
+        with (tempfile.NamedTemporaryFile() as dnfconf,
+              tempfile.TemporaryDirectory() as yumrepod):
+
+            repoquery.setup_xcpng_yum_repos(yum_repo_d=yumrepod,
+                                            sections=sections,
+                                            bin_arch=None,
+                                            version=XCP_VERSION)
+            repoquery.dnf_setup(dnf_conf=dnfconf.name, yum_repo_d=yumrepod)
+            #repoquery.fill_srpm_binrpms_cache()
+
+            logging.debug("get all XCP-ng %s SRPMs", label)
+            xcp_srpms = {nevr for nevr in repoquery.all_srpms()
+                         if not FILTER_UPSTREAM or not repoquery.is_pristine_upstream(nevr)}
+
+            xcp_sets[label] = {
+                n: (e, v, r)
+                for (n, e, v, r)
+                in filter_best_evr(repoquery.rpm_parse_nevr(nevr, f".xcpng{XCP_VERSION}")
+                                   for nevr in xcp_srpms)}
+
+        logging.info(f"{label}: {len(xcp_sets[label])}")
+
+    return xcp_sets
+
+def collect_data_xs8():
+    with (tempfile.NamedTemporaryFile() as dnfconf,
+          tempfile.TemporaryDirectory() as yumrepod):
+
+        repoquery.setup_xs8_yum_repos(yum_repo_d=yumrepod,
+                                      sections=['base', 'normal'],
+                                      )
+        repoquery.dnf_setup(dnf_conf=dnfconf.name, yum_repo_d=yumrepod)
+        logging.debug("fill cache with XS info")
+        repoquery.fill_srpm_binrpms_cache()
+
+        logging.debug("get all XS SRPMs")
+        xs8_srpms = {nevr for nevr in repoquery.all_srpms()
+                     if not FILTER_UPSTREAM or not repoquery.is_pristine_upstream(nevr)}
+        xs8_rpms_sources = {nevr for nevr in repoquery.SRPM_BINRPMS_CACHE.keys()
+                            if not FILTER_UPSTREAM or not repoquery.is_pristine_upstream(nevr)}
+
+        xs8_srpms_set = {n: (e, v, r)
+                         for (n, e, v, r)
+                         in filter_best_evr(repoquery.rpm_parse_nevr(nevr, f".xs8")
+                                            for nevr in xs8_srpms)}
+        xs8_rpms_sources_set = {n: (e, v, r)
+                                for (n, e, v, r)
+                                in filter_best_evr(repoquery.rpm_parse_nevr(nevr, f".xs8")
+                                                   for nevr in xs8_rpms_sources)}
+
+    logging.info(f"xs8 src: {len(xs8_srpms_set)}")
+    logging.info(f"xs8 bin: {len(xs8_rpms_sources_set)}")
+
+    return (xs8_srpms_set, xs8_rpms_sources_set)
+
+def collect_data_xs8ea():
+    with (tempfile.NamedTemporaryFile() as dnfconf,
+          tempfile.TemporaryDirectory() as yumrepod):
+
+        repoquery.setup_xs8_yum_repos(yum_repo_d=yumrepod,
+                                      sections=['earlyaccess'],
+                                      )
+        repoquery.dnf_setup(dnf_conf=dnfconf.name, yum_repo_d=yumrepod)
+        logging.debug("fill cache with XS EA info")
+        repoquery.fill_srpm_binrpms_cache()
+
+        logging.debug("get all XS EA SRPMs")
+        xs8ea_srpms = {nevr for nevr in repoquery.all_srpms()
+                       if not FILTER_UPSTREAM or not repoquery.is_pristine_upstream(nevr)}
+
+        xs8ea_srpms_set = {n: (e, v, r)
+                           for (n, e, v, r)
+                           in filter_best_evr(repoquery.rpm_parse_nevr(nevr, f".xs8")
+                                              for nevr in xs8ea_srpms)}
+
+    logging.info(f"xs8 EA src: {len(xs8ea_srpms_set)}")
+
+    return xs8ea_srpms_set
+
+def read_package_status_metadata():
+    with open('package_status.csv', newline='') as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=';', quotechar='|')
+        headers = next(csvreader)
+        assert headers == ["SRPM_name", "status", "comment"], f"unexpected headers {headers!r}"
+        PackageStatus = namedtuple("PackageStatus", headers[1:]) # type: ignore[misc]
+        return {row[0]: PackageStatus(*row[1:])
+                for row in csvreader}
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', '--verbose', action='count', default=0)
+    args = parser.parse_args()
+    if args.verbose > 2:
+        args.verbose = 2
+
+    loglevel = {0: logging.WARNING,
+                1: logging.INFO,
+                2: logging.DEBUG,
+                }[args.verbose]
+    logging.basicConfig(format='[%(levelname)s] %(message)s', level=loglevel)
+
+    PACKAGE_STATUS = read_package_status_metadata()
+
+    # collect data from repos
+    # ... xcp-ng
+    xcp_sets = collect_data_xcpng()
+    # ... xs8
+    (xs8_srpms_set, xs8_rpms_sources_set) = collect_data_xs8()
+    # ... xs8 earlyaccess
+    xs8ea_srpms_set = collect_data_xs8ea()
+
+    # ... collect
+
+    all_srpms = set(xs8_srpms_set.keys()) | xs8_rpms_sources_set.keys() | xs8ea_srpms_set.keys()
+    for label, srpms in xcp_sets.items():
+        all_srpms |= srpms.keys()
+
+    logging.info(f"all: {len(all_srpms)}")
+
+    # output
+
+    with open(f"repo-status-{XCP_VERSION}.html", "w") as outfile:
+        print('<!DOCTYPE html>', file=outfile)
+        print(f'''
+        <html>
+          <head>
+            <title>XCP-ng {XCP_VERSION} RPM flow</title>
+            <link rel="stylesheet" href="style.css" />
+          </head>
+          <body>
+            <table>
+              <tr class="header">
+                <th rowspan="2">package
+                <th class="xs" colspan="3">XenServer 8
+                <th class="xcp" colspan="{len(xcp_sets)}">XCP-ng {XCP_VERSION}
+              </tr>
+        ''', file=outfile)
+        print('<tr class="header"><th class="xs">srcrpm<th class="xs">binrpm<th class="xs">EA srcrpm', file=outfile)
+        for label in xcp_sets:
+            print(f'<th class="xcp">{label}', file=outfile)
+        print(f'</tr>', file=outfile)
+
+        for srpm in sorted(all_srpms):
+            xs_ver_src = xs8_srpms_set.get(srpm, None)
+            xsea_ver_src: tuple[str, str, str] | None | Literal["="]
+            xsea_ver_src = xs8ea_srpms_set.get(srpm, None)
+            if xs_ver_src and xsea_ver_src == xs_ver_src:
+                xsea_ver_src = "=" # don't overload with useless info # FIXME
+            xs_ver_bin = xs8_rpms_sources_set.get(srpm, None)
+            xcp_vers = {label: xcp_sets[label].get(srpm, None)
+                        for label in xcp_sets}
+
+            srpm_status = PACKAGE_STATUS.get(srpm, None)
+
+            if srpm_status:
+                tooltip = srpm_status.comment
+            else:
+                tooltip = ""
+
+            if srpm_status and srpm_status.status == "ignored":
+                row_classes = "ignored"
+            elif all(ver is None for ver in xcp_vers.values()) and xs_ver_bin is None:
+                row_classes = "notused"
+            else:
+                row_classes = ""
+
+            # XS source
+            xss_classes = "xs"
+            if srpm in xs8_rpms_sources_set and srpm not in xs8_srpms_set:
+                xss_classes += " nosource"
+
+            # XS binary
+            xsb_classes = "xs"
+            if xs_ver_bin and xs_ver_src != xs_ver_bin:
+                xsb_classes += " nosource"
+
+            print(f'<tr title="{tooltip}" class="{row_classes}"><td class="pkgname">{srpm}'
+                  f'<td class="{xss_classes}">{evr_format(xs_ver_src)}'
+                  f'<td class="{xsb_classes}">{evr_format(xs_ver_bin)}',
+                  f'<td>{evr_format(xsea_ver_src)}',
+                  file=outfile)
+
+            # XCP-ng
+            ref_xs_ver = xs_ver_bin if xs_ver_bin else xs_ver_src
+            for label in xcp_sets:
+                xcp_ver = xcp_vers[label]
+                xcp_ver_str = evr_format(xcp_ver)
+                classes = "xcp"
+                if repoquery.is_pristine_upstream(xcp_ver_str):
+                    classes += " upstream"
+                if not xcp_ver:
+                    pass
+                elif xcp_ver and xcp_ver == ref_xs_ver:
+                    classes += " uptodate"
+                elif not ref_xs_ver:
+                    classes += " better"
+                elif not ref_xs_ver:
+                    pass
+                elif rpm.labelCompare(xcp_ver, ref_xs_ver) < 0:
+                    classes += " outdated"
+                else: # xcp_ver > ref_xs_ver
+                    classes += " better"
+                if row_classes == "notused" and xcp_ver:
+                    classes += " unexpected"
+
+                print(f'<td class="{classes}">{xcp_ver_str}', file=outfile)
+            print(f'</tr>', file=outfile)
+        print('</table></body></html>', file=outfile)
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
