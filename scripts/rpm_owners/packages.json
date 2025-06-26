@@ -779,6 +779,10 @@
         "maintainer": "OS Platform & Release",
         "package": "hicolor-icon-theme"
     },
+    "host-installer": {
+        "maintainer": "OS Platform & Release",
+        "package": "host-installer"
+    },
     "host-upgrade-plugin": {
         "maintainer": "XAPI & Network",
         "package": "host-upgrade-plugin"
