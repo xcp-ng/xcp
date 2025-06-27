@@ -245,9 +245,7 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
             if not commit_prs:
                 # github is not properly reporting some PRs. Try to workaround that problem by getting
                 # the PR number from the commit message
-                group = re.match(
-                    r'Merge pull request #(\d+) from ' + repo.split('/')[0] + '/', commit.commit.message
-                )
+                group = re.match(r'Merge pull request #(\d+) from ', commit.commit.message)
                 if group:
                     pr = gh.get_repo(repo).get_pull(int(group[1]))
                     prs.add(pr)
