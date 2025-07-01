@@ -325,7 +325,7 @@ with io.StringIO() as out:
                 )
                 print_table_header(temp_out, tag)
                 taggeds = session.listTagged(tag)
-                taggeds = [t for t in taggeds if t['package_name'] in args.packages or args.packages == []]
+                taggeds = (t for t in taggeds if t['package_name'] in args.packages or args.packages == [])
                 taggeds = sorted(taggeds, key=lambda t: (tag_history[t['build_id']], t['build_id']), reverse=True)
                 for tagged in taggeds:
                     build = session.getBuild(tagged['build_id'])
