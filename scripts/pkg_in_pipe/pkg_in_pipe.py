@@ -222,7 +222,7 @@ def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
     A commit older that the end_sha commit and added by a merge commit won't appear in this list.
     """
     cache_key = f'commits-2-{start_sha}-{end_sha}'
-    if cache_key in CACHE:
+    if not args.re_cache and cache_key in CACHE:
         return cast(list[Commit], CACHE[cache_key])
     commits = []
     if gh:
@@ -238,7 +238,7 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
     prs = set()
     for commit in find_commits(gh, repo, start_sha, end_sha):
         cache_key = f'commit-prs-3-{commit.sha}'
-        if cache_key in CACHE:
+        if not args.re_cache and cache_key in CACHE:
             prs.update(cast(list[PullRequest], CACHE[cache_key]))
         elif gh:
             commit_prs = list(commit.get_pulls())
@@ -272,6 +272,7 @@ parser.add_argument(
 parser.add_argument(
     '--package', '-p', dest='packages', help="The packages to include in the report", action='append', default=[]
 )
+parser.add_argument('--re-cache', help="Refresh the cache", action='store_true')
 args = parser.parse_args()
 
 CACHE = diskcache.Cache(args.cache)
@@ -324,7 +325,7 @@ with io.StringIO() as out:
                 )
                 print_table_header(temp_out, tag)
                 taggeds = session.listTagged(tag)
-                taggeds = [t for t in taggeds if t['package_name'] in args.packages or args.packages == []]
+                taggeds = (t for t in taggeds if t['package_name'] in args.packages or args.packages == [])
                 taggeds = sorted(taggeds, key=lambda t: (tag_history[t['build_id']], t['build_id']), reverse=True)
                 for tagged in taggeds:
                     build = session.getBuild(tagged['build_id'])
