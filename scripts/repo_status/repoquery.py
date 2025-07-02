@@ -23,8 +23,10 @@ skip_if_unavailable=False
 """
 
 # DNF v4 adds an implicit trailing newline to --qf format, but v5 does not
-dnf_version = subprocess.check_output(['dnf', '--version'], universal_newlines=True).strip().split('.')
-if int(dnf_version[0]) >= 5:
+dnf_version = re.search(r"([0-9]+)\.[0-9.]+",
+                        subprocess.check_output(['dnf', '--version'], universal_newlines=True).splitlines()[0])
+assert dnf_version is not None
+if int(dnf_version[1]) >= 5:
     QFNL = "\n"
 else:
     QFNL = ""
