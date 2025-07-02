@@ -16,6 +16,16 @@ except ImportError:
 
 TIME_FORMAT = '%Y-%m-%d-%H-%M-%S'
 
+# target -> required branch
+PROTECTED_TARGETS = {
+    "v8.2-ci": "8.2",
+    "v8.2-fasttrack": "8.2",
+    "v8.2-incoming": "8.2",
+    "v8.3-ci": "master",
+    "v8.3-fasttrack": "master",
+    "v8.3-incoming": "master",
+}
+
 @contextmanager
 def cd(dir):
     """Change to a directory temporarily. To be used in a with statement."""
@@ -36,10 +46,23 @@ def check_git_repo(dirpath):
     with cd(dirpath):
         return subprocess.run(['git', 'diff-index', '--quiet', 'HEAD', '--']).returncode == 0
 
-def check_commit_is_available_remotely(dirpath, hash):
+def check_commit_is_available_remotely(dirpath, hash, target, warn):
     with cd(dirpath):
         if not subprocess.check_output(['git', 'branch', '-r', '--contains', hash]):
             raise Exception("The current commit is not available in the remote repository")
+        try:
+            expected_branch = PROTECTED_TARGETS.get(target)
+            if (
+                expected_branch is not None
+                and not is_remote_branch_commit(dirpath, hash, expected_branch)
+            ):
+                raise Exception(f"The current commit is not the last commit in the remote branch {expected_branch}.\n"
+                                f"This is required when using the protected target {target}.\n")
+        except Exception as e:
+            if warn:
+                print(f"warning: {e}", flush=True)
+            else:
+                raise e
 
 def get_repo_and_commit_info(dirpath):
     with cd(dirpath):
@@ -125,6 +148,13 @@ def push_bumped_release(git_repo, target, test_build_id, pre_build_id):
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
         return commit
 
+def is_remote_branch_commit(git_repo, sha, branch):
+    with cd(git_repo):
+        remote_sha = (
+            subprocess.check_output(['git', 'ls-remote', 'origin', f'refs/heads/{branch}']).decode().strip().split()[0]
+        )
+    return sha == remote_sha
+
 def main():
     parser = argparse.ArgumentParser(
         description='Build a package or chain-build several from local git repos for RPM sources'
@@ -135,6 +165,7 @@ def main():
                              'a chained build will be started in the order of the arguments')
     parser.add_argument('--scratch', action="store_true", help='Perform scratch build')
     parser.add_argument('--nowait', action="store_true", help='Do not wait for the build to end')
+    parser.add_argument('--force', action="store_true", help='Bypass sanity checks')
     parser.add_argument(
         '--test-build',
         metavar="ID",
@@ -176,7 +207,7 @@ def main():
         if test_build or pre_build:
             hash = push_bumped_release(git_repos[0], target, test_build, pre_build)
         else:
-            check_commit_is_available_remotely(git_repos[0], hash)
+            check_commit_is_available_remotely(git_repos[0], hash, None if is_scratch else target, args.force)
         url = koji_url(remote, hash)
         command = (
             ['koji', 'build']
@@ -194,7 +225,7 @@ def main():
             if test_build or pre_build:
                 hash = push_bumped_release(d, target, test_build, pre_build)
             else:
-                check_commit_is_available_remotely(d, hash)
+                check_commit_is_available_remotely(d, hash, None if is_scratch else target, args.force)
             urls.append(koji_url(remote, hash))
         command = ['koji', 'chain-build', target] + (' : '.join(urls)).split(' ') + (['--nowait'] if is_nowait else [])
         print('  '.join(command), flush=True)
