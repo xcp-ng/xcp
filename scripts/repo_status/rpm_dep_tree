@@ -1,6 +1,5 @@
 #! /usr/bin/env python3
 
-import atexit
 import logging
 import re
 import sys
@@ -18,11 +17,9 @@ def is_upstream(rpmname: str) -> bool:
         return True
     m = re.match(repoquery.RPM_NVR_SPLIT_REGEX, rpmname)
     assert m, f"{rpmname!r} does not match {repoquery.RPM_NVR_SPLIT_REGEX!r}"
-    if m.group(1) in ['systemd', 'util-linux', 'ncurses',
-                      #'xapi',
-                      'devtoolset-11-gcc', 'devtoolset-11-binutils']:
-        return True
-    return False
+    return m.group(1) in ['systemd', 'util-linux', 'ncurses',
+                          # 'xapi',
+                          'devtoolset-11-gcc', 'devtoolset-11-binutils']
 
 def main() -> int:
     logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.DEBUG)

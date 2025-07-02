@@ -70,7 +70,7 @@ failovermethod=priority
 skip_if_unavailable=False
 """
 
-def setup_xs8_yum_repos(*, yum_repo_d: str, sections: Iterable[str])-> None:
+def setup_xs8_yum_repos(*, yum_repo_d: str, sections: Iterable[str]) -> None:
     with open(os.path.join(yum_repo_d, "xs8.repo"), "w") as yumrepoconf:
         for section in sections:
             block = XS8_YUMREPO_TMPL.format(section=section)
@@ -153,7 +153,7 @@ def srpm_strip_src_rpm(srpmname: str) -> str:
     assert srpmname.endswith(SUFFIX), f"{srpmname} does not end in .src.rpm"
     nrv = srpmname[:-len(SUFFIX)]
     return nrv
- 
+
 def rpm_requires(rpmname: str) -> Sequence[str]:
     args = [
         '--disablerepo=*-src', # else requires of same-name SRPM are included
@@ -174,7 +174,7 @@ def srpm_requires(srpmname: str) -> set[str]:
     return ret
 
 def srpm_binrpms(srpmname: str) -> set[str]:
-    ret = SRPM_BINRPMS_CACHE.get(srpmname, None)
+    ret = SRPM_BINRPMS_CACHE.get(srpmname)
     if ret is None: # FIXME should not happen
         logging.error("%r not found in cache", srpmname)
         assert False
@@ -184,13 +184,11 @@ def srpm_binrpms(srpmname: str) -> set[str]:
 
 UPSTREAM_REGEX = re.compile(r'\.el[0-9]+(_[0-9]+)?(\..*|)$')
 RPM_NVR_SPLIT_REGEX = re.compile(r'^(.+)-([^-]+)-([^-]+)$')
-def is_pristine_upstream(rpmname:str) -> bool:
-    if re.search(UPSTREAM_REGEX, rpmname):
-        return True
-    return False
+def is_pristine_upstream(rpmname: str) -> bool:
+    return bool(re.search(UPSTREAM_REGEX, rpmname))
 
 def rpm_parse_nevr(nevr: str, suffix: str) -> tuple[str, str, str, str]:
-    "Parse into (name, epoch:version, release) stripping suffix from release"
+    """Parse into (name, epoch:version, release) stripping suffix from release."""
     m = re.match(RPM_NVR_SPLIT_REGEX, nevr)
     assert m, f"{nevr} does not match NEVR pattern"
     n, ev, r = m.groups()

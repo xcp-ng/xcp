@@ -1,14 +1,14 @@
 #! /usr/bin/env python3
 
 import argparse
-from collections import namedtuple,  OrderedDict
 import csv
 import logging
-import os
-import rpm                      # type: ignore
 import sys
 import tempfile
-from typing import Iterable, Iterator, Literal, Sequence
+from collections import OrderedDict, namedtuple
+from typing import Iterable, Iterator, Literal
+
+import rpm  # type: ignore
 
 import repoquery
 
@@ -17,7 +17,7 @@ XCP_VERSION = "8.3"
 FILTER_UPSTREAM = False
 
 def evr_format(evr: tuple[str, str, str] | None | Literal['=']) -> str:
-    if evr == "=":              # dirty special case
+    if isinstance(evr, str) and evr == "=":              # dirty special case
         return evr
     if evr is None:
         return "-"
@@ -29,7 +29,7 @@ def filter_best_evr(nevrs: Iterable[tuple[str, str, str, str]]
                     ) -> Iterator[tuple[str, str, str, str]]:
     best: dict[str, tuple[str, str, str]] = {}
     for (n, e, v, r) in nevrs:
-        if n not in best or rpm.labelCompare(best[n], (e, v, r)) < 0:
+        if n not in best or rpm.labelCompare(best[n], (e, v, r)) < 0:  # type: ignore
             best[n] = (e, v, r)
             yield (n, e, v, r)
         # else (e, v, r) is older than a previously-seen version, drop
@@ -41,8 +41,8 @@ def collect_data_xcpng() -> OrderedDict:
                               ("testing", ["testing"]),
                               ("ci", ["ci"]),
                               ("incoming", ["incoming"]),
-                              #("ydi1", ["ydi1"]),
-                              ("dtt1", ["dtt1"]),
+                              # ("ydi1", ["ydi1"]),
+                              # ("dtt1", ["dtt1"]),
                               ):
         with (tempfile.NamedTemporaryFile() as dnfconf,
               tempfile.TemporaryDirectory() as yumrepod):
@@ -52,7 +52,7 @@ def collect_data_xcpng() -> OrderedDict:
                                             bin_arch=None,
                                             version=XCP_VERSION)
             repoquery.dnf_setup(dnf_conf=dnfconf.name, yum_repo_d=yumrepod)
-            #repoquery.fill_srpm_binrpms_cache()
+            # repoquery.fill_srpm_binrpms_cache()
 
             logging.debug("get all XCP-ng %s SRPMs", label)
             xcp_srpms = {nevr for nevr in repoquery.all_srpms()
@@ -82,16 +82,16 @@ def collect_data_xs8():
         logging.debug("get all XS SRPMs")
         xs8_srpms = {nevr for nevr in repoquery.all_srpms()
                      if not FILTER_UPSTREAM or not repoquery.is_pristine_upstream(nevr)}
-        xs8_rpms_sources = {nevr for nevr in repoquery.SRPM_BINRPMS_CACHE.keys()
+        xs8_rpms_sources = {nevr for nevr in repoquery.SRPM_BINRPMS_CACHE
                             if not FILTER_UPSTREAM or not repoquery.is_pristine_upstream(nevr)}
 
         xs8_srpms_set = {n: (e, v, r)
                          for (n, e, v, r)
-                         in filter_best_evr(repoquery.rpm_parse_nevr(nevr, f".xs8")
+                         in filter_best_evr(repoquery.rpm_parse_nevr(nevr, ".xs8")
                                             for nevr in xs8_srpms)}
         xs8_rpms_sources_set = {n: (e, v, r)
                                 for (n, e, v, r)
-                                in filter_best_evr(repoquery.rpm_parse_nevr(nevr, f".xs8")
+                                in filter_best_evr(repoquery.rpm_parse_nevr(nevr, ".xs8")
                                                    for nevr in xs8_rpms_sources)}
 
         logging.debug("get XS waves SRPM versions")
@@ -120,7 +120,7 @@ def collect_data_xs8ea():
 
         xs8ea_srpms_set = {n: (e, v, r)
                            for (n, e, v, r)
-                           in filter_best_evr(repoquery.rpm_parse_nevr(nevr, f".xs8")
+                           in filter_best_evr(repoquery.rpm_parse_nevr(nevr, ".xs8")
                                               for nevr in xs8ea_srpms)}
 
     logging.info(f"xs8 EA src: {len(xs8ea_srpms_set)}")
@@ -191,7 +191,7 @@ def main() -> int:
         print('<tr class="header"><th class="xs">srcrpm<th class="xs">binrpm<th class="xs">EA srcrpm', file=outfile)
         for label in xcp_sets:
             print(f'<th class="xcp">{label}', file=outfile)
-        print(f'</tr>', file=outfile)
+        print('</tr>', file=outfile)
 
         for srpm in sorted(all_srpms):
             xs_ver_src = xs8_srpms_set.get(srpm, None)
@@ -249,7 +249,7 @@ def main() -> int:
                     classes += " better"
                 elif not ref_xs_ver:
                     pass
-                elif rpm.labelCompare(xcp_ver, ref_xs_ver) < 0:
+                elif rpm.labelCompare(xcp_ver, ref_xs_ver) < 0:  # type: ignore
                     classes += " outdated"
                 else: # xcp_ver > ref_xs_ver
                     classes += " better"
@@ -257,7 +257,7 @@ def main() -> int:
                     classes += " unexpected"
 
                 print(f'<td class="{classes}">{xcp_ver_str}', file=outfile)
-            print(f'</tr>', file=outfile)
+            print('</tr>', file=outfile)
         print('</table></body></html>', file=outfile)
 
     return 0
