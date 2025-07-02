@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+import argparse
 import logging
 import re
 import sys
@@ -22,18 +23,24 @@ def is_upstream(rpmname: str) -> bool:
                           'devtoolset-11-gcc', 'devtoolset-11-binutils']
 
 def main() -> int:
-    logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.DEBUG)
 
-    this_exe, version, root_srpm = sys.argv
+    parser = argparse.ArgumentParser(description="Generate a graph of a package dependencies")
+    parser.add_argument('version', help='XCP-ng version to query (8.2, 8.3, 9.0, …)')
+    parser.add_argument('srpm', help='Source rpm to query')
+    parser.add_argument('-v', '--verbose', action='count', default=0)
+    args = parser.parse_args()
+
+    loglevel = {0: logging.WARNING, 1: logging.INFO, 2: logging.DEBUG}.get(args.verbose, logging.DEBUG)
+    logging.basicConfig(format='[%(levelname)s] %(message)s', level=loglevel)
 
     with (tempfile.NamedTemporaryFile() as dnfconf,
           tempfile.TemporaryDirectory() as yumrepod,
-          open(f"{root_srpm}-{version}.dot", "w") as dotfile):
+          open(f"{args.srpm}-{args.version}.dot", "w") as dotfile):
 
         repoquery.setup_xcpng_yum_repos(yum_repo_d=yumrepod,
                                         sections=['base', 'updates'],
                                         bin_arch=ARCH,
-                                        version=version)
+                                        version=args.version)
         repoquery.dnf_setup(dnf_conf=dnfconf.name, yum_repo_d=yumrepod)
 
         repoquery.fill_srpm_binrpms_cache()
@@ -42,7 +49,7 @@ def main() -> int:
 
         print("digraph packages {", file=dotfile)
         srpms_seen: set[str] = set()
-        new_srpms = {repoquery.srpm_nevr(root_srpm)}
+        new_srpms = {repoquery.srpm_nevr(args.srpm)}
         while new_srpms:
             next_srpms = set()  # preparing next round's new_srpms
             logging.info("seen: %s, new: %s", len(srpms_seen), len(new_srpms))
