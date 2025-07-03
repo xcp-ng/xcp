@@ -90,7 +90,9 @@ def dnf_setup(*, dnf_conf: str, yum_repo_d: str) -> None:
                     ]
 
 BINRPM_SOURCE_CACHE: dict[str, str] = {}
-def rpm_source_package(rpmname: str) -> str:
+def rpm_source_package(rpmname: str, **kwargs) -> str:
+    if 'default' in kwargs:
+        return BINRPM_SOURCE_CACHE.get(rpmname, kwargs['default'])
     return BINRPM_SOURCE_CACHE[rpmname]
 
 def run_repoquery(args: list[str], split: bool = True) -> str | Sequence[str]:
