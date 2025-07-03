@@ -108,34 +108,29 @@ def fill_srpm_binrpms_cache() -> None:
         '--qf', '%{name}-%{version}-%{release}.src.rpm,%{name}-%{evr}' + QFNL,
         '--latest-limit=1',
     ]
-    SRPM_NEVR_CACHE = {         # sourcerpm -> srpm-nevr
-        sourcerpm: nevr
-        for sourcerpm, nevr in (line.split(',')
-                                for line in run_repoquery(args))
-    }
+
+    # sourcerpm -> srpm-nevr
+    srpm_nevr_cache = dict(line.split(',') for line in run_repoquery(args))
 
     # binary -> source mapping
     logging.debug("get binary to source mapping")
-    global SRPM_BINRPMS_CACHE, BINRPM_SOURCE_CACHE
+    BINRPM_SOURCE_CACHE.clear()
     args = [
         '--disablerepo=*-src', '*',
         '--qf', '%{name}-%{evr},%{sourcerpm}' + QFNL, # FIXME no epoch in sourcerpm, why does it work?
         '--latest-limit=1',
     ]
-    BINRPM_SOURCE_CACHE = {
+    BINRPM_SOURCE_CACHE.update({
         # packages without source are not in SRPM_NEVR_CACHE, fallback to sourcerpm
-        binrpm: SRPM_NEVR_CACHE.get(sourcerpm, srpm_strip_src_rpm(sourcerpm))
+        binrpm: srpm_nevr_cache.get(sourcerpm, srpm_strip_src_rpm(sourcerpm))
         for binrpm, sourcerpm in (line.split(',')
                                   for line in run_repoquery(args))
-    }
+    })
 
     # reverse mapping source -> binaries
-    SRPM_BINRPMS_CACHE = {}
+    SRPM_BINRPMS_CACHE.clear()
     for binrpm, srpm in BINRPM_SOURCE_CACHE.items():
-        binrpms = SRPM_BINRPMS_CACHE.get(srpm, set())
-        if not binrpms:
-            SRPM_BINRPMS_CACHE[srpm] = binrpms
-        binrpms.add(binrpm)
+        SRPM_BINRPMS_CACHE.setdefault(srpm, set()).add(binrpm)
 
 def srpm_nevr(rpmname: str) -> str:
     args = [
