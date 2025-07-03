@@ -28,8 +28,10 @@ dnf_version = re.search(r"([0-9]+)\.[0-9.]+",
 assert dnf_version is not None
 if int(dnf_version[1]) >= 5:
     QFNL = "\n"
+    REQUIRES_FLAGS = ["--providers-of=requires"]
 else:
     QFNL = ""
+    REQUIRES_FLAGS = ["--resolve", "--requires"]
 
 def setup_xcpng_yum_repos(*, yum_repo_d: str, sections: Iterable[str],
                           bin_arch: str | None, version: str) -> None:
@@ -155,8 +157,8 @@ def rpm_requires(rpmname: str) -> Sequence[str]:
     args = [
         '--disablerepo=*-src', # else requires of same-name SRPM are included
         '--qf=%{name}-%{evr}' + QFNL, # to avoid getting the arch and explicit zero epoch
-        '--resolve',
-        '--requires', rpmname,
+    ] + REQUIRES_FLAGS + [
+        rpmname,
     ]
     ret = run_repoquery(args)
     return ret
@@ -164,8 +166,8 @@ def rpm_requires(rpmname: str) -> Sequence[str]:
 def srpm_requires(srpmname: str) -> set[str]:
     args = [
         '--qf=%{name}-%{evr}' + QFNL, # to avoid getting the arch
-        '--resolve',
-        '--requires', f"{srpmname}.src",
+    ] + REQUIRES_FLAGS + [
+        f"{srpmname}.src",
     ]
     ret = set(run_repoquery(args))
     return ret
