@@ -95,13 +95,16 @@ def rpm_source_package(rpmname: str, **kwargs) -> str:
         return BINRPM_SOURCE_CACHE.get(rpmname, kwargs['default'])
     return BINRPM_SOURCE_CACHE[rpmname]
 
-def run_repoquery(args: list[str], split: bool = True) -> str | Sequence[str]:
+def run_dnf(args: list[str], split: bool = True) -> str | Sequence[str]:
     assert DNF_BASE_CMD is not None
-    cmd = DNF_BASE_CMD + ['repoquery'] + args
+    cmd = DNF_BASE_CMD + args
     logging.debug('$ %s', ' '.join(cmd))
     output = subprocess.check_output(cmd, universal_newlines=True).strip()
     logging.debug('> %s', output)
     return output.split() if split else output
+
+def run_repoquery(args: list[str], split: bool = True) -> str | Sequence[str]:
+    return run_dnf(['repoquery'] + args, split)
 
 SRPM_BINRPMS_CACHE: dict[str, set[str]] = {}         # binrpm-nevr -> srpm-nevr
 def fill_srpm_binrpms_cache() -> None:
