@@ -5,6 +5,7 @@ bpftool;ignored;unused, why?
 capstone;ignored;unused, why?
 citrix-crypto-module;ignored;proprietary, patched FIPS openssl
 compiler-rt18;ignored;unused, why?
+corosync;ignored;not supported
 dlm;ignored;previous dependency for corosync
 emu-manager;ignored;proprietary, replaced by xcp-emu-manager
 epel-release;ignored;unused, why?
