@@ -1,12 +1,15 @@
 [project]
 name = "koji-utils"
-version = "0.1.0"
 description = "Koji utils"
 readme = "README.md"
 requires-python = "~=3.11"
+dynamic = ["version"]
 dependencies = [
   "specfile",
 ]
+
+[project.scripts]
+koji-build = "koji_utils.koji_build:main"
 
 [dependency-groups]
 dev = [
@@ -17,6 +20,13 @@ dev = [
   "ruff",
   "typing-extensions",
 ]
+
+[build-system]
+requires = ["setuptools >= 77.0.3", "setuptools-scm>=8", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+root = "../.."
 
 [tool.pyright]
 typeCheckingMode = "standard"
