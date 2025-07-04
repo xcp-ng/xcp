@@ -194,8 +194,7 @@ wheels = [
 
 [[package]]
 name = "koji-utils"
-version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "koji" },
     { name = "specfile" },
