@@ -7,7 +7,13 @@ import logging
 from tabulate import tabulate
 
 import repoquery
-from lib import collect_data_xcpng, collect_data_xs8, get_xs8_rpm_updates, read_package_status_metadata
+from lib import (
+    collect_data_xcpng,
+    collect_data_xs8,
+    get_xs8_rpm_updates,
+    read_package_status_metadata,
+    read_previous_packages,
+)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-v', '--verbose', action='count', default=0)
@@ -17,6 +23,7 @@ loglevel = {0: logging.WARNING, 1: logging.INFO, 2: logging.DEBUG}.get(args.verb
 logging.basicConfig(format='[%(levelname)s] %(message)s', level=loglevel)
 
 PACKAGE_STATUS = read_package_status_metadata()
+PREVIOUS_PACKAGES = read_previous_packages('XS8-normal-src.txt')
 
 xcp_set = collect_data_xcpng()
 (xs8_srpms_set, xs8_rpms_sources_set) = collect_data_xs8()
@@ -34,6 +41,9 @@ for n in sorted(set(xs8_srpms_set.keys()) | xs8_rpms_sources_set.keys()):
     else:
         xs8_evr = xs8_srpms_evr or xs8_rpms_sources_evr
     xcp_evr = xcp_set.get(n)
+    if f'{n}-{xs8_evr}.xs8' in PREVIOUS_PACKAGES:
+        logging.info(f"ignoring previous package {n}")
+        continue
     xs8_update = srpm_updates.get(f'{n}-{xs8_evr}.xs8', '?')
     # if xcp_evr is not None and xcp_evr < xs8_evr:
     if xcp_evr is None:

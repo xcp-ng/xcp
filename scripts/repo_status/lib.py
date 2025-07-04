@@ -3,6 +3,7 @@
 import csv
 import gzip
 import logging
+import os
 import tempfile
 import xml.etree.ElementTree as ET
 from collections import namedtuple
@@ -102,6 +103,10 @@ def read_package_status_metadata():
         PackageStatus = namedtuple("PackageStatus", headers[1:]) # type: ignore[misc]
         return {row[0]: PackageStatus(*row[1:])
                 for row in csvreader}
+
+def read_previous_packages(path: str):
+    with open(path) as f:
+        return [repoquery.srpm_strip_src_rpm(os.path.basename(line.strip())) for line in f]
 
 def get_xs8_rpm_updates():
     NS = {'repo': 'http://linux.duke.edu/metadata/repo'}
