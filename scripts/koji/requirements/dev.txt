@@ -1,0 +1,9 @@
+# generated with update_requirements.py, do not edit manually
+icecream
+mypy
+flake8
+pydocstyle
+pyright
+ruff
+typing-extensions
+-r base.txt

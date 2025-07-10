@@ -1,0 +1,57 @@
+[project]
+name = "koji-utils"
+version = "0.1.0"
+description = "Koji utils"
+readme = "README.md"
+requires-python = "~=3.11"
+dependencies = [
+  "specfile",
+]
+
+[build-system]
+requires = ["uv_build>=0.7.19,<0.8.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""
+
+[project.scripts]
+koji-build = "koji_utils.koji_build:main"
+
+[dependency-groups]
+dev = [
+  "icecream",
+  "mypy",
+  "flake8",
+  "pydocstyle",
+  "pyright",
+  "ruff",
+  "typing-extensions",
+]
+
+[tool.pyright]
+typeCheckingMode = "standard"
+
+[tool.ruff]
+preview = true
+line-length = 120
+exclude = [".git"]
+
+[tool.ruff.format]
+quote-style = "preserve"
+
+[tool.ruff.lint]
+select = [
+  "F",  # Pyflakes
+  "I",  # isort
+  "SLF",  # flake8-self
+  "SIM",  # flake8-simplify
+]
+# don't use some of the SIM rules
+ignore = [
+  "SIM105",  # suppressible-exception
+  "SIM108",  # if-else-block-instead-of-if-exp
+]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 1
