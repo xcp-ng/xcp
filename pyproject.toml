@@ -1,6 +1,25 @@
+[project]
+name = "xcp-ng"
+requires-python = ">= 3.8"
+dynamic = ["version"]
+readme = "README.md"
+dependencies = ["specfile >= 0.34.0"]
+
+[project.scripts]
+"koji-xcp" = "koji.koji_build:main"
+
+[build-system]
+requires = ["setuptools >= 77.0.3", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "scripts"}
+packages = ["koji"]
+
+[tool.setuptools_scm]
+
 [tool.pydocstyle]
 ignore = "D100,D101,D102,D103,D104,D105,D106,D107,D203,D210,D212,D401,D403"
-
 
 [tool.ruff]
 preview = true
@@ -11,3 +30,9 @@ quote-style = "preserve"
 
 [tool.ruff.lint]
 select = ["F", "I", "SLF", "SIM"]
+
+[project.urls]
+Homepage = "https://xcp-ng.org/"
+Documentation = "https://docs.xcp-ng.org/"
+Repository = "https://github.com/xcp-ng/xcp.git"
+Issues = "https://github.com/xcp-ng/xcp/issues"
