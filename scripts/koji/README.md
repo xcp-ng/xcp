@@ -1,11 +1,17 @@
 # Koji tools
 
-## Dependencies
+Most tools here do not have any Python dependencies, the only exception is koji build.
 
-Run
+## Install koji_build
 
-~~~sh
-pip install --user -r requirements.txt
-~~~
+Run the command:
 
-to install the required dependencies.
+```sh
+uv tool install ..
+```
+
+To install in developer mode to enable live reload, use:
+
+```sh
+uv tool install .. -e
+```
