@@ -1,5 +1,4 @@
-#!/bin/env python
-from __future__ import print_function
+#!/usr/bin/env python3
 import argparse
 import subprocess
 import json
@@ -33,13 +32,13 @@ ALLOWED_TAGS = [
 ]
 
 def build_has_tag(build, tag):
-    out = subprocess.check_output(['koji', 'buildinfo', build])
+    out = subprocess.check_output(['koji', 'buildinfo', build]).decode()
     matches = re.search(r'^Tags: .*\b%s\b' % tag, out, re.MULTILINE)
     return matches is not None
 
 def update_vendor_tag_for_build(build, is_bootstrap=False):
     # get the first binary RPM found for the build
-    output = subprocess.check_output(['koji', 'buildinfo', build])
+    output = subprocess.check_output(['koji', 'buildinfo', build]).decode()
     srpm_path = ""
     rpm_path = ""
     for line in output.splitlines():
@@ -59,7 +58,9 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
             raise Exception("No RPM found for build %s" % build)
 
     # get vendor information
-    output = subprocess.check_output(['rpm', '-qp', rpm_path, '--qf', '%{vendor};;%{buildhost}'], stderr=DEVNULL)
+    output = subprocess.check_output(
+        ['rpm', '-qp', rpm_path, '--qf', '%{vendor};;%{buildhost}'], stderr=DEVNULL
+    ).decode()
     vendor, buildhost = output.split(';;')
     package = re.search('/packages/([^/]+)/', rpm_path).group(1)
 
@@ -114,7 +115,7 @@ def main():
         os.mkdir(os.path.join(data_dir))
 
     # results in a dict similar to this: {"id": 2690, "ts": 1543249294.02143}
-    last_event = json.loads(subprocess.check_output(['koji', 'call', 'getLastEvent']).replace("'", '"'))
+    last_event = json.loads(subprocess.check_output(['koji', 'call', 'getLastEvent']).decode().replace("'", '"'))
 
     # read last known event from our data directory
     last_sync_event_filepath = os.path.join(data_dir, 'last_sync_event')
@@ -139,7 +140,7 @@ def main():
 
     # get the list of builds since last event
     output = subprocess.check_output(['koji', 'list-builds', '--quiet', '--state=COMPLETE',
-                                      '--type=rpm', '--after=%s' % timestamp])
+                                      '--type=rpm', '--after=%s' % timestamp]).decode()
 
     for line in output.splitlines():
         build = line.split()[0]
