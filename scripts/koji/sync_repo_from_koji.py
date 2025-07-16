@@ -1,5 +1,4 @@
-#!/bin/env python
-from __future__ import print_function
+#!/usr/bin/env python3
 import argparse
 import re
 import os
@@ -206,13 +205,13 @@ def sign_unsigned_rpms(tag):
     # get list of RPMs not signed by us by comparing the list that is signed with the full list
 
     # all RPMs for the tag
-    output = subprocess.check_output(['koji', 'list-tagged', tag, '--rpms'])
+    output = subprocess.check_output(['koji', 'list-tagged', tag, '--rpms']).decode()
     rpms = set(output.strip().splitlines())
 
     # only signed RPMs
     # koji list-tagged v7.6-base --sigs | grep "^3fd3ac9e" | cut -c 10-
     signed_rpms = set()
-    output = subprocess.check_output(['koji', 'list-tagged', tag, '--sigs'])
+    output = subprocess.check_output(['koji', 'list-tagged', tag, '--sigs']).decode()
     for line in output.strip().splitlines():
         try:
             key, rpm = line.split(' ')
@@ -268,8 +267,8 @@ def main():
         atexit.register(atexit_remove_lock, lock_file)
 
     global U_TAGS, V_TAGS
-    U_TAGS += subprocess.check_output(['koji', 'list-tags', 'v*.*-u-*']).strip().splitlines()
-    V_TAGS += subprocess.check_output(['koji', 'list-tags', 'v*.*-v-*']).strip().splitlines()
+    U_TAGS += subprocess.check_output(['koji', 'list-tags', 'v*.*-u-*']).decode().strip().splitlines()
+    V_TAGS += subprocess.check_output(['koji', 'list-tags', 'v*.*-v-*']).decode().strip().splitlines()
 
     def dest_dir_for_tag(tag):
         if tag in U_TAGS:
@@ -289,7 +288,7 @@ def main():
             needs_update = False
 
             # get current list of packages from koji for this tag
-            tag_builds_koji = subprocess.check_output(['koji', 'list-tagged', '--quiet', tag])
+            tag_builds_koji = subprocess.check_output(['koji', 'list-tagged', '--quiet', tag]).decode()
 
             # read latest known list of builds in the tag if exists
             tag_builds_filepath = os.path.join(data_dir, "%s-builds.txt" % tag)
