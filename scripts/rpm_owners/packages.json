@@ -2732,7 +2732,7 @@
         "package": "xcp-ng-deps"
     },
     "xcp-ng-generic-lib": {
-        "maintainer": "Hypervisor & Kernel",
+        "maintainer": "Storage",
         "package": "xcp-ng-generic-lib"
     },
     "xcp-ng-linstor": {
