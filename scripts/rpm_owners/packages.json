@@ -157,6 +157,7 @@
         "status": "packaged"
     },
     "auto-cert-kit": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "auto-cert-kit",
@@ -187,6 +188,7 @@
         "status": "packaged"
     },
     "automake16": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "automake16",
@@ -278,6 +280,7 @@
         "status": "packaged"
     },
     "bpftool": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "bpftool",
@@ -340,6 +343,7 @@
         "status": "packaged"
     },
     "capstone": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "capstone",
@@ -432,6 +436,7 @@
         "status": "packaged"
     },
     "citrix-crypto-module": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary, patched FIPS openssl",
         "package": "citrix-crypto-module",
@@ -475,6 +480,7 @@
         "status": "packaged"
     },
     "compiler-rt18": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "compiler-rt18",
@@ -507,12 +513,14 @@
         "status": "ignored"
     },
     "corosync-system-config": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "not supported",
         "package": "corosync-system-config",
         "status": "ignored"
     },
     "corosync2": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "not supported",
         "package": "corosync2",
@@ -860,6 +868,7 @@
         "status": "packaged"
     },
     "emu-manager": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary, replaced by xcp-emu-manager",
         "package": "emu-manager",
@@ -872,6 +881,7 @@
         "status": "packaged"
     },
     "epel-release": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "epel-release",
@@ -962,6 +972,7 @@
         "status": "packaged"
     },
     "forkexecd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "forkexecd",
@@ -1280,6 +1291,7 @@
         "status": "packaged"
     },
     "hcp_nss": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, \u201cenforce any permitted user login as root\u201d",
         "package": "hcp_nss",
@@ -1342,6 +1354,7 @@
         "status": "packaged"
     },
     "hwloc": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "hwloc",
@@ -1829,6 +1842,7 @@
         "status": "packaged"
     },
     "libbpf": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "libbpf",
@@ -2030,6 +2044,7 @@
         "status": "packaged"
     },
     "libnbd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, dep for xapi-storage-plugins",
         "package": "libnbd",
@@ -2474,6 +2489,7 @@
         "status": "packaged"
     },
     "mbootpack": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "for secureboot?",
         "package": "mbootpack",
@@ -2537,6 +2553,7 @@
         "status": "?"
     },
     "message-switch": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "message-switch",
@@ -2575,6 +2592,7 @@
         "status": "packaged"
     },
     "mpdecimal": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "mpdecimal",
@@ -2607,6 +2625,7 @@
         "status": "packaged"
     },
     "nagios-plugins": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "XS specific feature, maybe include it later",
         "package": "nagios-plugins",
@@ -2693,6 +2712,7 @@
         "status": "packaged"
     },
     "ninja-build": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused",
         "package": "ninja-build",
@@ -2713,6 +2733,7 @@
         "status": "packaged"
     },
     "nrpe": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "nagios-plugins dependency",
         "package": "nrpe",
@@ -2870,12 +2891,14 @@
         "status": "packaged"
     },
     "pbis-open": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, likely linked to upgrade-pbis-to-winbind",
         "package": "pbis-open",
         "status": "ignored"
     },
     "pbis-open-upgrade": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, likely linked to upgrade-pbis-to-winbind",
         "package": "pbis-open-upgrade",
@@ -3358,6 +3381,7 @@
         "status": "packaged"
     },
     "pvsproxy": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary",
         "package": "pvsproxy",
@@ -3751,6 +3775,7 @@
         "status": "packaged"
     },
     "python-tqdm": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, dependency for pvsproxy",
         "package": "python-tqdm",
@@ -3992,6 +4017,7 @@
         "status": "?"
     },
     "rrdd-plugins": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "rrdd-plugins",
@@ -4011,6 +4037,7 @@
         "status": "packaged"
     },
     "ruby": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "ruby",
@@ -4023,6 +4050,7 @@
         "status": "packaged"
     },
     "sbd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused? \"storage-based death functionality\"",
         "package": "sbd",
@@ -4047,12 +4075,14 @@
         "status": "packaged"
     },
     "secureboot-certificates": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary, needs alternative?",
         "package": "secureboot-certificates",
         "status": "ignored"
     },
     "security-tools": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary, pool_secret tool",
         "package": "security-tools",
@@ -4119,6 +4149,7 @@
         "status": "packaged"
     },
     "sm-cli": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "sm-cli",
@@ -4132,6 +4163,7 @@
         "status": "packaged"
     },
     "sm-transport-lib": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary",
         "package": "sm-transport-lib",
@@ -4175,6 +4207,7 @@
         "status": "packaged"
     },
     "squeezed": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "squeezed",
@@ -4326,6 +4359,7 @@
         "status": "packaged"
     },
     "tix": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "unused, why?",
         "package": "tix",
@@ -4391,6 +4425,7 @@
         "status": "packaged"
     },
     "upgrade-pbis-to-winbind": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary",
         "package": "upgrade-pbis-to-winbind",
@@ -4428,6 +4463,7 @@
         "status": "packaged"
     },
     "v6d": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary, replaced by xcp-featured",
         "package": "v6d",
@@ -4446,6 +4482,7 @@
         "status": "packaged"
     },
     "varstored-guard": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "varstored-guard",
@@ -4477,12 +4514,14 @@
         "status": "ignored"
     },
     "vgpu": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary",
         "package": "vgpu",
         "status": "ignored"
     },
     "vhd-tool": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "vhd-tool",
@@ -4538,6 +4577,7 @@
         "status": "packaged"
     },
     "wsproxy": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "wsproxy",
@@ -4550,30 +4590,35 @@
         "status": "packaged"
     },
     "xapi-clusterd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary",
         "package": "xapi-clusterd",
         "status": "ignored"
     },
     "xapi-nbd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xapi-nbd",
         "status": "ignored"
     },
     "xapi-storage": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xapi-storage",
         "status": "ignored"
     },
     "xapi-storage-plugins": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietarized, forked as xcp-ng-xapi-storage",
         "package": "xapi-storage-plugins",
         "status": "ignored"
     },
     "xapi-storage-script": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xapi-storage-script",
@@ -4601,6 +4646,7 @@
         "status": "packaged"
     },
     "xcp-networkd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xcp-networkd",
@@ -4679,6 +4725,7 @@
         "status": "packaged"
     },
     "xcp-rrdd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xcp-rrdd",
@@ -4709,6 +4756,7 @@
         "status": "?"
     },
     "xencert": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "automated testkit for certifying storage hardware with XenServer",
         "package": "xencert",
@@ -4721,6 +4769,7 @@
         "status": "packaged"
     },
     "xenopsd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xenopsd",
@@ -4739,18 +4788,21 @@
         "status": "packaged"
     },
     "xenserver-nagios-plugins": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "XS specific feature, maybe include it later",
         "package": "xenserver-nagios-plugins",
         "status": "ignored"
     },
     "xenserver-release": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "xcp-ng-release",
         "package": "xenserver-release",
         "status": "forked"
     },
     "xenserver-snmp-agent": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary, SNMP MIB",
         "package": "xenserver-snmp-agent",
@@ -4763,6 +4815,7 @@
         "status": "packaged"
     },
     "xenserver-telemetry": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary, xapi plugin",
         "package": "xenserver-telemetry",
@@ -4817,6 +4870,7 @@
         "status": "packaged"
     },
     "xs-clipboardd": {
+        "added_by": "?",
         "maintainer": "?",
         "note": "proprietary, replaced by xcp-clipboardd",
         "package": "xs-clipboardd",
