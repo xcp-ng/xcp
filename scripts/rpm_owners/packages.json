@@ -1,2890 +1,4924 @@
 {
     "GConf2": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "GConf2"
+        "package": "GConf2",
+        "status": "packaged"
     },
     "GeoIP": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "GeoIP"
+        "package": "GeoIP",
+        "status": "packaged"
     },
     "ImageMagick": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "ImageMagick"
+        "package": "ImageMagick",
+        "status": "packaged"
     },
     "Judy": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "Judy"
+        "note": "dependency of netdata",
+        "package": "Judy",
+        "status": "packaged"
     },
     "OpenEXR": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "OpenEXR"
+        "package": "OpenEXR",
+        "status": "packaged"
     },
     "OpenIPMI": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "OpenIPMI"
+        "package": "OpenIPMI",
+        "status": "packaged"
+    },
+    "PyPAM": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "package": "PyPAM",
+        "status": "?"
     },
     "SDL": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "SDL"
+        "package": "SDL",
+        "status": "packaged"
     },
     "acl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "acl"
+        "package": "acl",
+        "status": "packaged"
     },
     "acpica-tools": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "acpica-tools"
+        "package": "acpica-tools",
+        "status": "packaged"
     },
     "adwaita-icon-theme": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "adwaita-icon-theme"
+        "package": "adwaita-icon-theme",
+        "status": "packaged"
     },
     "aic94xx-firmware": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "aic94xx-firmware"
+        "package": "aic94xx-firmware",
+        "status": "packaged"
     },
     "alsa-lib": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "alsa-lib"
+        "package": "alsa-lib",
+        "status": "packaged"
     },
     "amd-microcode": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "amd-microcode"
+        "package": "amd-microcode",
+        "status": "packaged"
     },
     "apr": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "apr"
+        "package": "apr",
+        "status": "packaged"
     },
     "apr-util": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "apr-util"
+        "package": "apr-util",
+        "status": "packaged"
     },
     "aqc111u-module": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "aqc111u-module"
+        "package": "aqc111u-module",
+        "status": "packaged"
     },
     "arptables": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "arptables"
+        "package": "arptables",
+        "status": "packaged"
     },
     "asciidoc": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "asciidoc"
+        "package": "asciidoc",
+        "status": "packaged"
     },
     "at": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "at"
+        "package": "at",
+        "status": "packaged"
     },
     "at-spi2-atk": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "at-spi2-atk"
+        "package": "at-spi2-atk",
+        "status": "packaged"
     },
     "at-spi2-core": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "at-spi2-core"
+        "package": "at-spi2-core",
+        "status": "packaged"
     },
     "atk": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "atk"
+        "package": "atk",
+        "status": "packaged"
     },
     "atlantic-module-alt": {
+        "added_by": "?",
         "maintainer": "Hypervisor & Kernel",
-        "package": "atlantic-module-alt"
+        "package": "atlantic-module-alt",
+        "status": "packaged"
     },
     "attr": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "attr"
+        "package": "attr",
+        "status": "packaged"
     },
     "audit": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "audit"
+        "package": "audit",
+        "status": "packaged"
+    },
+    "auto-cert-kit": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "auto-cert-kit",
+        "status": "ignored"
     },
     "autoconf": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "autoconf"
+        "package": "autoconf",
+        "status": "packaged"
     },
     "autoconf-archive": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "autoconf-archive"
+        "package": "autoconf-archive",
+        "status": "packaged"
     },
     "autogen": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "autogen"
+        "package": "autogen",
+        "status": "packaged"
     },
     "automake": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "automake"
+        "package": "automake",
+        "status": "packaged"
+    },
+    "automake16": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "automake16",
+        "status": "ignored"
     },
     "avago-megaraid-sas": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "avago-megaraid-sas"
+        "package": "avago-megaraid-sas",
+        "status": "packaged"
     },
     "avago-mpt3sas": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "avago-mpt3sas"
+        "package": "avago-mpt3sas",
+        "status": "packaged"
+    },
+    "avago-mpt3sas-alt": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "alternate driver",
+        "package": "avago-mpt3sas-alt",
+        "status": "?"
     },
     "avahi": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "avahi"
+        "package": "avahi",
+        "status": "packaged"
     },
     "basesystem": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "basesystem"
+        "package": "basesystem",
+        "status": "packaged"
     },
     "bash": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "bash"
+        "package": "bash",
+        "status": "packaged"
     },
     "bash-completion": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "bash-completion"
+        "package": "bash-completion",
+        "status": "packaged"
     },
     "bc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "bc"
+        "package": "bc",
+        "status": "packaged"
     },
     "bind": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "bind"
+        "package": "bind",
+        "status": "packaged"
     },
     "binutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "binutils"
+        "package": "binutils",
+        "status": "packaged"
     },
     "biosdevname": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "biosdevname"
+        "package": "biosdevname",
+        "status": "packaged"
     },
     "bison": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "bison"
+        "package": "bison",
+        "status": "packaged"
     },
     "blktap": {
+        "added_by": "XS",
         "maintainer": "Storage",
-        "package": "blktap"
+        "package": "blktap",
+        "status": "packaged"
     },
     "boost": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "boost"
+        "package": "boost",
+        "status": "packaged"
+    },
+    "bpftool": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "bpftool",
+        "status": "ignored"
     },
     "branding-xcp-ng": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "branding-xcp-ng"
+        "note": "replaces branding-xenserver",
+        "package": "branding-xcp-ng",
+        "status": "packaged"
     },
     "bridge-utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "bridge-utils"
+        "package": "bridge-utils",
+        "status": "packaged"
     },
     "broadcom-bnxt-en": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "broadcom-bnxt-en"
+        "package": "broadcom-bnxt-en",
+        "status": "packaged"
     },
     "broadcom-bnxt-en-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "broadcom-bnxt-en-alt"
+        "note": "alternate driver",
+        "package": "broadcom-bnxt-en-alt",
+        "status": "packaged"
     },
     "bubblewrap": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "bubblewrap"
+        "package": "bubblewrap",
+        "status": "packaged"
     },
     "busybox": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "busybox"
+        "package": "busybox",
+        "status": "packaged"
     },
     "bzip2": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "bzip2"
+        "package": "bzip2",
+        "status": "packaged"
     },
     "ca-certificates": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ca-certificates"
+        "package": "ca-certificates",
+        "status": "packaged"
     },
     "cairo": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "cairo"
+        "package": "cairo",
+        "status": "packaged"
+    },
+    "capstone": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "capstone",
+        "status": "ignored"
     },
     "cdrkit": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "cdrkit"
+        "package": "cdrkit",
+        "status": "packaged"
     },
     "centos-indexhtml": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "centos-indexhtml"
+        "package": "centos-indexhtml",
+        "status": "packaged"
     },
     "centos-logos": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "centos-logos"
+        "package": "centos-logos",
+        "status": "packaged"
     },
     "ceph-common": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ceph-common"
+        "package": "ceph-common",
+        "status": "packaged"
     },
     "checkpolicy": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "checkpolicy"
+        "package": "checkpolicy",
+        "status": "packaged"
     },
     "chelsio-cxgb4": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "chelsio-cxgb4"
+        "package": "chelsio-cxgb4",
+        "status": "packaged"
     },
     "chkconfig": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "chkconfig"
+        "package": "chkconfig",
+        "status": "packaged"
     },
     "chrony": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "chrony"
+        "package": "chrony",
+        "status": "packaged"
     },
     "chrpath": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "chrpath"
+        "package": "chrpath",
+        "status": "packaged"
     },
     "cifs-utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "cifs-utils"
+        "package": "cifs-utils",
+        "status": "packaged"
     },
     "cisco-enic": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "cisco-enic"
+        "package": "cisco-enic",
+        "status": "packaged"
     },
     "cisco-enic-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "cisco-enic-alt"
+        "note": "alternate driver",
+        "package": "cisco-enic-alt",
+        "status": "packaged"
     },
     "cisco-fnic": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "cisco-fnic"
+        "package": "cisco-fnic",
+        "status": "packaged"
     },
     "cisco-fnic-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "cisco-fnic-alt"
+        "note": "alternate driver",
+        "package": "cisco-fnic-alt",
+        "status": "packaged"
+    },
+    "citrix-crypto-module": {
+        "maintainer": "?",
+        "note": "proprietary, patched FIPS openssl",
+        "package": "citrix-crypto-module",
+        "status": "ignored"
     },
     "cmake3": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "cmake3"
+        "note": "Initially imported by us, XS started using it. For XS 8, they forked cmake-3.26.4-4.fc37.src.rpm. At first, we keep ours because we found nothing that would require cmake3 in recent updates",
+        "package": "cmake3",
+        "status": "packaged"
     },
     "cmocka": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "cmocka"
+        "package": "cmocka",
+        "status": "packaged"
     },
     "coccinelle": {
+        "added_by": "?",
         "maintainer": "Storage",
-        "package": "coccinelle"
+        "package": "coccinelle",
+        "status": "packaged"
     },
     "colord": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "colord"
+        "package": "colord",
+        "status": "packaged"
     },
     "compat-db": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "compat-db"
+        "package": "compat-db",
+        "status": "packaged"
     },
     "compat-gcc-32": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "compat-gcc-32"
+        "package": "compat-gcc-32",
+        "status": "packaged"
+    },
+    "compiler-rt18": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "compiler-rt18",
+        "status": "ignored"
     },
     "control-slice": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "control-slice"
+        "package": "control-slice",
+        "status": "packaged"
     },
     "coretemp-module-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "coretemp-module-alt"
+        "note": "added to workaround missing CPU temperature sensors in dom0",
+        "package": "coretemp-module-alt",
+        "status": "packaged"
     },
     "coreutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "coreutils"
+        "package": "coreutils",
+        "status": "packaged"
+    },
+    "corosync": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "Required for clustering, a feature we don't support. Was also required to build lvm2's lvm2-cluster subpackage. lvm2 rebuilt without cvcluster support and corosync removed from dom0, along with dlm -- not supported",
+        "package": "corosync",
+        "status": "ignored"
+    },
+    "corosync-system-config": {
+        "maintainer": "?",
+        "note": "not supported",
+        "package": "corosync-system-config",
+        "status": "ignored"
+    },
+    "corosync2": {
+        "maintainer": "?",
+        "note": "not supported",
+        "package": "corosync2",
+        "status": "ignored"
     },
     "cpio": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "cpio"
+        "package": "cpio",
+        "status": "packaged"
     },
     "cracklib": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "cracklib"
+        "package": "cracklib",
+        "status": "packaged"
     },
     "crash": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "crash"
+        "package": "crash",
+        "status": "packaged"
     },
     "createrepo_c": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "createrepo_c"
+        "package": "createrepo_c",
+        "status": "packaged"
     },
     "cronie": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "cronie"
+        "package": "cronie",
+        "status": "packaged"
     },
     "crontabs": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "crontabs"
+        "package": "crontabs",
+        "status": "packaged"
     },
     "cryptsetup": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "cryptsetup"
+        "package": "cryptsetup",
+        "status": "packaged"
     },
     "ctags": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "ctags"
+        "package": "ctags",
+        "status": "packaged"
     },
     "cups": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "cups"
+        "package": "cups",
+        "status": "packaged"
     },
     "curl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "curl"
+        "package": "curl",
+        "status": "packaged"
     },
     "cyrus-sasl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "cyrus-sasl"
+        "package": "cyrus-sasl",
+        "status": "packaged"
     },
     "dbus": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "dbus"
+        "package": "dbus",
+        "status": "packaged"
     },
     "dbus-glib": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "dbus-glib"
+        "package": "dbus-glib",
+        "status": "packaged"
     },
     "dconf": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "dconf"
+        "package": "dconf",
+        "status": "packaged"
     },
     "dejagnu": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "dejagnu"
+        "package": "dejagnu",
+        "status": "packaged"
     },
     "dejavu-fonts": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "dejavu-fonts"
+        "package": "dejavu-fonts",
+        "status": "packaged"
     },
     "dell-rbu-module": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "dell-rbu-module"
+        "note": "dell_rbu driver",
+        "package": "dell-rbu-module",
+        "status": "packaged"
     },
     "desktop-file-utils": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "desktop-file-utils"
+        "package": "desktop-file-utils",
+        "status": "packaged"
     },
     "dev86": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "dev86"
+        "package": "dev86",
+        "status": "packaged"
     },
     "device-mapper-multipath": {
+        "added_by": "XS",
         "maintainer": "Storage",
-        "package": "device-mapper-multipath"
+        "package": "device-mapper-multipath",
+        "status": "packaged"
     },
     "device-mapper-persistent-data": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "device-mapper-persistent-data"
+        "package": "device-mapper-persistent-data",
+        "status": "packaged"
     },
     "devtoolset-10": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "devtoolset-10"
+        "package": "devtoolset-10",
+        "status": "packaged"
     },
     "devtoolset-10-binutils": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "devtoolset-10-binutils"
+        "package": "devtoolset-10-binutils",
+        "status": "packaged"
     },
     "devtoolset-10-gcc": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "devtoolset-10-gcc"
+        "package": "devtoolset-10-gcc",
+        "status": "packaged"
     },
     "devtoolset-11": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "devtoolset-11"
+        "package": "devtoolset-11",
+        "status": "packaged"
     },
     "devtoolset-11-binutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "devtoolset-11-binutils"
+        "package": "devtoolset-11-binutils",
+        "status": "packaged"
+    },
+    "devtoolset-11-elfutils": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "Not really used?",
+        "package": "devtoolset-11-elfutils",
+        "status": "?"
     },
     "devtoolset-11-gcc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "devtoolset-11-gcc"
+        "package": "devtoolset-11-gcc",
+        "status": "packaged"
     },
     "devtoolset-11-gdb": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "devtoolset-11-gdb"
+        "package": "devtoolset-11-gdb",
+        "status": "packaged"
     },
     "dhcp": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "dhcp"
+        "package": "dhcp",
+        "status": "packaged"
     },
     "diffutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "diffutils"
+        "package": "diffutils",
+        "status": "packaged"
     },
     "ding-libs": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ding-libs"
+        "package": "ding-libs",
+        "status": "packaged"
+    },
+    "dlm": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "Was a requirement of corosync, but we don't include corosync anymore in dom0. Was also a build dep for one of lvm2's subpackages, that we don't build anymore to remove the build dependency towards dlm. We also removed dlm from xs-opam-repo. -- previous dependency for corosync",
+        "package": "dlm",
+        "status": "ignored"
     },
     "dmidecode": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "dmidecode"
+        "package": "dmidecode",
+        "status": "packaged"
     },
     "docbook-dtds": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "docbook-dtds"
+        "package": "docbook-dtds",
+        "status": "packaged"
     },
     "docbook-style-dsssl": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "docbook-style-dsssl"
+        "package": "docbook-style-dsssl",
+        "status": "packaged"
     },
     "docbook-style-xsl": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "docbook-style-xsl"
+        "package": "docbook-style-xsl",
+        "status": "packaged"
     },
     "docbook-utils": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "docbook-utils"
+        "package": "docbook-utils",
+        "status": "packaged"
     },
     "doxygen": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "doxygen"
+        "package": "doxygen",
+        "status": "packaged"
     },
     "dpkg": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "dpkg"
-    },
-    "drbd": {
-        "maintainer": "Storage",
-        "package": "drbd"
+        "package": "dpkg",
+        "status": "packaged"
     },
     "dracut": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "dracut"
+        "package": "dracut",
+        "status": "packaged"
+    },
+    "drbd": {
+        "added_by": "?",
+        "maintainer": "Storage",
+        "package": "drbd",
+        "status": "packaged"
     },
     "dstat": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "dstat"
+        "note": "extra tool",
+        "package": "dstat",
+        "status": "packaged"
+    },
+    "dtc": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "dep of xcp-ng-xapi-storage",
+        "package": "dtc",
+        "status": "?"
     },
     "dummypkg": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "dummypkg"
+        "package": "dummypkg",
+        "status": "packaged"
     },
     "dwarves": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "dwarves"
+        "package": "dwarves",
+        "status": "packaged"
     },
     "dwz": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "dwz"
+        "package": "dwz",
+        "status": "packaged"
     },
     "dyninst": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "dyninst"
+        "package": "dyninst",
+        "status": "packaged"
     },
     "e2fsprogs": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "e2fsprogs"
+        "package": "e2fsprogs",
+        "status": "packaged"
     },
     "ebtables": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ebtables"
+        "package": "ebtables",
+        "status": "packaged"
     },
     "ed": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ed"
+        "package": "ed",
+        "status": "packaged"
     },
     "edk2": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "edk2"
+        "package": "edk2",
+        "status": "packaged"
     },
     "efibootmgr": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "efibootmgr"
+        "package": "efibootmgr",
+        "status": "packaged"
     },
     "efivar": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "efivar"
+        "package": "efivar",
+        "status": "packaged"
     },
     "elfutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "elfutils"
+        "package": "elfutils",
+        "status": "packaged"
     },
     "emacs": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "emacs"
+        "package": "emacs",
+        "status": "packaged"
+    },
+    "emu-manager": {
+        "maintainer": "?",
+        "note": "proprietary, replaced by xcp-emu-manager",
+        "package": "emu-manager",
+        "status": "ignored"
     },
     "emulex-lpfc": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "emulex-lpfc"
+        "package": "emulex-lpfc",
+        "status": "packaged"
+    },
+    "epel-release": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "epel-release",
+        "status": "ignored"
     },
     "epel-rpm-macros": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "epel-rpm-macros"
+        "package": "epel-rpm-macros",
+        "status": "packaged"
     },
     "ethtool": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ethtool"
+        "package": "ethtool",
+        "status": "packaged"
     },
     "expat": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "expat"
+        "package": "expat",
+        "status": "packaged"
     },
     "expect": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "expect"
+        "package": "expect",
+        "status": "packaged"
     },
     "fakeroot": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "fakeroot"
+        "package": "fakeroot",
+        "status": "packaged"
     },
     "fcoe-utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "fcoe-utils"
+        "package": "fcoe-utils",
+        "status": "packaged"
     },
     "figlet": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "figlet"
+        "package": "figlet",
+        "status": "packaged"
     },
     "file": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "file"
+        "package": "file",
+        "status": "packaged"
     },
     "filesystem": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "filesystem"
+        "package": "filesystem",
+        "status": "packaged"
     },
     "findutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "findutils"
+        "package": "findutils",
+        "status": "packaged"
     },
     "fipscheck": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "fipscheck"
+        "package": "fipscheck",
+        "status": "packaged"
     },
     "flex": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "flex"
+        "package": "flex",
+        "status": "packaged"
     },
     "fontconfig": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "fontconfig"
+        "package": "fontconfig",
+        "status": "packaged"
     },
     "fontpackages": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "fontpackages"
+        "package": "fontpackages",
+        "status": "packaged"
+    },
+    "forkexecd": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "forkexecd",
+        "status": "ignored"
     },
     "freeipmi": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "freeipmi"
+        "package": "freeipmi",
+        "status": "packaged"
     },
     "freetype": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "freetype"
+        "package": "freetype",
+        "status": "packaged"
     },
     "fuse": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "fuse"
+        "note": "breq for e2fsprogs 1.47",
+        "package": "fuse",
+        "status": ""
     },
     "future": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "future"
+        "package": "future",
+        "status": "packaged"
     },
     "gawk": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gawk"
+        "package": "gawk",
+        "status": "packaged"
     },
     "gc": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gc"
+        "package": "gc",
+        "status": "packaged"
     },
     "gcc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gcc"
+        "package": "gcc",
+        "status": "packaged"
     },
     "gcc-libraries": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gcc-libraries"
+        "package": "gcc-libraries",
+        "status": "packaged"
     },
     "gd": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gd"
+        "package": "gd",
+        "status": "packaged"
     },
     "gdb": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "gdb"
+        "note": "dep of update-package",
+        "package": "gdb",
+        "status": "packaged"
     },
     "gdbm": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gdbm"
+        "package": "gdbm",
+        "status": "packaged"
     },
     "gdisk": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gdisk"
+        "package": "gdisk",
+        "status": "packaged"
     },
     "gdk-pixbuf2": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gdk-pixbuf2"
+        "package": "gdk-pixbuf2",
+        "status": "packaged"
     },
     "gettext": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gettext"
+        "package": "gettext",
+        "status": "packaged"
+    },
+    "gfs2-utils": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "unsupported fs",
+        "package": "gfs2-utils",
+        "status": "ignored"
     },
     "ghostscript": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "ghostscript"
+        "package": "ghostscript",
+        "status": "packaged"
     },
     "ghostscript-fonts": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "ghostscript-fonts"
+        "package": "ghostscript-fonts",
+        "status": "packaged"
     },
     "giflib": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "giflib"
+        "package": "giflib",
+        "status": "packaged"
     },
     "git": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "git"
+        "package": "git",
+        "status": "packaged"
     },
     "gl-manpages": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gl-manpages"
+        "package": "gl-manpages",
+        "status": "packaged"
     },
     "glib-networking": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "glib-networking"
+        "package": "glib-networking",
+        "status": "packaged"
     },
     "glib2": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "glib2"
+        "note": "same version as el7, why?",
+        "package": "glib2",
+        "status": "ignored"
     },
     "glibc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "glibc"
+        "package": "glibc",
+        "status": "packaged"
     },
     "glusterfs": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "glusterfs"
+        "note": "additional glusterfs package",
+        "package": "glusterfs",
+        "status": "packaged"
     },
     "gmp": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gmp"
+        "package": "gmp",
+        "status": "packaged"
     },
     "gnu-free-fonts": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gnu-free-fonts"
+        "package": "gnu-free-fonts",
+        "status": "packaged"
     },
     "gnupg2": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gnupg2"
+        "package": "gnupg2",
+        "status": "packaged"
     },
     "gnutls": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gnutls"
+        "package": "gnutls",
+        "status": "packaged"
     },
     "gobject-introspection": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gobject-introspection"
+        "package": "gobject-introspection",
+        "status": "packaged"
     },
     "golang": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "golang"
+        "note": "for newer xe-guest-utilities",
+        "package": "golang",
+        "status": "ignored"
     },
     "golang-github-golang-sys": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "golang-github-golang-sys"
+        "package": "golang-github-golang-sys",
+        "status": "packaged"
     },
     "gperf": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gperf"
+        "package": "gperf",
+        "status": "packaged"
     },
     "gpgme": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gpgme"
+        "package": "gpgme",
+        "status": "packaged"
     },
     "gpm": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "gpm"
+        "package": "gpm",
+        "status": "packaged"
     },
     "gpumon": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "gpumon"
+        "package": "gpumon",
+        "status": "packaged"
     },
     "graphite2": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "graphite2"
+        "package": "graphite2",
+        "status": "packaged"
     },
     "graphviz": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "graphviz"
+        "package": "graphviz",
+        "status": "packaged"
     },
     "grep": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "grep"
+        "package": "grep",
+        "status": "packaged"
     },
     "groff": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "groff"
+        "package": "groff",
+        "status": "packaged"
     },
     "grub": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "grub"
+        "package": "grub",
+        "status": "packaged"
     },
     "grubby": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "grubby"
+        "package": "grubby",
+        "status": "packaged"
     },
     "gsettings-desktop-schemas": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gsettings-desktop-schemas"
+        "package": "gsettings-desktop-schemas",
+        "status": "packaged"
     },
     "gssproxy": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gssproxy"
+        "package": "gssproxy",
+        "status": "packaged"
     },
     "gtk-doc": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gtk-doc"
+        "package": "gtk-doc",
+        "status": "packaged"
     },
     "gtk2": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gtk2"
+        "package": "gtk2",
+        "status": "packaged"
     },
     "gtk3": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "gtk3"
+        "package": "gtk3",
+        "status": "packaged"
     },
     "guest-templates-json": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "guest-templates-json"
+        "package": "guest-templates-json",
+        "status": "packaged"
     },
     "guile": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "guile"
+        "package": "guile",
+        "status": "packaged"
     },
     "gzip": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "gzip"
+        "package": "gzip",
+        "status": "packaged"
     },
     "hardlink": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "hardlink"
+        "package": "hardlink",
+        "status": "packaged"
     },
     "harfbuzz": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "harfbuzz"
+        "package": "harfbuzz",
+        "status": "packaged"
+    },
+    "hcp_nss": {
+        "maintainer": "?",
+        "note": "unused, \u201cenforce any permitted user login as root\u201d",
+        "package": "hcp_nss",
+        "status": "ignored"
     },
     "hdparm": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "hdparm"
+        "package": "hdparm",
+        "status": "packaged"
     },
     "help2man": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "help2man"
+        "package": "help2man",
+        "status": "packaged"
     },
     "hicolor-icon-theme": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "hicolor-icon-theme"
+        "package": "hicolor-icon-theme",
+        "status": "packaged"
     },
     "host-installer": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "host-installer"
+        "package": "host-installer",
+        "status": "packaged"
     },
     "host-upgrade-plugin": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "host-upgrade-plugin"
+        "package": "host-upgrade-plugin",
+        "status": "packaged"
     },
     "hostname": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "hostname"
+        "package": "hostname",
+        "status": "packaged"
     },
     "htop": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "htop"
+        "note": "added to default install",
+        "package": "htop",
+        "status": "packaged"
     },
     "http-nbd-transfer": {
+        "added_by": "XCP-ng",
         "maintainer": "Storage",
-        "package": "http-nbd-transfer"
+        "note": "XOSTOR dep",
+        "package": "http-nbd-transfer",
+        "status": "packaged"
     },
     "hwdata": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "hwdata"
+        "package": "hwdata",
+        "status": "packaged"
+    },
+    "hwloc": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "hwloc",
+        "status": "ignored"
     },
     "icu": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "icu"
+        "package": "icu",
+        "status": "packaged"
     },
     "iftop": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "iftop"
+        "note": "added to default install",
+        "package": "iftop",
+        "status": "packaged"
     },
     "igc-module": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "igc-module"
+        "note": "extra driver",
+        "package": "igc-module",
+        "status": "packaged"
     },
     "ilmbase": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "ilmbase"
+        "package": "ilmbase",
+        "status": "packaged"
     },
     "initscripts": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "initscripts"
+        "package": "initscripts",
+        "status": "packaged"
     },
     "intel-e1000e": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-e1000e"
+        "package": "intel-e1000e",
+        "status": "packaged"
     },
     "intel-e1000e-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-e1000e-alt"
+        "note": "alternate driver",
+        "package": "intel-e1000e-alt",
+        "status": "packaged"
     },
     "intel-fm10k": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-fm10k"
+        "package": "intel-fm10k",
+        "status": "packaged"
     },
     "intel-i40e": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-i40e"
+        "package": "intel-i40e",
+        "status": "packaged"
     },
     "intel-i40e-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-i40e-alt"
+        "note": "alternate driver",
+        "package": "intel-i40e-alt",
+        "status": "packaged"
     },
     "intel-ice": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-ice"
+        "package": "intel-ice",
+        "status": "packaged"
     },
     "intel-ice-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-ice-alt"
+        "note": "alternate driver",
+        "package": "intel-ice-alt",
+        "status": "packaged"
     },
     "intel-igb": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-igb"
+        "package": "intel-igb",
+        "status": "packaged"
     },
     "intel-igb-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-igb-alt"
+        "note": "alternate driver",
+        "package": "intel-igb-alt",
+        "status": "packaged"
     },
     "intel-igc": {
+        "added_by": "?",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-igc"
+        "package": "intel-igc",
+        "status": "packaged"
     },
     "intel-ixgbe": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-ixgbe"
+        "package": "intel-ixgbe",
+        "status": "packaged"
     },
     "intel-ixgbe-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "intel-ixgbe-alt"
+        "package": "intel-ixgbe-alt",
+        "status": "packaged"
     },
     "intel-microcode": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "intel-microcode"
+        "package": "intel-microcode",
+        "status": "packaged"
     },
     "interface-rename": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "interface-rename"
+        "package": "interface-rename",
+        "status": "packaged"
     },
     "intltool": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "intltool"
+        "package": "intltool",
+        "status": "packaged"
     },
     "iotop": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "iotop"
+        "note": "extra tool",
+        "package": "iotop",
+        "status": "packaged"
     },
     "iperf": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "iperf"
+        "note": "extra tool",
+        "package": "iperf",
+        "status": "packaged"
     },
     "iperf3": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "iperf3"
+        "note": "extra tool",
+        "package": "iperf3",
+        "status": "packaged"
     },
     "ipmitool": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ipmitool"
+        "package": "ipmitool",
+        "status": "packaged"
     },
     "iproute": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "iproute"
+        "package": "iproute",
+        "status": "packaged"
     },
     "ipset": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ipset"
+        "package": "ipset",
+        "status": "packaged"
     },
     "iptables": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "iptables"
+        "package": "iptables",
+        "status": "packaged"
     },
     "iputils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "iputils"
+        "package": "iputils",
+        "status": "packaged"
     },
     "ipxe": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "ipxe"
+        "package": "ipxe",
+        "status": "packaged"
     },
     "ipxe-efi": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "ipxe-efi"
+        "package": "ipxe-efi",
+        "status": "packaged"
     },
     "irqbalance": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "irqbalance"
+        "package": "irqbalance",
+        "status": "packaged"
     },
     "iscsi-initiator-utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "iscsi-initiator-utils"
+        "package": "iscsi-initiator-utils",
+        "status": "packaged"
     },
     "jansson": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "jansson"
+        "package": "jansson",
+        "status": "packaged"
     },
     "jasper": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "jasper"
+        "package": "jasper",
+        "status": "packaged"
+    },
+    "java-1.8.0-openjdk": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "Former dependency of XOSTOR",
+        "package": "java-1.8.0-openjdk",
+        "status": "?"
+    },
+    "java-11-openjdk": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "Dependency of XOSTOR",
+        "package": "java-11-openjdk",
+        "status": "?"
     },
     "jbigkit": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "jbigkit"
+        "package": "jbigkit",
+        "status": "packaged"
     },
     "jemalloc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "jemalloc"
+        "package": "jemalloc",
+        "status": "packaged"
     },
     "joe": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "joe"
+        "note": "extra tool",
+        "package": "joe",
+        "status": "packaged"
     },
     "json-c": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "json-c"
+        "package": "json-c",
+        "status": "packaged"
     },
     "json-glib": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "json-glib"
+        "package": "json-glib",
+        "status": "packaged"
     },
     "kbd": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "kbd"
+        "package": "kbd",
+        "status": "packaged"
     },
     "kernel": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "kernel"
+        "package": "kernel",
+        "status": "packaged"
     },
     "kernel-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "kernel-alt"
+        "note": "alternate kernel",
+        "package": "kernel-alt",
+        "status": "packaged"
+    },
+    "kernel-livepatch": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "package": "kernel-livepatch",
+        "status": "?"
     },
     "kexec-tools": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "kexec-tools"
+        "package": "kexec-tools",
+        "status": "packaged"
     },
     "keyutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "keyutils"
+        "package": "keyutils",
+        "status": "packaged"
     },
     "kmod": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "kmod"
+        "package": "kmod",
+        "status": "packaged"
     },
     "kpatch": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "kpatch"
+        "package": "kpatch",
+        "status": "packaged"
     },
     "krb5": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "krb5"
+        "package": "krb5",
+        "status": "packaged"
     },
     "lcms2": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "lcms2"
+        "package": "lcms2",
+        "status": "packaged"
     },
     "lcov": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "lcov"
+        "package": "lcov",
+        "status": "packaged"
     },
     "ldns": {
+        "added_by": "XCP-ng",
         "maintainer": "XAPI & Network",
-        "package": "ldns"
+        "package": "ldns",
+        "status": "packaged"
     },
     "less": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "less"
+        "package": "less",
+        "status": "packaged"
     },
     "libICE": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libICE"
+        "package": "libICE",
+        "status": "packaged"
     },
     "libSM": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libSM"
+        "package": "libSM",
+        "status": "packaged"
     },
     "libX11": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libX11"
+        "package": "libX11",
+        "status": "packaged"
     },
     "libXau": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXau"
+        "package": "libXau",
+        "status": "packaged"
     },
     "libXaw": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXaw"
+        "package": "libXaw",
+        "status": "packaged"
     },
     "libXcomposite": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXcomposite"
+        "package": "libXcomposite",
+        "status": "packaged"
     },
     "libXcursor": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXcursor"
+        "package": "libXcursor",
+        "status": "packaged"
     },
     "libXdamage": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXdamage"
+        "package": "libXdamage",
+        "status": "packaged"
     },
     "libXext": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXext"
+        "package": "libXext",
+        "status": "packaged"
     },
     "libXfixes": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXfixes"
+        "package": "libXfixes",
+        "status": "packaged"
     },
     "libXfont": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXfont"
+        "package": "libXfont",
+        "status": "packaged"
     },
     "libXft": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXft"
+        "package": "libXft",
+        "status": "packaged"
     },
     "libXi": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXi"
+        "package": "libXi",
+        "status": "packaged"
     },
     "libXinerama": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXinerama"
+        "package": "libXinerama",
+        "status": "packaged"
     },
     "libXmu": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXmu"
+        "package": "libXmu",
+        "status": "packaged"
     },
     "libXpm": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXpm"
+        "package": "libXpm",
+        "status": "packaged"
     },
     "libXrandr": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXrandr"
+        "package": "libXrandr",
+        "status": "packaged"
     },
     "libXrender": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXrender"
+        "package": "libXrender",
+        "status": "packaged"
     },
     "libXt": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXt"
+        "package": "libXt",
+        "status": "packaged"
     },
     "libXtst": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXtst"
+        "package": "libXtst",
+        "status": "packaged"
     },
     "libXxf86vm": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libXxf86vm"
+        "package": "libXxf86vm",
+        "status": "packaged"
     },
     "libaio": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libaio"
+        "package": "libaio",
+        "status": "packaged"
     },
     "libarchive": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libarchive"
+        "package": "libarchive",
+        "status": "packaged"
     },
     "libassuan": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libassuan"
+        "package": "libassuan",
+        "status": "packaged"
+    },
+    "libbpf": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "libbpf",
+        "status": "ignored"
     },
     "libcap": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libcap"
+        "package": "libcap",
+        "status": "packaged"
     },
     "libcap-ng": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libcap-ng"
+        "package": "libcap-ng",
+        "status": "packaged"
     },
     "libcgroup": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libcgroup"
+        "note": "unused, same version as el7, why?",
+        "package": "libcgroup",
+        "status": "ignored"
     },
     "libconfig": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libconfig"
+        "package": "libconfig",
+        "status": "packaged"
     },
     "libcroco": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libcroco"
+        "package": "libcroco",
+        "status": "packaged"
     },
     "libdaemon": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libdaemon"
+        "package": "libdaemon",
+        "status": "packaged"
     },
     "libdb": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libdb"
+        "package": "libdb",
+        "status": "packaged"
     },
     "libdrm": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "libdrm"
+        "package": "libdrm",
+        "status": "packaged"
     },
     "libdwarf": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libdwarf"
+        "package": "libdwarf",
+        "status": "packaged"
     },
     "libedit": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libedit"
+        "package": "libedit",
+        "status": "packaged"
     },
     "libempserver": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "libempserver"
+        "package": "libempserver",
+        "status": "packaged"
     },
     "libepoxy": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libepoxy"
+        "package": "libepoxy",
+        "status": "packaged"
     },
     "libestr": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libestr"
+        "package": "libestr",
+        "status": "packaged"
     },
     "libev": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libev"
+        "package": "libev",
+        "status": "packaged"
     },
     "libevent": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libevent"
+        "package": "libevent",
+        "status": "packaged"
+    },
+    "libfaketime": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "Used for installer ISO generation",
+        "package": "libfaketime",
+        "status": "?"
     },
     "libfastjson": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libfastjson"
+        "package": "libfastjson",
+        "status": "packaged"
     },
     "libffi": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libffi"
+        "package": "libffi",
+        "status": "packaged"
     },
     "libfontenc": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libfontenc"
+        "package": "libfontenc",
+        "status": "packaged"
     },
     "libgcrypt": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libgcrypt"
+        "package": "libgcrypt",
+        "status": "packaged"
     },
     "libgnome-keyring": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libgnome-keyring"
+        "package": "libgnome-keyring",
+        "status": "packaged"
     },
     "libgpg-error": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libgpg-error"
+        "package": "libgpg-error",
+        "status": "packaged"
     },
     "libgusb": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libgusb"
+        "package": "libgusb",
+        "status": "packaged"
+    },
+    "libhbalinux": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "why still here? -- unused? el7 fork, \u201cFix crash in fcoeadm/elxhbamgr on certain machines\u201d",
+        "package": "libhbalinux",
+        "status": ""
     },
     "libidn": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libidn"
+        "package": "libidn",
+        "status": "packaged"
     },
     "libjpeg-turbo": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libjpeg-turbo"
+        "package": "libjpeg-turbo",
+        "status": "packaged"
     },
     "libldb": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libldb"
+        "package": "libldb",
+        "status": "packaged"
     },
     "liblockfile": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "liblockfile"
+        "package": "liblockfile",
+        "status": "packaged"
     },
     "libmicrohttpd": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libmicrohttpd"
+        "package": "libmicrohttpd",
+        "status": "packaged"
     },
     "libmnl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libmnl"
+        "package": "libmnl",
+        "status": "packaged"
     },
     "libmodman": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libmodman"
+        "package": "libmodman",
+        "status": "packaged"
     },
     "libmpc": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libmpc"
+        "package": "libmpc",
+        "status": "packaged"
+    },
+    "libnbd": {
+        "maintainer": "?",
+        "note": "unused, dep for xapi-storage-plugins",
+        "package": "libnbd",
+        "status": "ignored"
     },
     "libnetfilter_conntrack": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libnetfilter_conntrack"
+        "package": "libnetfilter_conntrack",
+        "status": "packaged"
     },
     "libnfnetlink": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libnfnetlink"
+        "package": "libnfnetlink",
+        "status": "packaged"
     },
     "libnfsidmap": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libnfsidmap"
+        "package": "libnfsidmap",
+        "status": "packaged"
     },
     "libnl3": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libnl3"
+        "package": "libnl3",
+        "status": "packaged"
     },
     "libotf": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libotf"
+        "package": "libotf",
+        "status": "packaged"
     },
     "libpcap": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libpcap"
+        "package": "libpcap",
+        "status": "packaged"
     },
     "libpciaccess": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libpciaccess"
+        "package": "libpciaccess",
+        "status": "packaged"
     },
     "libpipeline": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libpipeline"
+        "package": "libpipeline",
+        "status": "packaged"
     },
     "libpng": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libpng"
+        "package": "libpng",
+        "status": "packaged"
     },
     "libproxy": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libproxy"
+        "package": "libproxy",
+        "status": "packaged"
     },
     "libpwquality": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libpwquality"
+        "package": "libpwquality",
+        "status": "packaged"
+    },
+    "libqb": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "package": "libqb",
+        "status": "?"
     },
     "libreport": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libreport"
+        "package": "libreport",
+        "status": "packaged"
     },
     "libreswan": {
+        "added_by": "XCP-ng",
         "maintainer": "XAPI & Network",
-        "package": "libreswan"
+        "package": "libreswan",
+        "status": "packaged"
     },
     "librsvg2": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "librsvg2"
+        "package": "librsvg2",
+        "status": "packaged"
     },
     "libseccomp": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libseccomp"
+        "package": "libseccomp",
+        "status": "packaged"
     },
     "libselinux": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libselinux"
+        "package": "libselinux",
+        "status": "packaged"
     },
     "libsemanage": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libsemanage"
+        "package": "libsemanage",
+        "status": "packaged"
     },
     "libsepol": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libsepol"
+        "package": "libsepol",
+        "status": "packaged"
     },
     "libsoup": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libsoup"
+        "package": "libsoup",
+        "status": "packaged"
     },
     "libssh2": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libssh2"
+        "package": "libssh2",
+        "status": "packaged"
     },
     "libtalloc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libtalloc"
+        "package": "libtalloc",
+        "status": "packaged"
     },
     "libtasn1": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libtasn1"
+        "package": "libtasn1",
+        "status": "packaged"
     },
     "libtdb": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libtdb"
+        "package": "libtdb",
+        "status": "packaged"
     },
     "libtevent": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libtevent"
+        "package": "libtevent",
+        "status": "packaged"
     },
     "libthai": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libthai"
+        "package": "libthai",
+        "status": "packaged"
     },
     "libtiff": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libtiff"
+        "package": "libtiff",
+        "status": "packaged"
     },
     "libtirpc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libtirpc"
+        "package": "libtirpc",
+        "status": "packaged"
     },
     "libtool": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libtool"
+        "package": "libtool",
+        "status": "packaged"
     },
     "libtpms": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "libtpms"
+        "package": "libtpms",
+        "status": "packaged"
     },
     "libunistring": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libunistring"
+        "package": "libunistring",
+        "status": "packaged"
     },
     "libunwind": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libunwind"
+        "package": "libunwind",
+        "status": "packaged"
     },
     "libusb": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libusb"
+        "package": "libusb",
+        "status": "packaged"
     },
     "libusbx": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libusbx"
+        "package": "libusbx",
+        "status": "packaged"
     },
     "libuser": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libuser"
+        "package": "libuser",
+        "status": "packaged"
     },
     "libutempter": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libutempter"
+        "package": "libutempter",
+        "status": "packaged"
     },
     "libuv": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libuv"
+        "package": "libuv",
+        "status": "packaged"
     },
     "libverto": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libverto"
+        "package": "libverto",
+        "status": "packaged"
+    },
+    "libvirt": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "Used to be a dependency for systemtap, in 8.2",
+        "package": "libvirt",
+        "status": "?"
     },
     "libwmf": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libwmf"
+        "package": "libwmf",
+        "status": "packaged"
     },
     "libxcb": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libxcb"
+        "package": "libxcb",
+        "status": "packaged"
     },
     "libxkbcommon": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libxkbcommon"
+        "package": "libxkbcommon",
+        "status": "packaged"
     },
     "libxml2": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libxml2"
+        "package": "libxml2",
+        "status": "packaged"
     },
     "libxshmfence": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libxshmfence"
+        "package": "libxshmfence",
+        "status": "packaged"
     },
     "libxslt": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "libxslt"
+        "package": "libxslt",
+        "status": "packaged"
     },
     "libyaml": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "libyaml"
+        "package": "libyaml",
+        "status": "packaged"
     },
     "linstor-client": {
+        "added_by": "XCP-ng",
         "maintainer": "Storage",
-        "package": "linstor-client"
+        "note": "XOSTOR dep",
+        "package": "linstor-client",
+        "status": "packaged"
     },
     "linux-firmware": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "linux-firmware"
+        "package": "linux-firmware",
+        "status": "packaged"
+    },
+    "linux-guest-loader": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "package": "linux-guest-loader",
+        "status": "?"
     },
     "linuxconsoletools": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "linuxconsoletools"
+        "note": "unused, same version as el7, why?",
+        "package": "linuxconsoletools",
+        "status": "ignored"
     },
     "livepatch-build-tools": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "livepatch-build-tools"
+        "note": "Used to be a dep for livepatch-utils which is proprietary",
+        "package": "livepatch-build-tools",
+        "status": "packaged"
     },
     "lksctp-tools": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "lksctp-tools"
+        "package": "lksctp-tools",
+        "status": "packaged"
     },
     "lldpad": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "lldpad"
+        "package": "lldpad",
+        "status": "packaged"
     },
     "lm_sensors": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "lm_sensors"
+        "package": "lm_sensors",
+        "status": "packaged"
     },
     "logrotate": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "logrotate"
+        "package": "logrotate",
+        "status": "packaged"
     },
     "lshw": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "lshw"
+        "note": "extra tool",
+        "package": "lshw",
+        "status": "packaged"
     },
     "lsof": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "lsof"
+        "package": "lsof",
+        "status": "packaged"
+    },
+    "lsscsi": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "extra tool",
+        "package": "lsscsi",
+        "status": "?"
     },
     "lua": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "lua"
+        "package": "lua",
+        "status": "packaged"
     },
     "lvm2": {
+        "added_by": "XS",
         "maintainer": "Storage",
-        "package": "lvm2"
+        "package": "lvm2",
+        "status": "packaged"
     },
     "lynx": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "lynx"
+        "package": "lynx",
+        "status": "packaged"
     },
     "lz4": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "lz4"
+        "package": "lz4",
+        "status": "packaged"
     },
     "lzo": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "lzo"
+        "package": "lzo",
+        "status": "packaged"
     },
     "m17n-db": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "m17n-db"
+        "package": "m17n-db",
+        "status": "packaged"
     },
     "m17n-lib": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "m17n-lib"
+        "package": "m17n-lib",
+        "status": "packaged"
+    },
+    "m2crypto": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "package": "m2crypto",
+        "status": "?"
     },
     "m4": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "m4"
+        "package": "m4",
+        "status": "packaged"
     },
     "mailx": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "mailx"
+        "package": "mailx",
+        "status": "packaged"
     },
     "make": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "make"
+        "package": "make",
+        "status": "packaged"
     },
     "makedumpfile": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "makedumpfile"
+        "package": "makedumpfile",
+        "status": "packaged"
     },
     "man-db": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "man-db"
+        "package": "man-db",
+        "status": "packaged"
     },
     "mariadb": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "mariadb"
+        "package": "mariadb",
+        "status": "packaged"
+    },
+    "mbootpack": {
+        "maintainer": "?",
+        "note": "for secureboot?",
+        "package": "mbootpack",
+        "status": ""
     },
     "mc": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "mc"
+        "note": "extra tool",
+        "package": "mc",
+        "status": "packaged"
     },
     "mcelog": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "mcelog"
+        "package": "mcelog",
+        "status": "packaged"
     },
     "mdadm": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "mdadm"
+        "package": "mdadm",
+        "status": "packaged"
     },
     "mellanox-mlnxen": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "mellanox-mlnxen"
+        "package": "mellanox-mlnxen",
+        "status": "packaged"
     },
     "mellanox-mlnxen-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "mellanox-mlnxen-alt"
+        "note": "alternate driver",
+        "package": "mellanox-mlnxen-alt",
+        "status": "packaged"
     },
     "memtest86+": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "memtest86+"
+        "package": "memtest86+",
+        "status": "packaged"
     },
     "mercurial": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "mercurial"
+        "package": "mercurial",
+        "status": "packaged"
     },
     "mesa": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "mesa"
+        "package": "mesa",
+        "status": "packaged"
+    },
+    "meson": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "dep of qemu-dp",
+        "package": "meson",
+        "status": "?"
+    },
+    "message-switch": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "message-switch",
+        "status": "ignored"
     },
     "microsemi-aacraid": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "microsemi-aacraid"
+        "package": "microsemi-aacraid",
+        "status": "packaged"
     },
     "microsemi-smartpqi": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "microsemi-smartpqi"
+        "package": "microsemi-smartpqi",
+        "status": "packaged"
     },
     "microsemi-smartpqi-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "microsemi-smartpqi-alt"
+        "note": "alternate driver",
+        "package": "microsemi-smartpqi-alt",
+        "status": "packaged"
     },
     "mlx4-modules-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "mlx4-modules-alt"
+        "note": "additional driver",
+        "package": "mlx4-modules-alt",
+        "status": "packaged"
     },
     "mozjs17": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "mozjs17"
+        "package": "mozjs17",
+        "status": "packaged"
+    },
+    "mpdecimal": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "mpdecimal",
+        "status": "ignored"
     },
     "mpfr": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "mpfr"
+        "package": "mpfr",
+        "status": "packaged"
     },
     "mpi3mr-module": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "mpi3mr-module"
+        "note": "additional driver",
+        "package": "mpi3mr-module",
+        "status": "packaged"
     },
     "mtools": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "mtools"
+        "package": "mtools",
+        "status": "packaged"
     },
     "mtr": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "mtr"
+        "note": "extra tool",
+        "package": "mtr",
+        "status": "packaged"
+    },
+    "nagios-plugins": {
+        "maintainer": "?",
+        "note": "XS specific feature, maybe include it later",
+        "package": "nagios-plugins",
+        "status": "ignored"
     },
     "nano": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nano"
+        "package": "nano",
+        "status": "packaged"
     },
     "nasm": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nasm"
+        "package": "nasm",
+        "status": "packaged"
     },
     "nbd": {
+        "added_by": "XS",
         "maintainer": "Storage",
-        "package": "nbd"
+        "package": "nbd",
+        "status": "packaged"
+    },
+    "nbdkit": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "added as dependency for XOSTOR",
+        "package": "nbdkit",
+        "status": "?"
     },
     "ncompress": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "ncompress"
+        "package": "ncompress",
+        "status": "packaged"
     },
     "ncurses": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ncurses"
+        "package": "ncurses",
+        "status": "packaged"
     },
     "neon": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "neon"
+        "package": "neon",
+        "status": "packaged"
     },
     "net-snmp": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "net-snmp"
+        "package": "net-snmp",
+        "status": "packaged"
     },
     "net-tools": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "net-tools"
+        "package": "net-tools",
+        "status": "packaged"
     },
     "netdata": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "netdata"
+        "note": "netdata package for XO, netdata-ui for users",
+        "package": "netdata",
+        "status": "packaged"
     },
     "nettle": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nettle"
+        "package": "nettle",
+        "status": "packaged"
     },
     "newt": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "newt"
+        "package": "newt",
+        "status": "packaged"
     },
     "nfs-utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nfs-utils"
+        "package": "nfs-utils",
+        "status": "packaged"
+    },
+    "ninja-build": {
+        "maintainer": "?",
+        "note": "unused",
+        "package": "ninja-build",
+        "status": "ignored"
     },
     "nload": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "nload"
+        "note": "extra tool",
+        "package": "nload",
+        "status": "packaged"
     },
     "nmap": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "nmap"
+        "note": "extra tool",
+        "package": "nmap",
+        "status": "packaged"
+    },
+    "nrpe": {
+        "maintainer": "?",
+        "note": "nagios-plugins dependency",
+        "package": "nrpe",
+        "status": "ignored"
     },
     "nspr": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nspr"
+        "package": "nspr",
+        "status": "packaged"
     },
     "nss": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nss"
+        "package": "nss",
+        "status": "packaged"
     },
     "nss-pem": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nss-pem"
+        "package": "nss-pem",
+        "status": "packaged"
     },
     "nss-softokn": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nss-softokn"
+        "package": "nss-softokn",
+        "status": "packaged"
     },
     "nss-util": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "nss-util"
+        "package": "nss-util",
+        "status": "packaged"
     },
     "numactl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "numactl"
+        "package": "numactl",
+        "status": "packaged"
     },
     "nvme-cli": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "nvme-cli"
+        "note": "extra tool",
+        "package": "nvme-cli",
+        "status": "packaged"
     },
     "ocaml": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "ocaml"
+        "package": "ocaml",
+        "status": "packaged"
     },
     "ocaml-findlib": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "ocaml-findlib"
+        "package": "ocaml-findlib",
+        "status": "packaged"
     },
     "opam": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "opam"
+        "package": "opam",
+        "status": "packaged"
     },
     "openjade": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "openjade"
+        "package": "openjade",
+        "status": "packaged"
     },
     "openldap": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "openldap"
+        "package": "openldap",
+        "status": "packaged"
     },
     "opensp": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "opensp"
+        "package": "opensp",
+        "status": "packaged"
     },
     "openssh": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "openssh"
+        "package": "openssh",
+        "status": "packaged"
     },
     "openssl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "openssl"
+        "package": "openssl",
+        "status": "packaged"
     },
     "openvswitch": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "openvswitch"
+        "package": "openvswitch",
+        "status": "packaged"
+    },
+    "oprofile": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "package": "oprofile",
+        "status": "?"
     },
     "os-prober": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "os-prober"
+        "package": "os-prober",
+        "status": "packaged"
     },
     "p11-kit": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "p11-kit"
+        "package": "p11-kit",
+        "status": "packaged"
     },
     "pakchois": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "pakchois"
+        "package": "pakchois",
+        "status": "packaged"
     },
     "pam": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pam"
+        "package": "pam",
+        "status": "packaged"
     },
     "pango": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "pango"
+        "package": "pango",
+        "status": "packaged"
     },
     "parted": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "parted"
+        "package": "parted",
+        "status": "packaged"
     },
     "passwd": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "passwd"
+        "package": "passwd",
+        "status": "packaged"
     },
     "patch": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "patch"
+        "package": "patch",
+        "status": "packaged"
+    },
+    "pbis-open": {
+        "maintainer": "?",
+        "note": "unused, likely linked to upgrade-pbis-to-winbind",
+        "package": "pbis-open",
+        "status": "ignored"
+    },
+    "pbis-open-upgrade": {
+        "maintainer": "?",
+        "note": "unused, likely linked to upgrade-pbis-to-winbind",
+        "package": "pbis-open-upgrade",
+        "status": "ignored"
     },
     "pciutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pciutils"
+        "package": "pciutils",
+        "status": "packaged"
     },
     "pcre": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pcre"
+        "package": "pcre",
+        "status": "packaged"
     },
     "perl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl"
+        "package": "perl",
+        "status": "packaged"
     },
     "perl-Carp": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Carp"
+        "package": "perl-Carp",
+        "status": "packaged"
     },
     "perl-Compress-Raw-Bzip2": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Compress-Raw-Bzip2"
+        "package": "perl-Compress-Raw-Bzip2",
+        "status": "packaged"
     },
     "perl-Compress-Raw-Zlib": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Compress-Raw-Zlib"
+        "package": "perl-Compress-Raw-Zlib",
+        "status": "packaged"
     },
     "perl-Data-Dumper": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Data-Dumper"
+        "package": "perl-Data-Dumper",
+        "status": "packaged"
     },
     "perl-Devel-CheckLib": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Devel-CheckLib"
+        "package": "perl-Devel-CheckLib",
+        "status": "packaged"
     },
     "perl-Digest": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Digest"
+        "package": "perl-Digest",
+        "status": "packaged"
     },
     "perl-Digest-MD5": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Digest-MD5"
+        "package": "perl-Digest-MD5",
+        "status": "packaged"
     },
     "perl-Digest-SHA": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Digest-SHA"
+        "package": "perl-Digest-SHA",
+        "status": "packaged"
     },
     "perl-Digest-SHA1": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Digest-SHA1"
+        "package": "perl-Digest-SHA1",
+        "status": "packaged"
     },
     "perl-Digest-SHA3": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Digest-SHA3"
+        "package": "perl-Digest-SHA3",
+        "status": "packaged"
     },
     "perl-Email-Date-Format": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Email-Date-Format"
+        "package": "perl-Email-Date-Format",
+        "status": "packaged"
     },
     "perl-Encode": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Encode"
+        "package": "perl-Encode",
+        "status": "packaged"
     },
     "perl-Env": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Env"
+        "package": "perl-Env",
+        "status": "packaged"
     },
     "perl-Error": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Error"
+        "package": "perl-Error",
+        "status": "packaged"
     },
     "perl-Exporter": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Exporter"
+        "package": "perl-Exporter",
+        "status": "packaged"
     },
     "perl-ExtUtils-MakeMaker": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-ExtUtils-MakeMaker"
+        "package": "perl-ExtUtils-MakeMaker",
+        "status": "packaged"
     },
     "perl-ExtUtils-Manifest": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-ExtUtils-Manifest"
+        "package": "perl-ExtUtils-Manifest",
+        "status": "packaged"
     },
     "perl-ExtUtils-ParseXS": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-ExtUtils-ParseXS"
+        "package": "perl-ExtUtils-ParseXS",
+        "status": "packaged"
     },
     "perl-File-Path": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-File-Path"
+        "package": "perl-File-Path",
+        "status": "packaged"
     },
     "perl-File-Temp": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-File-Temp"
+        "package": "perl-File-Temp",
+        "status": "packaged"
     },
     "perl-Filter": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Filter"
+        "package": "perl-Filter",
+        "status": "packaged"
     },
     "perl-GD": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-GD"
+        "package": "perl-GD",
+        "status": "packaged"
     },
     "perl-Getopt-Long": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Getopt-Long"
+        "package": "perl-Getopt-Long",
+        "status": "packaged"
     },
     "perl-HTTP-Tiny": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-HTTP-Tiny"
+        "package": "perl-HTTP-Tiny",
+        "status": "packaged"
     },
     "perl-IO-Compress": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-IO-Compress"
+        "package": "perl-IO-Compress",
+        "status": "packaged"
     },
     "perl-Locale-Maketext": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Locale-Maketext"
+        "package": "perl-Locale-Maketext",
+        "status": "packaged"
     },
     "perl-MIME-Lite": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-MIME-Lite"
+        "package": "perl-MIME-Lite",
+        "status": "packaged"
     },
     "perl-MIME-Types": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-MIME-Types"
+        "package": "perl-MIME-Types",
+        "status": "packaged"
     },
     "perl-Module-Load": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Module-Load"
+        "package": "perl-Module-Load",
+        "status": "packaged"
     },
     "perl-Module-Load-Conditional": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Module-Load-Conditional"
+        "package": "perl-Module-Load-Conditional",
+        "status": "packaged"
     },
     "perl-Module-Metadata": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Module-Metadata"
+        "package": "perl-Module-Metadata",
+        "status": "packaged"
     },
     "perl-Params-Check": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Params-Check"
+        "package": "perl-Params-Check",
+        "status": "packaged"
     },
     "perl-Parse-Yapp": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Parse-Yapp"
+        "package": "perl-Parse-Yapp",
+        "status": "packaged"
     },
     "perl-PathTools": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-PathTools"
+        "package": "perl-PathTools",
+        "status": "packaged"
     },
     "perl-Pod-Perldoc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Pod-Perldoc"
+        "package": "perl-Pod-Perldoc",
+        "status": "packaged"
     },
     "perl-Pod-Simple": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Pod-Simple"
+        "package": "perl-Pod-Simple",
+        "status": "packaged"
     },
     "perl-Pod-Usage": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Pod-Usage"
+        "package": "perl-Pod-Usage",
+        "status": "packaged"
     },
     "perl-SGMLSpm": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-SGMLSpm"
+        "package": "perl-SGMLSpm",
+        "status": "packaged"
     },
     "perl-Scalar-List-Utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Scalar-List-Utils"
+        "package": "perl-Scalar-List-Utils",
+        "status": "packaged"
     },
     "perl-Socket": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Socket"
+        "package": "perl-Socket",
+        "status": "packaged"
     },
     "perl-Storable": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Storable"
+        "package": "perl-Storable",
+        "status": "packaged"
     },
     "perl-TermReadKey": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-TermReadKey"
+        "package": "perl-TermReadKey",
+        "status": "packaged"
     },
     "perl-Test-Harness": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Test-Harness"
+        "package": "perl-Test-Harness",
+        "status": "packaged"
     },
     "perl-Test-Simple": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Test-Simple"
+        "package": "perl-Test-Simple",
+        "status": "packaged"
     },
     "perl-Text-ParseWords": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Text-ParseWords"
+        "package": "perl-Text-ParseWords",
+        "status": "packaged"
     },
     "perl-Text-Unidecode": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Text-Unidecode"
+        "package": "perl-Text-Unidecode",
+        "status": "packaged"
     },
     "perl-Thread-Queue": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Thread-Queue"
+        "package": "perl-Thread-Queue",
+        "status": "packaged"
     },
     "perl-Time-HiRes": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Time-HiRes"
+        "package": "perl-Time-HiRes",
+        "status": "packaged"
     },
     "perl-Time-Local": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-Time-Local"
+        "package": "perl-Time-Local",
+        "status": "packaged"
     },
     "perl-TimeDate": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-TimeDate"
+        "package": "perl-TimeDate",
+        "status": "packaged"
     },
     "perl-WWW-Curl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-WWW-Curl"
+        "package": "perl-WWW-Curl",
+        "status": "packaged"
     },
     "perl-XML-Parser": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-XML-Parser"
+        "package": "perl-XML-Parser",
+        "status": "packaged"
     },
     "perl-constant": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-constant"
+        "package": "perl-constant",
+        "status": "packaged"
     },
     "perl-generators": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-generators"
+        "package": "perl-generators",
+        "status": "packaged"
     },
     "perl-libintl": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-libintl"
+        "package": "perl-libintl",
+        "status": "packaged"
     },
     "perl-parent": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-parent"
+        "package": "perl-parent",
+        "status": "packaged"
     },
     "perl-podlators": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-podlators"
+        "package": "perl-podlators",
+        "status": "packaged"
     },
     "perl-srpm-macros": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-srpm-macros"
+        "package": "perl-srpm-macros",
+        "status": "packaged"
     },
     "perl-threads": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-threads"
+        "package": "perl-threads",
+        "status": "packaged"
     },
     "perl-threads-shared": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "perl-threads-shared"
+        "package": "perl-threads-shared",
+        "status": "packaged"
     },
     "perl-version": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "perl-version"
+        "package": "perl-version",
+        "status": "packaged"
     },
     "pinentry": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pinentry"
+        "package": "pinentry",
+        "status": "packaged"
     },
     "pixman": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pixman"
+        "package": "pixman",
+        "status": "packaged"
     },
     "pkgconfig": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pkgconfig"
+        "package": "pkgconfig",
+        "status": "packaged"
     },
     "plymouth": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "plymouth"
+        "package": "plymouth",
+        "status": "packaged"
     },
     "policycoreutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "policycoreutils"
+        "package": "policycoreutils",
+        "status": "packaged"
     },
     "polkit": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "polkit"
+        "package": "polkit",
+        "status": "packaged"
     },
     "polkit-pkla-compat": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "polkit-pkla-compat"
+        "package": "polkit-pkla-compat",
+        "status": "packaged"
     },
     "poppler-data": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "poppler-data"
+        "package": "poppler-data",
+        "status": "packaged"
     },
     "popt": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "popt"
+        "package": "popt",
+        "status": "packaged"
     },
     "portreserve": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "portreserve"
+        "package": "portreserve",
+        "status": "packaged"
     },
     "procps-ng": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "procps-ng"
+        "package": "procps-ng",
+        "status": "packaged"
     },
     "protobuf": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "protobuf"
+        "note": "dep and builddep for netdata, which needs protobuf 3",
+        "package": "protobuf",
+        "status": "packaged"
     },
     "protobuf-c": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "protobuf-c"
+        "note": "dep and builddep for netdata, which needs a version of protobuf-c compatible with protobuf 3",
+        "package": "protobuf-c",
+        "status": "packaged"
     },
     "psmisc": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "psmisc"
+        "package": "psmisc",
+        "status": "packaged"
     },
     "pth": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pth"
+        "package": "pth",
+        "status": "packaged"
+    },
+    "pvsproxy": {
+        "maintainer": "?",
+        "note": "proprietary",
+        "package": "pvsproxy",
+        "status": "ignored"
     },
     "pyOpenSSL": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "pyOpenSSL"
+        "package": "pyOpenSSL",
+        "status": "packaged"
     },
     "pygpgme": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pygpgme"
+        "package": "pygpgme",
+        "status": "packaged"
     },
     "pyliblzma": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pyliblzma"
+        "package": "pyliblzma",
+        "status": "packaged"
     },
     "pylint": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "pylint"
+        "package": "pylint",
+        "status": "packaged"
     },
     "pyparsing": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "pyparsing"
+        "package": "pyparsing",
+        "status": "packaged"
     },
     "pyproject-rpm-macros": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "pyproject-rpm-macros"
+        "package": "pyproject-rpm-macros",
+        "status": "packaged"
     },
     "pyserial": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pyserial"
+        "package": "pyserial",
+        "status": "packaged"
     },
     "pytest": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "pytest"
+        "package": "pytest",
+        "status": "packaged"
     },
     "python": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python"
+        "package": "python",
+        "status": "packaged"
     },
     "python-IPy": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-IPy"
+        "package": "python-IPy",
+        "status": "packaged"
     },
     "python-aiocontextvars": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-aiocontextvars"
+        "package": "python-aiocontextvars",
+        "status": "packaged"
+    },
+    "python-asn1crypto": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "Used to be dep for proprietary secureboot-certificates. Unneeded.",
+        "package": "python-asn1crypto",
+        "status": "?"
     },
     "python-astroid": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-astroid"
+        "package": "python-astroid",
+        "status": "packaged"
     },
     "python-backports": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-backports"
+        "package": "python-backports",
+        "status": "packaged"
     },
     "python-backports-ssl_match_hostname": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-backports-ssl_match_hostname"
+        "package": "python-backports-ssl_match_hostname",
+        "status": "packaged"
     },
     "python-beaker": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-beaker"
+        "package": "python-beaker",
+        "status": "packaged"
     },
     "python-bitarray": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-bitarray"
+        "package": "python-bitarray",
+        "status": "packaged"
     },
     "python-cffi": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-cffi"
+        "package": "python-cffi",
+        "status": "packaged"
     },
     "python-chardet": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-chardet"
+        "package": "python-chardet",
+        "status": "packaged"
     },
     "python-charset-normalizer": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-charset-normalizer"
+        "package": "python-charset-normalizer",
+        "status": "packaged"
     },
     "python-contextvars": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-contextvars"
+        "package": "python-contextvars",
+        "status": "packaged"
     },
     "python-cryptography": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-cryptography"
+        "package": "python-cryptography",
+        "status": "packaged"
     },
     "python-defusedxml": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-defusedxml"
+        "package": "python-defusedxml",
+        "status": "packaged"
     },
     "python-demjson": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-demjson"
+        "package": "python-demjson",
+        "status": "packaged"
     },
     "python-deprecated": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-deprecated"
+        "package": "python-deprecated",
+        "status": "packaged"
     },
     "python-dns": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-dns"
+        "package": "python-dns",
+        "status": "packaged"
     },
     "python-enum34": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-enum34"
+        "package": "python-enum34",
+        "status": "packaged"
     },
     "python-fasteners": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-fasteners"
+        "package": "python-fasteners",
+        "status": "packaged"
     },
     "python-idna": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-idna"
+        "package": "python-idna",
+        "status": "packaged"
     },
     "python-immutables": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-immutables"
+        "package": "python-immutables",
+        "status": "packaged"
     },
     "python-iniparse": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-iniparse"
+        "package": "python-iniparse",
+        "status": "packaged"
     },
     "python-ipaddress": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-ipaddress"
+        "package": "python-ipaddress",
+        "status": "packaged"
     },
     "python-iso8601": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-iso8601"
+        "package": "python-iso8601",
+        "status": "packaged"
     },
     "python-isort": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-isort"
+        "package": "python-isort",
+        "status": "packaged"
     },
     "python-kitchen": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-kitchen"
+        "package": "python-kitchen",
+        "status": "packaged"
     },
     "python-lazy-object-proxy": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-lazy-object-proxy"
+        "package": "python-lazy-object-proxy",
+        "status": "packaged"
     },
     "python-libarchive-c": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-libarchive-c"
+        "note": "dep of update-package",
+        "package": "python-libarchive-c",
+        "status": "packaged"
     },
     "python-linstor": {
+        "added_by": "?",
         "maintainer": "Storage",
-        "package": "python-linstor"
+        "package": "python-linstor",
+        "status": "packaged"
     },
     "python-lxml": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-lxml"
+        "package": "python-lxml",
+        "status": "packaged"
     },
     "python-mako": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-mako"
+        "package": "python-mako",
+        "status": "packaged"
     },
     "python-markupsafe": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-markupsafe"
+        "package": "python-markupsafe",
+        "status": "packaged"
     },
     "python-mccabe": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-mccabe"
+        "package": "python-mccabe",
+        "status": "packaged"
     },
     "python-mock": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-mock"
+        "package": "python-mock",
+        "status": "packaged"
+    },
+    "python-monotonic": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "previous dependency for sm",
+        "package": "python-monotonic",
+        "status": "ignored"
     },
     "python-opentelemetry": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-opentelemetry"
+        "package": "python-opentelemetry",
+        "status": "packaged"
     },
     "python-packaging": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-packaging"
+        "package": "python-packaging",
+        "status": "packaged"
     },
     "python-pam": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-pam"
+        "package": "python-pam",
+        "status": "packaged"
     },
     "python-paramiko": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-paramiko"
+        "package": "python-paramiko",
+        "status": "packaged"
     },
     "python-paste": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-paste"
+        "package": "python-paste",
+        "status": "packaged"
     },
     "python-pbr": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-pbr"
+        "package": "python-pbr",
+        "status": "packaged"
     },
     "python-pip": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-pip"
+        "package": "python-pip",
+        "status": "packaged"
     },
     "python-ply": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-ply"
+        "package": "python-ply",
+        "status": "packaged"
+    },
+    "python-psutil": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "package": "python-psutil",
+        "status": "?"
     },
     "python-py": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-py"
+        "package": "python-py",
+        "status": "packaged"
     },
     "python-pyasn1": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-pyasn1"
+        "package": "python-pyasn1",
+        "status": "packaged"
     },
     "python-pycparser": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "python-pycparser"
+        "package": "python-pycparser",
+        "status": "packaged"
     },
     "python-pycurl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-pycurl"
+        "package": "python-pycurl",
+        "status": "packaged"
     },
     "python-pyudev": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-pyudev"
+        "package": "python-pyudev",
+        "status": "packaged"
     },
     "python-requests": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-requests"
+        "package": "python-requests",
+        "status": "packaged"
     },
     "python-rpm-generators": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-rpm-generators"
+        "package": "python-rpm-generators",
+        "status": "packaged"
     },
     "python-rpm-macros": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-rpm-macros"
+        "package": "python-rpm-macros",
+        "status": "packaged"
     },
     "python-setuptools": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-setuptools"
+        "package": "python-setuptools",
+        "status": "packaged"
     },
     "python-six": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-six"
+        "package": "python-six",
+        "status": "packaged"
     },
     "python-tempita": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-tempita"
+        "package": "python-tempita",
+        "status": "packaged"
+    },
+    "python-tqdm": {
+        "maintainer": "?",
+        "note": "unused, dependency for pvsproxy",
+        "package": "python-tqdm",
+        "status": "ignored"
     },
     "python-typing-extensions": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-typing-extensions"
+        "package": "python-typing-extensions",
+        "status": "packaged"
     },
     "python-urlgrabber": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python-urlgrabber"
+        "package": "python-urlgrabber",
+        "status": "packaged"
     },
     "python-urllib3": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-urllib3"
+        "package": "python-urllib3",
+        "status": "packaged"
     },
     "python-wheel": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-wheel"
+        "package": "python-wheel",
+        "status": "packaged"
     },
     "python-wrapt": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python-wrapt"
+        "package": "python-wrapt",
+        "status": "packaged"
+    },
+    "python2-enum34": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "dep for proprietary secureboot-certificates. Drop?",
+        "package": "python2-enum34",
+        "status": "?"
     },
     "python3": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python3"
+        "package": "python3",
+        "status": "packaged"
     },
     "python3-cffi": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python3-cffi"
+        "package": "python3-cffi",
+        "status": "packaged"
     },
     "python3-coverage": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python3-coverage"
+        "package": "python3-coverage",
+        "status": "packaged"
     },
     "python3-docutils": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python3-docutils"
+        "package": "python3-docutils",
+        "status": "packaged"
     },
     "python3-mock": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python3-mock"
+        "package": "python3-mock",
+        "status": "packaged"
     },
     "python3-ply": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python3-ply"
+        "package": "python3-ply",
+        "status": "packaged"
     },
     "python3-pycparser": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python3-pycparser"
+        "package": "python3-pycparser",
+        "status": "packaged"
     },
     "python3-pyparsing": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "python3-pyparsing"
+        "package": "python3-pyparsing",
+        "status": "packaged"
     },
     "python3-setuptools": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python3-setuptools"
+        "package": "python3-setuptools",
+        "status": "packaged"
     },
     "python3-six": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "python3-six"
+        "package": "python3-six",
+        "status": "packaged"
     },
     "pyxattr": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "pyxattr"
+        "package": "pyxattr",
+        "status": "packaged"
     },
     "qemu": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "qemu"
+        "package": "qemu",
+        "status": "packaged"
     },
     "qemu-dp": {
+        "added_by": "XS",
         "maintainer": "Storage",
-        "package": "qemu-dp"
+        "package": "qemu-dp",
+        "status": "packaged"
     },
     "qlogic-fastlinq": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "qlogic-fastlinq"
+        "package": "qlogic-fastlinq",
+        "status": "packaged"
     },
     "qlogic-fastlinq-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "qlogic-fastlinq-alt"
+        "note": "additional driver",
+        "package": "qlogic-fastlinq-alt",
+        "status": "packaged"
     },
     "qlogic-netxtreme2": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "qlogic-netxtreme2"
+        "package": "qlogic-netxtreme2",
+        "status": "packaged"
     },
     "qlogic-netxtreme2-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "qlogic-netxtreme2-alt"
+        "note": "additional driver",
+        "package": "qlogic-netxtreme2-alt",
+        "status": "packaged"
     },
     "qlogic-qla2xxx": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "qlogic-qla2xxx"
+        "package": "qlogic-qla2xxx",
+        "status": "packaged"
     },
     "qlogic-qla2xxx-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "qlogic-qla2xxx-alt"
+        "note": "additional driver",
+        "package": "qlogic-qla2xxx-alt",
+        "status": "packaged"
     },
     "qlogic-qla2xxx-firmware": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "qlogic-qla2xxx-firmware"
+        "package": "qlogic-qla2xxx-firmware",
+        "status": "packaged"
     },
     "qrencode": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "qrencode"
+        "package": "qrencode",
+        "status": "packaged"
     },
     "quota": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "quota"
+        "package": "quota",
+        "status": "packaged"
     },
     "r8125-module": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "r8125-module"
+        "note": "additional driver",
+        "package": "r8125-module",
+        "status": "packaged"
     },
     "r8169-module-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "r8169-module-alt"
+        "note": "additional driver",
+        "package": "r8169-module-alt",
+        "status": "packaged"
     },
     "readline": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "readline"
+        "package": "readline",
+        "status": "packaged"
     },
     "redhat-lsb": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "redhat-lsb"
+        "package": "redhat-lsb",
+        "status": "packaged"
     },
     "redhat-rpm-config": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "redhat-rpm-config"
+        "package": "redhat-rpm-config",
+        "status": "packaged"
     },
     "rest": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "rest"
+        "package": "rest",
+        "status": "packaged"
     },
     "rootfiles": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "rootfiles"
+        "package": "rootfiles",
+        "status": "packaged"
     },
     "rpcbind": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "rpcbind"
+        "package": "rpcbind",
+        "status": "packaged"
     },
     "rpm": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "rpm"
+        "package": "rpm",
+        "status": "packaged"
+    },
+    "rrd-client-lib": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "dependency of proprietary pvsproxy",
+        "package": "rrd-client-lib",
+        "status": "?"
+    },
+    "rrdd-plugins": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "rrdd-plugins",
+        "status": "ignored"
     },
     "rsync": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "rsync"
+        "package": "rsync",
+        "status": "packaged"
     },
     "rsyslog": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "rsyslog"
+        "note": "updated by us to rsyslog-8.24.0-52.el7_8.2 for memory leak fixes. Dependency libfastjson not updated but would need to be if we used the mm-normalize plugin (RHBZ #1591493)",
+        "package": "rsyslog",
+        "status": "packaged"
+    },
+    "ruby": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "ruby",
+        "status": "ignored"
     },
     "samba": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "samba"
+        "package": "samba",
+        "status": "packaged"
+    },
+    "sbd": {
+        "maintainer": "?",
+        "note": "unused? \"storage-based death functionality\"",
+        "package": "sbd",
+        "status": ""
     },
     "scapy": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "scapy"
+        "package": "scapy",
+        "status": "packaged"
     },
     "scl-utils": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "scl-utils"
+        "package": "scl-utils",
+        "status": "packaged"
     },
     "screen": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "screen"
+        "package": "screen",
+        "status": "packaged"
+    },
+    "secureboot-certificates": {
+        "maintainer": "?",
+        "note": "proprietary, needs alternative?",
+        "package": "secureboot-certificates",
+        "status": "ignored"
+    },
+    "security-tools": {
+        "maintainer": "?",
+        "note": "proprietary, pool_secret tool",
+        "package": "security-tools",
+        "status": "ignored"
     },
     "sed": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "sed"
+        "package": "sed",
+        "status": "packaged"
     },
     "setools": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "setools"
+        "package": "setools",
+        "status": "packaged"
     },
     "setup": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "setup"
+        "package": "setup",
+        "status": "packaged"
     },
     "sg3_utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "sg3_utils"
+        "package": "sg3_utils",
+        "status": "packaged"
     },
     "sgml-common": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "sgml-common"
+        "package": "sgml-common",
+        "status": "packaged"
     },
     "shadow-utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "shadow-utils"
+        "package": "shadow-utils",
+        "status": "packaged"
     },
     "shared-mime-info": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "shared-mime-info"
+        "package": "shared-mime-info",
+        "status": "packaged"
     },
     "sharutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "sharutils"
+        "package": "sharutils",
+        "status": "packaged"
     },
     "slang": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "slang"
+        "package": "slang",
+        "status": "packaged"
     },
     "sm": {
+        "added_by": "XS",
         "maintainer": "Storage",
-        "package": "sm"
+        "package": "sm",
+        "status": "packaged"
+    },
+    "sm-cli": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "sm-cli",
+        "status": "ignored"
     },
     "sm-core-libs": {
+        "added_by": "XS",
         "maintainer": "Storage",
-        "package": "sm-core-libs"
+        "note": "deps for proprietary sm-transport-libs",
+        "package": "sm-core-libs",
+        "status": "packaged"
+    },
+    "sm-transport-lib": {
+        "maintainer": "?",
+        "note": "proprietary",
+        "package": "sm-transport-lib",
+        "status": "ignored"
     },
     "smartmontools": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "smartmontools"
+        "package": "smartmontools",
+        "status": "packaged"
     },
     "snappy": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "snappy"
+        "package": "snappy",
+        "status": "packaged"
     },
     "socat": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "socat"
+        "note": "extra tool",
+        "package": "socat",
+        "status": "packaged"
     },
     "softhsm": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "softhsm"
+        "package": "softhsm",
+        "status": "packaged"
     },
     "source-highlight": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "source-highlight"
+        "package": "source-highlight",
+        "status": "packaged"
     },
     "sqlite": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "sqlite"
+        "package": "sqlite",
+        "status": "packaged"
+    },
+    "squeezed": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "squeezed",
+        "status": "ignored"
     },
     "ssmtp": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ssmtp"
+        "package": "ssmtp",
+        "status": "packaged"
     },
     "star": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "star"
+        "package": "star",
+        "status": "packaged"
     },
     "strace": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "strace"
+        "package": "strace",
+        "status": "packaged"
     },
     "stunnel": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "stunnel"
+        "package": "stunnel",
+        "status": "packaged"
     },
     "subversion": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "subversion"
+        "package": "subversion",
+        "status": "packaged"
     },
     "sudo": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "sudo"
+        "package": "sudo",
+        "status": "packaged"
     },
     "swig": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "swig"
+        "package": "swig",
+        "status": "packaged"
     },
     "swtpm": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "swtpm"
+        "package": "swtpm",
+        "status": "packaged"
     },
     "sysfsutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "sysfsutils"
+        "package": "sysfsutils",
+        "status": "packaged"
     },
     "syslinux": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "syslinux"
+        "package": "syslinux",
+        "status": "packaged"
     },
     "sysstat": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "sysstat"
+        "package": "sysstat",
+        "status": "packaged"
     },
     "system-config-firewall": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "system-config-firewall"
+        "package": "system-config-firewall",
+        "status": "packaged"
     },
     "systemd": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "systemd"
+        "package": "systemd",
+        "status": "packaged"
     },
     "systemtap": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "systemtap"
+        "package": "systemtap",
+        "status": "packaged"
     },
     "sysvinit": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "sysvinit"
+        "package": "sysvinit",
+        "status": "packaged"
     },
     "tar": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "tar"
+        "package": "tar",
+        "status": "packaged"
     },
     "tcl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "tcl"
+        "package": "tcl",
+        "status": "packaged"
     },
     "tcp_wrappers": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "tcp_wrappers"
+        "package": "tcp_wrappers",
+        "status": "packaged"
     },
     "tcpdump": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "tcpdump"
+        "package": "tcpdump",
+        "status": "packaged"
     },
     "telnet": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "telnet"
+        "package": "telnet",
+        "status": "packaged"
     },
     "test-ring0": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "test-ring0"
+        "package": "test-ring0",
+        "status": "packaged"
     },
     "texinfo": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "texinfo"
+        "package": "texinfo",
+        "status": "packaged"
     },
     "tg3-module-alt": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "tg3-module-alt"
+        "note": "additional driver",
+        "package": "tg3-module-alt",
+        "status": "packaged"
     },
     "time": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "time"
+        "package": "time",
+        "status": "packaged"
+    },
+    "tix": {
+        "maintainer": "?",
+        "note": "unused, why?",
+        "package": "tix",
+        "status": "ignored"
     },
     "tmux": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "tmux"
+        "note": "extra tool",
+        "package": "tmux",
+        "status": "packaged"
     },
     "traceroute": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "traceroute"
+        "note": "extra tool",
+        "package": "traceroute",
+        "status": "packaged"
     },
     "tree": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "tree"
+        "note": "extra tool",
+        "package": "tree",
+        "status": "packaged"
     },
     "trousers": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "trousers"
+        "package": "trousers",
+        "status": "packaged"
     },
     "tzdata": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "tzdata"
+        "package": "tzdata",
+        "status": "packaged"
+    },
+    "uefistored": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "Obsoleted by varstored",
+        "package": "uefistored",
+        "status": "?"
     },
     "unbound": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "unbound"
+        "package": "unbound",
+        "status": "packaged"
     },
     "unzip": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "unzip"
+        "package": "unzip",
+        "status": "packaged"
     },
     "update-package": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "update-package"
+        "note": "needed to build driver disks",
+        "package": "update-package",
+        "status": "packaged"
+    },
+    "upgrade-pbis-to-winbind": {
+        "maintainer": "?",
+        "note": "proprietary",
+        "package": "upgrade-pbis-to-winbind",
+        "status": "ignored"
     },
     "urw-fonts": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "urw-fonts"
+        "package": "urw-fonts",
+        "status": "packaged"
     },
     "usbutils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "usbutils"
+        "package": "usbutils",
+        "status": "packaged"
     },
     "userspace-rcu": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "userspace-rcu"
+        "note": "builddep and dep for glusterfs",
+        "package": "userspace-rcu",
+        "status": "packaged"
     },
     "ustr": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "ustr"
+        "package": "ustr",
+        "status": "packaged"
     },
     "util-linux": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "util-linux"
+        "package": "util-linux",
+        "status": "packaged"
+    },
+    "v6d": {
+        "maintainer": "?",
+        "note": "proprietary, replaced by xcp-featured",
+        "package": "v6d",
+        "status": "ignored"
     },
     "valgrind": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "valgrind"
+        "package": "valgrind",
+        "status": "packaged"
     },
     "varstored": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "varstored"
+        "package": "varstored",
+        "status": "packaged"
+    },
+    "varstored-guard": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "varstored-guard",
+        "status": "ignored"
     },
     "vconfig": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "vconfig"
+        "package": "vconfig",
+        "status": "packaged"
     },
     "vcputune": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "vcputune"
+        "package": "vcputune",
+        "status": "packaged"
     },
     "vendor-drivers": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "vendor-drivers"
+        "package": "vendor-drivers",
+        "status": "packaged"
     },
     "vendor-update-keys": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "vendor-update-keys"
+        "note": "replaces proprietary vendor-update-keys -- proprietary",
+        "package": "vendor-update-keys",
+        "status": "ignored"
+    },
+    "vgpu": {
+        "maintainer": "?",
+        "note": "proprietary",
+        "package": "vgpu",
+        "status": "ignored"
+    },
+    "vhd-tool": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "vhd-tool",
+        "status": "ignored"
     },
     "vim": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "vim"
+        "package": "vim",
+        "status": "packaged"
     },
     "vmss": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "vmss"
+        "package": "vmss",
+        "status": "packaged"
     },
     "vncsnapshot": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "vncsnapshot"
+        "package": "vncsnapshot",
+        "status": "packaged"
     },
     "vncterm": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "vncterm"
+        "package": "vncterm",
+        "status": "packaged"
     },
     "wayland": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "wayland"
+        "package": "wayland",
+        "status": "packaged"
     },
     "wget": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "wget"
+        "package": "wget",
+        "status": "packaged"
     },
     "which": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "which"
+        "package": "which",
+        "status": "packaged"
     },
     "wpa_supplicant": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "wpa_supplicant"
+        "note": "extra tool",
+        "package": "wpa_supplicant",
+        "status": "packaged"
+    },
+    "wsproxy": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "wsproxy",
+        "status": "ignored"
     },
     "xapi": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "xapi"
+        "package": "xapi",
+        "status": "packaged"
+    },
+    "xapi-clusterd": {
+        "maintainer": "?",
+        "note": "proprietary",
+        "package": "xapi-clusterd",
+        "status": "ignored"
+    },
+    "xapi-nbd": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "xapi-nbd",
+        "status": "ignored"
+    },
+    "xapi-storage": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "xapi-storage",
+        "status": "ignored"
+    },
+    "xapi-storage-plugins": {
+        "maintainer": "?",
+        "note": "proprietarized, forked as xcp-ng-xapi-storage",
+        "package": "xapi-storage-plugins",
+        "status": "ignored"
+    },
+    "xapi-storage-script": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "xapi-storage-script",
+        "status": "ignored"
     },
     "xcp-clipboardd": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "xcp-clipboardd"
+        "note": "replaces proprietary xs-clipboardd",
+        "package": "xcp-clipboardd",
+        "status": "packaged"
     },
     "xcp-emu-manager": {
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "package": "xcp-emu-manager"
+        "note": "replaces proprietary emu-manager",
+        "package": "xcp-emu-manager",
+        "status": "packaged"
     },
     "xcp-featured": {
+        "added_by": "XCP-ng",
         "maintainer": "XAPI & Network",
-        "package": "xcp-featured"
+        "note": "replaces proprietary v6d-citrix",
+        "package": "xcp-featured",
+        "status": "packaged"
+    },
+    "xcp-networkd": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "xcp-networkd",
+        "status": "ignored"
     },
     "xcp-ng-deps": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "xcp-ng-deps"
+        "note": "meta package that defines default installation",
+        "package": "xcp-ng-deps",
+        "status": "packaged"
     },
     "xcp-ng-generic-lib": {
+        "added_by": "XCP-ng",
         "maintainer": "Storage",
-        "package": "xcp-ng-generic-lib"
+        "note": "lib for other packages",
+        "package": "xcp-ng-generic-lib",
+        "status": "packaged"
     },
     "xcp-ng-linstor": {
+        "added_by": "?",
         "maintainer": "Storage",
-        "package": "xcp-ng-linstor"
+        "package": "xcp-ng-linstor",
+        "status": "packaged"
     },
     "xcp-ng-plymouth-theme": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "xcp-ng-plymouth-theme"
+        "note": "replaces xenserver-plymouth-theme",
+        "package": "xcp-ng-plymouth-theme",
+        "status": "packaged"
     },
     "xcp-ng-pv-tools": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "xcp-ng-pv-tools"
+        "package": "xcp-ng-pv-tools",
+        "status": "packaged"
     },
     "xcp-ng-release": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "xcp-ng-release"
+        "note": "replaces xenserver-release",
+        "package": "xcp-ng-release",
+        "status": "packaged"
     },
     "xcp-ng-release-linstor": {
+        "added_by": "XCP-ng",
         "maintainer": "Storage",
-        "package": "xcp-ng-release-linstor"
+        "package": "xcp-ng-release-linstor",
+        "status": "packaged"
     },
     "xcp-ng-xapi-plugins": {
+        "added_by": "XCP-ng",
         "maintainer": "XAPI & Network",
-        "package": "xcp-ng-xapi-plugins"
+        "note": "XAPI plugins",
+        "package": "xcp-ng-xapi-plugins",
+        "status": "packaged"
+    },
+    "xcp-ng-xapi-storage": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "SMAPIv3 implementation, replaces proprietary implementation",
+        "package": "xcp-ng-xapi-storage",
+        "status": "?"
     },
     "xcp-python-libs": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "xcp-python-libs"
+        "package": "xcp-python-libs",
+        "status": "packaged"
     },
     "xcp-python-libs-compat": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "xcp-python-libs-compat"
+        "package": "xcp-python-libs-compat",
+        "status": "packaged"
+    },
+    "xcp-rrdd": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "xcp-rrdd",
+        "status": "ignored"
     },
     "xdelta": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "xdelta"
+        "package": "xdelta",
+        "status": "packaged"
     },
     "xen": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "xen"
+        "package": "xen",
+        "status": "packaged"
     },
     "xen-crashdump-analyser": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "xen-crashdump-analyser"
+        "package": "xen-crashdump-analyser",
+        "status": "packaged"
+    },
+    "xen-livepatch": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "package": "xen-livepatch",
+        "status": "?"
+    },
+    "xencert": {
+        "maintainer": "?",
+        "note": "automated testkit for certifying storage hardware with XenServer",
+        "package": "xencert",
+        "status": ""
     },
     "xengt-userspace": {
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
-        "package": "xengt-userspace"
+        "package": "xengt-userspace",
+        "status": "packaged"
+    },
+    "xenopsd": {
+        "maintainer": "?",
+        "note": "now in xapi",
+        "package": "xenopsd",
+        "status": "ignored"
     },
     "xenserver-dracut": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "xenserver-dracut"
+        "package": "xenserver-dracut",
+        "status": "packaged"
     },
     "xenserver-hwdata": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "xenserver-hwdata"
+        "package": "xenserver-hwdata",
+        "status": "packaged"
+    },
+    "xenserver-nagios-plugins": {
+        "maintainer": "?",
+        "note": "XS specific feature, maybe include it later",
+        "package": "xenserver-nagios-plugins",
+        "status": "ignored"
+    },
+    "xenserver-release": {
+        "maintainer": "?",
+        "note": "xcp-ng-release",
+        "package": "xenserver-release",
+        "status": "forked"
+    },
+    "xenserver-snmp-agent": {
+        "maintainer": "?",
+        "note": "proprietary, SNMP MIB",
+        "package": "xenserver-snmp-agent",
+        "status": "ignored"
     },
     "xenserver-status-report": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "xenserver-status-report"
+        "package": "xenserver-status-report",
+        "status": "packaged"
+    },
+    "xenserver-telemetry": {
+        "maintainer": "?",
+        "note": "proprietary, xapi plugin",
+        "package": "xenserver-telemetry",
+        "status": "ignored"
     },
     "xfsprogs": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "xfsprogs"
+        "package": "xfsprogs",
+        "status": "packaged"
     },
     "xha": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "xha"
+        "package": "xha",
+        "status": "packaged"
     },
     "xkeyboard-config": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "xkeyboard-config"
+        "package": "xkeyboard-config",
+        "status": "packaged"
     },
     "xmlto": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "xmlto"
+        "package": "xmlto",
+        "status": "packaged"
     },
     "xo-lite": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "xo-lite"
+        "package": "xo-lite",
+        "status": "packaged"
     },
     "xorg-x11-font-utils": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "xorg-x11-font-utils"
+        "package": "xorg-x11-font-utils",
+        "status": "packaged"
     },
     "xorg-x11-proto-devel": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "xorg-x11-proto-devel"
+        "package": "xorg-x11-proto-devel",
+        "status": "packaged"
     },
     "xorg-x11-util-macros": {
+        "added_by": "?",
         "maintainer": "OS Platform & Release",
-        "package": "xorg-x11-util-macros"
+        "package": "xorg-x11-util-macros",
+        "status": "packaged"
+    },
+    "xs-clipboardd": {
+        "maintainer": "?",
+        "note": "proprietary, replaced by xcp-clipboardd",
+        "package": "xs-clipboardd",
+        "status": "ignored"
     },
     "xs-opam-repo": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "xs-opam-repo"
+        "package": "xs-opam-repo",
+        "status": "packaged"
     },
     "xs-opam-src": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "xs-opam-src"
+        "package": "xs-opam-src",
+        "status": "packaged"
     },
     "xs-openssl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "xs-openssl"
+        "package": "xs-openssl",
+        "status": "packaged"
     },
     "xsconsole": {
+        "added_by": "XS",
         "maintainer": "XAPI & Network",
-        "package": "xsconsole"
+        "package": "xsconsole",
+        "status": "packaged"
+    },
+    "xscontainer": {
+        "added_by": "XCP-ng",
+        "maintainer": "?",
+        "note": "Not present in XS 8.3 anymore",
+        "package": "xscontainer",
+        "status": "?"
     },
     "xxhash": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "xxhash"
+        "package": "xxhash",
+        "status": "packaged"
     },
     "xz": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "xz"
+        "package": "xz",
+        "status": "packaged"
     },
     "yajl": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "yajl"
+        "package": "yajl",
+        "status": "packaged"
     },
     "yum": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "yum"
+        "package": "yum",
+        "status": "packaged"
     },
     "yum-metadata-parser": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "yum-metadata-parser"
+        "package": "yum-metadata-parser",
+        "status": "packaged"
     },
     "yum-utils": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "yum-utils"
+        "package": "yum-utils",
+        "status": "packaged"
     },
     "zfs": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "zfs"
+        "note": "ZFS support",
+        "package": "zfs",
+        "status": "packaged"
     },
     "zfs-kmod": {
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "package": "zfs-kmod"
+        "note": "ZFS dep",
+        "package": "zfs-kmod",
+        "status": "packaged"
     },
     "zip": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "zip"
+        "package": "zip",
+        "status": "packaged"
     },
     "zlib": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "zlib"
+        "package": "zlib",
+        "status": "packaged"
     },
     "zstd": {
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "package": "zstd"
+        "package": "zstd",
+        "status": "packaged"
     }
 }
