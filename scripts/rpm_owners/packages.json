@@ -1,7 +1,8 @@
 {
     "GConf2": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "GConf2",
         "status": "packaged"
     },
@@ -12,8 +13,9 @@
         "status": "packaged"
     },
     "ImageMagick": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "ImageMagick",
         "status": "packaged"
     },
@@ -25,8 +27,9 @@
         "status": "packaged"
     },
     "OpenEXR": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "OpenEXR",
         "status": "packaged"
     },
@@ -38,12 +41,13 @@
     },
     "PyPAM": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
+        "note": "likely a dependency of a XS package we don't include",
         "package": "PyPAM",
-        "status": "?"
+        "status": "ignored"
     },
     "SDL": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "SDL",
         "status": "packaged"
@@ -61,8 +65,9 @@
         "status": "packaged"
     },
     "adwaita-icon-theme": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "adwaita-icon-theme",
         "status": "packaged"
     },
@@ -73,26 +78,29 @@
         "status": "packaged"
     },
     "alsa-lib": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "alsa-lib",
         "status": "packaged"
     },
     "amd-microcode": {
-        "added_by": "XCP-ng",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "amd-microcode",
         "status": "packaged"
     },
     "apr": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "build dep of xcp-ng-pv-tools",
         "package": "apr",
         "status": "packaged"
     },
     "apr-util": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "build dep of xcp-ng-pv-tools",
         "package": "apr-util",
         "status": "packaged"
     },
@@ -109,7 +117,7 @@
         "status": "packaged"
     },
     "asciidoc": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "asciidoc",
         "status": "packaged"
@@ -121,25 +129,27 @@
         "status": "packaged"
     },
     "at-spi2-atk": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "at-spi2-atk",
         "status": "packaged"
     },
     "at-spi2-core": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "at-spi2-core",
         "status": "packaged"
     },
     "atk": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "atk",
         "status": "packaged"
     },
     "atlantic-module-alt": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
         "package": "atlantic-module-alt",
         "status": "packaged"
@@ -157,23 +167,24 @@
         "status": "packaged"
     },
     "auto-cert-kit": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "A tool provided by XenServer to their partners for certification",
         "package": "auto-cert-kit",
         "status": "ignored"
     },
     "autoconf": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "autoconf",
         "status": "packaged"
     },
     "autoconf-archive": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "built but not used by us",
         "package": "autoconf-archive",
-        "status": "packaged"
+        "status": "ignored"
     },
     "autogen": {
         "added_by": "XS",
@@ -182,15 +193,15 @@
         "status": "packaged"
     },
     "automake": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "automake",
         "status": "packaged"
     },
     "automake16": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "not used in XCP-ng at the moment",
         "package": "automake16",
         "status": "ignored"
     },
@@ -205,13 +216,6 @@
         "maintainer": "Hypervisor & Kernel",
         "package": "avago-mpt3sas",
         "status": "packaged"
-    },
-    "avago-mpt3sas-alt": {
-        "added_by": "XCP-ng",
-        "maintainer": "?",
-        "note": "alternate driver",
-        "package": "avago-mpt3sas-alt",
-        "status": "?"
     },
     "avahi": {
         "added_by": "XS",
@@ -262,7 +266,7 @@
         "status": "packaged"
     },
     "bison": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "bison",
         "status": "packaged"
@@ -280,9 +284,9 @@
         "status": "packaged"
     },
     "bpftool": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "not used in XCP-ng at the moment",
         "package": "bpftool",
         "status": "ignored"
     },
@@ -313,7 +317,7 @@
         "status": "packaged"
     },
     "bubblewrap": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "bubblewrap",
         "status": "packaged"
@@ -337,26 +341,26 @@
         "status": "packaged"
     },
     "cairo": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "cairo",
         "status": "packaged"
     },
     "capstone": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "packaged, but unused in XCP-ng at the moment",
         "package": "capstone",
         "status": "ignored"
     },
     "cdrkit": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "cdrkit",
         "status": "packaged"
     },
     "centos-indexhtml": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "centos-indexhtml",
         "status": "packaged"
@@ -374,7 +378,7 @@
         "status": "packaged"
     },
     "checkpolicy": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "checkpolicy",
         "status": "packaged"
@@ -398,7 +402,7 @@
         "status": "packaged"
     },
     "chrpath": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "chrpath",
         "status": "packaged"
@@ -436,7 +440,7 @@
         "status": "packaged"
     },
     "citrix-crypto-module": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary, patched FIPS openssl",
         "package": "citrix-crypto-module",
@@ -450,20 +454,21 @@
         "status": "packaged"
     },
     "cmocka": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "cmocka",
         "status": "packaged"
     },
     "coccinelle": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "Storage",
         "package": "coccinelle",
         "status": "packaged"
     },
     "colord": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "colord",
         "status": "packaged"
     },
@@ -480,9 +485,9 @@
         "status": "packaged"
     },
     "compiler-rt18": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "not used in XCP-ng at the moment",
         "package": "compiler-rt18",
         "status": "ignored"
     },
@@ -495,7 +500,7 @@
     "coretemp-module-alt": {
         "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
-        "note": "added to workaround missing CPU temperature sensors in dom0",
+        "note": "added to workaround missing CPU temperature sensors in dom0, doesn't work anymore in 8.3",
         "package": "coretemp-module-alt",
         "status": "packaged"
     },
@@ -508,21 +513,21 @@
     "corosync": {
         "added_by": "XS",
         "maintainer": "?",
-        "note": "Required for clustering, a feature we don't support. Was also required to build lvm2's lvm2-cluster subpackage. lvm2 rebuilt without cvcluster support and corosync removed from dom0, along with dlm -- not supported",
+        "note": "Required for clustering (GFS2), a feature we don't support. Was also required to build lvm2's lvm2-cluster subpackage. lvm2 rebuilt without cvcluster support and corosync removed from dom0, along with dlm",
         "package": "corosync",
         "status": "ignored"
     },
     "corosync-system-config": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "not supported",
+        "note": "not supported, related to GFS2",
         "package": "corosync-system-config",
         "status": "ignored"
     },
     "corosync2": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "not supported",
+        "note": "not supported, related to GFS2",
         "package": "corosync2",
         "status": "ignored"
     },
@@ -539,7 +544,7 @@
         "status": "packaged"
     },
     "crash": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "crash",
         "status": "packaged"
@@ -569,7 +574,7 @@
         "status": "packaged"
     },
     "ctags": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "ctags",
         "status": "packaged"
@@ -599,25 +604,27 @@
         "status": "packaged"
     },
     "dbus-glib": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "dbus-glib",
         "status": "packaged"
     },
     "dconf": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "dconf",
         "status": "packaged"
     },
     "dejagnu": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "dejagnu",
         "status": "packaged"
     },
     "dejavu-fonts": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "dejavu-fonts",
         "status": "packaged"
@@ -630,13 +637,14 @@
         "status": "packaged"
     },
     "desktop-file-utils": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a build dependency of htop and of protobuf (for netdata)",
         "package": "desktop-file-utils",
         "status": "packaged"
     },
     "dev86": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "dev86",
         "status": "packaged"
@@ -654,19 +662,19 @@
         "status": "packaged"
     },
     "devtoolset-10": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "devtoolset-10",
         "status": "packaged"
     },
     "devtoolset-10-binutils": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "devtoolset-10-binutils",
         "status": "packaged"
     },
     "devtoolset-10-gcc": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "devtoolset-10-gcc",
         "status": "packaged"
@@ -686,9 +694,9 @@
     "devtoolset-11-elfutils": {
         "added_by": "XS",
         "maintainer": "?",
-        "note": "Not really used?",
+        "note": "Packaged but not really used in XCP-ng",
         "package": "devtoolset-11-elfutils",
-        "status": "?"
+        "status": "ignored"
     },
     "devtoolset-11-gcc": {
         "added_by": "XS",
@@ -723,7 +731,7 @@
     "dlm": {
         "added_by": "XS",
         "maintainer": "?",
-        "note": "Was a requirement of corosync, but we don't include corosync anymore in dom0. Was also a build dep for one of lvm2's subpackages, that we don't build anymore to remove the build dependency towards dlm. We also removed dlm from xs-opam-repo. -- previous dependency for corosync",
+        "note": "Was a requirement of corosync, but we don't include corosync anymore in dom0. Was also a build dep for one of lvm2's subpackages, that we don't build anymore to remove the build dependency towards dlm. We also removed dlm from xs-opam-repo.",
         "package": "dlm",
         "status": "ignored"
     },
@@ -734,25 +742,25 @@
         "status": "packaged"
     },
     "docbook-dtds": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "docbook-dtds",
         "status": "packaged"
     },
     "docbook-style-dsssl": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "docbook-style-dsssl",
         "status": "packaged"
     },
     "docbook-style-xsl": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "docbook-style-xsl",
         "status": "packaged"
     },
     "docbook-utils": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "docbook-utils",
         "status": "packaged"
@@ -764,7 +772,7 @@
         "status": "packaged"
     },
     "dpkg": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "dpkg",
         "status": "packaged"
@@ -776,7 +784,7 @@
         "status": "packaged"
     },
     "drbd": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "Storage",
         "package": "drbd",
         "status": "packaged"
@@ -789,11 +797,11 @@
         "status": "packaged"
     },
     "dtc": {
-        "added_by": "XCP-ng",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "dep of xcp-ng-xapi-storage",
+        "note": "dep of qemu-dp",
         "package": "dtc",
-        "status": "?"
+        "status": "packaged"
     },
     "dummypkg": {
         "added_by": "XCP-ng",
@@ -802,13 +810,13 @@
         "status": "packaged"
     },
     "dwarves": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "dwarves",
         "status": "packaged"
     },
     "dwz": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "dwz",
         "status": "packaged"
@@ -862,14 +870,14 @@
         "status": "packaged"
     },
     "emacs": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "emacs",
         "status": "packaged"
     },
     "emu-manager": {
-        "added_by": "?",
-        "maintainer": "?",
+        "added_by": "XS",
+        "maintainer": "Hypervisor & Kernel",
         "note": "proprietary, replaced by xcp-emu-manager",
         "package": "emu-manager",
         "status": "ignored"
@@ -881,14 +889,14 @@
         "status": "packaged"
     },
     "epel-release": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "replaced in XCP-ng by xcp-ng-release, which adds EPEL by default, but disabled",
         "package": "epel-release",
         "status": "ignored"
     },
     "epel-rpm-macros": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "epel-rpm-macros",
         "status": "packaged"
@@ -912,7 +920,7 @@
         "status": "packaged"
     },
     "fakeroot": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "fakeroot",
         "status": "packaged"
@@ -924,7 +932,7 @@
         "status": "packaged"
     },
     "figlet": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "figlet",
         "status": "packaged"
@@ -954,7 +962,7 @@
         "status": "packaged"
     },
     "flex": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "flex",
         "status": "packaged"
@@ -972,7 +980,7 @@
         "status": "packaged"
     },
     "forkexecd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "forkexecd",
@@ -993,9 +1001,8 @@
     "fuse": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "note": "breq for e2fsprogs 1.47",
         "package": "fuse",
-        "status": ""
+        "status": "packaged"
     },
     "future": {
         "added_by": "XS",
@@ -1010,7 +1017,7 @@
         "status": "packaged"
     },
     "gc": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gc",
         "status": "packaged"
@@ -1022,13 +1029,13 @@
         "status": "packaged"
     },
     "gcc-libraries": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gcc-libraries",
         "status": "packaged"
     },
     "gd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gd",
         "status": "packaged"
@@ -1053,7 +1060,7 @@
         "status": "packaged"
     },
     "gdk-pixbuf2": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gdk-pixbuf2",
         "status": "packaged"
@@ -1072,38 +1079,40 @@
         "status": "ignored"
     },
     "ghostscript": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "ghostscript",
         "status": "packaged"
     },
     "ghostscript-fonts": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "ghostscript-fonts",
         "status": "packaged"
     },
     "giflib": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "giflib",
         "status": "packaged"
     },
     "git": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "git",
         "status": "packaged"
     },
     "gl-manpages": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "gl-manpages",
         "status": "packaged"
     },
     "glib-networking": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "glib-networking",
         "status": "packaged"
     },
@@ -1152,26 +1161,27 @@
         "status": "packaged"
     },
     "gobject-introspection": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gobject-introspection",
         "status": "packaged"
     },
     "golang": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "note": "for newer xe-guest-utilities",
+        "note": "for xe-guest-utilities (xcp-ng-pv-tools)",
         "package": "golang",
         "status": "ignored"
     },
     "golang-github-golang-sys": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "for xe-guest-utilities (xcp-ng-pv-tools)",
         "package": "golang-github-golang-sys",
         "status": "packaged"
     },
     "gperf": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gperf",
         "status": "packaged"
@@ -1195,13 +1205,13 @@
         "status": "packaged"
     },
     "graphite2": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "graphite2",
         "status": "packaged"
     },
     "graphviz": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "graphviz",
         "status": "packaged"
@@ -1231,8 +1241,9 @@
         "status": "packaged"
     },
     "gsettings-desktop-schemas": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "gsettings-desktop-schemas",
         "status": "packaged"
     },
@@ -1243,19 +1254,19 @@
         "status": "packaged"
     },
     "gtk-doc": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gtk-doc",
         "status": "packaged"
     },
     "gtk2": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gtk2",
         "status": "packaged"
     },
     "gtk3": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "gtk3",
         "status": "packaged"
@@ -1267,7 +1278,7 @@
         "status": "packaged"
     },
     "guile": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "guile",
         "status": "packaged"
@@ -1285,15 +1296,15 @@
         "status": "packaged"
     },
     "harfbuzz": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "harfbuzz",
         "status": "packaged"
     },
     "hcp_nss": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, \u201cenforce any permitted user login as root\u201d",
+        "note": "unused in XCP-ng",
         "package": "hcp_nss",
         "status": "ignored"
     },
@@ -1304,13 +1315,13 @@
         "status": "packaged"
     },
     "help2man": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "help2man",
         "status": "packaged"
     },
     "hicolor-icon-theme": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "hicolor-icon-theme",
         "status": "packaged"
@@ -1354,9 +1365,9 @@
         "status": "packaged"
     },
     "hwloc": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "unused in XCP-ng",
         "package": "hwloc",
         "status": "ignored"
     },
@@ -1381,8 +1392,9 @@
         "status": "packaged"
     },
     "ilmbase": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "ilmbase",
         "status": "packaged"
     },
@@ -1451,7 +1463,7 @@
         "status": "packaged"
     },
     "intel-igc": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
         "package": "intel-igc",
         "status": "packaged"
@@ -1469,7 +1481,7 @@
         "status": "packaged"
     },
     "intel-microcode": {
-        "added_by": "XCP-ng",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "intel-microcode",
         "status": "packaged"
@@ -1481,7 +1493,7 @@
         "status": "packaged"
     },
     "intltool": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "intltool",
         "status": "packaged"
@@ -1568,27 +1580,27 @@
         "status": "packaged"
     },
     "jasper": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "jasper",
         "status": "packaged"
     },
     "java-1.8.0-openjdk": {
         "added_by": "XCP-ng",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
         "note": "Former dependency of XOSTOR",
         "package": "java-1.8.0-openjdk",
-        "status": "?"
+        "status": "ignored"
     },
     "java-11-openjdk": {
         "added_by": "XCP-ng",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
         "note": "Dependency of XOSTOR",
         "package": "java-11-openjdk",
-        "status": "?"
+        "status": "packaged"
     },
     "jbigkit": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "jbigkit",
         "status": "packaged"
@@ -1640,8 +1652,9 @@
     "kernel-livepatch": {
         "added_by": "XS",
         "maintainer": "?",
+        "note": "livepatches not supported in XCP-ng at the moment",
         "package": "kernel-livepatch",
-        "status": "?"
+        "status": "ignored"
     },
     "kexec-tools": {
         "added_by": "XS",
@@ -1674,13 +1687,13 @@
         "status": "packaged"
     },
     "lcms2": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "lcms2",
         "status": "packaged"
     },
     "lcov": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "lcov",
         "status": "packaged"
@@ -1698,127 +1711,128 @@
         "status": "packaged"
     },
     "libICE": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libICE",
         "status": "packaged"
     },
     "libSM": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libSM",
         "status": "packaged"
     },
     "libX11": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libX11",
         "status": "packaged"
     },
     "libXau": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXau",
         "status": "packaged"
     },
     "libXaw": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXaw",
         "status": "packaged"
     },
     "libXcomposite": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXcomposite",
         "status": "packaged"
     },
     "libXcursor": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXcursor",
         "status": "packaged"
     },
     "libXdamage": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXdamage",
         "status": "packaged"
     },
     "libXext": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXext",
         "status": "packaged"
     },
     "libXfixes": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXfixes",
         "status": "packaged"
     },
     "libXfont": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXfont",
         "status": "packaged"
     },
     "libXft": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXft",
         "status": "packaged"
     },
     "libXi": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXi",
         "status": "packaged"
     },
     "libXinerama": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXinerama",
         "status": "packaged"
     },
     "libXmu": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXmu",
         "status": "packaged"
     },
     "libXpm": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXpm",
         "status": "packaged"
     },
     "libXrandr": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXrandr",
         "status": "packaged"
     },
     "libXrender": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXrender",
         "status": "packaged"
     },
     "libXt": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXt",
         "status": "packaged"
     },
     "libXtst": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "libXtst",
         "status": "packaged"
     },
     "libXxf86vm": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libXxf86vm",
         "status": "packaged"
@@ -1842,9 +1856,9 @@
         "status": "packaged"
     },
     "libbpf": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "unused in XCP-ng at the moment",
         "package": "libbpf",
         "status": "ignored"
     },
@@ -1880,7 +1894,7 @@
         "status": "packaged"
     },
     "libdaemon": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libdaemon",
         "status": "packaged"
@@ -1916,8 +1930,9 @@
         "status": "packaged"
     },
     "libepoxy": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "libepoxy",
         "status": "packaged"
     },
@@ -1941,10 +1956,10 @@
     },
     "libfaketime": {
         "added_by": "XCP-ng",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
         "note": "Used for installer ISO generation",
         "package": "libfaketime",
-        "status": "?"
+        "status": "packaged"
     },
     "libfastjson": {
         "added_by": "XS",
@@ -1959,7 +1974,7 @@
         "status": "packaged"
     },
     "libfontenc": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libfontenc",
         "status": "packaged"
@@ -1971,7 +1986,7 @@
         "status": "packaged"
     },
     "libgnome-keyring": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libgnome-keyring",
         "status": "packaged"
@@ -1983,17 +1998,18 @@
         "status": "packaged"
     },
     "libgusb": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "libgusb",
         "status": "packaged"
     },
     "libhbalinux": {
         "added_by": "XS",
         "maintainer": "?",
-        "note": "why still here? -- unused? el7 fork, \u201cFix crash in fcoeadm/elxhbamgr on certain machines\u201d",
+        "note": "remains of old releases, not used anymore",
         "package": "libhbalinux",
-        "status": ""
+        "status": "ignored"
     },
     "libidn": {
         "added_by": "XS",
@@ -2014,13 +2030,14 @@
         "status": "packaged"
     },
     "liblockfile": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "liblockfile",
         "status": "packaged"
     },
     "libmicrohttpd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libmicrohttpd",
         "status": "packaged"
@@ -2032,19 +2049,19 @@
         "status": "packaged"
     },
     "libmodman": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libmodman",
         "status": "packaged"
     },
     "libmpc": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libmpc",
         "status": "packaged"
     },
     "libnbd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "unused, dep for xapi-storage-plugins",
         "package": "libnbd",
@@ -2075,8 +2092,9 @@
         "status": "packaged"
     },
     "libotf": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "libotf",
         "status": "packaged"
     },
@@ -2105,7 +2123,7 @@
         "status": "packaged"
     },
     "libproxy": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libproxy",
         "status": "packaged"
@@ -2119,8 +2137,9 @@
     "libqb": {
         "added_by": "XS",
         "maintainer": "?",
+        "note": "dependency of corosync (for GFS2)",
         "package": "libqb",
-        "status": "?"
+        "status": "ignored"
     },
     "libreport": {
         "added_by": "XS",
@@ -2135,7 +2154,7 @@
         "status": "packaged"
     },
     "librsvg2": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "librsvg2",
         "status": "packaged"
@@ -2165,8 +2184,9 @@
         "status": "packaged"
     },
     "libsoup": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "libsoup",
         "status": "packaged"
     },
@@ -2201,13 +2221,13 @@
         "status": "packaged"
     },
     "libthai": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libthai",
         "status": "packaged"
     },
     "libtiff": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libtiff",
         "status": "packaged"
@@ -2219,7 +2239,7 @@
         "status": "packaged"
     },
     "libtool": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libtool",
         "status": "packaged"
@@ -2237,13 +2257,13 @@
         "status": "packaged"
     },
     "libunwind": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libunwind",
         "status": "packaged"
     },
     "libusb": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libusb",
         "status": "packaged"
@@ -2267,8 +2287,9 @@
         "status": "packaged"
     },
     "libuv": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "dependency of netdata",
         "package": "libuv",
         "status": "packaged"
     },
@@ -2283,23 +2304,25 @@
         "maintainer": "?",
         "note": "Used to be a dependency for systemtap, in 8.2",
         "package": "libvirt",
-        "status": "?"
+        "status": "ignored"
     },
     "libwmf": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "libwmf",
         "status": "packaged"
     },
     "libxcb": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libxcb",
         "status": "packaged"
     },
     "libxkbcommon": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "libxkbcommon",
         "status": "packaged"
     },
@@ -2310,7 +2333,7 @@
         "status": "packaged"
     },
     "libxshmfence": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libxshmfence",
         "status": "packaged"
@@ -2322,8 +2345,9 @@
         "status": "packaged"
     },
     "libyaml": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "dep of netdata",
         "package": "libyaml",
         "status": "packaged"
     },
@@ -2343,25 +2367,26 @@
     "linux-guest-loader": {
         "added_by": "XS",
         "maintainer": "?",
+        "note": "obsolete and unused",
         "package": "linux-guest-loader",
-        "status": "?"
+        "status": "ignored"
     },
     "linuxconsoletools": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "note": "unused, same version as el7, why?",
+        "note": "build dep of ncurses",
         "package": "linuxconsoletools",
-        "status": "ignored"
+        "status": "packaged"
     },
     "livepatch-build-tools": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
-        "note": "Used to be a dep for livepatch-utils which is proprietary",
+        "note": "Used to be a dep for livepatch-utils which is proprietary. We don't really use it as we don't support live patches, but we kept packaging it",
         "package": "livepatch-build-tools",
         "status": "packaged"
     },
     "lksctp-tools": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "lksctp-tools",
         "status": "packaged"
@@ -2399,10 +2424,10 @@
     },
     "lsscsi": {
         "added_by": "XCP-ng",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
         "note": "extra tool",
         "package": "lsscsi",
-        "status": "?"
+        "status": "packaged"
     },
     "lua": {
         "added_by": "XS",
@@ -2417,7 +2442,7 @@
         "status": "packaged"
     },
     "lynx": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "lynx",
         "status": "packaged"
@@ -2435,20 +2460,23 @@
         "status": "packaged"
     },
     "m17n-db": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "m17n-db",
         "status": "packaged"
     },
     "m17n-lib": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "m17n-lib",
         "status": "packaged"
     },
     "m2crypto": {
         "added_by": "XS",
         "maintainer": "?",
+        "note": "TODO determine where it came from and whether we use it at all",
         "package": "m2crypto",
         "status": "?"
     },
@@ -2489,11 +2517,11 @@
         "status": "packaged"
     },
     "mbootpack": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "for secureboot?",
+        "note": "Unused in XCP-ng at the moment.",
         "package": "mbootpack",
-        "status": ""
+        "status": "ignored"
     },
     "mc": {
         "added_by": "XCP-ng",
@@ -2534,26 +2562,26 @@
         "status": "packaged"
     },
     "mercurial": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "mercurial",
         "status": "packaged"
     },
     "mesa": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "mesa",
         "status": "packaged"
     },
     "meson": {
         "added_by": "XCP-ng",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
         "note": "dep of qemu-dp",
         "package": "meson",
-        "status": "?"
+        "status": "packaged"
     },
     "message-switch": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "message-switch",
@@ -2586,20 +2614,21 @@
         "status": "packaged"
     },
     "mozjs17": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "mozjs17",
         "status": "packaged"
     },
     "mpdecimal": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "Not used in XCP-ng at the moment",
         "package": "mpdecimal",
         "status": "ignored"
     },
     "mpfr": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "mpfr",
         "status": "packaged"
@@ -2612,7 +2641,7 @@
         "status": "packaged"
     },
     "mtools": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "mtools",
         "status": "packaged"
@@ -2625,7 +2654,7 @@
         "status": "packaged"
     },
     "nagios-plugins": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "XS specific feature, maybe include it later",
         "package": "nagios-plugins",
@@ -2651,13 +2680,13 @@
     },
     "nbdkit": {
         "added_by": "XCP-ng",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
         "note": "added as dependency for XOSTOR",
         "package": "nbdkit",
-        "status": "?"
+        "status": "packaged"
     },
     "ncompress": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "ncompress",
         "status": "packaged"
@@ -2669,7 +2698,7 @@
         "status": "packaged"
     },
     "neon": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "neon",
         "status": "packaged"
@@ -2712,11 +2741,11 @@
         "status": "packaged"
     },
     "ninja-build": {
-        "added_by": "?",
-        "maintainer": "?",
-        "note": "unused",
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "build dependency of netdata",
         "package": "ninja-build",
-        "status": "ignored"
+        "status": "packaged"
     },
     "nload": {
         "added_by": "XCP-ng",
@@ -2733,7 +2762,7 @@
         "status": "packaged"
     },
     "nrpe": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "nagios-plugins dependency",
         "package": "nrpe",
@@ -2801,7 +2830,7 @@
         "status": "packaged"
     },
     "openjade": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "openjade",
         "status": "packaged"
@@ -2813,7 +2842,7 @@
         "status": "packaged"
     },
     "opensp": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "opensp",
         "status": "packaged"
@@ -2839,8 +2868,9 @@
     "oprofile": {
         "added_by": "XS",
         "maintainer": "?",
+        "note": "Not used in XCP-ng at the moment",
         "package": "oprofile",
-        "status": "?"
+        "status": "ignored"
     },
     "os-prober": {
         "added_by": "XS",
@@ -2855,7 +2885,7 @@
         "status": "packaged"
     },
     "pakchois": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "pakchois",
         "status": "packaged"
@@ -2867,7 +2897,7 @@
         "status": "packaged"
     },
     "pango": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "pango",
         "status": "packaged"
@@ -2891,16 +2921,16 @@
         "status": "packaged"
     },
     "pbis-open": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, likely linked to upgrade-pbis-to-winbind",
+        "note": "unused, likely linked to proprietary pbis-to-winbind",
         "package": "pbis-open",
         "status": "ignored"
     },
     "pbis-open-upgrade": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, likely linked to upgrade-pbis-to-winbind",
+        "note": "unused, likely linked to proprietary upgrade-pbis-to-winbind",
         "package": "pbis-open-upgrade",
         "status": "ignored"
     },
@@ -2929,13 +2959,13 @@
         "status": "packaged"
     },
     "perl-Compress-Raw-Bzip2": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Compress-Raw-Bzip2",
         "status": "packaged"
     },
     "perl-Compress-Raw-Zlib": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Compress-Raw-Zlib",
         "status": "packaged"
@@ -2947,43 +2977,43 @@
         "status": "packaged"
     },
     "perl-Devel-CheckLib": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "perl-Devel-CheckLib",
         "status": "packaged"
     },
     "perl-Digest": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Digest",
         "status": "packaged"
     },
     "perl-Digest-MD5": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Digest-MD5",
         "status": "packaged"
     },
     "perl-Digest-SHA": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Digest-SHA",
         "status": "packaged"
     },
     "perl-Digest-SHA1": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Digest-SHA1",
         "status": "packaged"
     },
     "perl-Digest-SHA3": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Digest-SHA3",
         "status": "packaged"
     },
     "perl-Email-Date-Format": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Email-Date-Format",
         "status": "packaged"
@@ -2995,13 +3025,13 @@
         "status": "packaged"
     },
     "perl-Env": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Env",
         "status": "packaged"
     },
     "perl-Error": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Error",
         "status": "packaged"
@@ -3013,19 +3043,19 @@
         "status": "packaged"
     },
     "perl-ExtUtils-MakeMaker": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-ExtUtils-MakeMaker",
         "status": "packaged"
     },
     "perl-ExtUtils-Manifest": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-ExtUtils-Manifest",
         "status": "packaged"
     },
     "perl-ExtUtils-ParseXS": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-ExtUtils-ParseXS",
         "status": "packaged"
@@ -3049,7 +3079,7 @@
         "status": "packaged"
     },
     "perl-GD": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-GD",
         "status": "packaged"
@@ -3067,55 +3097,55 @@
         "status": "packaged"
     },
     "perl-IO-Compress": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-IO-Compress",
         "status": "packaged"
     },
     "perl-Locale-Maketext": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Locale-Maketext",
         "status": "packaged"
     },
     "perl-MIME-Lite": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-MIME-Lite",
         "status": "packaged"
     },
     "perl-MIME-Types": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-MIME-Types",
         "status": "packaged"
     },
     "perl-Module-Load": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Module-Load",
         "status": "packaged"
     },
     "perl-Module-Load-Conditional": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Module-Load-Conditional",
         "status": "packaged"
     },
     "perl-Module-Metadata": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Module-Metadata",
         "status": "packaged"
     },
     "perl-Params-Check": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Params-Check",
         "status": "packaged"
     },
     "perl-Parse-Yapp": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Parse-Yapp",
         "status": "packaged"
@@ -3145,7 +3175,7 @@
         "status": "packaged"
     },
     "perl-SGMLSpm": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-SGMLSpm",
         "status": "packaged"
@@ -3169,19 +3199,19 @@
         "status": "packaged"
     },
     "perl-TermReadKey": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-TermReadKey",
         "status": "packaged"
     },
     "perl-Test-Harness": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Test-Harness",
         "status": "packaged"
     },
     "perl-Test-Simple": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Test-Simple",
         "status": "packaged"
@@ -3193,13 +3223,13 @@
         "status": "packaged"
     },
     "perl-Text-Unidecode": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Text-Unidecode",
         "status": "packaged"
     },
     "perl-Thread-Queue": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Thread-Queue",
         "status": "packaged"
@@ -3217,7 +3247,7 @@
         "status": "packaged"
     },
     "perl-TimeDate": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-TimeDate",
         "status": "packaged"
@@ -3229,7 +3259,7 @@
         "status": "packaged"
     },
     "perl-XML-Parser": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-XML-Parser",
         "status": "packaged"
@@ -3241,13 +3271,13 @@
         "status": "packaged"
     },
     "perl-generators": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-generators",
         "status": "packaged"
     },
     "perl-libintl": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-libintl",
         "status": "packaged"
@@ -3265,7 +3295,7 @@
         "status": "packaged"
     },
     "perl-srpm-macros": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-srpm-macros",
         "status": "packaged"
@@ -3283,7 +3313,7 @@
         "status": "packaged"
     },
     "perl-version": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-version",
         "status": "packaged"
@@ -3319,19 +3349,21 @@
         "status": "packaged"
     },
     "polkit": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "polkit",
         "status": "packaged"
     },
     "polkit-pkla-compat": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "initially added as a dependency of protobuf, for netdata",
         "package": "polkit-pkla-compat",
         "status": "packaged"
     },
     "poppler-data": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "poppler-data",
         "status": "packaged"
@@ -3381,14 +3413,14 @@
         "status": "packaged"
     },
     "pvsproxy": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary",
         "package": "pvsproxy",
         "status": "ignored"
     },
     "pyOpenSSL": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "pyOpenSSL",
         "status": "packaged"
@@ -3406,19 +3438,19 @@
         "status": "packaged"
     },
     "pylint": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "pylint",
         "status": "packaged"
     },
     "pyparsing": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "pyparsing",
         "status": "packaged"
     },
     "pyproject-rpm-macros": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "pyproject-rpm-macros",
         "status": "packaged"
@@ -3430,7 +3462,7 @@
         "status": "packaged"
     },
     "pytest": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "pytest",
         "status": "packaged"
@@ -3442,13 +3474,13 @@
         "status": "packaged"
     },
     "python-IPy": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-IPy",
         "status": "packaged"
     },
     "python-aiocontextvars": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-aiocontextvars",
         "status": "packaged"
@@ -3458,28 +3490,28 @@
         "maintainer": "?",
         "note": "Used to be dep for proprietary secureboot-certificates. Unneeded.",
         "package": "python-asn1crypto",
-        "status": "?"
+        "status": "ignored"
     },
     "python-astroid": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-astroid",
         "status": "packaged"
     },
     "python-backports": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-backports",
         "status": "packaged"
     },
     "python-backports-ssl_match_hostname": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-backports-ssl_match_hostname",
         "status": "packaged"
     },
     "python-beaker": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-beaker",
         "status": "packaged"
@@ -3503,13 +3535,13 @@
         "status": "packaged"
     },
     "python-charset-normalizer": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-charset-normalizer",
         "status": "packaged"
     },
     "python-contextvars": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-contextvars",
         "status": "packaged"
@@ -3527,19 +3559,19 @@
         "status": "packaged"
     },
     "python-demjson": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-demjson",
         "status": "packaged"
     },
     "python-deprecated": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-deprecated",
         "status": "packaged"
     },
     "python-dns": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-dns",
         "status": "packaged"
@@ -3563,7 +3595,7 @@
         "status": "packaged"
     },
     "python-immutables": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-immutables",
         "status": "packaged"
@@ -3575,19 +3607,19 @@
         "status": "packaged"
     },
     "python-ipaddress": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-ipaddress",
         "status": "packaged"
     },
     "python-iso8601": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-iso8601",
         "status": "packaged"
     },
     "python-isort": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-isort",
         "status": "packaged"
@@ -3599,7 +3631,7 @@
         "status": "packaged"
     },
     "python-lazy-object-proxy": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-lazy-object-proxy",
         "status": "packaged"
@@ -3612,37 +3644,37 @@
         "status": "packaged"
     },
     "python-linstor": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "Storage",
         "package": "python-linstor",
         "status": "packaged"
     },
     "python-lxml": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-lxml",
         "status": "packaged"
     },
     "python-mako": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-mako",
         "status": "packaged"
     },
     "python-markupsafe": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-markupsafe",
         "status": "packaged"
     },
     "python-mccabe": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-mccabe",
         "status": "packaged"
     },
     "python-mock": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-mock",
         "status": "packaged"
@@ -3655,19 +3687,19 @@
         "status": "ignored"
     },
     "python-opentelemetry": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-opentelemetry",
         "status": "packaged"
     },
     "python-packaging": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "python-packaging",
         "status": "packaged"
     },
     "python-pam": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-pam",
         "status": "packaged"
@@ -3679,13 +3711,13 @@
         "status": "packaged"
     },
     "python-paste": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-paste",
         "status": "packaged"
     },
     "python-pbr": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-pbr",
         "status": "packaged"
@@ -3709,7 +3741,7 @@
         "status": "?"
     },
     "python-py": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-py",
         "status": "packaged"
@@ -3739,25 +3771,25 @@
         "status": "packaged"
     },
     "python-requests": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-requests",
         "status": "packaged"
     },
     "python-rpm-generators": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-rpm-generators",
         "status": "packaged"
     },
     "python-rpm-macros": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-rpm-macros",
         "status": "packaged"
     },
     "python-setuptools": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-setuptools",
         "status": "packaged"
@@ -3769,20 +3801,20 @@
         "status": "packaged"
     },
     "python-tempita": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-tempita",
         "status": "packaged"
     },
     "python-tqdm": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "unused, dependency for pvsproxy",
         "package": "python-tqdm",
         "status": "ignored"
     },
     "python-typing-extensions": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-typing-extensions",
         "status": "packaged"
@@ -3794,19 +3826,19 @@
         "status": "packaged"
     },
     "python-urllib3": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-urllib3",
         "status": "packaged"
     },
     "python-wheel": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-wheel",
         "status": "packaged"
     },
     "python-wrapt": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python-wrapt",
         "status": "packaged"
@@ -3816,7 +3848,7 @@
         "maintainer": "?",
         "note": "dep for proprietary secureboot-certificates. Drop?",
         "package": "python2-enum34",
-        "status": "?"
+        "status": "ignored"
     },
     "python3": {
         "added_by": "XS",
@@ -3825,7 +3857,7 @@
         "status": "packaged"
     },
     "python3-cffi": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "python3-cffi",
         "status": "packaged"
@@ -3843,25 +3875,25 @@
         "status": "packaged"
     },
     "python3-mock": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "python3-mock",
         "status": "packaged"
     },
     "python3-ply": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "python3-ply",
         "status": "packaged"
     },
     "python3-pycparser": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "python3-pycparser",
         "status": "packaged"
     },
     "python3-pyparsing": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "python3-pyparsing",
         "status": "packaged"
@@ -3980,14 +4012,15 @@
         "status": "packaged"
     },
     "redhat-rpm-config": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "redhat-rpm-config",
         "status": "packaged"
     },
     "rest": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
+        "note": "dep of protobuf, needed for netdata",
         "package": "rest",
         "status": "packaged"
     },
@@ -4014,10 +4047,10 @@
         "maintainer": "?",
         "note": "dependency of proprietary pvsproxy",
         "package": "rrd-client-lib",
-        "status": "?"
+        "status": "ignored"
     },
     "rrdd-plugins": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "rrdd-plugins",
@@ -4037,9 +4070,9 @@
         "status": "packaged"
     },
     "ruby": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "Not used in XCP-ng at the moment",
         "package": "ruby",
         "status": "ignored"
     },
@@ -4050,11 +4083,11 @@
         "status": "packaged"
     },
     "sbd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused? \"storage-based death functionality\"",
+        "note": "Not used in XCP-ng at the moment. \"storage-based death functionality\"",
         "package": "sbd",
-        "status": ""
+        "status": "ignored"
     },
     "scapy": {
         "added_by": "XS",
@@ -4075,14 +4108,14 @@
         "status": "packaged"
     },
     "secureboot-certificates": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary, needs alternative?",
         "package": "secureboot-certificates",
         "status": "ignored"
     },
     "security-tools": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary, pool_secret tool",
         "package": "security-tools",
@@ -4095,7 +4128,7 @@
         "status": "packaged"
     },
     "setools": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "setools",
         "status": "packaged"
@@ -4113,7 +4146,7 @@
         "status": "packaged"
     },
     "sgml-common": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "sgml-common",
         "status": "packaged"
@@ -4149,7 +4182,7 @@
         "status": "packaged"
     },
     "sm-cli": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "sm-cli",
@@ -4163,7 +4196,7 @@
         "status": "packaged"
     },
     "sm-transport-lib": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary",
         "package": "sm-transport-lib",
@@ -4176,7 +4209,7 @@
         "status": "packaged"
     },
     "snappy": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "snappy",
         "status": "packaged"
@@ -4189,13 +4222,13 @@
         "status": "packaged"
     },
     "softhsm": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "softhsm",
         "status": "packaged"
     },
     "source-highlight": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "source-highlight",
         "status": "packaged"
@@ -4207,7 +4240,7 @@
         "status": "packaged"
     },
     "squeezed": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "squeezed",
@@ -4238,7 +4271,7 @@
         "status": "packaged"
     },
     "subversion": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "subversion",
         "status": "packaged"
@@ -4250,7 +4283,7 @@
         "status": "packaged"
     },
     "swig": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "swig",
         "status": "packaged"
@@ -4268,7 +4301,7 @@
         "status": "packaged"
     },
     "syslinux": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "syslinux",
         "status": "packaged"
@@ -4359,9 +4392,9 @@
         "status": "packaged"
     },
     "tix": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "unused, why?",
+        "note": "Not used in XCP-ng at the moment",
         "package": "tix",
         "status": "ignored"
     },
@@ -4403,7 +4436,7 @@
         "maintainer": "?",
         "note": "Obsoleted by varstored",
         "package": "uefistored",
-        "status": "?"
+        "status": "ignored"
     },
     "unbound": {
         "added_by": "XS",
@@ -4425,14 +4458,14 @@
         "status": "packaged"
     },
     "upgrade-pbis-to-winbind": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary",
         "package": "upgrade-pbis-to-winbind",
         "status": "ignored"
     },
     "urw-fonts": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "urw-fonts",
         "status": "packaged"
@@ -4463,7 +4496,7 @@
         "status": "packaged"
     },
     "v6d": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary, replaced by xcp-featured",
         "package": "v6d",
@@ -4482,7 +4515,7 @@
         "status": "packaged"
     },
     "varstored-guard": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "varstored-guard",
@@ -4514,14 +4547,14 @@
         "status": "ignored"
     },
     "vgpu": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary",
         "package": "vgpu",
         "status": "ignored"
     },
     "vhd-tool": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "vhd-tool",
@@ -4552,7 +4585,7 @@
         "status": "packaged"
     },
     "wayland": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "wayland",
         "status": "packaged"
@@ -4577,7 +4610,7 @@
         "status": "packaged"
     },
     "wsproxy": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "wsproxy",
@@ -4590,35 +4623,35 @@
         "status": "packaged"
     },
     "xapi-clusterd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "proprietary",
+        "note": "proprietary (GFS2)",
         "package": "xapi-clusterd",
         "status": "ignored"
     },
     "xapi-nbd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xapi-nbd",
         "status": "ignored"
     },
     "xapi-storage": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xapi-storage",
         "status": "ignored"
     },
     "xapi-storage-plugins": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietarized, forked as xcp-ng-xapi-storage",
         "package": "xapi-storage-plugins",
         "status": "ignored"
     },
     "xapi-storage-script": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xapi-storage-script",
@@ -4646,7 +4679,7 @@
         "status": "packaged"
     },
     "xcp-networkd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xcp-networkd",
@@ -4667,7 +4700,7 @@
         "status": "packaged"
     },
     "xcp-ng-linstor": {
-        "added_by": "?",
+        "added_by": "XCP-ng",
         "maintainer": "Storage",
         "package": "xcp-ng-linstor",
         "status": "packaged"
@@ -4707,10 +4740,10 @@
     },
     "xcp-ng-xapi-storage": {
         "added_by": "XCP-ng",
-        "maintainer": "?",
+        "maintainer": "Storage",
         "note": "SMAPIv3 implementation, replaces proprietary implementation",
         "package": "xcp-ng-xapi-storage",
-        "status": "?"
+        "status": "packaged"
     },
     "xcp-python-libs": {
         "added_by": "XS",
@@ -4725,7 +4758,7 @@
         "status": "packaged"
     },
     "xcp-rrdd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xcp-rrdd",
@@ -4752,15 +4785,16 @@
     "xen-livepatch": {
         "added_by": "XS",
         "maintainer": "?",
+        "note": "We don't support livepatches at the moment",
         "package": "xen-livepatch",
-        "status": "?"
+        "status": "ignored"
     },
     "xencert": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "automated testkit for certifying storage hardware with XenServer",
         "package": "xencert",
-        "status": ""
+        "status": "ignored"
     },
     "xengt-userspace": {
         "added_by": "XS",
@@ -4769,7 +4803,7 @@
         "status": "packaged"
     },
     "xenopsd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "now in xapi",
         "package": "xenopsd",
@@ -4788,21 +4822,21 @@
         "status": "packaged"
     },
     "xenserver-nagios-plugins": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "XS specific feature, maybe include it later",
         "package": "xenserver-nagios-plugins",
         "status": "ignored"
     },
     "xenserver-release": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
-        "note": "xcp-ng-release",
+        "note": "replaced by xcp-ng-release, loosely synced",
         "package": "xenserver-release",
         "status": "forked"
     },
     "xenserver-snmp-agent": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary, SNMP MIB",
         "package": "xenserver-snmp-agent",
@@ -4815,7 +4849,7 @@
         "status": "packaged"
     },
     "xenserver-telemetry": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary, xapi plugin",
         "package": "xenserver-telemetry",
@@ -4836,11 +4870,12 @@
     "xkeyboard-config": {
         "added_by": "?",
         "maintainer": "OS Platform & Release",
+        "note": "another protobuf dependency (for netdata)",
         "package": "xkeyboard-config",
         "status": "packaged"
     },
     "xmlto": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "xmlto",
         "status": "packaged"
@@ -4852,25 +4887,25 @@
         "status": "packaged"
     },
     "xorg-x11-font-utils": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "xorg-x11-font-utils",
         "status": "packaged"
     },
     "xorg-x11-proto-devel": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "xorg-x11-proto-devel",
         "status": "packaged"
     },
     "xorg-x11-util-macros": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "xorg-x11-util-macros",
         "status": "packaged"
     },
     "xs-clipboardd": {
-        "added_by": "?",
+        "added_by": "XS",
         "maintainer": "?",
         "note": "proprietary, replaced by xcp-clipboardd",
         "package": "xs-clipboardd",
@@ -4905,7 +4940,7 @@
         "maintainer": "?",
         "note": "Not present in XS 8.3 anymore",
         "package": "xscontainer",
-        "status": "?"
+        "status": "packaged"
     },
     "xxhash": {
         "added_by": "XS",
