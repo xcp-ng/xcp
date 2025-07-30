@@ -1686,6 +1686,13 @@
         "package": "krb5",
         "status": "packaged"
     },
+    "kronosnet": {
+        "added_by": "XS",
+        "maintainer": "?",
+        "note": "dependency of proprietary xapi-clusterd",
+        "package": "kronosnet",
+        "status": "ignored"
+    },
     "lcms2": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
