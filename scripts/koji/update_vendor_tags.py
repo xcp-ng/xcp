@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
+
 import argparse
-import subprocess
 import json
 import os
 import re
-
-DEVNULL = open(os.devnull, 'w')
+import subprocess
 
 XS_buildhosts = [
     '1b68968c4e4e',
@@ -59,7 +58,7 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
 
     # get vendor information
     output = subprocess.check_output(
-        ['rpm', '-qp', rpm_path, '--qf', '%{vendor};;%{buildhost}'], stderr=DEVNULL
+        ['rpm', '-qp', rpm_path, '--qf', '%{vendor};;%{buildhost}'], stderr=devprocess.DEVNULL
     ).decode()
     vendor, buildhost = output.split(';;')
     package = re.search('/packages/([^/]+)/', rpm_path).group(1)

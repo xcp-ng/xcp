@@ -155,6 +155,26 @@ def is_remote_branch_commit(git_repo, sha, branch):
         )
     return sha == remote_sha
 
+def build_id_of(name, candidate):
+    if candidate is None:
+        return None
+
+    length = len(candidate)
+    if length > 16:
+        logging.error(f"The {name} build id must be at most 16 characters long, it's {length} characters long")
+        exit(1)
+
+    invalid_chars = any(re.match(r'[a-zA-Z0-9]', char) is None for char in candidate)
+
+    if invalid_chars:
+        pp_invalid = ''.join("^" if re.match(r'[a-zA-Z0-9]', char) is None else " " for char in candidate)
+        logging.error(f"The {name} build id must only contain letters and digits:")
+        logging.error(f"    {candidate}")
+        logging.error(f"    {pp_invalid}")
+        exit(1)
+
+    return candidate
+
 def main():
     parser = argparse.ArgumentParser(
         description='Build a package or chain-build several from local git repos for RPM sources'
@@ -182,16 +202,12 @@ def main():
     git_repos = [os.path.abspath(check_dir(d)) for d in args.git_repos]
     is_scratch = args.scratch
     is_nowait = args.nowait
-    test_build = args.test_build
-    pre_build = args.pre_build
+
+    test_build = build_id_of("test", args.test_build)
+    pre_build = build_id_of("pre", args.pre_build)
+
     if test_build and pre_build:
         logging.error("--pre-build and --test-build can't be used together")
-        exit(1)
-    if test_build is not None and re.match('^[a-zA-Z0-9]{1,16}$', test_build) is None:
-        logging.error("The test build id must be 16 characters long maximum and only contain letters and digits")
-        exit(1)
-    if pre_build is not None and re.match('^[a-zA-Z0-9]{1,16}$', pre_build) is None:
-        logging.error("The pre build id must be 16 characters long maximum and only contain letters and digits")
         exit(1)
 
     if len(git_repos) > 1 and is_scratch:
