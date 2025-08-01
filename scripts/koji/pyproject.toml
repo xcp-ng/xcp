@@ -1,0 +1,105 @@
+[project]
+name = "koji-utils"
+description = "Koji utils"
+readme = "README.md"
+requires-python = "~=3.11"
+dynamic = ["version"]
+dependencies = [
+  "koji",
+  "specfile",
+]
+
+[project.scripts]
+koji-build = "koji_utils.koji_build:main"
+
+[dependency-groups]
+dev = [
+  "icecream",
+  "mypy",
+  "flake8",
+  "pyright",
+  "ruff",
+  "typing-extensions",
+  "flake8-pyproject",
+]
+
+[build-system]
+requires = ["setuptools >= 77.0.3", "setuptools-scm>=8", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+root = "../.."
+
+[tool.pyright]
+typeCheckingMode = "standard"
+
+[tool.ruff]
+preview = true
+line-length = 120
+exclude = [".git"]
+
+[tool.ruff.format]
+quote-style = "preserve"
+
+[tool.ruff.lint]
+select = [
+  "D",  # pydocstyle
+  "F",  # Pyflakes
+  "I",  # isort
+  "SLF",  # flake8-self
+  "SIM",  # flake8-simplify
+]
+# don't use some of the default D and SIM rules
+ignore = [
+  "D100",  # undocumented-public-module
+  "D101",  # undocumented-public-class
+  "D102",  # undocumented-public-method
+  "D103",  # undocumented-public-function
+  "D104",  # undocumented-public-package
+  "D105",  # undocumented-magic-method
+  "D106",  # undocumented-public-nested-class
+  "D107",  # undocumented-public-init
+  "D200",  # unnecessary-multiline-docstring
+  "D203",  # incorrect-blank-line-before-class
+  "D204",  # incorrect-blank-line-after-class
+  "D205",  # missing-blank-line-after-summary
+  "D210",  # surrounding-whitespace
+  "D212",  # incorrect-blank-line-before-class
+  "D400",  # missing-trailing-period
+  "D401",  # non-imperative-mood
+  "D403",  # first-word-uncapitalized
+  "SIM105",  # suppressible-exception
+  "SIM108",  # if-else-block-instead-of-if-exp
+]
+
+# restrict to the PEP 257 rules
+pydocstyle.convention = "pep257"
+
+[tool.ruff.lint.isort.sections]
+testing = ["pytest*"]
+typing = ["typing"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 1
+section-order = [
+    "future",
+    "testing",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+    "typing",
+]
+
+# ruff doesn't provide all the pycodestyle rules, and pycodestyle is not well
+# supported by some IDEs, so we use flake8 for that
+[tool.flake8]
+max-line-length = 120
+ignore = [
+  "E261",  # At least two spaces before inline comment
+  "E302",  # Expected 2 blank lines, found 0
+  "E305",  # Expected 2 blank lines after end of function or class
+  "W503",  # Line break occurred before a binary operator
+  "F",  # already done by ruff
+]
+exclude=[".git", ".venv"]
