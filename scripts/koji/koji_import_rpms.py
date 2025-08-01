@@ -5,7 +5,6 @@ import glob
 import os
 import subprocess
 
-
 def get_srpm_info(srpmpath):
     return subprocess.check_output(['rpm', '-qp', srpmpath, '--qf', '%{name};;%{nvr}']).decode().split(';;')
 
@@ -21,7 +20,9 @@ def main():
     parser.add_argument('package_tags', help='comma-separated list of tags for the package(s)')
     parser.add_argument('build_tags', help='comma-separated list of tags for imported build(s)')
     parser.add_argument('--owner', help='owner for the package(s)', default='kojiadmin')
-    parser.add_argument('--create-build', help='create the build even if there\'s no SRPM', action='store_true', default=False)
+    parser.add_argument(
+        '--create-build', help='create the build even if there\'s no SRPM', action='store_true', default=False
+    )
     args = parser.parse_args()
 
     srpm_directory = os.path.abspath(check_dir(args.srpm_directory))
