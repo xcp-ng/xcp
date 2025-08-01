@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
-import subprocess
 import logging
+import subprocess
 import sys
 
 def setup_logger():
@@ -34,4 +34,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

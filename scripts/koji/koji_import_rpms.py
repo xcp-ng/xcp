@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import argparse
+import glob
 import os
 import subprocess
-import glob
 
 def get_srpm_info(srpmpath):
-    return subprocess.check_output(['rpm', '-qp', srpmpath, '--qf', '%{name};;%{nvr}']).split(';;')
+    return subprocess.check_output(['rpm', '-qp', srpmpath, '--qf', '%{name};;%{nvr}']).decode().split(';;')
 
 def check_dir(dirpath):
     if not os.path.isdir(dirpath):
@@ -19,10 +19,10 @@ def main():
     parser.add_argument('package_tags', help='comma-separated list of tags for the package(s)')
     parser.add_argument('build_tags', help='comma-separated list of tags for imported build(s)')
     parser.add_argument('--owner', help='owner for the package(s)', default='kojiadmin')
-    parser.add_argument('--create-build', help='create the build even if there\'s no SRPM', action='store_true', default=False)
+    parser.add_argument(
+        '--create-build', help='create the build even if there\'s no SRPM', action='store_true', default=False
+    )
     args = parser.parse_args()
-
-    DEVNULL = open(os.devnull, 'w')
 
     srpm_directory = os.path.abspath(check_dir(args.srpm_directory))
     rpm_directory = os.path.abspath(check_dir(args.rpm_directory))
