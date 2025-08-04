@@ -2866,6 +2866,12 @@
         "package": "openssl",
         "status": "packaged"
     },
+    "openssl-compat-10": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "package": "openssl-compat-10",
+        "status": "packaged"
+    },
     "openvswitch": {
         "added_by": "XS",
         "maintainer": "XAPI & Network",
