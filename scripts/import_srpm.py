@@ -28,6 +28,11 @@ def main():
                 }[args.verbose]
     logging.basicConfig(format='[%(levelname)s] %(message)s', level=loglevel)
 
+    try:
+        call_process(['sh', '-c', 'command -v rpm2cpio'])
+    except subprocess.CalledProcessError:
+        parser.error("Command `rpm2cpio` missing")
+
     # check that the source RPM file exists
     if not os.path.isfile(args.source_rpm):
         parser.error("File %s does not exist." % args.source_rpm)
@@ -76,7 +81,7 @@ def main():
     print(" extracting SRPM...")
 
     os.chdir('SOURCES')
-    os.system('rpm2cpio "%s" | cpio -idmv' % source_rpm_abs)
+    call_process(['sh', '-c', 'rpm2cpio "%s" | cpio -idmv' % source_rpm_abs])
     os.chdir('..')
     os.system('mv SOURCES/*.spec SPECS/')
 
