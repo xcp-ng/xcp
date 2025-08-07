@@ -7,7 +7,7 @@ import subprocess
 
 
 def get_srpm_info(srpmpath):
-    return subprocess.check_output(['rpm', '-qp', srpmpath, '--qf', '%{name};;%{nvr}']).split(';;')
+    return subprocess.check_output(['rpm', '-qp', srpmpath, '--qf', '%{name};;%{nvr}']).decode().split(';;')
 
 def check_dir(dirpath):
     if not os.path.isdir(dirpath):
