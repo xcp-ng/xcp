@@ -135,18 +135,40 @@ def find_next_release(package, spec, target, test_build_id, pre_build_id):
     else:
         return f'{spec.release}~{pre_build_id}.{build_nb}'
 
-def push_bumped_release(git_repo, target, test_build_id, pre_build_id):
+def push_bumped_release(git_repo, target, test_build_id, pre_build_id, commit_id):
     t = datetime.now().strftime(TIME_FORMAT)
+    if test_build_id is None and commit_id:
+        test_build_id = commit_id
     branch = f'koji/test/{test_build_id or pre_build_id}/{t}'
     with cd(git_repo), local_branch(branch):
         spec_paths = subprocess.check_output(['git', 'ls-files', 'SPECS/*.spec']).decode().splitlines()
         assert len(spec_paths) == 1
         spec_path = spec_paths[0]
+        modified_files = [spec_path]
         with Specfile(spec_path) as spec:
+            expected_dir_name = f'{spec.name}-{spec.version}'
+            tar_name=f'xen-api-{spec.version}'
+            if commit_id is not None:
+                # download xapi sources from hash and recreate the tar.gz with
+                # the expected directory name
+                subprocess.check_call(['wget', f'http://github.com/xcp-ng/xen-api/archive/{commit_id}.tar.gz', '-O', f'{commit_id}.tar.gz'])
+                subprocess.check_call(['gunzip', '-f', f'{commit_id}.tar.gz'])
+                if not os.path.exists(expected_dir_name):
+                    os.makedirs(expected_dir_name)
+                subprocess.check_call(['tar', 'xf', f'{commit_id}.tar', '-C', f'{expected_dir_name}', '--strip-components=1'])
+                subprocess.check_call(['tar', 'cf', f'{tar_name}.tar', f'{expected_dir_name}', '--remove-files'])
+                subprocess.check_call(['gzip', f'{tar_name}.tar'])
+                # replace the Source0 with the new archive
+                subprocess.check_call(['mv', f'{tar_name}.tar.gz', 'SOURCES'])
+                modified_files.append(f'SOURCES/{tar_name}.tar.gz')
+
             # find the next build number
             package = Path(spec_path).stem
             spec.release = find_next_release(package, spec, target, test_build_id, pre_build_id)
-        subprocess.check_call(['git', 'commit', '--quiet', '-m', "bump release for test build", spec_path])
+            with spec.sources() as sources:
+                print(sources[0].expanded_location)
+        subprocess.check_call(['git', 'commit', '--quiet', '-m', "bump release for test build"]
+                               + modified_files)
         subprocess.check_call(['git', 'push', 'origin', f'HEAD:refs/heads/{branch}'])
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
         return commit
@@ -199,6 +221,12 @@ def main():
         metavar="ID",
         help='Run a pre build. The provided ID will be used to build a unique release tag.',
     )
+    parser.add_argument(
+        '--xapi-build',
+        metavar="ID",
+        help='Run a test build for xapi. The provided commit hash will be used as the'
+             'source repository and as a unique release tag.',
+    )
     args = parser.parse_args()
 
     target = args.target
@@ -208,9 +236,14 @@ def main():
 
     test_build = build_id_of("test", args.test_build)
     pre_build = build_id_of("pre", args.pre_build)
+    commit_id = args.xapi_build
 
     if test_build and pre_build:
         logging.error("--pre-build and --test-build can't be used together")
+        exit(1)
+
+    if (commit_id and test_build) or (commit_id and pre_build):
+        logging.error("--{pre,test}-build and --xapi-build can't be used together")
         exit(1)
 
     if len(git_repos) > 1 and is_scratch:
@@ -222,9 +255,9 @@ def main():
 
     if len(git_repos) == 1:
         remote, hash = get_repo_and_commit_info(git_repos[0])
-        if test_build or pre_build:
+        if test_build or pre_build or commit_id:
             clean_old_branches(git_repos[0])
-            hash = push_bumped_release(git_repos[0], target, test_build, pre_build)
+            hash = push_bumped_release(git_repos[0], target, test_build, pre_build, commit_id)
         else:
             check_commit_is_available_remotely(git_repos[0], hash, None if is_scratch else target, args.force)
         url = koji_url(remote, hash)
@@ -240,9 +273,9 @@ def main():
         urls = []
         for d in git_repos:
             remote, hash = get_repo_and_commit_info(d)
-            if test_build or pre_build:
+            if test_build or pre_build or commit_id:
                 clean_old_branches(d)
-                hash = push_bumped_release(d, target, test_build, pre_build)
+                hash = push_bumped_release(d, target, test_build, pre_build, commit_id)
             else:
                 check_commit_is_available_remotely(d, hash, None if is_scratch else target, args.force)
             urls.append(koji_url(remote, hash))
