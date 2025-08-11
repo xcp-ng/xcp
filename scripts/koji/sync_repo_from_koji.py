@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 from datetime import datetime
+from subprocess import DEVNULL
 
 USER_REPO_HTTPS = "https://koji.xcp-ng.org/repos/user/"
 
@@ -21,7 +22,7 @@ RELEASE_VERSIONS = [
     '8.3',
 ]
 
-DEV_VERSIONS = [
+DEV_VERSIONS: list[str] = [
 ]
 
 VERSIONS = DEV_VERSIONS + RELEASE_VERSIONS
@@ -62,7 +63,7 @@ RELEASE_TAGS = [
     'v8.0-base',
     'v8.1-base',
     'v8.2-base',
-#    'v8.3-base', # special case: we have a history of pre-release builds that users might need for troubleshooting
+    # 'v8.3-base', # special case: we have a history of pre-release builds that users might need for troubleshooting
 ]
 
 # tags for which we want to export a stripped repo for offline updates
@@ -87,6 +88,7 @@ KEY_ID = "3fd3ac9e"
 
 def version_from_tag(tag):
     matches = re.match(r'v(\d+\.\d+)', tag)
+    assert matches is not None
     return matches.group(1)
 
 def repo_name_from_tag(tag):
@@ -213,7 +215,7 @@ def sign_unsigned_rpms(tag):
     for line in output.strip().splitlines():
         try:
             key, rpm = line.split(' ')
-        except:
+        except ValueError:
             # couldn't unpack values... no signature.
             continue
         if key == KEY_ID:
@@ -321,7 +323,9 @@ def main():
                 print("\n-- Make koji write the repository for tag %s" % tag)
                 with_non_latest = [] if tag in RELEASE_TAGS else ['--non-latest']
                 sys.stdout.flush()
-                subprocess.check_call(['koji', 'dist-repo', tag, '3fd3ac9e',  '--with-src', '--noinherit'] + with_non_latest)
+                subprocess.check_call(
+                    ['koji', 'dist-repo', tag, '3fd3ac9e', '--with-src', '--noinherit'] + with_non_latest
+                )
 
                 # write repository to the appropriate destination directory for the tag
                 write_repo(tag, dest_dir_for_tag(tag), tmp_root_dir)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import koji
+import koji  # type: ignore
 
 config = koji.read_config("koji")
 s = koji.ClientSession('https://kojihub.xcp-ng.org', config)

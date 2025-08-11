@@ -5,6 +5,7 @@ import json
 import os
 import re
 import subprocess
+from subprocess import DEVNULL
 
 XS_buildhosts = [
     '1b68968c4e4e',
@@ -42,9 +43,9 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
     rpm_path = ""
     for line in output.splitlines():
         first_element = line.split()[0]
-        if re.match('.+/src/.+\.src\.rpm', first_element):
+        if re.match(r'.+/src/.+\.src\.rpm', first_element):
             srpm_path = ""
-        if re.match('.+\.rpm', first_element):
+        if re.match(r'.+\.rpm', first_element):
             rpm_path = first_element
 
     if not rpm_path:
@@ -58,10 +59,12 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
 
     # get vendor information
     output = subprocess.check_output(
-        ['rpm', '-qp', rpm_path, '--qf', '%{vendor};;%{buildhost}'], stderr=devprocess.DEVNULL
+        ['rpm', '-qp', rpm_path, '--qf', '%{vendor};;%{buildhost}'], stderr=DEVNULL
     ).decode()
     vendor, buildhost = output.split(';;')
-    package = re.search('/packages/([^/]+)/', rpm_path).group(1)
+    rpm_match = re.search('/packages/([^/]+)/', rpm_path)
+    assert rpm_match is not None
+    package = rpm_match.group(1)
 
     tag = None
     if buildhost in XS_buildhosts:
@@ -120,6 +123,7 @@ def main():
     last_sync_event_filepath = os.path.join(data_dir, 'last_sync_event')
 
     need_update = True
+    timestamp = 0
     if os.path.exists(last_sync_event_filepath):
         with open(last_sync_event_filepath) as f:
             last_sync_event = json.loads(f.read())
@@ -128,9 +132,6 @@ def main():
             need_update = False
         else:
             timestamp = last_sync_event['ts']
-    else:
-        timestamp = 0 # first update ever
-
 
     if not need_update:
         if not quiet:
