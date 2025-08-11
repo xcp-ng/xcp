@@ -50,6 +50,8 @@ def check_commit_is_available_remotely(dirpath, hash, target, warn):
     with cd(dirpath):
         if not subprocess.check_output(['git', 'branch', '-r', '--contains', hash]):
             raise Exception("The current commit is not available in the remote repository")
+        if target is not None and re.match(r'v\d+\.\d+-u-.+', target):
+            raise Exception("Building with a user target requires using --pre-build or --test-build.\n")
         try:
             expected_branch = PROTECTED_TARGETS.get(target)
             if (
