@@ -209,7 +209,7 @@ def find_previous_build_commit(build_tag, build):
     ]
     if not tagged:
         return None
-    previous_build = KOJI.getBuild(tagged[0]['build_id'])
+    previous_build = get_koji_build(tagged[0]['build_id'])
     if not previous_build.get('source'):
         return None
     return parse_source(previous_build['source'])[1]
@@ -253,6 +253,14 @@ def find_pull_requests(repo, start_sha, end_sha):
             prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
 
+def get_koji_build(build_id) -> dict:
+    cache_key = f'koji-build-{build_id}'
+    if not args.re_cache and cache_key in CACHE:
+        return cast(dict, CACHE[cache_key])
+    else:
+        build = KOJI.getBuild(build_id)
+        CACHE.set(cache_key, build, expire=RETENTION_TIME)
+        return build
 
 started_at = datetime.now()
 
@@ -327,7 +335,7 @@ with io.StringIO() as out:
                 taggeds = (t for t in taggeds if t['package_name'] in args.packages or args.packages == [])
                 taggeds = sorted(taggeds, key=lambda t: (tag_history[t['build_id']], t['build_id']), reverse=True)
                 for tagged in taggeds:
-                    build = KOJI.getBuild(tagged['build_id'])
+                    build = get_koji_build(tagged['build_id'])
                     prs: list[PullRequest] = []
                     maintained_by = None
                     previous_build_sha = find_previous_build_commit(tag, build)
