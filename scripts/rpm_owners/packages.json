@@ -4510,7 +4510,7 @@
     },
     "v6d": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "XAPI & Network",
         "note": "proprietary, replaced by xcp-featured",
         "package": "v6d",
         "status": "ignored"
@@ -4637,7 +4637,7 @@
     },
     "xapi-clusterd": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "XAPI & Network",
         "note": "proprietary (GFS2)",
         "package": "xapi-clusterd",
         "status": "ignored"
@@ -4658,7 +4658,7 @@
     },
     "xapi-storage-plugins": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "Storage",
         "note": "proprietarized, forked as xcp-ng-xapi-storage",
         "package": "xapi-storage-plugins",
         "status": "ignored"
