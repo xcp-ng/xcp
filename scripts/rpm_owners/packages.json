@@ -4988,6 +4988,7 @@
     "yum-utils": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Forked by XS, we may prefer to follow upstream instead until we see a need for their patches",
         "package": "yum-utils",
         "status": "packaged"
     },
