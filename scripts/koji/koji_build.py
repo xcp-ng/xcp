@@ -90,7 +90,8 @@ def local_branch(branch):
     try:
         yield branch
     finally:
-        subprocess.check_call(['git', 'checkout', prev_branch])
+        # prev_branch is empty when the head was detached
+        subprocess.check_call(['git', 'checkout', prev_branch or commit])
 
 def is_old_branch(b):
     branch_time = datetime.strptime(b.split('/')[-1], TIME_FORMAT)
