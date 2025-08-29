@@ -277,6 +277,13 @@
         "package": "blktap",
         "status": "packaged"
     },
+    "bluez": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "note": "Rebuild dependency for python2 and python3",
+        "package": "bluez",
+        "status": "packaged"
+    },
     "boost": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
@@ -4406,10 +4413,17 @@
     },
     "tix": {
         "added_by": "XS",
-        "maintainer": "?",
-        "note": "Not used in XCP-ng at the moment",
+        "maintainer": "OS Platform & Release",
+        "note": "Rebuild dependency for python2 and python3",
         "package": "tix",
-        "status": "ignored"
+        "status": "packaged"
+    },
+    "tk": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "note": "Rebuild dependency for python2 and python3",
+        "package": "tk",
+        "status": "packaged"
     },
     "tmux": {
         "added_by": "XCP-ng",
