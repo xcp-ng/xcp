@@ -4579,6 +4579,13 @@
         "package": "vim",
         "status": "packaged"
     },
+    "vmfs6-tools": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "as-is, not supported, not in the product, only in xcp-ng-labs",
+        "package": "vmfs6-tools",
+        "status": "?"
+    },
     "vmss": {
         "added_by": "XS",
         "maintainer": "XAPI & Network",
