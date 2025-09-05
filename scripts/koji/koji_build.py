@@ -229,7 +229,7 @@ def main():
             check_commit_is_available_remotely(git_repos[0], hash, None if is_scratch else target, args.force)
         url = koji_url(remote, hash)
         command = (
-            ['koji', 'build']
+            ['koji', 'build', '--wait-repo']
             + (['--scratch'] if is_scratch else [])
             + [target, url]
             + (['--nowait'] if is_nowait else [])
