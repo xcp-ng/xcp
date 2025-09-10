@@ -221,9 +221,9 @@ def main():
             parser.error("%s is not in a clean state (or is not a git repository)." % d)
 
     if len(git_repos) == 1:
-        clean_old_branches(git_repos[0])
         remote, hash = get_repo_and_commit_info(git_repos[0])
         if test_build or pre_build:
+            clean_old_branches(git_repos[0])
             hash = push_bumped_release(git_repos[0], target, test_build, pre_build)
         else:
             check_commit_is_available_remotely(git_repos[0], hash, None if is_scratch else target, args.force)
@@ -239,9 +239,9 @@ def main():
     else:
         urls = []
         for d in git_repos:
-            clean_old_branches(d)
             remote, hash = get_repo_and_commit_info(d)
             if test_build or pre_build:
+                clean_old_branches(d)
                 hash = push_bumped_release(d, target, test_build, pre_build)
             else:
                 check_commit_is_available_remotely(d, hash, None if is_scratch else target, args.force)
