@@ -1341,7 +1341,7 @@
     },
     "host-upgrade-plugin": {
         "added_by": "XS",
-        "maintainer": "XAPI & Network",
+        "maintainer": "OS Platform & Release",
         "package": "host-upgrade-plugin",
         "status": "packaged"
     },
