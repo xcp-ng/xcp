@@ -5,6 +5,7 @@ import json
 import os
 import re
 import subprocess
+from subprocess import DEVNULL
 
 XS_buildhosts = [
     '1b68968c4e4e',
@@ -42,9 +43,9 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
     rpm_path = ""
     for line in output.splitlines():
         first_element = line.split()[0]
-        if re.match('.+/src/.+\.src\.rpm', first_element):
+        if re.match(r'.+/src/.+\.src\.rpm', first_element):
             srpm_path = ""
-        if re.match('.+\.rpm', first_element):
+        if re.match(r'.+\.rpm', first_element):
             rpm_path = first_element
 
     if not rpm_path:
@@ -58,10 +59,12 @@ def update_vendor_tag_for_build(build, is_bootstrap=False):
 
     # get vendor information
     output = subprocess.check_output(
-        ['rpm', '-qp', rpm_path, '--qf', '%{vendor};;%{buildhost}'], stderr=devprocess.DEVNULL
+        ['rpm', '-qp', rpm_path, '--qf', '%{vendor};;%{buildhost}'], stderr=DEVNULL
     ).decode()
     vendor, buildhost = output.split(';;')
-    package = re.search('/packages/([^/]+)/', rpm_path).group(1)
+    match = re.search('/packages/([^/]+)/', rpm_path)
+    assert match is not None
+    package = match.group(1)
 
     tag = None
     if buildhost in XS_buildhosts:
@@ -119,23 +122,18 @@ def main():
     # read last known event from our data directory
     last_sync_event_filepath = os.path.join(data_dir, 'last_sync_event')
 
-    need_update = True
     if os.path.exists(last_sync_event_filepath):
         with open(last_sync_event_filepath) as f:
             last_sync_event = json.loads(f.read())
 
         if last_sync_event == last_event:
-            need_update = False
+            if not quiet:
+                print("No update needed.")
+            return
         else:
             timestamp = last_sync_event['ts']
     else:
         timestamp = 0 # first update ever
-
-
-    if not need_update:
-        if not quiet:
-            print("No update needed.")
-        return
 
     # get the list of builds since last event
     output = subprocess.check_output(['koji', 'list-builds', '--quiet', '--state=COMPLETE',
