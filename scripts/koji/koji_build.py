@@ -109,7 +109,7 @@ def clean_old_branches(git_repo):
             subprocess.check_call(['git', 'push', '--delete', 'origin'] + old_branches)
 
 def xcpng_version(target):
-    xcpng_version_match = re.match(r'^v(\d+\.\d+)-u-\S+$', target)
+    xcpng_version_match = re.match(r'^v(\d+\.\d+)-\S+$', target)
     if xcpng_version_match is None:
         raise Exception(f"Can't find XCP-ng version in {target}")
     return xcpng_version_match.group(1)
