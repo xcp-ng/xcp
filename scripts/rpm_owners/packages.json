@@ -4575,7 +4575,7 @@
     },
     "vgpu": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "Hypervisor & Kernel",
         "note": "proprietary",
         "package": "vgpu",
         "status": "ignored"
@@ -4864,14 +4864,14 @@
     },
     "xenserver-release": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
         "note": "replaced by xcp-ng-release, loosely synced",
         "package": "xenserver-release",
         "status": "forked"
     },
     "xenserver-snmp-agent": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "OS Platform & Release",
         "note": "proprietary, SNMP MIB",
         "package": "xenserver-snmp-agent",
         "status": "ignored"
@@ -4884,7 +4884,7 @@
     },
     "xenserver-telemetry": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "XAPI & Network",
         "note": "proprietary, xapi plugin",
         "package": "xenserver-telemetry",
         "status": "ignored"
@@ -4940,7 +4940,7 @@
     },
     "xs-clipboardd": {
         "added_by": "XS",
-        "maintainer": "?",
+        "maintainer": "Hypervisor & Kernel",
         "note": "proprietary, replaced by xcp-clipboardd",
         "package": "xs-clipboardd",
         "status": "ignored"
