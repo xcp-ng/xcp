@@ -98,7 +98,7 @@ def main():
 
     args = parser.parse_args()
 
-    if any(not os.path.exists(file) in file for file in args.files):
+    if any(not os.path.exists(file) for file in args.files):
         print("Error: Given file path does not exist", file=sys.stderr)
         sys.exit(1)
 
