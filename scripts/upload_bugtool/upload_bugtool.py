@@ -60,7 +60,7 @@ def upload(base_url, folder_token, password, file):
     print("Uploading %s" % file, file=sys.stderr)
 
     upload_filename = urlquote(os.path.basename(file))
-    target_url = urlparse.urljoin(base_url, "public.php/webdav/%s" % upload_filename)
+    target_url = urlparse.urljoin(base_url, "public.php/dav/files/%s/%s" % (folder_token, upload_filename))
     cred = "%s:%s" % (folder_token, password)
 
     # fmt: off
