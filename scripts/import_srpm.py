@@ -2,11 +2,41 @@
 import argparse
 import logging
 import os
+import shutil
 import subprocess
+from glob import glob
+
 
 def call_process(args):
     logging.debug("$ %s", args)
     subprocess.check_call(args)
+
+def pipe_commands(*commands: list[str]) -> bytes:
+    if not commands:
+        raise ValueError("The 'commands' list cannot be empty.")
+    if any(not cmd for cmd in commands):
+        raise ValueError("All commands in the list must be non-empty.")
+
+    processes: list[subprocess.Popen[bytes]] = []
+    next_process_stdin = None
+
+    for command in commands:
+        process = subprocess.Popen(
+            command,
+            stdin=next_process_stdin,
+            stdout=subprocess.PIPE,
+        )
+        processes.append(process)
+        next_process_stdin = process.stdout
+
+    final_stdout, _final_stderr = processes[-1].communicate()
+
+    for cmd, process in zip(commands, processes):
+        process.wait()
+        if process.returncode != 0:
+            raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+
+    return final_stdout
 
 def main():
     parser = argparse.ArgumentParser(description='Imports the contents of a source RPM into a git repository')
@@ -27,6 +57,10 @@ def main():
                 2: logging.DEBUG,
                 }[args.verbose]
     logging.basicConfig(format='[%(levelname)s] %(message)s', level=loglevel)
+
+    for dep in ['cpio', 'rpm2cpio']:
+        if shutil.which(dep) is None:
+            parser.error(f"{dep} can't be found.")
 
     # check that the source RPM file exists
     if not os.path.isfile(args.source_rpm):
@@ -76,9 +110,10 @@ def main():
     print(" extracting SRPM...")
 
     os.chdir('SOURCES')
-    os.system('rpm2cpio "%s" | cpio -idmv' % source_rpm_abs)
+    pipe_commands(['rpm2cpio', source_rpm_abs], ['cpio', '-idmv'])
     os.chdir('..')
-    os.system('mv SOURCES/*.spec SPECS/')
+    for f in glob('SOURCES/*.spec'):
+        shutil.move(f, 'SPECS')
 
     print(" removing trademarked or copyrighted files...")
 
