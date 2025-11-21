@@ -16,14 +16,16 @@ except ImportError:
 
 TIME_FORMAT = '%Y-%m-%d-%H-%M-%S'
 
-# target -> required branch
+# target -> allowed branch(es)
+# To lock a target, just assign an empty set: "{}"
+# Unlisted targets are not protected then any branch will be allowed
 PROTECTED_TARGETS = {
-    "v8.2-ci": "8.2",
-    "v8.2-fasttrack": "8.2",
-    "v8.2-incoming": "8.2",
-    "v8.3-ci": "master",
-    "v8.3-fasttrack": "master",
-    "v8.3-incoming": "master",
+    "v8.2-ci": {"8.2"},
+    "v8.2-fasttrack": {"8.2"},
+    "v8.2-incoming": {"8.2"},
+    "v8.3-ci": {"master", "8.3"},
+    "v8.3-fasttrack": {"master", "8.3"},
+    "v8.3-incoming": {"master", "8.3"},
 }
 
 @contextmanager
@@ -46,20 +48,30 @@ def check_git_repo(dirpath):
     with cd(dirpath):
         return subprocess.run(['git', 'diff-index', '--quiet', 'HEAD', '--']).returncode == 0
 
-def check_commit_is_available_remotely(dirpath, hash, target, warn):
+def check_commit_is_available_remotely(dirpath, sha, target, warn):
     with cd(dirpath):
-        if not subprocess.check_output(['git', 'branch', '-r', '--contains', hash]):
+        output = subprocess.check_output(['git', 'branch', '-r', '--contains', sha])
+        if not output:
             raise Exception("The current commit is not available in the remote repository")
+        logging.debug('Commit %s is contained in remote branch: %s', sha, output.decode().strip())
+        
         if target is not None and re.match(r'v\d+\.\d+-u-.+', target):
             raise Exception("Building with a user target requires using --pre-build or --test-build.\n")
         try:
-            expected_branch = PROTECTED_TARGETS.get(target)
-            if (
-                expected_branch is not None
-                and not is_remote_branch_commit(dirpath, hash, expected_branch)
-            ):
-                raise Exception(f"The current commit is not the last commit in the remote branch {expected_branch}.\n"
-                                f"This is required when using the protected target {target}.\n")
+            allowed_branches = PROTECTED_TARGETS.get(target)
+            if allowed_branches is None:
+                logging.debug('Target %s is not protected, any branch is allowed', target)
+            else:
+                for branch in allowed_branches:
+                    try:
+                        if is_remote_branch_commit(dirpath, sha, branch):
+                            logging.debug('Commit %s is on top of branch %s (target: %s)', sha, branch, target)
+                            break
+                    except Exception as e:
+                        logging.debug('Ignoring %s', e)
+                else:
+                    raise Exception(f"The current commit is not the last commit of any remote allowed branches: {allowed_branches}.\n"
+                                    f"This is required when using the protected target {target}.")
         except Exception as e:
             if warn:
                 print(f"warning: {e}", flush=True)
@@ -152,10 +164,20 @@ def push_bumped_release(git_repo, target, test_build_id, pre_build_id):
         return commit
 
 def is_remote_branch_commit(git_repo, sha, branch):
+    """ Args:
+           git_repo: URL of git repository
+           sha: Git hash
+           branch: remote branch in repository
+        Returns:
+           True if commit is on top of an assumed remote branch, false otherwise
+        Raises:
+           Exception: If branch is missing from repo, or not reachable
+    """
     with cd(git_repo):
-        remote_sha = (
-            subprocess.check_output(['git', 'ls-remote', 'origin', f'refs/heads/{branch}']).decode().strip().split()[0]
-        )
+        references = subprocess.check_output(['git', 'ls-remote', 'origin', f'refs/heads/{branch}']).decode().strip().split()
+        if not references:
+            raise Exception(f'Remote branch "{branch}" missing or unreachable')
+        remote_sha = references[0]
     return sha == remote_sha
 
 def build_id_of(name, candidate):
