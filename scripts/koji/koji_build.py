@@ -16,14 +16,14 @@ except ImportError:
 
 TIME_FORMAT = '%Y-%m-%d-%H-%M-%S'
 
-# target -> required branch
+# target -> supported branch(es)
 PROTECTED_TARGETS = {
-    "v8.2-ci": "8.2",
-    "v8.2-fasttrack": "8.2",
-    "v8.2-incoming": "8.2",
-    "v8.3-ci": "master",
-    "v8.3-fasttrack": "master",
-    "v8.3-incoming": "master",
+    "v8.2-ci": ["8.2"],
+    "v8.2-fasttrack": ["8.2"],
+    "v8.2-incoming": ["8.2"],
+    "v8.3-ci": ["master", "8.3"],
+    "v8.3-fasttrack": ["master", "8.3"],
+    "v8.3-incoming": ["master", "8.3"],
 }
 
 @contextmanager
@@ -53,13 +53,17 @@ def check_commit_is_available_remotely(dirpath, hash, target, warn):
         if target is not None and re.match(r'v\d+\.\d+-u-.+', target):
             raise Exception("Building with a user target requires using --pre-build or --test-build.\n")
         try:
-            expected_branch = PROTECTED_TARGETS.get(target)
-            if (
-                expected_branch is not None
-                and not is_remote_branch_commit(dirpath, hash, expected_branch)
-            ):
-                raise Exception(f"The current commit is not the last commit in the remote branch {expected_branch}.\n"
-                                f"This is required when using the protected target {target}.\n")
+            available = False
+            supported_branches = PROTECTED_TARGETS.get(target)
+            if supported_branches:
+                for branch in supported_branches:
+                    available = is_remote_branch_commit(dirpath, hash, branch)
+                    if available:
+                        logging.info(f"commit {hash} is on top of branch {branch} (target: {target})")
+                        break
+            if not available:
+                raise Exception(f"The current commit is not the last commit of any remote branches {supported_branches}.\n"
+                            f"This is required when using the protected target {target}.\n")
         except Exception as e:
             if warn:
                 print(f"warning: {e}", flush=True)
@@ -153,9 +157,8 @@ def push_bumped_release(git_repo, target, test_build_id, pre_build_id):
 
 def is_remote_branch_commit(git_repo, sha, branch):
     with cd(git_repo):
-        remote_sha = (
-            subprocess.check_output(['git', 'ls-remote', 'origin', f'refs/heads/{branch}']).decode().strip().split()[0]
-        )
+        list = subprocess.check_output(['git', 'ls-remote', 'origin', f'refs/heads/{branch}']).decode().strip().split()
+        remote_sha = list[0] if list else None
     return sha == remote_sha
 
 def build_id_of(name, candidate):
