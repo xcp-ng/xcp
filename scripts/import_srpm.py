@@ -41,9 +41,9 @@ def pipe_commands(*commands: list[str]) -> bytes:
 def main():
     parser = argparse.ArgumentParser(description='Imports the contents of a source RPM into a git repository')
     parser.add_argument('source_rpm', help='local path to source RPM')
-    parser.add_argument('repository', help='local path to the repository')
-    parser.add_argument('parent_branch', help='git parent branch from which to branch')
-    parser.add_argument('branch', help='destination branch')
+    parser.add_argument('repository', default='./', nargs='?', help='local path to the repository')
+    parser.add_argument('parent_branch', nargs='?', help='git parent branch from which to branch')
+    parser.add_argument('branch', nargs='?', help='destination branch')
     parser.add_argument('tag', nargs='?', help='tag')
     parser.add_argument('-v', '--verbose', action='count', default=0)
     parser.add_argument('-p', '--push', action='store_true', help='pull and push')
@@ -90,8 +90,14 @@ def main():
 
     if args.push:
         call_process(['git', 'fetch'])
-    call_process(['git', 'checkout', args.parent_branch])
-    if args.push:
+    if args.parent_branch:
+        call_process(['git', 'checkout', args.parent_branch])
+    if (
+        args.push
+        # only pull if the branch is already tracked
+        and subprocess.call(['git', 'rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}'],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0
+    ):
         call_process(['git', 'pull'])
 
     print(" removing everything from SOURCES and SPECS...")
@@ -126,10 +132,11 @@ def main():
             open(os.path.join('SOURCES', "%s.deleted-by-XCP-ng.txt" % f), 'w').write(deletemsg)
             deleted.append(f)
 
-    if subprocess.call(['git', 'rev-parse', '--quiet', '--verify', args.branch]) != 0:
-        call_process(['git', 'checkout', '-b', args.branch])
-    else:
-        call_process(['git', 'checkout', args.branch])
+    if args.branch:
+        if subprocess.call(['git', 'rev-parse', '--quiet', '--verify', args.branch]) != 0:
+            call_process(['git', 'checkout', '-b', args.branch])
+        else:
+            call_process(['git', 'checkout', args.branch])
     call_process(['git', 'add', '--all'])
 
     print(" committing...")
@@ -151,20 +158,21 @@ def main():
     if args.tag is not None:
         call_process(['git', 'tag', args.tag])
 
+    branch = args.branch or subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode().strip()
     # push to remote
     if args.push:
-        call_process(['git', 'push', '--set-upstream', 'origin', args.branch])
+        call_process(['git', 'push', '--set-upstream', 'origin', branch])
         if args.tag is not None:
             call_process(['git', 'push', 'origin', args.tag])
 
-    print(" switching to master before leaving...")
-
-    call_process(['git', 'checkout', 'master'])
+    if args.branch:
+        print(" switching to master before leaving...")
+        call_process(['git', 'checkout', 'master'])
 
     # merge to master if needed
     if args.push and args.master:
         print(" merging to master...")
-        call_process(['git', 'push', 'origin', '%s:master' % args.branch])
+        call_process(['git', 'push', 'origin', '%s:master' % branch])
         call_process(['git', 'pull'])
 
 
