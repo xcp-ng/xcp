@@ -4781,7 +4781,7 @@
     },
     "xcp-python-libs": {
         "added_by": "XS",
-        "maintainer": "XAPI & Network",
+        "maintainer": "OS Platform & Release",
         "package": "xcp-python-libs",
         "status": "packaged"
     },
