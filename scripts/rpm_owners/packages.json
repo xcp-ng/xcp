@@ -4843,6 +4843,13 @@
         "package": "xenopsd",
         "status": "ignored"
     },
+    "xenserver-config": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "note": "We chose not to follow their decision to stuff RPM macros into a custom RPM, when all were actually coming from CentOS / EPEL / Fedora. But we must evaluate the impact of any future changes made by them there.",
+        "package": "xenserver-config",
+        "status": "ignored"
+    },
     "xenserver-dracut": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
@@ -4943,6 +4950,13 @@
         "maintainer": "Hypervisor & Kernel",
         "note": "proprietary, replaced by xcp-clipboardd",
         "package": "xs-clipboardd",
+        "status": "ignored"
+    },
+    "xs-obsolete-packages": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "note": "We use xcp-ng-deps to obsolete packages. Need to check what they obsolete to see if it's pertinent for us.",
+        "package": "xs-obsolete-packages",
         "status": "ignored"
     },
     "xs-opam-repo": {
