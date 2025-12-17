@@ -106,6 +106,7 @@ done
 case "$COMPRESS" in
     bzip2) ZCAT=bzcat; ZIP=bzip2 ;;
     gzip) ZCAT=zcat; ZIP=gzip ;;
+    zstd) ZCAT=zstdcat; ZIP=zstd ;;
     *) die_usage "unsupported compression method" ;;
 esac
 
