@@ -1280,7 +1280,7 @@
     },
     "guest-templates-json": {
         "added_by": "XS",
-        "maintainer": "XAPI & Network",
+        "maintainer": "Hypervisor & Kernel",
         "package": "guest-templates-json",
         "status": "packaged"
     },
