@@ -2381,7 +2381,7 @@
     "linux-guest-loader": {
         "added_by": "XS",
         "maintainer": "?",
-        "note": "obsolete and unused",
+        "note": "Removed in early 8.3 development stage as not used anymore. However, likely to come back in 9.0 as a way to support PV-in-PVH guests along with Xen 4.19+",
         "package": "linux-guest-loader",
         "status": "ignored"
     },
