@@ -1,0 +1,50 @@
+[project]
+name = "repo_status"
+version = "0.1.0"
+description = "Repository status and comparison"
+readme = "README.md"
+requires-python = "~=3.11"
+dependencies = [
+  "requests",
+  "rpm",
+  "tabulate",
+]
+
+[dependency-groups]
+dev = [
+  "icecream",
+  "mypy",
+  "flake8",
+  "pydocstyle",
+  "pyright",
+  "ruff",
+  "types-requests",
+  "typing-extensions",
+]
+
+[tool.pyright]
+typeCheckingMode = "standard"
+
+[tool.ruff]
+preview = true
+line-length = 120
+exclude = [".git"]
+
+[tool.ruff.format]
+quote-style = "preserve"
+
+[tool.ruff.lint]
+select = [
+  "F",  # Pyflakes
+  "I",  # isort
+  "SLF",  # flake8-self
+  "SIM",  # flake8-simplify
+]
+# don't use some of the SIM rules
+ignore = [
+  "SIM105",  # suppressible-exception
+  "SIM108",  # if-else-block-instead-of-if-exp
+]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 1
