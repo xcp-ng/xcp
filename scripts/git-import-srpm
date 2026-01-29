@@ -1,0 +1,174 @@
+#!/bin/bash -eu
+
+# This is a poor man's script importing a SRPM into a git repository.  It
+# has a few limitations in its current quick&dirty implementation:
+#
+# - Blindly applies patches referenced inside the spec file in order, but
+# if any changes are made to the sources in the spec %prep, these won't be
+# reflected.  A more robust solution would be to run `rpmbuild -bp` and
+# shadow the `patch` command to create a git commit every step, as well as
+# a final commit for any "manual" changes done in %prep.
+#
+# - Loses any comments appended to patches in the spec file, these could be
+# added to the commit description.
+#
+# On Debian derivatives, you'll need:
+#  sudo apt-get install rpm
+#
+# Simply run it inside a SRPM git repository and give it a revision (can be
+# tag, branch, sha1, ...), e.g.:
+#
+#  SOURCE_REPO_PATH=/path/to/linux/repo SRPM_REPO_PATH=/path/kernel/srpm/repo git-import-srpm XS-8.2.1
+#
+# By default, the SRPM_REPO_PATH is the current working directory.  If no
+# SOURCE_REPO_PATH is given, a default path is inferred that is
+# SRPM_REPO_PATH/../(linux|xen) (depending on the product).
+#
+# To import all XenServer releases:
+#   cd /path/to/xen-rpms.git ; git rev-list --first-parent origin/master origin/XS-8.3.0 | xargs -P $(nproc) -n1 ./git-import-srpm
+# To import all Linux releases:
+#   cd /path/to/kernel-rpms.git ; git rev-list | xargs -P $(nproc) -n1 ./git-import-srpm
+# To import the current revision of xen-rpms, provided you're in the right directory:
+#   git-import-srpm HEAD
+
+function product() {
+    if [ -f "${rpm_repo}/SPECS/kernel.spec" ]; then
+	echo -n "linux"
+    elif [ -f "${rpm_repo}/SPECS/xen.spec" ]; then
+	echo -n "xen"
+    else
+	exit 1
+    fi
+}
+
+rpm_repo=${SRPM_REPO_PATH:-$(pwd)}
+case "$(product)" in
+    linux)
+	src_repo="${SOURCE_REPO_PATH:-${rpm_repo}/../linux/}"
+	spec_file="SPECS/kernel.spec"
+	release_prefix="v"
+	;;
+    xen)
+	src_repo="${SOURCE_REPO_PATH:-${rpm_repo}/../xen/}"
+	spec_file="SPECS/xen.spec"
+	release_prefix="RELEASE-"
+	;;
+esac
+
+src_rpm_rev=$1
+
+function init_worktrees() {
+    git -C "${rpm_repo}" worktree add --detach ${worktree}/srpm ${src_rpm_rev}^0
+
+    # Upstream stable base
+    base_version=$(git -C ${worktree}/srpm show "HEAD:${spec_file}" | rpmspec -P /dev/stdin | awk "/^Version:/{print \"${release_prefix}\" \$NF}")
+
+    if [ "$(product)" == "xen" ]; then
+	if [ "${base_version}" = RELEASE-4.13.0 ]; then
+	    base_version_quirk=85e1424de2dda
+	fi
+    fi
+
+    release=$(git -C ${worktree}/srpm show "HEAD:${spec_file}" | rpmspec -P /dev/stdin | awk '/^Release:/{print $NF}')
+
+    vendor=$(git -C ${worktree}/srpm show "HEAD:${spec_file}" | grep -q XCP-ng && echo "xcpng" || echo "xenserver")
+
+    branch="$(product)/${vendor}-${base_version#RELEASE-}-${release}/base"
+
+    git -C ${src_repo} worktree add -B "${branch}-partial" "${worktree}/src" "${base_version_quirk:-${base_version}}"
+    git -C ${worktree}/src branch -f "${branch%base}upstream" "${base_version_quirk:-${base_version}}"
+}
+
+# Fix the date in case it is not present in the patch file to get
+# idempotent runs.
+function fixup_date() {
+    local p="${1}"
+
+    author_date="Sat Sep 19 2015 06:09:42 GMT+0000"
+
+    awk '
+BEGIN { has_date=0 }
+/^Date:/ { has_date=1 }
+{ lines[NR]=$0 }
+END {
+  if (!has_date) {
+    for (i=1; i<=NR; i++) {
+      print lines[i]
+      if (lines[i] ~ /^From:/) {
+        print "Date: '"${author_date}"'"
+      }
+    }
+  } else {
+    for (i=1; i<=NR; i++) print lines[i]
+  }
+}
+' "${p}" > "${p}.fixed"
+    mv "${p}.fixed" "${p}"
+
+}
+
+function apply_patch() {
+    p="${1}"
+
+    # Quirk to get idempotent runs and properly stitched history in Xen
+    # sources.  This patch creates a .gitarchive-info-pq file with a sha1
+    # to the head of the patch-qeueu, as such it is different every time
+    # and causes history to diverge early in similar branches.  Simply do
+    # not apply it.
+    if [ "${p}" = "changeset-info.patch" ] ; then
+	return 0
+    fi
+
+    export GIT_COMMITTER_NAME="Vates Git Importer"
+    export GIT_COMMITTER_EMAIL="gitimporter@vates.tech"
+    export GIT_COMMITTER_DATE="1519512702"
+
+    # These are simply default values in case the information is not
+    # present inside the patch file - it allows idempotent runs as well.
+    export GIT_AUTHOR_NAME="${GIT_COMMITTER_NAME}"
+    export GIT_AUTHOR_EMAIL="${GIT_COMMITTER_EMAIL}"
+    fixup_date "${worktree}/srpm/SOURCES/$p"
+
+    git_dir=$(git rev-parse --git-dir)
+    git am -3 < ${worktree}/srpm/SOURCES/$p || (
+
+	# This one is used when we fallback to plain git commit
+	export GIT_AUTHOR_DATE="1442642982"
+
+	# git am fails when the patch has no commit description.
+	if [ -s "${git_dir}"/rebase-apply/msg ]; then
+	    # There was a commit description, so try and use it
+	    git commit -F "${git_dir}"/rebase-apply/msg && git am --skip
+	else
+	    # No commit description, use the patch path
+	    git commit -m "$p" && git am --skip
+	fi
+    ) || (
+	# git am has failed to apply the patch, a human needs to resolve
+	# conflicts
+	return 1
+    )
+    return 0
+}
+
+cd ${src_repo}
+
+worktree=$(mktemp -d -t src-import-xen-XXX)
+trap "rm -Rf ${worktree}; cd ${src_repo}; git worktree prune; cd ${rpm_repo}; git worktree prune" EXIT
+
+
+init_worktrees
+
+cd ${worktree}/src
+
+(git -C ${worktree}/srpm/ show "HEAD:${spec_file}") | while IFS= read -r l; do
+    case "${l}" in
+	Patch*)
+	    echo ${l}
+	    p="${l#* }"
+	    apply_patch "${p}" /dev/null
+	    ;;
+    esac
+done
+
+git branch -m "${branch}-partial" "${branch}"
