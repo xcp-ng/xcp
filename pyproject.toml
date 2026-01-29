@@ -7,6 +7,7 @@ dependencies = ["specfile >= 0.34.0"]
 
 [project.scripts]
 "koji-xcp" = "koji.koji_build:main"
+"xcp-import-srpm" = "misc.import_srpm:main"
 
 [build-system]
 requires = ["setuptools >= 77.0.3", "setuptools-scm>=8"]
@@ -14,7 +15,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 package-dir = {"" = "scripts"}
-packages = ["koji"]
+packages = ["koji", "misc"]
 
 [tool.setuptools_scm]
 
