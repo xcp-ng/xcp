@@ -35,7 +35,7 @@ THIS_SCRIPT="$(readlink -f "$0")"
 
 SRPM_REPO_PATH=${SRPM_REPO_PATH:-${PWD}}
 PRODUCT=$(basename ${SRPM_REPO_PATH}/SPECS/*.spec .spec)
-CODE_REPO_PATH="${CODE_REPO_PATH:-${SRPM_REPO_PATH}/../${PRODUCT}/}"
+CODE_REPO_PATH="${CODE_REPO_PATH:-${SRPM_REPO_PATH}/../${PRODUCT/kernel/linux}/}"
 SPEC_FILE="SPECS/${PRODUCT}.spec"
 if [ "${PRODUCT}" = "kernel" -o "${PRODUCT}" = "qemu" ]; then
     RELEASE_PREFIX="v"
