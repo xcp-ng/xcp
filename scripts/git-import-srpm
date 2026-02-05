@@ -31,26 +31,43 @@
 # CODE_REPO_PATH is given, a default path is inferred that is
 # SRPM_REPO_PATH/../(linux|xen|qemu) (depending on the product).
 
+set -o pipefail
+
 THIS_SCRIPT="$(readlink -f "$0")"
 
 SRPM_REPO_PATH=${SRPM_REPO_PATH:-${PWD}}
-PRODUCT=$(basename ${SRPM_REPO_PATH}/SPECS/*.spec .spec)
+PRODUCT="$(basename "${SRPM_REPO_PATH}/SPECS/"*.spec .spec)"
 CODE_REPO_PATH="${CODE_REPO_PATH:-${SRPM_REPO_PATH}/../${PRODUCT/kernel/linux}/}"
 SPEC_FILE="SPECS/${PRODUCT}.spec"
-if [ "${PRODUCT}" = "kernel" -o "${PRODUCT}" = "qemu" ]; then
+if [[ ${PRODUCT} = "kernel" || ${PRODUCT} = "qemu" ]]; then
     RELEASE_PREFIX="v"
-elif [ "${PRODUCT}" = "xen" ]; then
+elif [[ ${PRODUCT} = "xen" ]]; then
     RELEASE_PREFIX="RELEASE-"
 else
     echo "Unknown package: '${PRODUCT}'"
     exit 1
 fi
 
+function check_spec_file() {
+    local worktree="$1"
+    local revision="$2"
+    local spec_file
+
+    spec_file="$(git -C "${worktree}" ls-tree --name-only "${revision}" SPECS/)"
+
+    if [[ ${spec_file} != "${SPEC_FILE}" ]]; then
+        echo "${SPEC_FILE} does not exist in ${worktree}:${revision}" 1>&2
+        exit 1
+    fi
+}
+
 function get_build_dir() {
     local worktree="$1"
     local revision="$2"
 
-    git -C ${worktree} show "${revision}:${SPEC_FILE}" | \
+    check_spec_file "${worktree}" "${revision}"
+
+    git -C "${worktree}" show "${revision}:${SPEC_FILE}" | \
         rpmspec --query --define "_topdir ${worktree}" --qf '%{name}-%{version}\n' /dev/stdin 2>> "${COMMAND_LOGS}" | \
         head -n 1
 }
@@ -59,40 +76,34 @@ function get_base_version() {
     local worktree="$1"
     local revision="$2"
 
-    if [ "$(git -C ${worktree} ls-tree --name-only ${revision} SPECS/)" != "${SPEC_FILE}" ]; then
-        return
-    fi
+    check_spec_file "${worktree}" "${revision}"
 
-    git -C ${worktree} show "${revision}:${SPEC_FILE}" | rpmspec -P /dev/stdin 2>> "${COMMAND_LOGS}" | awk "/^Version:/{print \"${RELEASE_PREFIX}\" \$NF}"
+    git -C "${worktree}" show "${revision}:${SPEC_FILE}" | rpmspec -P /dev/stdin 2>> "${COMMAND_LOGS}" | awk "/^Version:/{print \"${RELEASE_PREFIX}\" \$NF}"
 }
 
 function get_release() {
     local worktree="$1"
     local revision="$2"
 
-    if [ "$(git -C ${worktree} ls-tree --name-only ${revision} SPECS/)" != "${SPEC_FILE}" ]; then
-        return
-    fi
+    check_spec_file "${worktree}" "${revision}"
 
-    git -C ${worktree} show "${revision}:${SPEC_FILE}" | rpmspec -P /dev/stdin 2>> "${COMMAND_LOGS}" | awk '/^Release:/{print $NF}'
+    git -C "${worktree}" show "${revision}:${SPEC_FILE}" | rpmspec -P /dev/stdin 2>> "${COMMAND_LOGS}" | awk '/^Release:/{print $NF}'
 }
 
 function get_full_version() {
     local base_version="$1"
     local release="$2"
 
-    echo ${base_version#${RELEASE_PREFIX}}-${release}
+    echo "${base_version#"${RELEASE_PREFIX}"}-${release}"
 }
 
 function get_vendor() {
     local worktree="$1"
     local revision="$2"
 
-    if [ "$(git -C ${worktree} ls-tree --name-only ${revision} SPECS/)" != "${SPEC_FILE}" ]; then
-        return
-    fi
+    check_spec_file "${worktree}" "${revision}"
 
-    git -C ${worktree} show "${revision}:${SPEC_FILE}" | grep -q -e XCP-ng -e xcp \
+    git -C "${worktree}" show "${revision}:${SPEC_FILE}" | grep -q -e XCP-ng -e xcp \
         && echo "xcpng" \
         || echo "xenserver"
 }
@@ -101,15 +112,15 @@ function get_branch_name() {
     local worktree="$1"
     local revision="$2"
 
-    base_version=$(get_base_version "${worktree}" ${revision})
+    base_version=$(get_base_version "${worktree}" "${revision}")
 
-    release="$(get_release "${worktree}" ${revision})"
+    release="$(get_release "${worktree}" "${revision}")"
 
-    vendor=$(get_vendor "${worktree}" ${revision})
+    vendor=$(get_vendor "${worktree}" "${revision}")
 
     full_version="$(get_full_version "${base_version}" "${release}")"
 
-    if [ -z "${vendor}" -o -z "{full_version}" ]; then
+    if [[ -z ${vendor} || -z ${full_version} ]]; then
         echo "unknown_branch_name_for_rev_${revision}"
     else
         echo "${PRODUCT}/${vendor}-${full_version}/base"
@@ -126,8 +137,8 @@ function init_worktrees() {
 
     # Upstream stable base
     base_version=$(get_base_version "${srpm_repo_worktree}" HEAD)
-    if [ "${PRODUCT}" == "xen" ]; then
-        if [ "${base_version}" = RELEASE-4.13.0 ]; then
+    if [[ ${PRODUCT} = "xen" ]]; then
+        if [[ ${base_version} = "RELEASE-4.13.0" ]]; then
             base_version=85e1424de2dda
         fi
     fi
@@ -136,19 +147,19 @@ function init_worktrees() {
 
     echo "[+] Constructing ${BRANCH_NAME} from rev ${srpm_repo_revision}"
 
-    git -C ${CODE_REPO_PATH} show-ref --verify --quiet refs/heads/${BRANCH_NAME} && {
+    if git -C "${CODE_REPO_PATH}" show-ref --verify --quiet "refs/heads/${BRANCH_NAME}"; then
         echo "[-] branch ${BRANCH_NAME} already exists"
         exit 1
-    } || :
+    fi
 
 
-    git -C "${CODE_REPO_PATH}" rev-parse ${base_version} 2> /dev/null > /dev/null || {
+    git -C "${CODE_REPO_PATH}" rev-parse "${base_version}" 2> /dev/null > /dev/null || {
         echo "- ${BRANCH_NAME}: ${base_version} cannot be found, have you fetched"
         exit 1
     }
 
-    git -C ${CODE_REPO_PATH} worktree add -B "${BRANCH_NAME}-partial" "${code_repo_worktree}" "${base_version}" >> "${COMMAND_LOGS}" 2>> "${COMMAND_LOGS}"
-    git -C ${CODE_REPO_PATH} branch -f "${BRANCH_NAME%base}pre-base" "${base_version}"
+    git -C "${CODE_REPO_PATH}" worktree add -B "${BRANCH_NAME}-partial" "${code_repo_worktree}" "${base_version}" >> "${COMMAND_LOGS}" 2>> "${COMMAND_LOGS}"
+    git -C "${CODE_REPO_PATH}" branch -f "${BRANCH_NAME%base}pre-base" "${base_version}"
 }
 
 # Fix the date in case it is not present in the patch file to get
@@ -183,12 +194,12 @@ function load_author_and_title() {
     local p="${1}"
     local git_dir="${2}"
 
-    mailinfo="$(git mailinfo /dev/null /dev/null < ${p} |   \
+    mailinfo="$(git mailinfo /dev/null /dev/null < "${p}" |   \
         sed -n -e 's/^Author: \(.*\)$/export GIT_AUTHOR_NAME=\"\1\"/p'               \
                -e 's/^Email: \(.*\)$/export GIT_AUTHOR_EMAIL=\"\1\"/p'               \
                -e 's/^Subject: \(.*\)$/local subject=\"\1\"/p')"
     eval "${mailinfo}"
-    if [ -n "${subject:-}" ]; then
+    if [[ -n ${subject:-} ]]; then
         sed -i "1i\${subject}\n\n" "${git_dir}"/rebase-apply/msg
     fi
 }
@@ -215,7 +226,7 @@ function apply_patch() {
     # to the head of the patch-qeueu, as such it is different every time
     # and causes history to diverge early in similar branches.  Simply do
     # not apply it.
-    if [ "$(basename ${p})" = "changeset-info.patch" ] ; then
+    if [[ $(basename "${p}") = "changeset-info.patch" ]] ; then
         return 0
     fi
 
@@ -223,13 +234,16 @@ function apply_patch() {
 
     fixup_date "${patch}"
 
-    local git_dir=$(git rev-parse --git-dir)
-    git am -3 < "${patch}" || (
+    local git_dir
+    git_dir=$(git rev-parse --git-dir)
+    if ! git am -3 < "${patch}"; then
 
-        local unmerged_files="$(git status -s | grep '^UU')"
-        local changes="$(git status -s)"
+        local unmerged_files
+        unmerged_files="$(git status -s | grep '^UU')"
+        local changes
+        changes="$(git status -s)"
 
-        if [ -n "${unmerged_files}" -o -z "${changes}" ]; then
+        if [[ -n ${unmerged_files} || -z ${changes} ]]; then
             # The patch didn't apply.  Sometimes git am is a bit more
             # peculiar than a patch command, especially if there are index
             # information it doesn't have in its tree.  In that case
@@ -240,16 +254,18 @@ function apply_patch() {
             # An error for this git am falls through, likely caused by
             # missing author information, so we'll use git commit directly
             # below.
-            git am --continue && return 0 || :
+            if git am --continue; then
+                return 0
+            fi
         fi
 
         # This one is used when we fallback to plain git commit
         export GIT_AUTHOR_DATE="1442642982"
-        if [ -s "${git_dir}"/rebase-apply/msg ]; then
+        if [[ -s ${git_dir}/rebase-apply/msg ]]; then
 
             load_author_and_title "${patch}" "${git_dir}"
 
-            if [ "$(basename ${p})" = "qemu-4.2.1-CVE-2023-3354.backport.patch" ]; then
+            if [[ $(basename "${p}") = "qemu-4.2.1-CVE-2023-3354.backport.patch" ]]; then
                 # Patch is malformed
                 sed -i '1i\io: remove io watch if TLS channel is closed during handshake\n' "${git_dir}"/rebase-apply/msg
                 export GIT_AUTHOR_NAME="Daniel P. Berrangé"
@@ -260,18 +276,17 @@ function apply_patch() {
             git commit -F "${git_dir}"/rebase-apply/msg && git am --skip
         else
             # No commit description, use the patch path
-            git commit -m "$(basename ${p})" && git am --skip
+            git commit -m "$(basename "${p}")" && git am --skip
         fi
         return $?
-
-    ) || return 1
+    fi
     return 0
 }
 
 function apply_spec_quirks() {
     # This one is no-where to be found, and it doesn't really change any
     # source code, simply stuff a binary tarball in the sources
-    sed -i "s@cp /usr/src/ipxe-source.tar.gz.*@@" ${SRPM_REPO_WORKTREE}/${SPEC_FILE}
+    sed -i "s@cp /usr/src/ipxe-source.tar.gz.*@@" "${SRPM_REPO_WORKTREE}/${SPEC_FILE}"
 
     # This is a remote source which is not available anymore, so rpmbuild
     # would fail
@@ -292,36 +307,41 @@ function apply_spec_quirks() {
 
 function import_all_branches() {
     local -A revs_for_version
+    local nproc
+    nproc=$(nproc)
 
     echo "[+] Gathering unique branches"
 
-    cd ${SRPM_REPO_PATH}
+    cd "${SRPM_REPO_PATH}"
 
-    for revision in $(git rev-list --topo-order HEAD); do
-        local branch_name="$(get_branch_name ${PWD} ${revision} 2>> "${COMMAND_LOGS}")"
-        if [ -z "${revs_for_version[${branch_name}]:-}" ]; then
+    for revision in $(git rev-list --min-parents=1 --topo-order HEAD); do
+        local branch_name
+        branch_name="$(get_branch_name "${PWD}" "${revision}" 2>> "${COMMAND_LOGS}")"
+        if [[ -z ${revs_for_version[${branch_name}]:-} ]]; then
             revs_for_version[${branch_name}]="${revision}"
         fi
     done
 
-    for b in ${!revs_for_version[@]}; do
+    for b in "${!revs_for_version[@]}"; do
         local revision="${revs_for_version[${b}]}"
         case ${b} in
             unknown_branch_name*)
-                echo "Could not infer a branch name for revision: ${revision}" 1&>2
+                echo "Could not infer a branch name for revision: ${revision}" 1>&2
                 ;;
             *)
-                echo ${revs_for_version[${b}]}
+                echo "${revs_for_version[${b}]}"
                 ;;
         esac
-    done | (SRPM_REPO_PATH="${SRPM_REPO_PATH}" CODE_REPO_PATH="${CODE_REPO_PATH}" xargs -n 1 -P $(nproc) ${THIS_SCRIPT})
+    done | (SRPM_REPO_PATH="${SRPM_REPO_PATH}" CODE_REPO_PATH="${CODE_REPO_PATH}" xargs -n 1 -P "${nproc}" "${THIS_SCRIPT}")
 }
 
 COMMAND_LOGS=/tmp/git-import-srpm.${1}.debug.log
 
-test -f ${COMMAND_LOGS} && rm ${COMMAND_LOGS} || :
+if [[ -f ${COMMAND_LOGS} ]]; then
+    rm "${COMMAND_LOGS}"
+fi
 
-if [ "$1" = "--all" ]; then
+if [[ "$1" = "--all" ]]; then
     import_all_branches
     exit 0
 fi
@@ -329,20 +349,20 @@ fi
 SRPM_REPO_REVISION=$1
 
 TMPDIR=$(mktemp -d -t src-import-xen-XXX)
-if [ -z "${DONT_DELETE_TMP_DIR:-}"]; then
-    trap "
+if [[ -z ${DONT_DELETE_TMP_DIR:-} ]]; then
+    trap '
 rm -Rf ${TMPDIR:-/a/path/that/does/not/exist}
 cd ${CODE_REPO_PATH}
 git worktree prune
 cd ${SRPM_REPO_PATH}
 git worktree prune
-" EXIT
+' EXIT
 fi
 
 SRPM_REPO_WORKTREE="${TMPDIR}/srpm"
 CODE_REPO_WORKTREE="${TMPDIR}/code"
 
-init_worktrees ${SRPM_REPO_WORKTREE} ${CODE_REPO_WORKTREE} ${SRPM_REPO_REVISION}
+init_worktrees "${SRPM_REPO_WORKTREE}" "${CODE_REPO_WORKTREE}" "${SRPM_REPO_REVISION}"
 
 apply_spec_quirks
 
@@ -354,10 +374,10 @@ rpmbuild --nodeps \
          --define "_topdir ${SRPM_REPO_WORKTREE}" \
          --define "_default_patch_fuzz 2" \
          --eval "%{_default_patch_fuzz}" \
-         -bp ${SRPM_REPO_WORKTREE}/${SPEC_FILE} 2>> ${COMMAND_LOGS} >> ${COMMAND_LOGS} &
+         -bp "${SRPM_REPO_WORKTREE}/${SPEC_FILE}" 2>> "${COMMAND_LOGS}" >> "${COMMAND_LOGS}" &
 RPMBUILD_PID=$!
 
-cd ${SRPM_REPO_WORKTREE}
+cd "${SRPM_REPO_WORKTREE}"
 
 git show "HEAD:${SPEC_FILE}" | while IFS= read -r l; do
     case "${l}" in
@@ -366,20 +386,22 @@ git show "HEAD:${SPEC_FILE}" | while IFS= read -r l; do
             apply_patch "${CODE_REPO_WORKTREE}" "${SRPM_REPO_WORKTREE}/SOURCES/${p}" >> "${COMMAND_LOGS}" 2>> "${COMMAND_LOGS}" || {
                 echo "[-] [apply_patch] Failed reconstructing ${BRANCH_NAME} for ${SRPM_REPO_REVISION}, check ${COMMAND_LOGS}"
                 exit 1
-
             }
+            ;;
+        *)
             ;;
     esac
 done
 
-wait ${RPMBUILD_PID} || {
+wait "${RPMBUILD_PID}" || {
     echo "[-] [rpmbuild] Failed reconstructing ${BRANCH_NAME} for ${SRPM_REPO_REVISION}, check ${COMMAND_LOGS}"
     exit 1
 } && {
-    build_dir="$(get_build_dir ${SRPM_REPO_WORKTREE} ${SRPM_REPO_REVISION})"
-    git -C ${CODE_REPO_WORKTREE} --work-tree ${SRPM_REPO_WORKTREE}/BUILD/${build_dir} add -A
+    build_dir="$(get_build_dir "${SRPM_REPO_WORKTREE}" "${SRPM_REPO_REVISION}")"
+    git -C "${CODE_REPO_WORKTREE}" --work-tree "${SRPM_REPO_WORKTREE}/BUILD/${build_dir}" add -A
     export_author
-    git -C ${CODE_REPO_WORKTREE} commit -s --date=${GIT_COMMITTER_DATE} -m "rpmbuild: remaining diff." 2>> ${COMMAND_LOGS} >> ${COMMAND_LOGS} 2>> ${COMMAND_LOGS} || :
+    git -C "${CODE_REPO_WORKTREE}" commit -s --date="${GIT_COMMITTER_DATE}" -m "rpmbuild: remaining diff." 2>> "${COMMAND_LOGS}" >> "${COMMAND_LOGS}" || :
 }
 
+# Workaround `git branch` race condition when it moves the branch reflog.
 flock "${CODE_REPO_PATH}/.git/branch-rename.lock" -c "git -C \"${CODE_REPO_WORKTREE}\" branch -m \"${BRANCH_NAME}-partial\" \"${BRANCH_NAME}\""
