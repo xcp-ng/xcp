@@ -1,0 +1,5 @@
+# generated with update_requirements.py, do not edit manually
+pygit2>=1.13.0
+textual>=7.5.0
+rich>=14.3.2
+pygments>=2.19.2

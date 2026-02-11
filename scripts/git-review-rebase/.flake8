@@ -1,0 +1,16 @@
+[flake8]
+max-line-length = 100
+extend-ignore = E203, W503
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    .eggs,
+    *.egg-info,
+    .venv,
+    venv,
+    .tox
+
+# E203: whitespace before ':' (conflicts with black)
+# W503: line break before binary operator (conflicts with black)
