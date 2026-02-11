@@ -95,7 +95,9 @@ class DiffPrettyRowMaker:
                 continue
 
             for i in range(l1, l2):
-                if i == len(left_tokens) - 1 or i == len(left_tokens) - 2:
+                if i == len(left_tokens) - 1 or (
+                    i == len(left_tokens) - 2 and not left_tokens[i].strip()
+                ):
                     break
                 left_text.stylize(bg, left_idx + 1, left_idx + len(left_tokens[i]) + 1)
                 left_idx += len(left_tokens[i])
