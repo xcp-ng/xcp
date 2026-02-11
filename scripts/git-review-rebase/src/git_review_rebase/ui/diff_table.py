@@ -172,7 +172,7 @@ class DiffPrettyRowMaker:
             return (Text(""), Text(""), Text(""))
 
         left_diff_line, middle_char, right_diff_line = (
-            line[: self.middle_point],
+            line[: self.middle_point].rstrip(),
             line[self.middle_point],
             line[self.middle_point + self.right_first_char_index :],
         )
