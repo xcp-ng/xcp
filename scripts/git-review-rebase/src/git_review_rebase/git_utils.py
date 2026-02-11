@@ -1,6 +1,7 @@
 """Git utility functions for repository operations."""
 
 import multiprocessing
+from multiprocessing.managers import DictProxy
 
 import pygit2
 from pygit2 import Walker
@@ -42,13 +43,12 @@ def cached_patchid_ref(revision: str) -> str:
     return f"refs/patchids/from_revision/" f"{revision[:2]}/{revision[2:4]}/{revision[4:]}"
 
 
-_repo = None
-_commit_by_patchid_str = None
+_repo: None | pygit2.Repository = None
+_commit_by_patchid_str: None | DictProxy = None
 
 
 def patchid(repo: pygit2.Repository, commit: pygit2.Commit, cache_flags: CacheFlags) -> pygit2.Oid:
-    if cache_flags:
-        cached_ref = cached_patchid_ref(str(commit.id))
+    cached_ref = cached_patchid_ref(str(commit.id))
     try:
         if CacheFlags.READ_FROM_CACHE not in cache_flags:
             raise KeyError("Do not use the cache")
@@ -70,7 +70,10 @@ def patchid_map_fn(
     """Given a revision stuff the commits_patchid dict with its patchid."""
     if _repo is None:
         raise RuntimeError("_repo needs to be defined")
+    if _commit_by_patchid_str is None:
+        raise RuntimeError("_commit_by_patchid_str needs to be defined")
     commit = _repo.get(pygit2.Oid(hex=revision))
+    assert isinstance(commit, pygit2.Commit)
     _commit_by_patchid_str[str(patchid(_repo, commit, cache_flags))] = revision
 
 

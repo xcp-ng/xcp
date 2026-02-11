@@ -152,9 +152,11 @@ class DiffPrettyRowMaker:
         match middle_text.plain[0]:
             case ">":
                 assert self.right_commit is not None
+                left = left_text
                 right = await self.prefix(self.right_diff, self.right_commit, right_text)
             case "<":
                 assert self.left_commit is not None
+                right = right_text
                 left = await self.prefix(self.left_diff, self.left_commit, left_text)
             case _:
                 assert self.left_commit is not None

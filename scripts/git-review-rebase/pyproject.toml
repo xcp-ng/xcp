@@ -33,6 +33,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pyright>=1.1.408",
     "pytest>=9.0.2",
     "pytest-asyncio>=1.3.0",
     "black>=24.10.0",

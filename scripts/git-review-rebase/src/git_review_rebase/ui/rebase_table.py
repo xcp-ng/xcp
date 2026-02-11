@@ -139,5 +139,5 @@ class RebaseTable(DataTable):
                 left_cell,
                 markers_from_match_type(rebased_commit_match.match_info),
                 right_cell,
-                key=commit_oid, # type: ignore
+                key=commit_oid,  # type: ignore
             )

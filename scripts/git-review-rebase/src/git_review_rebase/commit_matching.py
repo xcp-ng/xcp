@@ -77,6 +77,6 @@ class RebasedCommitsMatches:
             right_commit = self.repo.get(right_commit_id)
             assert isinstance(right_commit, pygit2.Commit)
             self.commit_matches[right_commit_id] = RebasedCommitMatch(
-                None, self.repo.get(right_commit_id), CommitMatchInfoFlag.Added
+                None, right_commit, CommitMatchInfoFlag.Added
             )
         self.commit_matches.update(left_commit_matches)
