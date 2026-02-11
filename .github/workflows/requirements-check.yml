@@ -1,0 +1,30 @@
+name: Check requirements file consistency
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'scripts/git-review-rebase/**'
+  pull_request:
+    paths:
+      - 'scripts/git-review-rebase/**'
+
+permissions: {}
+
+jobs:
+  requirements-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scripts/git-review-rebase/
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/uv-setup/
+        with:
+          dev: false
+          working-directory: ./scripts/git-review-rebase/
+      - run: ./requirements/update_requirements.py
+      - run: git diff --exit-code

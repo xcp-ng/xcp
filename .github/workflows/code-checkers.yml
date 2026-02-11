@@ -1,0 +1,33 @@
+name: Static code checkers
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'scripts/git-review-rebase/**'
+  pull_request:
+    paths:
+      - 'scripts/git-review-rebase/**'
+
+permissions: {}
+
+jobs:
+  git-review-rebase-code-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scripts/git-review-rebase/
+    env:
+      FORCE_COLOR: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/uv-setup/
+        with:
+          working-directory: ./scripts/git-review-rebase/
+      - run: mypy --install-types --non-interactive .
+      - run: pyright
+      - run: ruff check
+      - run: flake8

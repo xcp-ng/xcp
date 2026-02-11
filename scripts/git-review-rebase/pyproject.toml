@@ -31,7 +31,7 @@ dependencies = [
     "pygments>=2.19.2",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=9.0.2",
     "pytest-asyncio>=1.3.0",

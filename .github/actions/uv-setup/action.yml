@@ -1,0 +1,43 @@
+name: Setup UV and Sync
+description: 'Install uv and sync the dependencies'
+inputs:
+  sync:
+    description: 'Whether to run `uv sync` after setting up.'
+    required: false
+    default: 'true'
+    type: boolean
+  dev:
+    description: 'Whether to use `--no-dev` with `uv sync`.'
+    required: false
+    default: 'true'
+    type: boolean
+  activate-environment:
+    description: 'Wether to activate the virtual env or not'
+    required: false
+    default: true
+    type: boolean
+  working-directory:
+    description: 'Use working-directory to run uv commands'
+    required: false
+    default: './'
+    type: string
+runs:
+  using: 'composite'
+  steps:
+    - uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba  # v6.3.1
+      with:
+        version: "0.7.x"
+        activate-environment: ${{ inputs.activate-environment }}
+        working-directory: ${{ inputs.working-directory }}
+    - if: inputs.sync == 'true' && inputs.dev == 'false'
+      run: uv sync --frozen --no-dev
+      shell: bash
+      env:
+        FORCE_COLOR: "1"
+      working-directory: ${{ inputs.working-directory }}
+    - if: inputs.sync == 'true' && inputs.dev == 'true'
+      run: uv sync --frozen
+      shell: bash
+      env:
+        FORCE_COLOR: "1"
+      working-directory: ${{ inputs.working-directory }}

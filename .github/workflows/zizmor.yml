@@ -1,0 +1,29 @@
+name: GitHub Actions Security Analysis with zizmor 🌈
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'scripts/git-review-rebase/**'
+  pull_request:
+    paths:
+      - 'scripts/git-review-rebase/**'
+
+permissions: {}
+
+jobs:
+  zizmor:
+    name: zizmor latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/uv-setup/
+        with:
+          sync: false
+        working-directory: ./scripts/git-review-rebase/
+      - run: uvx zizmor --color=always .
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
