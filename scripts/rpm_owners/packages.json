@@ -250,6 +250,7 @@
     "bind": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: bind-9.9.4-63.xs8.src.rpm",
         "package": "bind",
         "status": "packaged"
     },
@@ -274,6 +275,7 @@
     "blktap": {
         "added_by": "XS",
         "maintainer": "Storage",
+        "note": "Base: blktap-3.55.5-6.xs8.src.rpm",
         "package": "blktap",
         "status": "packaged"
     },
@@ -456,7 +458,7 @@
     "cmake3": {
         "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "note": "Initially imported by us, XS started using it. For XS 8, they forked cmake-3.26.4-4.fc37.src.rpm. At first, we keep ours because we found nothing that would require cmake3 in recent updates",
+        "note": "Base: cmake3-3.26.4-3.xs8.src.rpm , Initially imported by us, XS started using it. For XS 8, they forked cmake-3.26.4-4.fc37.src.rpm. At first, we keep ours because we found nothing that would require cmake3 in recent updates",
         "package": "cmake3",
         "status": "packaged"
     },
@@ -514,6 +516,7 @@
     "coreutils": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: coreutils-8.22-22-xs8.src.rpm",
         "package": "coreutils",
         "status": "packaged"
     },
@@ -559,6 +562,7 @@
     "createrepo_c": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: createrepo_c-0.21.1-3.xs8.src.rpm",
         "package": "createrepo_c",
         "status": "packaged"
     },
@@ -595,6 +599,7 @@
     "curl": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: curl-8.9.1-5.el10.src.rpm",
         "package": "curl",
         "status": "packaged"
     },
@@ -1164,6 +1169,7 @@
     "gnutls": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: gnutls-3.3.29-10.xs8.src.rpm",
         "package": "gnutls",
         "status": "packaged"
     },
@@ -1208,6 +1214,7 @@
     "gpumon": {
         "added_by": "XS",
         "maintainer": "XAPI & Network",
+        "note": "Base: gpumon-24.1.0-71.xs8.src.rpm",
         "package": "gpumon",
         "status": "packaged"
     },
@@ -1515,7 +1522,7 @@
     "iperf": {
         "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "note": "extra tool",
+        "note": "Base: iperf3-3.9-13.el9.src.rpm , extra tool",
         "package": "iperf",
         "status": "packaged"
     },
@@ -1529,6 +1536,7 @@
     "ipmitool": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: ipmitool-1.8.19-11.fc43.src.rpm",
         "package": "ipmitool",
         "status": "packaged"
     },
@@ -1553,6 +1561,7 @@
     "iputils": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: iputils-20160308-10.el7.src.rpm",
         "package": "iputils",
         "status": "packaged"
     },
@@ -1690,6 +1699,7 @@
     "krb5": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: krb5-1.15.1-22.xs8.src.rpm",
         "package": "krb5",
         "status": "packaged"
     },
@@ -1715,6 +1725,7 @@
     "ldns": {
         "added_by": "XCP-ng",
         "maintainer": "XAPI & Network",
+        "note": "Base: ldns-1.7.0-21.el8.src.rpm",
         "package": "ldns",
         "status": "packaged"
     },
@@ -1860,6 +1871,7 @@
     "libarchive": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: libarchive-3.6.1-4.fc38.src.rpm",
         "package": "libarchive",
         "status": "packaged"
     },
@@ -1965,6 +1977,7 @@
     "libevent": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: libevent-2.0.21-4.el7.src.rpm",
         "package": "libevent",
         "status": "packaged"
     },
@@ -2207,6 +2220,7 @@
     "libssh2": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: libssh2-1.11.0-1.xs8.src.rpm",
         "package": "libssh2",
         "status": "packaged"
     },
@@ -2261,6 +2275,7 @@
     "libtpms": {
         "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
+        "note": "Base: libtpms-0.9.6-3.xs8.src.rpm",
         "package": "libtpms",
         "status": "packaged"
     },
@@ -2720,6 +2735,7 @@
     "net-snmp": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: net-snmp-5.9.3-8.xs8.src.rpm",
         "package": "net-snmp",
         "status": "packaged"
     },
@@ -2864,24 +2880,28 @@
     "openssh": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: openssh-9.8p1-1.2.xs8.src.rpm",
         "package": "openssh",
         "status": "packaged"
     },
     "openssl": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: openssl-3.0.9-2.0.1.xs8.src.rpm",
         "package": "openssl",
         "status": "packaged"
     },
     "openssl-compat-10": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: openssl-compat-10-1.0.2k-26.1.xs8.src.rpm",
         "package": "openssl-compat-10",
         "status": "packaged"
     },
     "openvswitch": {
         "added_by": "XS",
         "maintainer": "XAPI & Network",
+        "note": "Base: openvswitch-2.17.7-4.xs8.src.rpm",
         "package": "openvswitch",
         "status": "packaged"
     },
@@ -3490,6 +3510,7 @@
     "python": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: python-2.7.5-92.xs8.src.rpm",
         "package": "python",
         "status": "packaged"
     },
@@ -3781,6 +3802,7 @@
     "python-pycurl": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: python-pycurl-7.19.0-19.el7.src.rpm",
         "package": "python-pycurl",
         "status": "packaged"
     },
@@ -3873,6 +3895,7 @@
     "python3": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: python3-3.6.8-20.xs8.src.rpm",
         "package": "python3",
         "status": "packaged"
     },
@@ -4079,6 +4102,7 @@
     "rsync": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: rsync-3.4.1-1.xs8.src.rpm",
         "package": "rsync",
         "status": "packaged"
     },
@@ -4099,6 +4123,7 @@
     "samba": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: samba-4.10.16-17.0.8.xs8.src.rpm",
         "package": "samba",
         "status": "packaged"
     },
@@ -4237,7 +4262,7 @@
     "socat": {
         "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
-        "note": "extra tool",
+        "note": "Base: socat-1.7.4.1-6.el9.src.rpm , extra tool",
         "package": "socat",
         "status": "packaged"
     },
@@ -4269,6 +4294,7 @@
     "ssmtp": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: ssmtp-2.64-14.el7.src.rpm",
         "package": "ssmtp",
         "status": "packaged"
     },
@@ -4287,6 +4313,7 @@
     "stunnel": {
         "added_by": "XS",
         "maintainer": "XAPI & Network",
+        "note": "Base: stunnel-5.60-5.xs8.src.rpm",
         "package": "stunnel",
         "status": "packaged"
     },
@@ -4299,6 +4326,7 @@
     "sudo": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: sudo-1.9.15-5.xs8.src.rpm",
         "package": "sudo",
         "status": "packaged"
     },
@@ -4311,6 +4339,7 @@
     "swtpm": {
         "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
+        "note": "Base: swtpm-0.7.3-12.xs8.src.rpm",
         "package": "swtpm",
         "status": "packaged"
     },
@@ -4377,6 +4406,7 @@
     "tcpdump": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: tcpdump-4.9.2-3.el7.src.rpm",
         "package": "tcpdump",
         "status": "packaged"
     },
@@ -4449,6 +4479,7 @@
     "trousers": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
+        "note": "Base: trousers-0.3.15-11.el10_0.src.rpm",
         "package": "trousers",
         "status": "packaged"
     },
@@ -4538,6 +4569,7 @@
     "varstored": {
         "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
+        "note": "Base: varstored-1.2.0-3.xs8.src.rpm",
         "package": "varstored",
         "status": "packaged"
     },
@@ -4653,6 +4685,7 @@
     "xapi": {
         "added_by": "XS",
         "maintainer": "XAPI & Network",
+        "note": "Base: xapi-25.33.1-2.xs8.src.rpm",
         "package": "xapi",
         "status": "packaged"
     },
@@ -4962,6 +4995,7 @@
     "xs-opam-repo": {
         "added_by": "XS",
         "maintainer": "XAPI & Network",
+        "note": "Base: xs-opam-repo-6.96.0-1.xs8.src.rpm",
         "package": "xs-opam-repo",
         "status": "packaged"
     },
