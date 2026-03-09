@@ -16,6 +16,16 @@ def copy_branch(repo: Repository, source: str, dest: str) -> bool:
         print(f"Error creating branch {dest} in {repo.name}: {e}")
         return False
 
+    # Move PRs targeting the source branch to the new destination branch
+    try:
+        prs = repo.get_pulls(state='open', base=source)
+        for pr in prs:
+            if pr.base.ref == source:
+                pr.edit(base=dest)
+    except Exception as e:
+        print(f"Error moving PRs in {repo.name}: {e}")
+        return False
+
     return True
 
 parser = argparse.ArgumentParser(description="Copy a branch to another branch in all the active rpm repositories")
