@@ -24,9 +24,12 @@ PROTECTED_TARGETS = {
     "v8.2-ci": {"8.2"},
     "v8.2-fasttrack": {"8.2"},
     "v8.2-incoming": {"8.2"},
-    "v8.3-ci": {"master", "8.3"},
-    "v8.3-fasttrack": {"master", "8.3"},
-    "v8.3-incoming": {"master", "8.3"},
+    "v8.3-ci": {"8.3"},
+    "v8.3-fasttrack": {"8.3"},
+    "v8.3-incoming": {"8.3"},
+    "v9.0-ci": {"master"},
+    "v9.0-fasttrack": {"master"},
+    "v9.0-incoming": {"master"},
 }
 
 @contextmanager
