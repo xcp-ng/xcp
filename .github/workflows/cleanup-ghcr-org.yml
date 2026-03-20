@@ -1,0 +1,28 @@
+name: Cleanup untagged GHCR images
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (preview without deletion)'
+        required: false
+        default: 'true'
+
+permissions:
+  packages: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup untagged GHCR images
+        uses: dataaxiom/ghcr-cleanup-action@cd0cdb900b5dbf3a6f2cc869f0dbb0b8211f50c4
+        with:
+          owner: ${{ github.repository_owner }}
+          delete-untagged: true
+          expand-packages: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          dry-run: ${{ inputs.dry_run }}
