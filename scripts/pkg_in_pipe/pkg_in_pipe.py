@@ -254,6 +254,30 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
     return sorted(prs, key=lambda p: p.number, reverse=True)
 
 
+def get_plane_issues(plane_token):
+    """Fetch all issues from Plane API with cursor-based pagination."""
+    all_results = []
+    cursor = None
+    base_url = (
+        'https://project.vates.tech/api/v1/workspaces/vates-global/projects/'
+        '43438eec-1335-4fc2-8804-5a4c32f4932d/issues/'
+    )
+
+    while True:
+        resp = requests.get(
+            base_url,
+            headers={'x-api-key': plane_token},
+            params={'cursor': cursor} if cursor else {},
+        )
+        data = resp.json()
+        all_results.extend(data.get('results', []))
+        cursor = data.get('next_cursor')
+        if not data.get('next_page_results', False) or not cursor:
+            break
+
+    return all_results
+
+
 started_at = datetime.now()
 
 parser = argparse.ArgumentParser(description='Generate a report of the packages in the pipe')
@@ -283,12 +307,7 @@ tags = args.tags or DEFAULT_TAGS
 
 # load the issues from plane, so we can search for the plane card related to a build
 try:
-    resp = requests.get(
-        'https://project.vates.tech/api/v1/workspaces/vates-global/projects/'
-        '43438eec-1335-4fc2-8804-5a4c32f4932d/issues/',
-        headers={'x-api-key': args.plane_token},
-    )
-    issues = resp.json().get('results', [])
+    issues = get_plane_issues(args.plane_token)
 except Exception:
     issues = []
 
