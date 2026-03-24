@@ -2978,6 +2978,13 @@
         "package": "perl-Carp",
         "status": "packaged"
     },
+    "perl-Archive-Tar": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "note": "build dep of samba",
+        "package": "perl-Archive-tar",
+        "status": "packaged"
+    },
     "perl-Compress-Raw-Bzip2": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
