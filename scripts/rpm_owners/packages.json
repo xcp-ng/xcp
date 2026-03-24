@@ -2417,6 +2417,13 @@
         "package": "lm_sensors",
         "status": "packaged"
     },
+    "lmdb": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "note": "build dep of krb5",
+        "package": "lmdb",
+        "status": "packaged"
+    },
     "logrotate": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
