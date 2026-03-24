@@ -2818,6 +2818,13 @@
         "package": "numactl",
         "status": "packaged"
     },
+    "nut": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "extra tool",
+        "package": "nut",
+        "status": "packaged"
+    },
     "nvme-cli": {
         "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
