@@ -895,6 +895,12 @@
         "package": "emulex-lpfc",
         "status": "packaged"
     },
+    "emulex-lpfc-alt": {
+        "added_by": "XCP-ng",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "emulex-lpfc-alt",
+        "status": "packaged"
+    },
     "epel-release": {
         "added_by": "XS",
         "maintainer": "?",
