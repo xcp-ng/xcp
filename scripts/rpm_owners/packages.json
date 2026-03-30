@@ -2431,6 +2431,13 @@
         "package": "lldpad",
         "status": "packaged"
     },
+    "lldpd": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "extra tool",
+        "package": "lldpd",
+        "status": "packaged"
+    },
     "lm_sensors": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
