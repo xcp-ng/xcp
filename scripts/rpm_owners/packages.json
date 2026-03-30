@@ -166,6 +166,13 @@
         "package": "audit",
         "status": "packaged"
     },
+    "augeas": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "extra, build dep of nut",
+        "package": "augeas",
+        "status": "packaged"
+    },
     "auto-cert-kit": {
         "added_by": "XS",
         "maintainer": "?",
@@ -537,6 +544,13 @@
         "note": "not supported, related to GFS2",
         "package": "corosync2",
         "status": "ignored"
+    },
+    "cppunit": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "extra, build dep of nut",
+        "package": "cppunit",
+        "status": "packaged"
     },
     "cpio": {
         "added_by": "XS",
@@ -2749,6 +2763,13 @@
         "package": "netdata",
         "status": "packaged"
     },
+    "netpbm": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "extra, build dep of nut",
+        "package": "netpbm",
+        "status": "packaged"
+    },
     "nettle": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
@@ -2829,6 +2850,13 @@
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "numactl",
+        "status": "packaged"
+    },
+    "nut": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "extra tool",
+        "package": "nut",
         "status": "packaged"
     },
     "nvme-cli": {
