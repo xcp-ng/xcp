@@ -2417,6 +2417,13 @@
         "package": "lm_sensors",
         "status": "packaged"
     },
+    "lmdb": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "note": "build dep of krb5",
+        "package": "lmdb",
+        "status": "packaged"
+    },
     "logrotate": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
@@ -2976,6 +2983,13 @@
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "perl-Carp",
+        "status": "packaged"
+    },
+    "perl-Archive-Tar": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "note": "build dep of samba",
+        "package": "perl-Archive-tar",
         "status": "packaged"
     },
     "perl-Compress-Raw-Bzip2": {
