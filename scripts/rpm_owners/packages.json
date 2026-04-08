@@ -384,6 +384,13 @@
         "maintainer": "OS Platform & Release",
         "package": "centos-logos",
         "status": "packaged"
+    }
+    "check": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "extra, build dep of lldpd",
+        "package": "check",
+        "status": "packaged"
     },
     "ceph-common": {
         "added_by": "XS",
@@ -2429,6 +2436,13 @@
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "lldpad",
+        "status": "packaged"
+    },
+    "lldpd": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "note": "extra tool",
+        "package": "lldpd",
         "status": "packaged"
     },
     "lm_sensors": {
