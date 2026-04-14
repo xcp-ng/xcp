@@ -384,7 +384,7 @@
         "maintainer": "OS Platform & Release",
         "package": "centos-logos",
         "status": "packaged"
-    }
+    },
     "check": {
         "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
