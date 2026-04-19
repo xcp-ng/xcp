@@ -148,12 +148,10 @@ def find_next_release(package, spec, target, test_build_id, pre_build_id):
         base_nvr = f'{package}-{spec.version}-{spec.release}.0.{test_build_id}.'
     else:
         base_nvr = f'{package}-{spec.version}-{spec.release}~{pre_build_id}.'
-    # use a regex to match %{macro} without actually expanding the macros
-    base_nvr_re = (
-        re.escape(re.sub('%{.+}', "@@@", base_nvr)).replace('@@@', '.*')
-        + r'(\d+)'
-        + re.escape(f'.xcpng{xcpng_version(target)}')
-    )
+    # Build a regex to match NVR patterns containing spec macros (e.g., %{release}).
+    # Since macros can't be expanded at this point, we replace them with placeholders
+    # during escaping, then convert those to regex wildcards to match any value.
+    base_nvr_re = re.escape(re.sub('%{.+}', "@@@", base_nvr)).replace('@@@', '.*') + r'(\d+)'
     build_matches = [re.match(base_nvr_re, b) for b in builds]
     build_nbs = [int(m.group(1)) for m in build_matches if m]
     build_nb = sorted(build_nbs)[-1] + 1 if build_nbs else 1
