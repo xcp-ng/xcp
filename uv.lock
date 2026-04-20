@@ -1,0 +1,34 @@
+version = 1
+revision = 3
+requires-python = ">=3.8"
+
+[[package]]
+name = "rpm"
+version = "0.4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/bd/ce/8db44d2b8fd6713a59e391d12b6816854b7bee8121ae7370c2d565de4265/rpm-0.4.0.tar.gz", hash = "sha256:79adbefa82318e2625d6e4fa16666cf88543498a1f2c10dc3879165d1dc3ecee", size = 11237, upload-time = "2025-04-08T08:57:26.261Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/17/96/0f4e9ba318c6e09b76357ee88d6c73101f8799f8ed707cfdc1df131b4234/rpm-0.4.0-py3-none-any.whl", hash = "sha256:0ef697cb5fb73bf9300a13d423529d7ec215239bf95c5ecb145e6610645f6067", size = 5151, upload-time = "2025-04-08T08:57:24.971Z" },
+]
+
+[[package]]
+name = "specfile"
+version = "0.37.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "rpm" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d3/70/ab5d45a3f2cd5c020d4039545ae348b37fd5e55e99f975c1282d7d07024e/specfile-0.37.1.tar.gz", hash = "sha256:ca61d9995026ab22694cc0032323bd071f93b44b9ed1a84522506c1ab4d0f146", size = 113291, upload-time = "2025-10-03T12:47:00.171Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/36/fd/e34470e1642f0f14369f4d07785722901df4ac2d7dac1e0708366c6aa6ba/specfile-0.37.1-py3-none-any.whl", hash = "sha256:5371e6efd826a583d1614f68097102ee4926f1880012f015c6aad1626a0520bd", size = 67436, upload-time = "2025-10-03T12:46:58.354Z" },
+]
+
+[[package]]
+name = "xcp-ng"
+source = { editable = "." }
+dependencies = [
+    { name = "specfile" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "specfile", specifier = ">=0.34.0" }]
