@@ -110,7 +110,7 @@ def fix_record(cls_name, record):
         logging.info(f'The {cls_name} {name} has {snapshot_of} as its "snapshot_of" value, changing to null.')
         record.set('snapshot_of', 'OpaqueRef:NULL')
         ref = record.get('ref')
-    elif cls_name == 'VDI' and record.get('is-a-snapshot') == 'true' and snapshot_of == record.get('ref'):
+    elif cls_name == 'VDI' and record.get('is_a_snapshot') == 'true' and snapshot_of == record.get('ref'):
         name = record.get('uuid')
         logging.info(f'The {cls_name} {name} has itself as its "snapshot_of" value, changing to null.')
         record.set('snapshot_of', 'OpaqueRef:NULL')
