@@ -27,6 +27,9 @@ xapi_db        = '/var/lib/xcp/state.db'
 xapi_db_backup = '/var/lib/xcp/state.db.snapshot_of.backup'
 xapi_db_fixed  = '/var/lib/xcp/state.db.snapshot_of.fixed'
 
+MIN_MAJOR = 8
+MIN_MINOR = 3
+
 def service_status(name):
     cmd = ['systemctl', 'is-active', name]
     r = subprocess.run(
@@ -181,6 +184,35 @@ def rewrite(args):
         if ha_enabled:
             start_ha()
 
+def get_xcpng_version():
+    inventory = {}
+
+    with open("/etc/xensource-inventory") as f:
+        for line in f:
+            if "=" in line:
+                k, v = line.strip().split("=", 1)
+                inventory[k] = v.strip("'")
+
+    version = inventory.get("PRODUCT_VERSION")
+
+    if not version:
+        raise RuntimeError("PRODUCT_VERSION not found")
+
+    major, minor, *_ = version.split(".")
+    return int(major), int(minor)
+
+
+def ensure_supported_version():
+    major, minor = get_xcpng_version()
+
+    if (major, minor) < (MIN_MAJOR, MIN_MINOR):
+        print(
+            f"ERROR: snapshot-fixer.py requires XCP-ng "
+            f"{MIN_MAJOR}.{MIN_MINOR} or newer. "
+            f"Detected version: {major}.{minor}"
+        )
+        sys.exit(1)
+
 def main():
     p = ArgumentParser(description='Rewrite erroneous VM snapshot links.')
     ps = p.add_subparsers(dest='cmd')
@@ -195,6 +227,7 @@ def main():
         p.print_help()
         sys.exit(1)
 
+    ensure_supported_version()
     logging.basicConfig()
     logging.getLogger().setLevel(logging.INFO)
 
