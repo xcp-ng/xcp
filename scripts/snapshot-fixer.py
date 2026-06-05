@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from argparse import ArgumentParser
 import logging
 import shutil
@@ -26,9 +25,6 @@ import xml.etree.ElementTree as ET
 xapi_db        = '/var/lib/xcp/state.db'
 xapi_db_backup = '/var/lib/xcp/state.db.snapshot_of.backup'
 xapi_db_fixed  = '/var/lib/xcp/state.db.snapshot_of.fixed'
-
-MIN_MAJOR = 8
-MIN_MINOR = 3
 
 def service_status(name):
     cmd = ['systemctl', 'is-active', name]
@@ -66,11 +62,19 @@ def start_xapi(ha_enabled):
 
 def stop_xapi():
     logging.info('Shutting down xapi...')
-    try:
-        poke_service('xapi', 'stop', is_service_inactive)
-    except TimeoutError:
-        logging.error('Timed out, aborting')
-        sys.exit(1)
+    subprocess.run(['systemctl', 'stop', 'xapi'], check=False)
+    
+    max_wait = 60
+    waited = 0
+    while waited < max_wait:
+        if is_service_inactive('xapi'):
+            logging.info(f'xapi stopped after {waited} seconds')
+            return
+        time.sleep(2)
+        waited += 2
+        logging.debug(f'Waiting for xapi to stop... ({waited}s elapsed)')
+    
+    logging.warning(f'xapi did not stop within {max_wait} seconds, but continuing...')
 
 def start_ha():
     logging.info('Enable HA...')
@@ -184,35 +188,6 @@ def rewrite(args):
         if ha_enabled:
             start_ha()
 
-def get_xcpng_version():
-    inventory = {}
-
-    with open("/etc/xensource-inventory") as f:
-        for line in f:
-            if "=" in line:
-                k, v = line.strip().split("=", 1)
-                inventory[k] = v.strip("'")
-
-    version = inventory.get("PRODUCT_VERSION")
-
-    if not version:
-        raise RuntimeError("PRODUCT_VERSION not found")
-
-    major, minor, *_ = version.split(".")
-    return int(major), int(minor)
-
-
-def ensure_supported_version():
-    major, minor = get_xcpng_version()
-
-    if (major, minor) < (MIN_MAJOR, MIN_MINOR):
-        print(
-            f"ERROR: snapshot-fixer.py requires XCP-ng "
-            f"{MIN_MAJOR}.{MIN_MINOR} or newer. "
-            f"Detected version: {major}.{minor}"
-        )
-        sys.exit(1)
-
 def main():
     p = ArgumentParser(description='Rewrite erroneous VM snapshot links.')
     ps = p.add_subparsers(dest='cmd')
@@ -227,7 +202,6 @@ def main():
         p.print_help()
         sys.exit(1)
 
-    ensure_supported_version()
     logging.basicConfig()
     logging.getLogger().setLevel(logging.INFO)
 
