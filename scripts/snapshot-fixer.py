@@ -45,8 +45,8 @@ def is_service_active(name):
 def is_service_inactive(name):
     return service_status(name) in [b'inactive', b'failed']
 
-def poke_service(name, cmd, check):
-    end = time.time() + 15
+def poke_service(name, cmd, check, timeout=15):
+    end = time.time() + timeout
     subprocess.run(['systemctl', cmd, name], check=True)
     while time.time() < end:
         if check(name):
@@ -67,7 +67,7 @@ def start_xapi(ha_enabled):
 def stop_xapi():
     logging.info('Shutting down xapi...')
     try:
-        poke_service('xapi', 'stop', is_service_inactive)
+        poke_service('xapi', 'stop', is_service_inactive, 60)
     except TimeoutError:
         logging.error('Timed out, aborting')
         sys.exit(1)
