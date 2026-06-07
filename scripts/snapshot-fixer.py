@@ -27,6 +27,7 @@ xapi_db        = '/var/lib/xcp/state.db'
 xapi_db_backup = '/var/lib/xcp/state.db.snapshot_of.backup'
 xapi_db_fixed  = '/var/lib/xcp/state.db.snapshot_of.fixed'
 
+bypass_checks = False
 MIN_MAJOR = 8
 MIN_MINOR = 3
 
@@ -162,27 +163,34 @@ def dry_run(args):
 
 def restore(args):
     ensure_file_exists(xapi_db_backup)
-    ha_enabled = query_and_stop_ha()
-    stop_xapi()
+    if not bypass_checks:
+        ha_enabled = query_and_stop_ha()
+        stop_xapi()
+
     try:
         copy_database(xapi_db_backup, to=xapi_db)
     finally:
-        start_xapi(ha_enabled)
-        if ha_enabled:
-            start_ha()
+        if not bypass_checks:
+            start_xapi(ha_enabled)
+            if ha_enabled:
+                start_ha()
 
 def rewrite(args):
     ensure_file_exists(xapi_db)
     ensure_file_missing(xapi_db_backup)
-    ha_enabled = query_and_stop_ha()
-    stop_xapi()
+
+    if not bypass_checks:
+        ha_enabled = query_and_stop_ha()
+        stop_xapi()
+
     try:
         copy_database(xapi_db, to=xapi_db_backup)
         rewrite_database(xapi_db_backup, to=xapi_db)
     finally:
-        start_xapi(ha_enabled)
-        if ha_enabled:
-            start_ha()
+        if not bypass_checks:
+            start_xapi(ha_enabled)
+            if ha_enabled:
+                start_ha()
 
 def get_xcpng_version():
     inventory = {}
@@ -214,7 +222,10 @@ def ensure_supported_version():
         sys.exit(1)
 
 def main():
+    global xapi_db, xapi_db_backup, xapi_db_fixed, bypass_checks
+
     p = ArgumentParser(description='Rewrite erroneous VM snapshot links.')
+    p.add_argument('--database', default=None, help='Override the xapi database path (default: /var/lib/xcp/state.db)')
     ps = p.add_subparsers(dest='cmd')
     dp = ps.add_parser('dry-run', help='Prints invalid values in the database, does not stop xapi nor modify the database.')
     dp.set_defaults(func=dry_run)
@@ -227,7 +238,17 @@ def main():
         p.print_help()
         sys.exit(1)
 
-    ensure_supported_version()
+    if args.database:
+        # If the user provided a custom database, we will assume that the provided database is compatible with the script
+        # and we will bypass checking the XCP version and stopping / starting HA and XAPI
+        xapi_db = args.database
+        xapi_db_backup = xapi_db + '.snapshot_of.backup'
+        xapi_db_fixed  = xapi_db + '.snapshot_of.fixed'
+        bypass_checks = True
+
+    if not bypass_checks:
+        ensure_supported_version()
+
     logging.basicConfig()
     logging.getLogger().setLevel(logging.INFO)
 
