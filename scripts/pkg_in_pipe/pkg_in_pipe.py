@@ -199,9 +199,9 @@ def tag_priority(tag):
     tag = tag.split('-')[-1]
     return TAG_ORDER.index(tag)
 
-def find_previous_build_commit(session, build_tag, build):
+def find_previous_build_commit(build_tag, build):
     """Find the previous build in an higher priority koji tag and return its commit."""
-    tagged = session.listTagged(build_tag, package=build['package_name'], inherit=True)
+    tagged = KOJI.listTagged(build_tag, package=build['package_name'], inherit=True)
     tagged = sorted(tagged, key=lambda t: (tag_priority(t['tag_name']), -t['build_id']))
     build_tag_priority = tag_priority(build_tag)
     tagged = [
@@ -209,7 +209,7 @@ def find_previous_build_commit(session, build_tag, build):
     ]
     if not tagged:
         return None
-    previous_build = session.getBuild(tagged[0]['build_id'])
+    previous_build = get_koji_build(tagged[0]['build_id'])
     if not previous_build.get('source'):
         return None
     return parse_source(previous_build['source'])[1]
@@ -233,26 +233,34 @@ def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
         CACHE.set(cache_key, commits, expire=RETENTION_TIME)
     return commits
 
-def find_pull_requests(gh, repo, start_sha, end_sha):
+def find_pull_requests(repo, start_sha, end_sha):
     """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
     prs = set()
-    for commit in find_commits(gh, repo, start_sha, end_sha):
+    for commit in find_commits(GITHUB, repo, start_sha, end_sha):
         cache_key = f'commit-prs-3-{commit.sha}'
         if not args.re_cache and cache_key in CACHE:
             prs.update(cast(list[PullRequest], CACHE[cache_key]))
-        elif gh:
+        elif GITHUB:
             commit_prs = list(commit.get_pulls())
             if not commit_prs:
                 # github is not properly reporting some PRs. Try to workaround that problem by getting
                 # the PR number from the commit message
                 group = re.match(r'Merge pull request #(\d+) from ', commit.commit.message)
                 if group:
-                    pr = gh.get_repo(repo).get_pull(int(group[1]))
+                    pr = GITHUB.get_repo(repo).get_pull(int(group[1]))
                     prs.add(pr)
             CACHE.set(cache_key, commit_prs, expire=RETENTION_TIME)
             prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
 
+def get_koji_build(build_id) -> dict:
+    cache_key = f'koji-build-{build_id}'
+    if not args.re_cache and cache_key in CACHE:
+        return cast(dict, CACHE[cache_key])
+    else:
+        build = KOJI.getBuild(build_id)
+        CACHE.set(cache_key, build, expire=RETENTION_TIME)
+        return build
 
 def get_plane_issues(plane_token):
     """Fetch all issues from Plane API with cursor-based pagination."""
@@ -312,14 +320,13 @@ except Exception:
     issues = []
 
 # connect to github
+GITHUB = None
 if args.github_token:
-    gh = github.Github(auth=github.Auth.Token(args.github_token))
+    GITHUB = github.Github(auth=github.Auth.Token(args.github_token))
     try:
-        gh.get_repo('xcp-ng/xcp')  # check that the token is valid
+        GITHUB.get_repo('xcp-ng/xcp')  # check that the token is valid
     except BadCredentialsException:
-        gh = None
-else:
-    gh = None
+        GITHUB = None
 
 # load the packages maintainers
 with urlopen('https://github.com/xcp-ng/xcp/raw/refs/heads/master/scripts/rpm_owners/packages.json') as f:
@@ -329,31 +336,31 @@ with io.StringIO() as out:
     print_header(out)
     if not issues:
         print_plane_warning(out)
-    if not gh:
+    if not GITHUB:
         print_github_warning(out)
     with io.StringIO() as temp_out:
         try:
             # open koji session
             config = koji.read_config("koji")
-            session = koji.ClientSession('https://kojihub.xcp-ng.org', config)
-            session.ssl_login(config['cert'], None, config['serverca'])
+            KOJI = koji.ClientSession('https://kojihub.xcp-ng.org', config)
+            KOJI.ssl_login(config['cert'], None, config['serverca'])
             for tag in tags:
                 tag_history = dict(
                     (tl['build_id'], tl['create_ts'])
-                    for tl in session.queryHistory(tag=tag, active=True)['tag_listing']
+                    for tl in KOJI.queryHistory(tag=tag, active=True)['tag_listing']
                 )
                 print_table_header(temp_out, tag)
-                taggeds = session.listTagged(tag)
+                taggeds = KOJI.listTagged(tag)
                 taggeds = (t for t in taggeds if t['package_name'] in args.packages or args.packages == [])
                 taggeds = sorted(taggeds, key=lambda t: (tag_history[t['build_id']], t['build_id']), reverse=True)
                 for tagged in taggeds:
-                    build = session.getBuild(tagged['build_id'])
+                    build = get_koji_build(tagged['build_id'])
                     prs: list[PullRequest] = []
                     maintained_by = None
-                    previous_build_sha = find_previous_build_commit(session, tag, build)
+                    previous_build_sha = find_previous_build_commit(tag, build)
                     if build['source'] is not None:
                         (repo, sha) = parse_source(build['source'])
-                        prs = find_pull_requests(gh, repo, sha, previous_build_sha)
+                        prs = find_pull_requests(repo, sha, previous_build_sha)
                     maintained_by = PACKAGES.get(tagged['package_name'], {}).get('maintainer')
                     build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
                     build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
