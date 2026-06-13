@@ -23,6 +23,14 @@ import xml.etree.ElementTree as ET
 # In unlikely case the script corrupts the database, the script provides an
 # option to restore the database from the backup.
 
+xapi_db        = '/var/lib/xcp/state.db'
+xapi_db_backup = '/var/lib/xcp/state.db.snapshot_of.backup'
+xapi_db_fixed  = '/var/lib/xcp/state.db.snapshot_of.fixed'
+
+bypass_checks = False
+MIN_MAJOR = 8
+MIN_MINOR = 3
+
 def service_status(name):
     cmd = ['systemctl', 'is-active', name]
     r = subprocess.run(
@@ -213,12 +221,6 @@ def ensure_supported_version():
         sys.exit(1)
 
 def main():
-    global xapi_db, xapi_db_backup, xapi_db_fixed
-    global bypass_checks, MIN_MAJOR, MIN_MINOR
-    bypass_checks = False
-    MIN_MAJOR = 8
-    MIN_MINOR = 3
-
     p = ArgumentParser(description='Rewrite erroneous VM snapshot links.')
     p.add_argument('--database', default=None, help='Override the xapi database path (default: /var/lib/xcp/state.db)')
     ps = p.add_subparsers(dest='cmd')
@@ -237,12 +239,9 @@ def main():
         # If the user provided a custom database, we will assume that the provided database is compatible with the script
         # and we will bypass checking the XCP version and stopping / starting HA and XAPI
         xapi_db = args.database
+        xapi_db_backup = xapi_db + '.snapshot_of.backup'
+        xapi_db_fixed  = xapi_db + '.snapshot_of.fixed'
         bypass_checks = True
-    else:
-        xapi_db = '/var/lib/xcp/state.db'
-
-    xapi_db_backup = xapi_db + '.snapshot_of.backup'
-    xapi_db_fixed  = xapi_db + '.snapshot_of.fixed'
 
     if not bypass_checks:
         ensure_supported_version()
