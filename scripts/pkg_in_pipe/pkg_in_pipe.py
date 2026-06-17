@@ -249,6 +249,9 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
                 if group:
                     pr = gh.get_repo(repo).get_pull(int(group[1]))
                     prs.add(pr)
+            # github sometimes return a PR which doesn't match the given commit, so we check if the commit
+            # is actually in the PR
+            commit_prs = [pr for pr in commit_prs if commit in pr.get_commits()]
             CACHE.set(cache_key, commit_prs, expire=RETENTION_TIME)
             prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
