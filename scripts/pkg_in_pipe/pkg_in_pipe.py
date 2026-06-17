@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-
 import argparse
 import io
 import json
 import os
 import re
+from collections import defaultdict
 from datetime import datetime
 from textwrap import dedent
 from typing import cast
@@ -108,6 +108,9 @@ def print_table_header(out, tag):
                             Cards
                         </th>
                         <th scope="col" class="px-6 py-2 w-[12.5%]">
+                            Milestones
+                        </th>
+                        <th scope="col" class="px-6 py-2 w-[12.5%]">
                             Built by
                         </th>
                         <th scope="col" class="px-6 py-2 w-[12.5%]">
@@ -153,6 +156,7 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
     ])
     warn_build = "<span class='has-tooltip'><span class='tooltip p-1 rounded bg-blue-500 text-gray-900'>Build not listed in any of the related cards</span>⚠️</span>"  # noqa
     warn_maintainer = "<span class='has-tooltip'><span class='tooltip p-1 rounded bg-blue-500 text-gray-900'>Maintainer information missing</span>⚠️</span>"  # noqa
+    milestones_content = ", ".join(sorted(set(milestone for issue in issues for milestone in issue['milestones'])))
     print(f'''    
         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
             <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate">
@@ -167,6 +171,9 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
                 <ul>
                 {issues_content}
                 </ul>
+            </td>
+            <td class="px-6 py-2">
+                {milestones_content}
             </td>
             <td class="px-6 py-2">
                 {built_by}
@@ -280,6 +287,63 @@ def get_plane_issues(plane_token):
 
     return all_results
 
+def get_plane_milestones(plane_token):
+    """Fetch all milestones from Plane API with cursor-based pagination."""
+    all_results = []
+    cursor = None
+    base_url = (
+        'https://project.vates.tech/api/v1/workspaces/vates-global/projects/'
+        '43438eec-1335-4fc2-8804-5a4c32f4932d/milestones/'
+    )
+
+    while True:
+        resp = requests.get(
+            base_url,
+            headers={'x-api-key': plane_token},
+            params={'cursor': cursor} if cursor else {},
+        )
+        data = resp.json()
+        all_results.extend(data.get('results', []))
+        cursor = data.get('next_cursor')
+        if not data.get('next_page_results', False) or not cursor:
+            break
+
+    return all_results
+
+def get_plane_milestone_issues(plane_token, milestone: str):
+    """Fetch all issues for a milestone from Plane API with cursor-based pagination."""
+    all_results = []
+    cursor = None
+    base_url = (
+        'https://project.vates.tech/api/v1/workspaces/vates-global/projects/'
+        f'43438eec-1335-4fc2-8804-5a4c32f4932d/milestones/{milestone}/work-items/'
+    )
+
+    while True:
+        resp = requests.get(
+            base_url,
+            headers={'x-api-key': plane_token},
+            params={'cursor': cursor} if cursor else {},
+        )
+        data = resp.json()
+        all_results.extend(data.get('results', []))
+        cursor = data.get('next_cursor')
+        if not data.get('next_page_results', False) or not cursor:
+            break
+
+    return all_results
+
+def get_plane_issues_with_milestones(plane_token):
+    issues = get_plane_issues(plane_token)
+    milestones = get_plane_milestones(plane_token)
+    issue_milestones = defaultdict(list)
+    for milestone in milestones:
+        milestone_issues = get_plane_milestone_issues(plane_token, milestone['id'])
+        for mi in milestone_issues:
+            issue_milestones[mi['issue']].append(milestone['title'])
+    for issue in issues:
+        issue['milestones'] = issue_milestones[issue['id']]
+    return issues
 
 started_at = datetime.now()
 
@@ -310,9 +374,10 @@ tags = args.tags or DEFAULT_TAGS
 
 # load the issues from plane, so we can search for the plane card related to a build
 try:
-    issues = get_plane_issues(args.plane_token)
+    issues = get_plane_issues_with_milestones(args.plane_token)
 except Exception:
     issues = []
+    raise
 
 # connect to github
 if args.github_token:
