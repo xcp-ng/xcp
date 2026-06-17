@@ -221,6 +221,8 @@ def ensure_supported_version():
         sys.exit(1)
 
 def main():
+    global xapi_db, xapi_db_backup, xapi_db_fixed, bypass_checks
+
     p = ArgumentParser(description='Rewrite erroneous VM snapshot links.')
     p.add_argument('--database', default=None, help='Override the xapi database path (default: /var/lib/xcp/state.db)')
     ps = p.add_subparsers(dest='cmd')
