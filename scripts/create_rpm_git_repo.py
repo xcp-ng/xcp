@@ -100,10 +100,11 @@ Built RPMs and source RPMs are available on https://updates.xcp-ng.org.
         f.write(readme)
     subprocess.check_call(['git', 'add', 'README.md'])
     # create the CODEOWNERS file
-    content = f"* {to_gh_team(maintainer)}\n"
+    owners = [maintainer]
     # make sure the platform team is owner of all the repositories
-    if maintainer != TEAM_ALIASES['platform']:
-        content += f"* {to_gh_team(TEAM_ALIASES['platform'])}\n"
+    if TEAM_ALIASES['platform'] not in owners:
+        owners.append(TEAM_ALIASES['platform'])
+    content = '* ' + ' '.join(to_gh_team(owner) for owner in owners) + '\n'
     os.mkdir('.github')
     with open('.github/CODEOWNERS', 'w') as f:
         f.write(content)
