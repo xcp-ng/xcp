@@ -237,7 +237,7 @@ def find_pull_requests(gh, repo, start_sha, end_sha):
     """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
     prs = set()
     for commit in find_commits(gh, repo, start_sha, end_sha):
-        cache_key = f'commit-prs-3-{commit.sha}'
+        cache_key = f'commit-prs-4-{commit.sha}'
         if not args.re_cache and cache_key in CACHE:
             prs.update(cast(list[PullRequest], CACHE[cache_key]))
         elif gh:
