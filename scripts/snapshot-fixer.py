@@ -162,12 +162,15 @@ def dry_run(args):
     regenerate_database(xapi_db)
 
 def restore(args):
+    ha_enabled = False
+
     ensure_file_exists(xapi_db_backup)
-    if not bypass_checks:
-        ha_enabled = query_and_stop_ha()
-        stop_xapi()
 
     try:
+        if not bypass_checks:
+            ha_enabled = query_and_stop_ha()
+            stop_xapi()
+
         copy_database(xapi_db_backup, to=xapi_db)
     finally:
         if not bypass_checks:
@@ -176,14 +179,16 @@ def restore(args):
                 start_ha()
 
 def rewrite(args):
+    ha_enabled = False
+
     ensure_file_exists(xapi_db)
     ensure_file_missing(xapi_db_backup)
 
-    if not bypass_checks:
-        ha_enabled = query_and_stop_ha()
-        stop_xapi()
-
     try:
+        if not bypass_checks:
+            ha_enabled = query_and_stop_ha()
+            stop_xapi()
+
         copy_database(xapi_db, to=xapi_db_backup)
         rewrite_database(xapi_db_backup, to=xapi_db)
     finally:
@@ -194,8 +199,11 @@ def rewrite(args):
 
 def get_xcpng_version():
     inventory = {}
+    path = '/etc/xensource-inventory'
 
-    with open("/etc/xensource-inventory") as f:
+    ensure_file_exists(path)
+
+    with open(path) as f:
         for line in f:
             if "=" in line:
                 k, v = line.strip().split("=", 1)
