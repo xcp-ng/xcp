@@ -194,8 +194,11 @@ def rewrite(args):
 
 def get_xcpng_version():
     inventory = {}
+    path = '/etc/xensource-inventory'
 
-    with open("/etc/xensource-inventory") as f:
+    ensure_file_exists(path)
+
+    with open(path) as f:
         for line in f:
             if "=" in line:
                 k, v = line.strip().split("=", 1)
