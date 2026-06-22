@@ -1,0 +1,57 @@
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+td {
+    padding: 2px 5px;
+    /* background-color: lightblue; */
+}
+
+tr.header {
+    vertical-align: top;
+}
+tr.ignored {
+    color: #888888;
+    background-color: #cccccc;
+}
+tr.notused { /* still to check */
+    color: red;
+    background-color: #cccccc;
+}
+
+th.xs {
+    background-color: #ddddff;
+}
+th.xcp {
+    background-color: #ddffdd;
+}
+
+td.pkgname {
+    white-space: nowrap;
+}
+
+.nosource {
+    color: red;
+    background-color: black;
+}
+
+.unexpected {
+    color: red;
+}
+
+.outdated {
+    background-color: red;
+}
+
+.uptodate {
+    background-color: lightgreen;
+}
+
+.better {
+    background-color: #77cc00;
+}
+
+.upstream {
+    /* must not be background-color, can exist in outdated/uptodate/better */
+    color: blue;
+}
