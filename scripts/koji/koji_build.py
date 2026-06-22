@@ -166,7 +166,7 @@ def push_bumped_release(git_repo, target, test_build_id, pre_build_id):
     t = datetime.now().strftime(TIME_FORMAT)
     branch = f'koji/test/{test_build_id or pre_build_id}/{t}'
     with cd(git_repo), local_branch(branch):
-        spec_paths = subprocess.check_output(['git', 'ls-files', 'SPECS/*.spec']).decode().splitlines()
+        spec_paths = subprocess.check_output(['git', 'ls-files', 'SPECS/*.spec', '*.spec']).decode().splitlines()
         assert len(spec_paths) == 1
         spec_path = spec_paths[0]
         with Specfile(spec_path) as spec:
