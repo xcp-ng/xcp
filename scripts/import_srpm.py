@@ -7,6 +7,8 @@ import os
 import shutil
 import subprocess
 from glob import glob
+from urllib.parse import urlparse
+from urllib.request import urlretrieve
 
 
 def call_process(args):
@@ -40,6 +42,13 @@ def pipe_commands(*commands: list[str]) -> bytes:
 
     return final_stdout
 
+def is_url(url_string):
+    try:
+        result = urlparse(url_string)
+        return all([result.scheme, result.netloc])
+    except ValueError:
+        return False
+
 def main():
     parser = argparse.ArgumentParser(description='Imports the contents of a source RPM into a git repository')
     parser.add_argument('source_rpm', help='local path to source RPM')
@@ -64,12 +73,19 @@ def main():
         if shutil.which(dep) is None:
             parser.error(f"{dep} can't be found.")
 
+    # handle URL source
+    source_rpm = args.source_rpm
+    if is_url(source_rpm):
+        # get the src.rpm locally, and continue with the actual file
+        local_filename = f'/tmp/{os.path.basename(source_rpm)}'
+        urlretrieve(source_rpm, local_filename)
+        source_rpm = local_filename
     # check that the source RPM file exists
-    if not os.path.isfile(args.source_rpm):
-        parser.error("File %s does not exist." % args.source_rpm)
-    if not args.source_rpm.endswith('.src.rpm'):
-        parser.error("File %s does not appear to be a source RPM." % args.source_rpm)
-    source_rpm_abs = os.path.abspath(args.source_rpm)
+    if not os.path.isfile(source_rpm):
+        parser.error("File %s does not exist." % source_rpm)
+    if not source_rpm.endswith('.src.rpm'):
+        parser.error("File %s does not appear to be a source RPM." % source_rpm)
+    source_rpm_abs = os.path.abspath(source_rpm)
 
     # enter repository directory
     if not os.path.isdir(args.repository):
@@ -144,7 +160,7 @@ def main():
     if not has_changes:
         print("\nWorking copy has no modifications. Nothing to commit. No changes from previous release?\n")
     else:
-        msg = 'Import %s' % os.path.basename(args.source_rpm)
+        msg = 'Import %s' % os.path.basename(source_rpm)
         if deleted:
             msg += "\n\nFiles deleted for legal reasons:\n - " + '\n - '.join(deleted)
         call_process(['git', 'commit', '-s', '-m', msg])
