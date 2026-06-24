@@ -18,7 +18,6 @@ from github.Commit import Commit
 from github.GithubException import BadCredentialsException
 from github.PullRequest import PullRequest
 
-
 def print_header(out):
     print(dedent('''
         <!DOCTYPE html>
@@ -197,7 +196,10 @@ TAG_ORDER = ['incoming', 'ci', 'testing', 'candidates', 'updates', 'base', 'lab'
 def tag_priority(tag):
     # drop the version in the tag — v8.3-incoming -> incoming
     tag = tag.split('-')[-1]
-    return TAG_ORDER.index(tag)
+    if tag in TAG_ORDER:
+        return TAG_ORDER.index(tag)
+    else:
+        return -1
 
 def find_previous_build_commit(build_tag, build):
     """Find the previous build in an higher priority koji tag and return its commit."""
@@ -287,6 +289,8 @@ CACHE = diskcache.Cache(args.cache)
 RETENTION_TIME = 24 * 60 * 60  # 24 hours
 
 DEFAULT_TAGS = [f'v{v}-{p}' for v in ['8.2', '8.3'] for p in ['incoming', 'ci', 'testing', 'candidates', 'lab']]
+# 9.0 does not yet have all the 9.0-* variants. Just list the one already there for now
+DEFAULT_TAGS += ['v9.0-incoming']
 tags = args.tags or DEFAULT_TAGS
 
 # load the issues from plane, so we can search for the plane card related to a build
