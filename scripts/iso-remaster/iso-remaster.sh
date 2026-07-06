@@ -106,6 +106,7 @@ done
 case "$COMPRESS" in
     bzip2) ZCAT=bzcat; ZIP=bzip2 ;;
     gzip) ZCAT=zcat; ZIP=gzip ;;
+    zstd) ZCAT=zstdcat; ZIP=zstd ;;
     *) die_usage "unsupported compression method" ;;
 esac
 
@@ -192,14 +193,14 @@ esac
 # maybe run install.img patcher
 
 if [ -n "$IMGPATCHER" ]; then
-    bzcat "$SRCISO/install.img" | (cd "$INSTALLIMG" && "${FAKEROOT[@]}" cpio -idm)
+    $ZCAT "$SRCISO/install.img" | (cd "$INSTALLIMG" && "${FAKEROOT[@]}" cpio -idm)
 
     # patch install.img contents
     "${FAKEROOT[@]}" "$IMGPATCHER" "$INSTALLIMG" || die "IMG patcher exited in error: $?"
 
     # repack install.img
     (cd "$INSTALLIMG" && "${FAKEROOT[@]}" sh -c "find . | cpio -o -H newc") |
-        bzip2 > "$DESTISO/install.img"
+        $ZIP > "$DESTISO/install.img"
 fi
 
 # produce merged view
