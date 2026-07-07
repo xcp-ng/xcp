@@ -4,6 +4,8 @@ import logging
 import os
 import re
 import subprocess
+from tempfile import TemporaryDirectory
+from shutil import rmtree
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -165,7 +167,7 @@ def find_next_release(package, spec, target, test_build_id, pre_build_id):
     else:
         return f'{spec.release}~{pre_build_id}.{build_nb}'
 
-def push_bumped_release(git_repo, target, test_build_id, pre_build_id, source_commit_id, source_repo):
+def push_bumped_release(git_repo, target, test_build_id, pre_build_id, source_commit_id=None, source_repo=None):
     t = datetime.now().strftime(TIME_FORMAT)
     if test_build_id is None and source_commit_id:
         test_build_id = source_commit_id
@@ -181,32 +183,37 @@ def push_bumped_release(git_repo, target, test_build_id, pre_build_id, source_co
                 # Get Source0 path
                 with spec.sources() as sources:
                     tar_name = sources[0].expanded_location
-                    tar_name = re.sub(r'\.tar\.gz$', '', tar_name)
+                    tar_name, ext = os.path.splitext(tar_name)
+                    tar_name = re.sub(r'\.tar$', '', tar_name)
 
-                source_archive = f'{source_commit_id}.tar.gz'
-                # download sources given the commit hash and recreate the tar.gz with
+                tar_compress_opts = { '.gz': 'z', '.xz': 'J', '.bz2': 'j' }
+                if ext in tar_compress_opts:
+                    tar_compress_opt = tar_compress_opts[ext]
+                else:
+                    logging.error(f"This type of compressed archive ({ext}) is not currently supported")
+                    exit(1)
+
+                # download sources given the commit hash and recreate the tar{ext} with
                 # the expected directory name
-                try:
+                with TemporaryDirectory() as temp_dir:
+                    source_archive = os.path.join(temp_dir, f'{source_commit_id}.tar.gz')
                     try:
+                        # Github only supports .gz archives
                         subprocess.check_call(['wget', f'https://github.com/{source_repo}/archive/{source_commit_id}.tar.gz', '-O', source_archive])
                     except Exception:
-                        logging.error("--source-build is not a valid hash in the specified repo. Please confirm both are correct")
+                        logging.exception("Couldn't fetch sources for the commit hash. "
+                                          "This could be because of network/Github issues "
+                                          "or because --source-build is not a valid hash "
+                                          "in the specified repo.")
                         exit(1)
 
-                    if os.path.exists(expected_dir_name):
-                        os.rmdir(expected_dir_name)
-                    os.makedirs(expected_dir_name)
+                    full_dir_name = os.path.join(temp_dir, expected_dir_name)
+                    os.makedirs(full_dir_name)
 
-                    subprocess.check_call(['tar', 'xzf', source_archive, '-C', expected_dir_name, '--strip-components=1'])
-                    subprocess.check_call(['tar', 'czf', f'{tar_name}.tar.gz', expected_dir_name, '--remove-files'])
+                    subprocess.check_call(['tar', 'xzf', source_archive, '-C', full_dir_name, '--strip-components=1'])
                     # replace the Source0 with the new archive
-                    subprocess.check_call(['mv', f'{tar_name}.tar.gz', 'SOURCES'])
-                    modified_files.append(f'SOURCES/{tar_name}.tar.gz')
-                finally:
-                    if os.path.isfile(source_archive):
-                        os.remove(source_archive)
-                    if os.path.isfile(expected_dir_name):
-                        os.rmdir(expected_dir_name)
+                    subprocess.check_call(['tar', f'cf{tar_compress_opt}', f'SOURCES/{tar_name}.tar{ext}', '-C', temp_dir, expected_dir_name, '--remove-files'])
+                    modified_files.append(f'SOURCES/{tar_name}.tar{ext}')
 
             # find the next build number
             package = Path(spec_path).stem
@@ -279,7 +286,7 @@ def main():
         '--source-build',
         metavar="ID",
         help='Run a test build from a hash in the source repository.'
-             'The provided commit hash will be used as a unique release tag.',
+             'The provided short or full commit hash will be used as a unique release tag.',
     )
     parser.add_argument(
         '--source-repo',
@@ -360,7 +367,7 @@ def main():
             remote, hash = get_repo_and_commit_info(d)
             if test_build or pre_build or source_commit_id:
                 clean_old_branches(d)
-                hash = push_bumped_release(d, target, test_build, pre_build, None, None)
+                hash = push_bumped_release(d, target, test_build, pre_build)
             else:
                 check_commit_is_available_remotely(d, hash, None if is_scratch else target, args.force)
             urls.append(koji_url(remote, hash))
