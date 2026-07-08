@@ -4,6 +4,8 @@ import logging
 import os
 import re
 import subprocess
+from tempfile import TemporaryDirectory
+from shutil import rmtree
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -32,6 +34,11 @@ PROTECTED_TARGETS = {
     "v9.0-incoming": {"master"},
 }
 
+SOURCE_MAPPING = {
+    "xcp-ng-rpms/xapi": "xapi-project/xen-api",
+    "xcp-ng-rpms/xsconsole": "xapi-project/xsconsole",
+}
+
 @contextmanager
 def cd(dir):
     """Change to a directory temporarily. To be used in a with statement."""
@@ -58,7 +65,7 @@ def check_commit_is_available_remotely(dirpath, sha, target, warn):
         if not output:
             raise Exception("The current commit is not available in the remote repository")
         logging.debug('Commit %s is contained in remote branch: %s', sha, output.decode().strip())
-        
+
         if target is not None and re.match(r'v\d+\.\d+-u-.+', target):
             raise Exception("Building with a user target requires using --pre-build or --test-build.\n")
         try:
@@ -160,18 +167,59 @@ def find_next_release(package, spec, target, test_build_id, pre_build_id):
     else:
         return f'{spec.release}~{pre_build_id}.{build_nb}'
 
-def push_bumped_release(git_repo, target, test_build_id, pre_build_id):
+def push_bumped_release(git_repo, target, test_build_id, pre_build_id, source_commit_id=None, source_repo=None):
     t = datetime.now().strftime(TIME_FORMAT)
+    if test_build_id is None and source_commit_id:
+        test_build_id = source_commit_id
     branch = f'koji/test/{test_build_id or pre_build_id}/{t}'
     with cd(git_repo), local_branch(branch):
         spec_paths = subprocess.check_output(['git', 'ls-files', 'SPECS/*.spec']).decode().splitlines()
         assert len(spec_paths) == 1
         spec_path = spec_paths[0]
+        modified_files = [spec_path]
         with Specfile(spec_path) as spec:
+            if source_commit_id is not None:
+                expected_dir_name = f'{spec.name}-{spec.expand(spec.version)}'
+                # Get Source0 path
+                with spec.sources() as sources:
+                    tar_name = sources[0].expanded_location
+                    tar_name, ext = os.path.splitext(tar_name)
+                    tar_name = re.sub(r'\.tar$', '', tar_name)
+
+                tar_compress_opts = { '.gz': 'z', '.xz': 'J', '.bz2': 'j' }
+                if ext in tar_compress_opts:
+                    tar_compress_opt = tar_compress_opts[ext]
+                else:
+                    logging.error(f"This type of compressed archive ({ext}) is not currently supported")
+                    exit(1)
+
+                # download sources given the commit hash and recreate the tar{ext} with
+                # the expected directory name
+                with TemporaryDirectory() as temp_dir:
+                    source_archive = os.path.join(temp_dir, f'{source_commit_id}.tar.gz')
+                    try:
+                        # Github only supports .gz archives
+                        subprocess.check_call(['wget', f'https://github.com/{source_repo}/archive/{source_commit_id}.tar.gz', '-O', source_archive])
+                    except Exception:
+                        logging.exception("Couldn't fetch sources for the commit hash. "
+                                          "This could be because of network/Github issues "
+                                          "or because --source-build is not a valid hash "
+                                          "in the specified repo.")
+                        exit(1)
+
+                    full_dir_name = os.path.join(temp_dir, expected_dir_name)
+                    os.makedirs(full_dir_name)
+
+                    subprocess.check_call(['tar', 'xzf', source_archive, '-C', full_dir_name, '--strip-components=1'])
+                    # replace the Source0 with the new archive
+                    subprocess.check_call(['tar', f'cf{tar_compress_opt}', f'SOURCES/{tar_name}.tar{ext}', '-C', temp_dir, expected_dir_name, '--remove-files'])
+                    modified_files.append(f'SOURCES/{tar_name}.tar{ext}')
+
             # find the next build number
             package = Path(spec_path).stem
             spec.release = find_next_release(package, spec, target, test_build_id, pre_build_id)
-        subprocess.check_call(['git', 'commit', '--quiet', '-m', "bump release for test build", spec_path])
+        subprocess.check_call(['git', 'commit', '--quiet', '-m', "bump release for test build"]
+                               + modified_files)
         subprocess.check_call(['git', 'push', 'origin', f'HEAD:refs/heads/{branch}'])
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
         return commit
@@ -234,6 +282,18 @@ def main():
         metavar="ID",
         help='Run a pre build. The provided ID will be used to build a unique release tag.',
     )
+    parser.add_argument(
+        '--source-build',
+        metavar="ID",
+        help='Run a test build from a hash in the source repository.'
+             'The provided short or full commit hash will be used as a unique release tag.',
+    )
+    parser.add_argument(
+        '--source-repo',
+        metavar="ID",
+        help='Determines the source repository that will be used with --source-build.'
+             'Overrides automatic mapping used when --source-repo is not specified.',
+    )
     args = parser.parse_args()
 
     target = args.target
@@ -243,13 +303,26 @@ def main():
 
     test_build = build_id_of("test", args.test_build)
     pre_build = build_id_of("pre", args.pre_build)
+    source_commit_id = args.source_build
 
     if test_build and pre_build:
         logging.error("--pre-build and --test-build can't be used together")
         exit(1)
 
+    if (source_commit_id and test_build) or (source_commit_id and pre_build):
+        logging.error("--{pre,test}-build and --source-build can't be used together")
+        exit(1)
+
     if len(git_repos) > 1 and is_scratch:
         parser.error("--scratch is not compatible with chained builds.")
+
+    if len(git_repos) > 1 and source_commit_id:
+        logging.error("--source-build can only be used on one source repository, chain builds are not supported")
+        exit(1)
+
+    if args.source_repo and not source_commit_id:
+        logging.error("--source-repo can only be used with --source-build")
+        exit(1)
 
     for d in git_repos:
         if not check_git_repo(d):
@@ -257,9 +330,26 @@ def main():
 
     if len(git_repos) == 1:
         remote, hash = get_repo_and_commit_info(git_repos[0])
-        if test_build or pre_build:
+
+        source_repo = None
+        if source_commit_id:
+            if args.source_repo:
+                source_repo = args.source_repo
+            else:
+                # Get 'org/repo' part from the Git remote URL
+                remote_repo = re.sub('.git', '', re.split('github.com[:/]', remote)[-1])
+                # Map it to known source repositories
+                if remote_repo in SOURCE_MAPPING:
+                    source_repo = SOURCE_MAPPING[remote_repo]
+                else:
+                    logging.error('No corresponding source repo could be automatically '
+                                  'detected for this spec repo. Specify --source-repo '
+                                  'or add another spec->source mapping to the script')
+                    exit(1)
+
+        if test_build or pre_build or source_commit_id:
             clean_old_branches(git_repos[0])
-            hash = push_bumped_release(git_repos[0], target, test_build, pre_build)
+            hash = push_bumped_release(git_repos[0], target, test_build, pre_build, source_commit_id, source_repo)
         else:
             check_commit_is_available_remotely(git_repos[0], hash, None if is_scratch else target, args.force)
         url = koji_url(remote, hash)
@@ -275,7 +365,7 @@ def main():
         urls = []
         for d in git_repos:
             remote, hash = get_repo_and_commit_info(d)
-            if test_build or pre_build:
+            if test_build or pre_build or source_commit_id:
                 clean_old_branches(d)
                 hash = push_bumped_release(d, target, test_build, pre_build)
             else:
