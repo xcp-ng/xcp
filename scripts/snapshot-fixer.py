@@ -88,11 +88,19 @@ def start_ha():
 
 def query_and_stop_ha():
     logging.info('Check HA...')
-    r = subprocess.run(
-        [ 'xe', 'pool-list', '--minimal' ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
+    def pool_list():
+        return subprocess.run(
+            [ 'xe', 'pool-list', '--minimal' ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+    r = pool_list()
+    if r.returncode != 0:
+        logging.info('Xapi was down, bringing it up to check HA')
+        start_xapi(False)
+    while r.returncode != 0:
+        r = pool_list()
+        time.sleep(0.1)
     pool_uuid = r.stdout.strip().split()[-1].decode('utf-8')
     r = subprocess.run(
         [ 'xe', 'pool-param-get', 'param-name=ha-enabled', 'uuid=' + pool_uuid ],
