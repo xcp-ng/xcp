@@ -103,7 +103,6 @@ def main():
             call_process(['git', 'diff-index', '--quiet', 'HEAD', '--'])
             print("Working copy is clean.")
         except Exception:
-            raise
             parser.error("Git repository seems to have local modifications.")
 
         # check that there are no untracked files
@@ -123,8 +122,8 @@ def main():
         if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
             call_process(['git', 'rm', 'SOURCES/*', '-r'])
         if os.path.isdir('SOURCES') and len(os.listdir('SOURCES')) > 0:
-            parser.error("Files remaining in SOURCES/ after removing the tracked ones. ")
-            parser.error("Delete them (including hidden files), reset --hard.")
+            parser.error("Files remaining in SOURCES/ after removing the tracked ones. \n"
+                         "Delete them (including hidden files), reset --hard.")
         os.mkdir('SOURCES')
 
         if os.path.isdir('SPECS'):
