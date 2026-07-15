@@ -102,7 +102,7 @@ def main():
         try:
             call_process(['git', 'diff-index', '--quiet', 'HEAD', '--'])
             print("Working copy is clean.")
-        except:
+        except Exception:
             raise
             parser.error("Git repository seems to have local modifications.")
 
@@ -160,7 +160,7 @@ def main():
         has_changes = False
         try:
             call_process(['git', 'diff-index', '--quiet', 'HEAD', '--'])
-        except:
+        except Exception:
             has_changes = True
 
         if not has_changes:
