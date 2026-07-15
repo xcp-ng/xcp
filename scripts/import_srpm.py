@@ -146,7 +146,8 @@ def main():
         for f in ['Citrix_Logo_Black.png', 'COPYING.CitrixCommercial']:
             if f in sources:
                 os.unlink(os.path.join('SOURCES', f))
-                open(os.path.join('SOURCES', "%s.deleted-by-XCP-ng.txt" % f), 'w').write(deletemsg)
+                with open(os.path.join('SOURCES', "%s.deleted-by-XCP-ng.txt" % f), 'w') as f:
+                    f.write(deletemsg)
                 deleted.append(f)
 
         if subprocess.call(['git', 'rev-parse', '--quiet', '--verify', args.branch]) != 0:
