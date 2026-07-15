@@ -159,7 +159,7 @@ def main():
         print(" committing...")
         has_changes = False
         try:
-            call_process(['git', 'diff-index', '--quiet',  'HEAD', '--'])
+            call_process(['git', 'diff-index', '--quiet', 'HEAD', '--'])
         except:
             has_changes = True
 
