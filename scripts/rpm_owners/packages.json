@@ -4766,6 +4766,12 @@
         "package": "xcp-clipboardd",
         "status": "packaged"
     },
+    "xcp-efivar-utils": {
+        "added_by": "XCP-ng",
+        "maintainer": "Hypervisor & Kernel",
+        "package": "xcp-efivar-utils",
+        "status": "packaged"
+    },
     "xcp-emu-manager": {
         "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
