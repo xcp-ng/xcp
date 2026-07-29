@@ -4029,6 +4029,13 @@
         "package": "qlogic-fastlinq-alt",
         "status": "packaged"
     },
+    "qlogic-fastlinq-alt_8.42": {
+        "added_by": "XCP-ng",
+        "maintainer": "Hypervisor & Kernel",
+        "note": "additional driver",
+        "package": "qlogic-fastlinq-alt_8.42",
+        "status": "packaged"
+    },
     "qlogic-netxtreme2": {
         "added_by": "XS",
         "maintainer": "Hypervisor & Kernel",
