@@ -185,7 +185,7 @@ def print_table_line(out, build, link, issues, built_by, prs: list[PullRequest],
         ''', file=out)  # nopep8
 
 def parse_source(source: str) -> tuple[str, str]:
-    groups = re.match(r'git\+https://github\.com/([\w-]+/[\w-]+)(|\.git)#([0-9a-f]{40})', source)
+    groups = re.match(r'git\+https://github\.com/([\w-]+/[\w.-]+?)(|\.git)#([0-9a-f]{40})', source)
     assert groups is not None, "can't match the source to the expected github url"
     return (groups[1], groups[3])
 
