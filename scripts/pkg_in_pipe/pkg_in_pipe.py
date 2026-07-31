@@ -199,7 +199,7 @@ def filter_issues(issues, urls):
     return res
 
 
-TAG_ORDER = ['incoming', 'ci', 'testing', 'candidates', 'updates', 'base', 'lab']
+TAG_ORDER = ['incoming', 'ci', 'testing', 'candidates', 'updates', 'base', 'lab', 'linstor']
 
 def tag_priority(tag):
     # drop the version in the tag — v8.3-incoming -> incoming
@@ -369,7 +369,11 @@ args = parser.parse_args()
 CACHE = diskcache.Cache(args.cache)
 RETENTION_TIME = 24 * 60 * 60  # 24 hours
 
-DEFAULT_TAGS = [f'v{v}-{p}' for v in ['8.2', '8.3'] for p in ['incoming', 'ci', 'testing', 'candidates', 'lab']]
+DEFAULT_TAGS = [
+    f'v{v}-{p}'
+    for v in ['8.2', '8.3']
+    for p in ['incoming', 'ci', 'testing', 'candidates', 'lab', 'v-linstor-testing']
+]
 tags = args.tags or DEFAULT_TAGS
 
 # load the issues from plane, so we can search for the plane card related to a build
