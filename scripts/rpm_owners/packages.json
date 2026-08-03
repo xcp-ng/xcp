@@ -1958,12 +1958,6 @@
         "package": "libdwarf",
         "status": "packaged"
     },
-    "libidn2": {
-        "added_by": "XS",
-        "maintainer": "OS Platform & Release",
-        "package": "libidn2",
-        "status": "packaged"
-    },
     "libedit": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
@@ -2062,6 +2056,12 @@
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libidn",
+        "status": "packaged"
+    },
+    "libidn2": {
+        "added_by": "XS",
+        "maintainer": "OS Platform & Release",
+        "package": "libidn2",
         "status": "packaged"
     },
     "libjpeg-turbo": {
