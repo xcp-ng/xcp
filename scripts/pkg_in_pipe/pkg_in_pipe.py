@@ -371,7 +371,7 @@ RETENTION_TIME = 24 * 60 * 60  # 24 hours
 
 DEFAULT_TAGS = [
     f'v{v}-{p}'
-    for v in ['8.2', '8.3']
+    for v in ['8.3']
     for p in ['incoming', 'ci', 'testing', 'candidates', 'lab', 'v-linstor-testing']
 ]
 tags = args.tags or DEFAULT_TAGS
