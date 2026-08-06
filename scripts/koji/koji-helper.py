@@ -8,12 +8,15 @@ List all source packages from a Koji tag.
 
 Usage:
     uv run koji-helper.py list <tag> [OPTIONS]
-    uv run koji-helper.py list-update <to_tag> <from_tag> [OPTIONS]
+    uv run koji-helper.py list-update \
+      <to_tag> <from_tag> [from_others_tags] [OPTIONS]
 
 Examples:
     uv run koji-helper.py list v8.3-ci
     uv run koji-helper.py list-update v8.3-ci v8.3-updates
-    uv run koji-helper.py --no-verify-ssl list-update v8.3-ci v8.3-updates
+    uv run koji-helper.py --no-verify-ssl list-update v8.3-ci \
+      v8.3-testing v8.3-candidates v8.3-updates v8.3-base
+
 
 """
 
@@ -67,47 +70,52 @@ def list_source_packages(session, tag, latest=True):
     return tag_info, results
 
 
-def list_update_source_packages(session, to_tag, from_tag=None, latest=True):
+def list_update_source_packages(session, to_tag,
+                                from_tags=None, latest=True):
     """
-    List source packages that have been updated from from_tag to to_tag.
-
-    If from_tag is provided, returns packages where the NVR in to_tag
-    is different from the NVR in from_tag.
+    List source packages that have been updated from one or more
+    from_tags to to_tag.
 
     Returns a dict mapping package name to its info:
         - nvr: name-version-release string in to_tag
         - version: package version in to_tag
         - release: package release in to_tag
-        - base_nvr: name-version-release string in from_tag (if provided)
-        - base_version: package version in from_tag
-        - base_release: package release in from_tag
+        - base_version: matching info from base tag or None
     """
     to_tag_info, to_packages = list_source_packages(session, to_tag)
 
     base_packages = {}
-    if from_tag:
-        _, base_packages = list_source_packages(session, from_tag)
+    if from_tags:
+        for from_tag in from_tags:
+            _, from_packages = list_source_packages(session, from_tag)
+            base_packages[from_tag] = from_packages
 
     results = {}
     for name, info in to_packages.items():
         to_nvr = info["nvr"]
-        if from_tag:
-            base_info = base_packages.get(name, {})
-            base_nvr = base_info.get("nvr")
-            if base_nvr and base_nvr != to_nvr:
-                results[name] = {
-                    "nvr": to_nvr,
-                    "version": info["version"],
-                    "release": info["release"],
-                    "base_nvr": base_nvr,
-                    "base_version": base_info.get("version"),
-                    "base_release": base_info.get("release"),
-                }
-        else:
+        if not from_tags:
             results[name] = {
                 "nvr": to_nvr,
                 "version": info["version"],
-                "release": info["release"]
+                "release": info["release"],
+                "base_version": None,
+            }
+        else:
+            base_version = None
+            for from_tag in from_tags:
+                from_pkgs = base_packages[from_tag]
+                if name in from_pkgs:
+                    base_info = from_pkgs[name]
+                    base_nvr = base_info.get("nvr")
+                    if base_nvr and base_nvr != to_nvr:
+                        base_version = base_info
+                        break
+
+            results[name] = {
+                "nvr": to_nvr,
+                "version": info["version"],
+                "release": info["release"],
+                "base_version": base_version,
             }
 
     return to_tag_info, results
@@ -138,7 +146,7 @@ def do_list(session, opts):
 
 def do_list_update(session, opts):
     tag_info, packages = list_update_source_packages(
-        session, opts.tag, from_tag=opts.base_tag
+        session, opts.tag, from_tags=opts.base_tags
     )
 
     if not packages:
@@ -146,15 +154,20 @@ def do_list_update(session, opts):
         sys.exit(0)
 
     lines = []
-    lines.append("Updated packages from"
-                 f"{opts.base_tag or 'any tag'} to {tag_info['name']}")
+    base_tags_str = ', '.join(opts.base_tags) if opts.base_tags else 'any tag'
+    lines.append(f"Updated packages from {base_tags_str}"
+                 f" to {tag_info['name']}")
     lines.append(f"Total updated source packages: {len(packages)}")
     lines.append("-" * 60)
 
     for name, info in sorted(packages.items()):
-        old_vr = f"{info.get('base_version')}-{info.get('base_release')}"
         new_vr = f"{info['version']}-{info['release']}"
-        lines.append(f"{name}: {old_vr} -> {new_vr}")
+        base_version = info.get("base_version")
+        if base_version:
+            old_vr = f"{base_version['version']}-{base_version['release']}"
+            lines.append(f"{name}: {old_vr} -> {new_vr}")
+        else:
+            lines.append(f"{name}: UNKNOWN -> {new_vr}")
 
     output_text = "\n".join(lines) + "\n"
 
@@ -182,9 +195,8 @@ def main():
     list_parser = subparsers.add_parser(
         "list",
         help="List all source packages from a tag")
-    list_parser.add_argument(
-        "tag",
-        help="The Koji tag to query (e.g., c9s, f40, epel9)")
+    list_parser.add_argument("tag",
+                             help="The Koji tag to query")
 
     # list-update command
     list_update_parser = subparsers.add_parser(
@@ -192,8 +204,9 @@ def main():
         help="List updated source packages between tags")
     list_update_parser.add_argument("tag", help="The target Koji tag")
     list_update_parser.add_argument(
-        "base_tag",
-        help="The source Koji tag to compare against")
+        "base_tags",
+        nargs="+",
+        help="The source Koji tags to compare against")
 
     global opts
     opts = parser.parse_args()
