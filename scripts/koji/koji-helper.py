@@ -29,27 +29,44 @@ Examples:
 
 import argparse
 import sys
+from typing import Any, NotRequired, TypedDict
 
 import koji
 
 
-def get_session(opts):
+class PackageInfo(TypedDict):
+    """Information about a source package build."""
+
+    nvr: str
+    version: str
+    release: str
+    base_version: NotRequired["PackageInfo | None"]
+
+
+Packages = dict[str, PackageInfo]
+
+
+def get_session(args: argparse.Namespace) -> koji.ClientSession:
     """Create and return a Koji client session."""
     session = koji.ClientSession(
-        opts.server,
-        opts={"no_ssl_verify": opts.no_verify_ssl},
+        args.server,
+        opts={"no_ssl_verify": args.no_verify_ssl},
     )
     return session
 
 
-def list_source_packages(session, tag, latest=True):
+def list_source_packages(
+    session: koji.ClientSession, tag: str, latest: bool = True
+) -> tuple[dict[str, Any], Packages]:
     """
     List all source packages in the given tag.
 
-    Returns a dict mapping package name to its info:
-        - nvr: name-version-release string
-        - version: package version
-        - release: package release
+    Returns a tuple of (tag_info, packages) where:
+        - tag_info: dict with tag metadata (name, id, etc.)
+        - packages: Packages type mapping package name to its info:
+            - nvr: name-version-release string
+            - version: package version
+            - release: package release
     """
     # Get the tag info
     tag_info = session.getTag(tag, strict=True)
@@ -57,7 +74,7 @@ def list_source_packages(session, tag, latest=True):
     # Get all source builds in the tag
     builds = session.listTagged(tag, latest=latest)
 
-    results = {}
+    results: Packages = {}
     for build in builds:
         name = build["package_name"]
         if name not in results:
@@ -70,66 +87,67 @@ def list_source_packages(session, tag, latest=True):
     return tag_info, results
 
 
-def list_update_source_packages(session, to_tag,
-                                from_tags=None, latest=True):
+def list_update_source_packages(
+    session: koji.ClientSession,
+    to_tag: str,
+    from_tags: list[str] | None = None,
+    latest: bool = True,
+) -> tuple[dict[str, Any], Packages]:
     """
     List source packages that have been updated from one or more
     from_tags to to_tag.
 
-    Returns a dict mapping package name to its info:
-        - nvr: name-version-release string in to_tag
-        - version: package version in to_tag
-        - release: package release in to_tag
-        - base_version: matching info from base tag or None
+    Returns a tuple of (tag_info, packages) where:
+        - tag_info: dict with tag metadata (name, id, etc.)
+        - packages: Packages type mapping package name to its info:
+            - nvr: name-version-release string in to_tag
+            - version: package version in to_tag
+            - release: package release in to_tag
+            - base_version: matching info from base tag or None
     """
+    if not from_tags:
+        msg = "At least one from_tag is required"
+        raise ValueError(msg)
+
     to_tag_info, to_packages = list_source_packages(session, to_tag)
 
-    base_packages = {}
-    if from_tags:
-        for from_tag in from_tags:
-            _, from_packages = list_source_packages(session, from_tag)
-            base_packages[from_tag] = from_packages
+    base_packages: dict[str, Packages] = {}
+    for from_tag in from_tags:
+        _, from_packages = list_source_packages(session, from_tag)
+        base_packages[from_tag] = from_packages
 
-    results = {}
+    results: Packages = {}
     for name, info in to_packages.items():
         to_nvr = info["nvr"]
-        if not from_tags:
-            results[name] = {
-                "nvr": to_nvr,
-                "version": info["version"],
-                "release": info["release"],
-                "base_version": None,
-            }
-        else:
-            base_version = None
-            for from_tag in from_tags:
-                from_pkgs = base_packages[from_tag]
-                if name in from_pkgs:
-                    base_info = from_pkgs[name]
-                    base_nvr = base_info.get("nvr")
-                    if base_nvr and base_nvr != to_nvr:
-                        base_version = base_info
-                        break
+        base_version: PackageInfo | None = None
+        for from_tag in from_tags:
+            from_pkgs = base_packages[from_tag]
+            if name in from_pkgs:
+                base_info = from_pkgs[name]
+                base_nvr = base_info.get("nvr")
+                if base_nvr and base_nvr != to_nvr:
+                    base_version = base_info
+                    break
 
-            results[name] = {
-                "nvr": to_nvr,
-                "version": info["version"],
-                "release": info["release"],
-                "base_version": base_version,
-            }
+        results[name] = {
+            "nvr": to_nvr,
+            "version": info["version"],
+            "release": info["release"],
+            "base_version": base_version,
+        }
 
     return to_tag_info, results
 
 
-def do_list(session, opts):
-    tag_info, packages = list_source_packages(
-        session, opts.tag
-    )
+def do_list(session: koji.ClientSession, args: argparse.Namespace) -> None:
+    tag_info, packages = list_source_packages(session, args.tag)
 
     if not packages:
-        print(f"No source packages found in tag '{opts.tag}'.",
-              file=sys.stderr)
-        sys.exit(0)
+        print(
+            f"No source packages found in tag '{args.tag}'.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
     lines = []
     lines.append(f"Tag: {tag_info['name']}")
@@ -144,19 +162,22 @@ def do_list(session, opts):
     print(output_text)
 
 
-def do_list_update(session, opts):
+def do_list_update(
+    session: koji.ClientSession, args: argparse.Namespace
+) -> None:
     tag_info, packages = list_update_source_packages(
-        session, opts.tag, from_tags=opts.base_tags
+        session, args.tag, from_tags=args.base_tags
     )
 
     if not packages:
         print("No updated source packages found.", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(1)
 
     lines = []
-    base_tags_str = ', '.join(opts.base_tags) if opts.base_tags else 'any tag'
-    lines.append(f"Updated packages from {base_tags_str}"
-                 f" to {tag_info['name']}")
+    base_tags_str = ", ".join(args.base_tags) if args.base_tags else "any tag"
+    lines.append(
+        f"Updated packages from {base_tags_str} to {tag_info['name']}"
+    )
     lines.append(f"Total updated source packages: {len(packages)}")
     lines.append("-" * 60)
 
@@ -174,10 +195,8 @@ def do_list_update(session, opts):
     print(output_text)
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Koji helper script."
-    )
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Koji helper script.")
     parser.add_argument(
         "--server",
         default="https://kojihub.xcp-ng.org",
@@ -193,35 +212,32 @@ def main():
 
     # list command
     list_parser = subparsers.add_parser(
-        "list",
-        help="List all source packages from a tag")
-    list_parser.add_argument("tag",
-                             help="The Koji tag to query")
+        "list", help="List all source packages from a tag"
+    )
+    list_parser.add_argument("tag", help="The Koji tag to query")
 
     # list-update command
     list_update_parser = subparsers.add_parser(
-        "list-update",
-        help="List updated source packages between tags")
+        "list-update", help="List updated source packages between tags"
+    )
     list_update_parser.add_argument("tag", help="The target Koji tag")
     list_update_parser.add_argument(
-        "base_tags",
-        nargs="+",
-        help="The source Koji tags to compare against")
+        "base_tags", nargs="+", help="The source Koji tags to compare against"
+    )
 
-    global opts
-    opts = parser.parse_args()
+    args = parser.parse_args()
 
-    if not opts.command:
+    if not args.command:
         parser.print_help()
         sys.exit(1)
 
-    session = get_session(opts)
+    session = get_session(args)
 
     try:
-        if opts.command == "list":
-            do_list(session, opts)
-        elif opts.command == "list-update":
-            do_list_update(session, opts)
+        if args.command == "list":
+            do_list(session, args)
+        elif args.command == "list-update":
+            do_list_update(session, args)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
