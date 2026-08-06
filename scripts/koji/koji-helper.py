@@ -52,6 +52,8 @@ def list_source_packages(session, tag, latest=False):
 
     Returns a dict mapping package name to its info:
         - nvr: name-version-release string
+        - version: package version
+        - release: package release
     """
     # Get the tag info
     tag_info = session.getTag(tag, strict=True)
@@ -64,7 +66,9 @@ def list_source_packages(session, tag, latest=False):
         name = build["package_name"]
         if name not in results:
             results[name] = {
-                "nvr": build["nvr"]
+                "nvr": build["nvr"],
+                "version": build["version"],
+                "release": build["release"],
             }
 
     return tag_info, results
@@ -79,7 +83,11 @@ def list_update_source_packages(session, to_tag, from_tag=None, latest=False):
 
     Returns a dict mapping package name to its info:
         - nvr: name-version-release string in to_tag
+        - version: package version in to_tag
+        - release: package release in to_tag
         - base_nvr: name-version-release string in from_tag (if provided)
+        - base_version: package version in from_tag
+        - base_release: package release in from_tag
     """
     to_tag_info, to_packages = list_source_packages(session, to_tag, latest=latest)
 
@@ -91,11 +99,19 @@ def list_update_source_packages(session, to_tag, from_tag=None, latest=False):
     for name, info in to_packages.items():
         to_nvr = info["nvr"]
         if from_tag:
-            base_nvr = base_packages.get(name, {}).get("nvr")
+            base_info = base_packages.get(name, {})
+            base_nvr = base_info.get("nvr")
             if base_nvr and base_nvr != to_nvr:
-                results[name] = {"nvr": to_nvr, "base_nvr": base_nvr}
+                results[name] = {
+                    "nvr": to_nvr,
+                    "version": info["version"],
+                    "release": info["release"],
+                    "base_nvr": base_nvr,
+                    "base_version": base_info.get("version"),
+                    "base_release": base_info.get("release"),
+                }
         else:
-            results[name] = {"nvr": to_nvr}
+            results[name] = {"nvr": to_nvr, "version": info["version"], "release": info["release"]}
 
     return to_tag_info, results
 
@@ -142,7 +158,9 @@ def do_list_update(session, opts):
     lines.append("-" * 60)
 
     for name, info in sorted(packages.items()):
-        lines.append(f"{name}: {info['base_nvr']} -> {info['nvr']}")
+        old_vr = f"{info.get('base_version')}-{info.get('base_release')}"
+        new_vr = f"{info['version']}-{info['release']}"
+        lines.append(f"{name}: {old_vr} -> {new_vr}")
 
     output_text = "\n".join(lines) + "\n"
 
