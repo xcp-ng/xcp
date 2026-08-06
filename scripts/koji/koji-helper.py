@@ -5,14 +5,13 @@ List all source packages from a Koji tag.
 
 Usage:
     uv run koji-helper.py list <tag> [OPTIONS]
-    uv run koji-helper.py update <to_tag> <from_tag> [OPTIONS]
+    uv run koji-helper.py list-update <to_tag> <from_tag> [OPTIONS]
 
 Examples:
-    uv run koji-helper.py list c9s
-    uv run koji-helper.py list f40 --latest
-    uv run koji-helper.py list epel9 --output packages.txt
-    uv run koji-helper.py update c9s f40
-    uv run koji-helper.py update c9s f40 --output updates.txt
+    uv run koji-helper.py list v8.3-ci
+    uv run koji-helper.py list-update v8.3-ci v8.3-updates
+    uv run koji-helper.py --no-verify-ssl list-update v8.3-ci v8.3-updates
+
 """
 
 # /// script
@@ -23,7 +22,6 @@ Examples:
 # ///
 
 import argparse
-import pdb
 import sys
 
 import koji
@@ -31,11 +29,6 @@ import koji
 
 def get_session(opts):
     """Create and return a Koji client session."""
-    if opts.no_verify_ssl:
-        # Disable SSL verification warnings
-        import urllib3
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
     session = koji.ClientSession(
         opts.server,
         opts={"no_ssl_verify": opts.no_verify_ssl},
@@ -43,7 +36,7 @@ def get_session(opts):
     return session
 
 
-def list_source_packages(session, tag, latest=False):
+def list_source_packages(session, tag, latest=True):
     """
     List all source packages in the given tag.
 
@@ -71,7 +64,7 @@ def list_source_packages(session, tag, latest=False):
     return tag_info, results
 
 
-def list_update_source_packages(session, to_tag, from_tag=None, latest=False):
+def list_update_source_packages(session, to_tag, from_tag=None, latest=True):
     """
     List source packages that have been updated from from_tag to to_tag.
 
@@ -86,11 +79,11 @@ def list_update_source_packages(session, to_tag, from_tag=None, latest=False):
         - base_version: package version in from_tag
         - base_release: package release in from_tag
     """
-    to_tag_info, to_packages = list_source_packages(session, to_tag, latest=latest)
+    to_tag_info, to_packages = list_source_packages(session, to_tag)
 
     base_packages = {}
     if from_tag:
-        _, base_packages = list_source_packages(session, from_tag, latest=latest)
+        _, base_packages = list_source_packages(session, from_tag)
 
     results = {}
     for name, info in to_packages.items():
@@ -108,18 +101,23 @@ def list_update_source_packages(session, to_tag, from_tag=None, latest=False):
                     "base_release": base_info.get("release"),
                 }
         else:
-            results[name] = {"nvr": to_nvr, "version": info["version"], "release": info["release"]}
+            results[name] = {
+                "nvr": to_nvr,
+                "version": info["version"],
+                "release": info["release"]
+            }
 
     return to_tag_info, results
 
 
 def do_list(session, opts):
     tag_info, packages = list_source_packages(
-        session, opts.tag, latest=opts.latest
+        session, opts.tag
     )
 
     if not packages:
-        print(f"No source packages found in tag '{opts.tag}'.", file=sys.stderr)
+        print(f"No source packages found in tag '{opts.tag}'.",
+              file=sys.stderr)
         sys.exit(0)
 
     lines = []
@@ -132,25 +130,21 @@ def do_list(session, opts):
 
     output_text = "\n".join(lines) + "\n"
 
-    if opts.output:
-        with open(opts.output, "w") as f:
-            f.write(output_text)
-        print(f"Output written to {opts.output}")
-    else:
-        print(output_text)
+    print(output_text)
 
 
 def do_list_update(session, opts):
     tag_info, packages = list_update_source_packages(
-        session, opts.tag, from_tag=opts.base_tag, latest=opts.latest
+        session, opts.tag, from_tag=opts.base_tag
     )
 
     if not packages:
-        print(f"No updated source packages found.", file=sys.stderr)
+        print("No updated source packages found.", file=sys.stderr)
         sys.exit(0)
 
     lines = []
-    lines.append(f"Updated packages from {opts.base_tag or 'any tag'} to {tag_info['name']}")
+    lines.append("Updated packages from"
+                 f"{opts.base_tag or 'any tag'} to {tag_info['name']}")
     lines.append(f"Total updated source packages: {len(packages)}")
     lines.append("-" * 60)
 
@@ -161,12 +155,7 @@ def do_list_update(session, opts):
 
     output_text = "\n".join(lines) + "\n"
 
-    if opts.output:
-        with open(opts.output, "w") as f:
-            f.write(output_text)
-        print(f"Output written to {opts.output}")
-    else:
-        print(output_text)
+    print(output_text)
 
 
 def main():
@@ -179,27 +168,6 @@ def main():
         help="Koji hub server URL (default: %(default)s)",
     )
     parser.add_argument(
-        "--web-url",
-        default="https://koji.xcp-ng.org/",
-        help="Koji web UI URL (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--latest",
-        action="store_true",
-        help="Only show the latest build per package",
-    )
-    parser.add_argument(
-        "--output",
-        "-o",
-        default=None,
-        help="Output file path (default: stdout)",
-    )
-    parser.add_argument(
-        "--pdb",
-        action="store_true",
-        help="Drop into pdb on error",
-    )
-    parser.add_argument(
         "--no-verify-ssl",
         action="store_true",
         help="Ignore SSL certificate verification errors",
@@ -208,13 +176,21 @@ def main():
     subparsers = parser.add_subparsers(dest="command")
 
     # list command
-    list_parser = subparsers.add_parser("list", help="List all source packages from a tag")
-    list_parser.add_argument("tag", help="The Koji tag to query (e.g., c9s, f40, epel9)")
+    list_parser = subparsers.add_parser(
+        "list",
+        help="List all source packages from a tag")
+    list_parser.add_argument(
+        "tag",
+        help="The Koji tag to query (e.g., c9s, f40, epel9)")
 
     # list-update command
-    list_update_parser = subparsers.add_parser("list-update", help="List updated source packages between tags")
+    list_update_parser = subparsers.add_parser(
+        "list-update",
+        help="List updated source packages between tags")
     list_update_parser.add_argument("tag", help="The target Koji tag")
-    list_update_parser.add_argument("base_tag", help="The source Koji tag to compare against")
+    list_update_parser.add_argument(
+        "base_tag",
+        help="The source Koji tag to compare against")
 
     global opts
     opts = parser.parse_args()
@@ -231,12 +207,8 @@ def main():
         elif opts.command == "list-update":
             do_list_update(session, opts)
     except Exception as e:
-        if opts.pdb:
-            print(f"Error: {e}", file=sys.stderr)
-            pdb.post_mortem()
-        else:
-            print(f"Error: {e}", file=sys.stderr)
-            sys.exit(1)
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
