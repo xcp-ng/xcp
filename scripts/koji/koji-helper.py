@@ -14,7 +14,7 @@ Usage:
 Examples:
     uv run koji-helper.py list v8.3-ci
     uv run koji-helper.py list-update v8.3-ci v8.3-updates
-    uv run koji-helper.py --no-verify-ssl list-update v8.3-ci \
+    uv run koji-helper.py list-update v8.3-ci \
       v8.3-testing v8.3-candidates v8.3-updates v8.3-base
 
 
@@ -48,10 +48,10 @@ Packages = dict[str, PackageInfo]
 
 def get_session(args: argparse.Namespace) -> koji.ClientSession:
     """Create and return a Koji client session."""
-    session = koji.ClientSession(
-        args.server,
-        opts={"no_ssl_verify": args.no_verify_ssl},
-    )
+    # Open a koji session
+    config = koji.read_config("koji")
+    session = koji.ClientSession(args.server, config)
+    session.ssl_login(config['cert'], None, config['serverca'])
     return session
 
 
@@ -202,12 +202,6 @@ def main() -> None:
         default="https://kojihub.xcp-ng.org",
         help="Koji hub server URL (default: %(default)s)",
     )
-    parser.add_argument(
-        "--no-verify-ssl",
-        action="store_true",
-        help="Ignore SSL certificate verification errors",
-    )
-
     subparsers = parser.add_subparsers(dest="command")
 
     # list command
@@ -233,15 +227,10 @@ def main() -> None:
 
     session = get_session(args)
 
-    try:
-        if args.command == "list":
-            do_list(session, args)
-        elif args.command == "list-update":
-            do_list_update(session, args)
-    except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
-
+    if args.command == "list":
+        do_list(session, args)
+    elif args.command == "list-update":
+        do_list_update(session, args)
 
 if __name__ == "__main__":
     main()
