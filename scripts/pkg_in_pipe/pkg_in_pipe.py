@@ -208,8 +208,8 @@ def tag_priority(tag):
     else:
         return -1
 
-def find_previous_build_commit(build_tag, build):
-    """Find the previous build in an higher priority koji tag and return its commit."""
+def find_previous_build(build_tag, build):
+    """Find the previous build of the package in an higher priority koji tag and return it."""
     tagged = KOJI.listTagged(build_tag, package=build['package_name'], inherit=True)
     tagged = sorted(tagged, key=lambda t: (tag_priority(t['tag_name']), -t['build_id']))
     build_tag_priority = tag_priority(build_tag)
@@ -218,10 +218,27 @@ def find_previous_build_commit(build_tag, build):
     ]
     if not tagged:
         return None
-    previous_build = get_koji_build(tagged[0]['build_id'])
-    if not previous_build.get('source'):
-        return None
-    return parse_source(previous_build['source'])[1]
+    return get_koji_build(tagged[0]['build_id'])
+
+def released_tags(build_tag):
+    """Return the tags holding the released builds of the version, e.g. v8.3-updates and v8.3-base."""
+    version = build_tag.split('-')[0][1:]  # v8.3-candidates -> 8.3
+    return [] if not version else [f'v{version}-updates', f'v{version}-base']
+
+def find_released_build(build_tag, package_name):
+    """Find the newest released build of the package in the updates and base tags, updates first.
+
+    Some versions may not have an updates or base tag yet, which koji reports as an error, so a
+    missing tag is treated as an empty one.
+    """
+    for tag in released_tags(build_tag):
+        try:
+            tagged = KOJI.listTagged(tag, package=package_name)
+        except koji.GenericError:
+            continue
+        if tagged:
+            return get_koji_build(max(tagged, key=lambda t: t['build_id'])['build_id'])
+    return None
 
 def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
     """
@@ -377,6 +394,7 @@ parser.add_argument(
     '--package', '-p', dest='packages', help="The packages to include in the report", action='append', default=[]
 )
 parser.add_argument('--re-cache', help="Refresh the cache", action='store_true')
+parser.add_argument('--json-output', help="Also write a machine readable report in json format to this path")
 args = parser.parse_args()
 
 CACHE = diskcache.Cache(args.cache)
@@ -411,6 +429,14 @@ if args.github_token:
 with urlopen('https://github.com/xcp-ng/xcp/raw/refs/heads/master/scripts/rpm_owners/packages.json') as f:
     PACKAGES = json.load(f)
 
+report_data = {
+    'generated_at': started_at.isoformat(),
+    'generated_info': args.generated_info,
+    'warnings': {'plane': not issues, 'github': not GITHUB},
+    'error': None,
+    'tags': [],
+}
+
 with io.StringIO() as out:
     print_header(out)
     if not issues:
@@ -424,6 +450,8 @@ with io.StringIO() as out:
             KOJI = koji.ClientSession('https://kojihub.xcp-ng.org', config)
             KOJI.ssl_login(config['cert'], None, config['serverca'])
             for tag in tags:
+                tag_data = {'tag': tag, 'builds': []}
+                report_data['tags'].append(tag_data)
                 tag_history = dict(
                     (tl['build_id'], tl['create_ts'])
                     for tl in KOJI.queryHistory(tag=tag, active=True)['tag_listing']
@@ -436,7 +464,11 @@ with io.StringIO() as out:
                     build = get_koji_build(tagged['build_id'])
                     prs: list[PullRequest] = []
                     maintained_by = None
-                    previous_build_sha = find_previous_build_commit(tag, build)
+                    previous_build = find_previous_build(tag, build)
+                    previous_build_sha = None
+                    if previous_build is not None and previous_build.get('source') is not None:
+                        previous_build_sha = parse_source(previous_build['source'])[1]
+                    released_build = find_released_build(tag, tagged['package_name'])
                     if build['source'] is not None:
                         (repo, sha) = parse_source(build['source'])
                         prs = find_pull_requests(repo, sha, previous_build_sha)
@@ -446,12 +478,34 @@ with io.StringIO() as out:
                     print_table_line(
                         temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs, maintained_by
                     )
+                    tag_data['builds'].append({
+                        'nvr': tagged['nvr'],
+                        'previous_nvr': released_build['nvr'] if released_build is not None else None,
+                        'package': tagged['package_name'],
+                        'url': build_url,
+                        'built_by': tagged['owner_name'],
+                        'maintained_by': maintained_by,
+                        'issues': [{
+                            'sequence_id': i['sequence_id'],
+                            'url': f'https://project.vates.tech/vates-global/browse/XCPNG-{i["sequence_id"]}/',
+                            'milestones': sorted(set(i['milestones'])),
+                        } for i in build_issues],
+                        'pull_requests': [{
+                            'number': pr.number,
+                            'title': pr.title,
+                            'url': pr.html_url,
+                            'linked': issues_have_link(build_issues, pr.html_url),
+                        } for pr in prs],
+                        'build_linked': issues_have_link(build_issues, build_url),
+                    })
                 print_table_footer(temp_out)
             out.write(temp_out.getvalue())
         except koji.GenericError:
+            report_data['error'] = 'koji'
             print_koji_error(out)
             raise
         except Exception:
+            report_data['error'] = 'unknown'
             print_generic_error(out)
             raise
         finally:
@@ -460,3 +514,7 @@ with io.StringIO() as out:
     # write the actual output at once, in order to avoid a blank page during the processing
     with open(args.output, 'w') as f:
         f.write(out.getvalue())
+
+    if args.json_output:
+        with open(args.json_output, 'w') as f:
+            json.dump(report_data, f, indent=2)

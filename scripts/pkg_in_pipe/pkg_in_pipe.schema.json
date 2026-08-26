@@ -1,0 +1,143 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xcp-ng.org/schemas/pkg_in_pipe.json",
+    "title": "XCP-ng package in the pipe report",
+    "type": "object",
+    "required": ["generated_at", "generated_info", "warnings", "error", "tags"],
+    "properties": {
+        "generated_at": {
+            "description": "Timestamp of the start of the report generation, in ISO 8601 format",
+            "type": "string",
+            "format": "date-time"
+        },
+        "generated_info": {
+            "description": "Message about the generation included in the report",
+            "type": ["string", "null"]
+        },
+        "warnings": {
+            "description": "Whether some external sources could not be reached",
+            "type": "object",
+            "required": ["plane", "github"],
+            "properties": {
+                "plane": {
+                    "description": "True if the issues could not be retrieved from plane",
+                    "type": "boolean"
+                },
+                "github": {
+                    "description": "True if github is not available and the pull requests may come from the cache",
+                    "type": "boolean"
+                }
+            }
+        },
+        "error": {
+            "description": "Set when the report could not be fully generated",
+            "enum": [null, "koji", "unknown"]
+        },
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["tag", "builds"],
+                "properties": {
+                    "tag": {
+                        "description": "The koji tag this section is about, e.g. v8.3-incoming",
+                        "type": "string"
+                    },
+                    "builds": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "nvr", "package", "url", "built_by", "maintained_by", "issues", "pull_requests",
+                                "build_linked"
+                            ],
+                            "properties": {
+                                "nvr": {
+                                    "description": "The package name, version and release of the build",
+                                    "type": "string"
+                                },
+                                "previous_nvr": {
+                                    "description": "The NVR of the previously released build of the package (newest build in the updates or base tag), when one exists",
+                                    "type": ["string", "null"]
+                                },
+                                "package": {
+                                    "description": "The name of the package this build is about",
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "description": "URL to the build on koji",
+                                    "type": "string",
+                                    "format": "uri"
+                                },
+                                "built_by": {
+                                    "description": "The koji user who built the package",
+                                    "type": "string"
+                                },
+                                "maintained_by": {
+                                    "description": "The maintainer of the package, when known",
+                                    "type": ["string", "null"]
+                                },
+                                "issues": {
+                                    "description": "The plane cards related to this build or its pull requests",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "required": ["sequence_id", "url", "milestones"],
+                                        "properties": {
+                                            "sequence_id": {
+                                                "description": "The XCPNG sequence id of the card",
+                                                "type": "string"
+                                            },
+                                            "url": {
+                                                "description": "URL to the card on plane",
+                                                "type": "string",
+                                                "format": "uri"
+                                            },
+                                            "milestones": {
+                                                "type": "array",
+                                                "items": {"type": "string"},
+                                                "uniqueItems": true
+                                            }
+                                        }
+                                    }
+                                },
+                                "pull_requests": {
+                                    "description": "The pull requests related to this build",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "required": ["number", "title", "url", "linked"],
+                                        "properties": {
+                                            "number": {
+                                                "description": "The pull request number on github",
+                                                "type": "integer",
+                                                "minimum": 1
+                                            },
+                                            "title": {
+                                                "description": "The title of the pull request",
+                                                "type": "string"
+                                            },
+                                            "url": {
+                                                "description": "URL to the pull request on github",
+                                                "type": "string",
+                                                "format": "uri"
+                                            },
+                                            "linked": {
+                                                "description": "True if the pull request is listed in one of the related cards",
+                                                "type": "boolean"
+                                            }
+                                        }
+                                    }
+                                },
+                                "build_linked": {
+                                    "description": "True if the build is listed in one of the related cards",
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
