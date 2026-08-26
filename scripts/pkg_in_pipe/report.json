@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-08-26T14:54:16.276502",
+  "generated_info": null,
+  "warnings": {
+    "plane": false,
+    "github": false
+  },
+  "error": null,
+  "tags": [
+    {
+      "tag": "v8.3-testing",
+      "builds": [
+        {
+          "nvr": "sm-3.2.12-23.5.xcpng8.3",
+          "previous_nvr": "sm-3.2.12-23.4.xcpng8.3",
+          "package": "sm",
+          "url": "https://koji.xcp-ng.org/buildinfo?buildID=6089",
+          "built_by": "gaetan.lehmann",
+          "maintained_by": "Storage",
+          "issues": [
+            {
+              "sequence_id": 3706,
+              "url": "https://project.vates.tech/vates-global/browse/XCPNG-3706/",
+              "milestones": [
+                "8.3-next"
+              ]
+            },
+            {
+              "sequence_id": 3675,
+              "url": "https://project.vates.tech/vates-global/browse/XCPNG-3675/",
+              "milestones": [
+                "8.3-next"
+              ]
+            },
+            {
+              "sequence_id": 3674,
+              "url": "https://project.vates.tech/vates-global/browse/XCPNG-3674/",
+              "milestones": [
+                "8.3-next"
+              ]
+            }
+          ],
+          "pull_requests": [
+            {
+              "number": 104,
+              "title": "Release 3.2.12-23.5",
+              "url": "https://github.com/xcp-ng-rpms/sm/pull/104",
+              "linked": true
+            }
+          ],
+          "build_linked": true
+        },
+        {
+          "nvr": "xapi-26.1.16-1.2.xcpng8.3",
+          "previous_nvr": "xapi-26.1.16-1.1.xcpng8.3",
+          "package": "xapi",
+          "url": "https://koji.xcp-ng.org/buildinfo?buildID=6088",
+          "built_by": "asultanov",
+          "maintained_by": "XAPI & Network",
+          "issues": [
+            {
+              "sequence_id": 3671,
+              "url": "https://project.vates.tech/vates-global/browse/XCPNG-3671/",
+              "milestones": [
+                "8.3-next"
+              ]
+            }
+          ],
+          "pull_requests": [
+            {
+              "number": 142,
+              "title": "Optimize migration from QCOW2-backed VDIs + preserve VDI tags on migration",
+              "url": "https://github.com/xcp-ng-rpms/xapi/pull/142",
+              "linked": true
+            }
+          ],
+          "build_linked": true
+        },
+        {
+          "nvr": "blktap-3.55.5-9.4.xcpng8.3",
+          "previous_nvr": "blktap-3.55.5-9.3.xcpng8.3",
+          "package": "blktap",
+          "url": "https://koji.xcp-ng.org/buildinfo?buildID=6091",
+          "built_by": "abourgeois",
+          "maintained_by": "Storage",
+          "issues": [
+            {
+              "sequence_id": 3669,
+              "url": "https://project.vates.tech/vates-global/browse/XCPNG-3669/",
+              "milestones": [
+                "8.3-next"
+              ]
+            }
+          ],
+          "pull_requests": [
+            {
+              "number": 28,
+              "title": "Release 3.55.5-9.4",
+              "url": "https://github.com/xcp-ng-rpms/blktap/pull/28",
+              "linked": true
+            }
+          ],
+          "build_linked": true
+        }
+      ]
+    }
+  ]
+}

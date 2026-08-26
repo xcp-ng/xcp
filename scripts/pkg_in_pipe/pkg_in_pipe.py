@@ -246,7 +246,7 @@ def find_pull_requests(repo, start_sha, end_sha):
     """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
     prs = set()
     for commit in find_commits(GITHUB, repo, start_sha, end_sha):
-        cache_key = f'commit-prs-4-{commit.sha}'
+        cache_key = f'commit-prs-6-{commit.sha}'
         if not args.re_cache and cache_key in CACHE:
             prs.update(cast(list[PullRequest], CACHE[cache_key]))
         elif GITHUB:
@@ -258,9 +258,12 @@ def find_pull_requests(repo, start_sha, end_sha):
                 if group:
                     pr = GITHUB.get_repo(repo).get_pull(int(group[1]))
                     prs.add(pr)
-            # github sometimes return a PR which doesn't match the given commit, so we check if the commit
-            # is actually in the PR
-            commit_prs = [pr for pr in commit_prs if commit in pr.get_commits()]
+            # github sometimes returns a PR which is only related to the commit through its branch
+            # history, e.g. a PR whose branch was created from this commit, so we check that the
+            # commit is actually part of the PR: it must be one of its commits, or its merge
+            # commit. The latter is needed for the PRs merged by rebase or squash, whose merge
+            # commit on the base branch is not one of the PR commits.
+            commit_prs = [pr for pr in commit_prs if commit in pr.get_commits() or commit.sha == pr.merge_commit_sha]
             CACHE.set(cache_key, commit_prs, expire=RETENTION_TIME)
             prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
