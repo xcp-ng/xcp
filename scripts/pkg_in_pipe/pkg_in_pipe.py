@@ -4,6 +4,7 @@ import io
 import json
 import os
 import re
+import tomllib
 from collections import defaultdict
 from datetime import datetime
 from textwrap import dedent
@@ -17,6 +18,10 @@ import requests
 from github.Commit import Commit
 from github.GithubException import BadCredentialsException
 from github.PullRequest import PullRequest
+
+
+with open(os.path.join(os.path.dirname(__file__), 'missing_sources.toml'), 'rb') as missing_sources_file:
+    MISSING_SOURCES = tomllib.load(missing_sources_file)
 
 def print_header(out):
     print(dedent('''
@@ -219,7 +224,7 @@ def find_previous_build_commit(build_tag, build):
 
     for tag in tagged:
         previous_build = get_koji_build(tag['build_id'])
-        source = previous_build.get('source')
+        source = previous_build.get('source') or MISSING_SOURCES.get(previous_build['nvr'])
         if not source:
             continue
         return parse_source(source)[1]
