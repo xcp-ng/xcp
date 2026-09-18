@@ -216,12 +216,16 @@ def find_previous_build_commit(build_tag, build):
     tagged = [
         t for t in tagged if tag_priority(t['tag_name']) >= build_tag_priority and t['build_id'] < build['build_id']
     ]
-    if not tagged:
-        return None
-    previous_build = get_koji_build(tagged[0]['build_id'])
-    if not previous_build.get('source'):
-        return None
-    return parse_source(previous_build['source'])[1]
+
+    for tag in tagged:
+        previous_build = get_koji_build(tag['build_id'])
+        source = previous_build.get('source')
+        if not source:
+            continue
+        return parse_source(source)[1]
+
+    return None
+
 
 def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
     """
