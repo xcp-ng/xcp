@@ -428,7 +428,6 @@ try:
     issues = get_plane_issues_with_milestones(args.plane_token)
 except Exception:
     issues = []
-    raise
 
 # connect to github
 GITHUB = None
