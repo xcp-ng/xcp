@@ -15,7 +15,19 @@ A plane token with enough rights to list the cards in the XCPNG project must be 
 environment variable or the `--plane-token` command line option.
 
 An extra `--generated-info` command line option may be used to add some info about the report generation process.
- 
+
+A machine readable version of the report can also be generated with the `--json-output` option:
+
+```sh
+pkg_in_pipe --json-output report.json report.html
+```
+
+The json report can be validated against its schema with:
+
+```sh
+python -m jsonschema -i report.json pkg_in_pipe.schema.json
+```
+
 # Run in docker
 
 Before running in docker, the docker image must be built with:
