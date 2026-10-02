@@ -1,0 +1,43 @@
+[project]
+name = "plane_to_grist"
+version = "0.1.0"
+description = "Plane to grist converter"
+readme = "README.md"
+requires-python = "~=3.11"
+dependencies = [
+    "requests",
+]
+
+[dependency-groups]
+dev = [
+    "icecream",
+    "mypy",
+    "pycodestyle>=2.6.0",
+    "pydocstyle",
+    "pyright",
+    "ruff",
+    "types-requests",
+    "typing-extensions",
+]
+
+[tool.pyright]
+typeCheckingMode = "standard"
+
+[tool.ruff]
+preview = true
+line-length = 120
+exclude = [".git"]
+
+[tool.ruff.format]
+quote-style = "preserve"
+
+[tool.ruff.lint]
+select = [
+  "F",  # Pyflakes
+  "I",  # isort
+  "SLF",  # flake8-self
+  "SIM",  # flake8-simplify
+]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 1
