@@ -16,6 +16,8 @@ environment variable or the `--plane-token` command line option.
 
 An extra `--generated-info` command line option may be used to add some info about the report generation process.
 
+The `--debug` option logs more details about the generation on stderr.
+
 A machine readable version of the report can also be generated with the `--json-output` option:
 
 ```sh

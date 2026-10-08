@@ -2,8 +2,10 @@
 import argparse
 import io
 import json
+import logging
 import os
 import re
+import sys
 import tomllib
 from collections import defaultdict
 from datetime import datetime
@@ -18,6 +20,31 @@ import requests
 from github.Commit import Commit
 from github.GithubException import BadCredentialsException
 from github.PullRequest import PullRequest
+
+log = logging.getLogger(__name__)
+
+
+class ColorFormatter(logging.Formatter):
+    colors = {
+        logging.CRITICAL: '\033[31m',
+        logging.ERROR: '\033[31m',
+        logging.WARNING: '\033[33m',
+        logging.DEBUG: '\033[34m',
+    }
+
+    def __init__(self, use_color: bool) -> None:
+        super().__init__(fmt='{message}', style='{')
+        self.use_color = use_color
+
+    def format(self, record: logging.LogRecord) -> str:
+        message = super().format(record)
+        if record.levelno == logging.INFO:
+            return message
+
+        prefix = f'{record.levelname.lower()}: '
+        if color := self.colors.get(record.levelno) if self.use_color else None:
+            prefix = f'{color}{prefix}\033[0m'
+        return '\n'.join(f'{prefix}{line}' for line in message.splitlines() or [''])
 
 
 with open(os.path.join(os.path.dirname(__file__), 'missing_sources.toml'), 'rb') as missing_sources_file:
@@ -254,6 +281,21 @@ def find_released_build(build_tag, package_name):
             return get_koji_build(max(tagged, key=lambda t: t['build_id'])['build_id'])
     return None
 
+def cached(key):
+    """Return the value cached for that key, or None when it must be fetched again."""
+    if args.re_cache:
+        log.debug("cache ignored because of --re-cache: %s", key)
+        return None
+    if key in CACHE:
+        log.debug("cache hit: %s", key)
+        return CACHE[key]
+    log.debug("cache miss: %s", key)
+    return None
+
+def cache(key, value):
+    log.debug("caching: %s", key)
+    CACHE.set(key, value, expire=RETENTION_TIME)
+
 def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
     """
     List the commits in the range [start_sha,end_sha[.
@@ -262,15 +304,15 @@ def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
     A commit older that the end_sha commit and added by a merge commit won't appear in this list.
     """
     cache_key = f'commits-2-{start_sha}-{end_sha}'
-    if not args.re_cache and cache_key in CACHE:
-        return cast(list[Commit], CACHE[cache_key])
+    if (commits := cast(list[Commit], cached(cache_key))) is not None:
+        return commits
     commits = []
     if gh:
         for commit in gh.get_repo(repo).get_commits(start_sha):
             if commit.sha == end_sha:
                 break
             commits.append(commit)
-        CACHE.set(cache_key, commits, expire=RETENTION_TIME)
+        cache(cache_key, commits)
     return commits
 
 def find_pull_requests(repo, start_sha, end_sha):
@@ -278,8 +320,8 @@ def find_pull_requests(repo, start_sha, end_sha):
     prs = set()
     for commit in find_commits(GITHUB, repo, start_sha, end_sha):
         cache_key = f'commit-prs-6-{commit.sha}'
-        if not args.re_cache and cache_key in CACHE:
-            prs.update(cast(list[PullRequest], CACHE[cache_key]))
+        if (commit_prs := cast(list[PullRequest], cached(cache_key))) is not None:
+            prs.update(commit_prs)
         elif GITHUB:
             commit_prs = list(commit.get_pulls())
             if not commit_prs:
@@ -295,17 +337,17 @@ def find_pull_requests(repo, start_sha, end_sha):
             # commit. The latter is needed for the PRs merged by rebase or squash, whose merge
             # commit on the base branch is not one of the PR commits.
             commit_prs = [pr for pr in commit_prs if commit in pr.get_commits() or commit.sha == pr.merge_commit_sha]
-            CACHE.set(cache_key, commit_prs, expire=RETENTION_TIME)
+            cache(cache_key, commit_prs)
             prs.update(commit_prs)
     return sorted(prs, key=lambda p: p.number, reverse=True)
 
 def get_koji_build(build_id) -> dict:
     cache_key = f'koji-build-{build_id}'
-    if not args.re_cache and cache_key in CACHE:
-        return cast(dict, CACHE[cache_key])
+    if (build := cast(dict, cached(cache_key))) is not None:
+        return build
     else:
         build = KOJI.getBuild(build_id)
-        CACHE.set(cache_key, build, expire=RETENTION_TIME)
+        cache(cache_key, build)
         return build
 
 def get_plane_issues(plane_token):
@@ -409,7 +451,14 @@ parser.add_argument(
 )
 parser.add_argument('--re-cache', help="Refresh the cache", action='store_true')
 parser.add_argument('--json-output', help="Also write a machine readable report in json format to this path")
+parser.add_argument('--debug', help="Log more details on stderr", action='store_true')
 args = parser.parse_args()
+
+handler = logging.StreamHandler()
+handler.setFormatter(ColorFormatter(
+    not os.environ.get('NO_COLOR') and (bool(os.environ.get('FORCE_COLOR')) or sys.stderr.isatty()),
+))
+logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO, handlers=[handler])
 
 CACHE = diskcache.Cache(args.cache)
 RETENTION_TIME = 24 * 60 * 60  # 24 hours
@@ -426,9 +475,9 @@ tags = args.tags or DEFAULT_TAGS
 # load the issues from plane, so we can search for the plane card related to a build
 try:
     issues = get_plane_issues_with_milestones(args.plane_token)
-except Exception:
+except Exception as e:
     issues = []
-    raise
+    log.warning("failed to load the tickets from plane: %s", e)
 
 # connect to github
 GITHUB = None
@@ -438,6 +487,12 @@ if args.github_token:
         GITHUB.get_repo('xcp-ng/xcp')  # check that the token is valid
     except BadCredentialsException:
         GITHUB = None
+        log.warning("the github token is invalid")
+    except github.GithubException as e:
+        GITHUB = None
+        log.warning("failed to connect to github: %s", e)
+else:
+    log.warning("no github token, the pull requests come from the cache")
 
 # load the packages maintainers
 with urlopen('https://github.com/xcp-ng/xcp/raw/refs/heads/master/scripts/rpm_owners/packages.json') as f:
@@ -464,6 +519,7 @@ with io.StringIO() as out:
             KOJI = koji.ClientSession('https://kojihub.xcp-ng.org', config)
             KOJI.ssl_login(config['cert'], None, config['serverca'])
             for tag in tags:
+                log.info('processing tag %s', tag)
                 tag_data = {'tag': tag, 'builds': []}
                 report_data['tags'].append(tag_data)
                 tag_history = dict(
@@ -475,6 +531,8 @@ with io.StringIO() as out:
                 taggeds = (t for t in taggeds if t['package_name'] in args.packages or args.packages == [])
                 taggeds = sorted(taggeds, key=lambda t: (tag_history[t['build_id']], t['build_id']), reverse=True)
                 for tagged in taggeds:
+                    build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
+                    log.info('  processing build %s (%s)', tagged['nvr'], build_url)
                     build = get_koji_build(tagged['build_id'])
                     prs: list[PullRequest] = []
                     maintained_by = None
@@ -484,7 +542,6 @@ with io.StringIO() as out:
                         (repo, sha) = parse_source(build['source'])
                         prs = find_pull_requests(repo, sha, previous_build_sha)
                     maintained_by = PACKAGES.get(tagged['package_name'], {}).get('maintainer')
-                    build_url = f'https://koji.xcp-ng.org/buildinfo?buildID={tagged["build_id"]}'
                     build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
                     print_table_line(
                         temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs, maintained_by
