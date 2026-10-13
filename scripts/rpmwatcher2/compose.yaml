@@ -1,0 +1,31 @@
+# Credentials and S3 settings can be put in a .env file next to this file (ignored by git).
+#
+# Generate the reports:
+#   docker compose run --rm rpmwatcher
+# Same, with an upload to a local S3 (SeaweedFS) to test the upload:
+#   docker compose --profile local-s3 up -d s3
+#   docker compose run --rm --entrypoint aws rpmwatcher --endpoint-url http://s3:8333 s3 mb s3://reports
+#   S3_BUCKET=reports S3_ENDPOINT_URL=http://s3:8333 docker compose run --rm rpmwatcher
+services:
+  rpmwatcher:
+    build: .
+    command: ["${XCP_VERSION:-8.3}"]
+    environment:
+      S3_BUCKET:
+      S3_PREFIX:
+      S3_ENDPOINT_URL:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-us-east-1}
+    volumes:
+      - ./out:/out
+      - cache:/cache
+
+  s3:
+    profiles: [local-s3]
+    image: chrislusf/seaweedfs:3.80
+    command: server -dir=/data -s3
+    ports: ["8333:8333"]
+
+volumes:
+  cache:
