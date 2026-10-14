@@ -22,6 +22,8 @@ Those are common concepts in the RPM world.
 import argparse
 import datetime
 import functools
+import glob
+import html
 import json
 import logging
 import os
@@ -55,7 +57,7 @@ log = logging.getLogger('rpmwatcher')
 # Data sources
 #
 
-def fetch_metadata(url, cache_dir, md_type):
+def fetch_metadata(url, cache_dir, md_type, cache_key):
     """ Download a metadata file of a repository (primary, filelists...), return its local path """
     with urllib.request.urlopen(url + 'repodata/repomd.xml') as f:
         repomd = ET.fromstring(f.read())
@@ -67,8 +69,12 @@ def fetch_metadata(url, cache_dir, md_type):
     else:
         raise Exception("No %s metadata in %s" % (md_type, url))
     # the file name contains its checksum, so a cached file is always up to date
-    path = os.path.join(cache_dir, os.path.basename(href))
+    prefix = os.path.join(cache_dir, "%s-%s-" % (cache_key, md_type))
+    path = prefix + os.path.basename(href)
     if not os.path.exists(path):
+        # remove the previous versions of this file
+        for old in glob.glob(glob.escape(prefix) + '*'):
+            os.unlink(old)
         log.info("downloading %s", url + href)
         with urllib.request.urlopen(url + href) as src, open(path + '.part', 'wb') as dst:
             shutil.copyfileobj(src, dst)
@@ -83,12 +89,12 @@ def load_pool(xcp_version, repo_url, cache_dir):
         for repo_name in MAIN_REPOS:
             url = repo_url.format(major=major, version=xcp_version, repo=repo_name, arch=arch)
             repo = pool.add_repo(repo_name)
-            f = solv.xfopen(fetch_metadata(url, cache_dir, 'primary'))
+            f = solv.xfopen(fetch_metadata(url, cache_dir, 'primary', repo_name + '-' + arch))
             repo.add_rpmmd(f, None)
             f.close()
             if arch != 'Source':
                 # needed for build dependencies on files, e.g. /usr/lib64/crt1.o
-                f = solv.xfopen(fetch_metadata(url, cache_dir, 'filelists'))
+                f = solv.xfopen(fetch_metadata(url, cache_dir, 'filelists', repo_name + '-' + arch))
                 repo.add_rpmmd(f, 'FL', solv.Repo.REPO_EXTEND_SOLVABLES)
                 f.close()
     pool.addfileprovides()
@@ -621,6 +627,11 @@ def build_report_rows(xcp_builds, xcp_rpms, report_fields, elaborate):
             'direct_build_deps': direct_build_deps,
             'rpms': rpms,
         }
+        if elaborate:
+            # the markdown table is converted to HTML, which keeps raw HTML: escape the text
+            # coming from the packages metadata or packages.json, and the table separator
+            for field in ['summary', 'added_by', 'maintainer', 'note', 'roles', 'direct_build_deps', 'rpms']:
+                values[field] = html.escape(values[field], quote=False).replace('|', '\\|')
         sort_key = (ROLE_PRIORITY.index(main_role), BUILT_BY_ORDER.index(values['built_by']), srpm_name, srpm_nvr)
         rows.append((sort_key, [values[field] for field in report_fields]))
     return [row for _, row in sorted(rows)]

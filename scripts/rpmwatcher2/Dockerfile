@@ -1,4 +1,4 @@
-FROM fedora:41
+FROM fedora:44
 RUN dnf install -y python3-solv python3-rpm python3-markdown koji awscli2 && dnf clean all
 ADD rpmwatcher.py entrypoint.sh /rpmwatcher/
 ADD data /rpmwatcher/data
