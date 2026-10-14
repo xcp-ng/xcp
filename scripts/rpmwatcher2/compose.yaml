@@ -1,7 +1,8 @@
-# Credentials and S3 settings can be put in a .env file next to this file (ignored by git).
-#
-# Generate the reports:
+# Generate the reports in ./out, without upload:
 #   docker compose run --rm rpmwatcher
+# Generate and upload to the production S3, with the settings and credentials in prod.env
+# (ignored by git; don't name it .env, docker compose would load it for every run):
+#   docker compose --env-file prod.env run --rm rpmwatcher
 # Same, with an upload to a local S3 (SeaweedFS) to test the upload:
 #   docker compose --profile local-s3 up -d s3
 #   docker compose run --rm --entrypoint aws rpmwatcher --endpoint-url http://s3:8333 s3 mb s3://reports

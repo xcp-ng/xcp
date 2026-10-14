@@ -22,8 +22,19 @@ XCP_VERSION=8.2 docker compose run --rm rpmwatcher
 ```
 
 The reports are uploaded to S3 when `S3_BUCKET` is set (and optionally `S3_PREFIX`,
-`S3_ENDPOINT_URL` and the usual `AWS_*` variables). See `compose.yaml` to test the upload
-with a local S3 server.
+`S3_ENDPOINT_URL` and the usual `AWS_*` variables). For the production upload, put them in a
+`prod.env` file (ignored by git) and pass it explicitly:
+
+```
+docker compose --env-file prod.env run --rm rpmwatcher
+```
+
+Don't name it `.env`: docker compose would load it for every run, including tests.
+See `compose.yaml` to test the upload with a local S3 server.
+
+S3 static websites don't list directories, so an `index.html` that looks like an nginx
+directory listing is written in every directory, and the list of versions at the top is
+rebuilt after each upload.
 
 Without docker, it needs python3-solv, python3-rpm, python3-markdown and koji:
 

@@ -35,6 +35,7 @@ import xml.etree.ElementTree as ET
 import markdown
 import rpm
 import solv
+from autoindex import write_dir_indexes
 
 MAIN_REPOS = ['base', 'updates', 'candidates', 'testing', 'ci']
 BUILDERS = ['centos', 'epel', 'xs', 'xcp-ng']
@@ -715,15 +716,6 @@ def write_reports(xcp_builds, xcp_rpms, xcp_version, reports_dir):
             f.write(markdown.markdown(table, extensions=['tables']))
             f.write(html_script())
 
-    with open(os.path.join(reports_dir, 'index.html'), 'w') as f:
-        f.write('<!DOCTYPE html>\n<html lang="en">\n<head><meta charset="utf-8"/>'
-                '<title>XCP-ng %s RPM reports</title></head>\n<body>\n' % xcp_version)
-        f.write('<h1>XCP-ng %s RPM reports</h1>\n<p>Generated on %s</p>\n<ul>\n' % (xcp_version, date))
-        for report_name in REPORTS:
-            links = ' '.join('<a href="report_%s.%s">%s</a>' % (report_name, ext, ext) for ext in ['html', 'md', 'csv'])
-            f.write('<li>%s: %s</li>\n' % (report_name, links))
-        f.write('</ul>\n</body>\n</html>\n')
-
 class SetEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, set):
@@ -740,6 +732,8 @@ def main():
     parser.add_argument('--repo-url', default=REPO_URL,
                         help='URL of the repositories, with {major}, {version}, {repo} and {arch} placeholders '
                              '(default: %(default)s)')
+    parser.add_argument('--index-root', default='/',
+                        help='path of the output directory on the web site, for the titles of the index pages')
     parser.add_argument('--koji-hub', default=KOJI_HUB, help='URL of the koji hub')
     parser.add_argument('--koji-snapshot', help='JSON file with the koji data, instead of querying koji (for tests)')
     parser.add_argument('-v', '--verbose', action='store_true')
@@ -768,6 +762,8 @@ def main():
         with open(os.path.join(output_dir, name), 'w') as f:
             json.dump(data, f, sort_keys=True, indent=4, cls=SetEncoder)
     write_reports(xcp_builds, xcp_rpms, xcp_version, os.path.join(output_dir, 'reports'))
+    # S3 static websites don't list directories
+    write_dir_indexes(output_dir, args.index_root.rstrip('/') + '/' + xcp_version)
     log.info("%d SRPMs, %d RPMs, reports written in %s", len(xcp_builds), len(xcp_rpms), output_dir)
 
 if __name__ == "__main__":
