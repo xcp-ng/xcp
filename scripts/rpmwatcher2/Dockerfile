@@ -1,4 +1,5 @@
-FROM fedora:44
+# AlmaLinux 10 is maintained until 2035, longer than XCP-ng 8.3
+FROM almalinux:10
 RUN dnf install -y python3-rpm python3-markdown awscli2 && dnf clean all
 ADD rpmwatcher.py autoindex.py entrypoint.sh /rpmwatcher/
 ADD data/centos7-srpms.json data/epel7-srpms.json /rpmwatcher/data/

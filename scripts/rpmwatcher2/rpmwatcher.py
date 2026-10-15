@@ -479,6 +479,10 @@ def main():
                        ('extra_installable_nvra.json', extra_nvra)]:
         with open(os.path.join(output_dir, name), 'w') as f:
             json.dump(data, f, sort_keys=True, indent=4, cls=SetEncoder)
+    # list of the extra packages we support, referenced from the documentation and used by xcp-ng-tests,
+    # sorted like `koji list-groups` did for the previous rpmwatcher
+    with open(os.path.join(output_dir, 'extra_installable.txt'), 'w') as f:
+        f.write('\n'.join(sorted(resolved['installable_extras'])))
     write_reports(xcp_builds, xcp_rpms, xcp_version, os.path.join(output_dir, 'reports'))
     # S3 static websites don't list directories
     write_dir_indexes(output_dir, args.index_root.rstrip('/') + '/' + xcp_version)

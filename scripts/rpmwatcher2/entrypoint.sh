@@ -1,6 +1,8 @@
 #!/bin/sh
 # Generate the reports from the output of resolve.py, then upload them to S3 if S3_BUCKET is set
 set -e
+# the prefix is a directory, make sure it ends with a /
+case "$S3_PREFIX" in ""|*/) ;; *) S3_PREFIX="$S3_PREFIX/" ;; esac
 /rpmwatcher/rpmwatcher.py --output /out --input /work --index-root "/$S3_PREFIX" "$@"
 if [ -n "$S3_BUCKET" ]; then
     AWS="aws ${S3_ENDPOINT_URL:+--endpoint-url $S3_ENDPOINT_URL}"

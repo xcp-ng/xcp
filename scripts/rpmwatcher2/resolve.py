@@ -69,13 +69,15 @@ class Yum:
         self.tmp_dir = tempfile.mkdtemp(prefix='rpmwatcher-')
         self.install_root = os.path.join(self.tmp_dir, 'root')
         # The repositories are defined in our own configuration file. reposdir points to an empty
-        # directory, so that the repository files installed in the installroot (e.g. by
-        # xcp-ng-release) are not used.
+        # directory, so that the repository files of the image or of the installroot (e.g. installed
+        # by xcp-ng-release) are not used.
         os.mkdir(os.path.join(self.tmp_dir, 'repos.d'))
         self.conf = os.path.join(self.tmp_dir, 'yum.conf')
         major = xcp_version.split('.')[0]
         with open(self.conf, 'w') as f:
-            f.write("[main]\nreposdir=%s\nplugins=0\n" % os.path.join(self.tmp_dir, 'repos.d'))
+            # the settings of dom0 that change what yum installs, no plugins (e.g. priorities)
+            f.write("[main]\nreposdir=%s\nobsoletes=1\nexactarch=1\ninstallonlypkgs=\nplugins=0\n"
+                    % os.path.join(self.tmp_dir, 'repos.d'))
             for repo in MAIN_REPOS:
                 for arch, suffix, enabled in [('x86_64', '', 1), ('Source', '-source', 0)]:
                     f.write("""
@@ -331,7 +333,8 @@ def main():
     path = os.path.join(args.output, args.version + '.json')
     with open(path + '.part', 'w') as f:
         json.dump({'xcp_builds': xcp_builds, 'xcp_rpms': xcp_rpms, 'rpms_installed_by_default': by_default,
-                   'extra_installable_nvra': extra_nvra}, f, sort_keys=True, indent=4)
+                   'installable_extras': extras, 'extra_installable_nvra': extra_nvra},
+                  f, sort_keys=True, indent=4)
     os.rename(path + '.part', path)
     log.info("%d SRPMs, %d RPMs, written in %s", len(xcp_builds), len(xcp_rpms), path)
 
