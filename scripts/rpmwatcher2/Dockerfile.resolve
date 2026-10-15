@@ -1,0 +1,26 @@
+# Minimal XCP-ng 8.3 system, to resolve the dependencies with the same yum as on an XCP-ng host.
+# It's bootstrapped from the XCP-ng repositories with the dnf of Fedora.
+FROM fedora:44 AS bootstrap
+RUN mkdir /repos && for r in base updates; do \
+        printf '[xcpng-%s]\nname=xcpng-%s\nbaseurl=https://updates.xcp-ng.org/8/8.3/%s/x86_64/\n' $r $r $r >> /repos/xcpng.repo; \
+    done
+# EL7 packages only carry digests that recent rpm versions no longer accept.
+# The signatures are checked in the next stage instead.
+RUN echo "%_pkgverify_level none" > /etc/rpm/macros.pkgverify
+RUN dnf -y --installroot=/rootfs --releasever=8.3 --use-host-config --setopt=reposdir=/repos \
+        --setopt=install_weak_deps=False --setopt=tsflags=nodocs --nogpgcheck --setopt=keepcache=True \
+        install yum yum-utils xcp-ng-release \
+    && mkdir /pkgs && find /rootfs/var/cache -name '*.rpm' -exec mv {} /pkgs/ \; \
+    && rm -rf /rootfs/var/cache/* /rootfs/var/lib/rpm/*
+
+FROM scratch
+COPY --from=bootstrap /rootfs /
+# The rpm database written by the rpm of Fedora can't be read by the EL7 one: register the packages again.
+# Their signatures are checked here, the rpm of Fedora doesn't accept the SHA1 signatures of the XCP-ng key.
+RUN --mount=type=bind,from=bootstrap,source=/pkgs,target=/pkgs \
+    rpm --initdb && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng \
+    && rpm -K /pkgs/*.rpm | grep -v ': rsa sha1 (md5) pgp md5 OK$' | { ! grep . ; } \
+    && rpm -i --justdb --nodeps --noscripts --notriggers /pkgs/*.rpm
+ADD resolve.py /rpmwatcher/
+ADD data/koji-ca.crt /rpmwatcher/data/
+ENTRYPOINT ["/usr/bin/python2", "-u", "/rpmwatcher/resolve.py", "--output", "/work"]
