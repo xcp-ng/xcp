@@ -1,0 +1,46 @@
+# Generate the reports in ./out, without upload:
+#   docker compose run --rm rpmwatcher
+# Generate and upload to the production S3, with the settings and credentials in prod.env
+# (ignored by git; don't name it .env, docker compose would load it for every run):
+#   docker compose --env-file prod.env run --rm rpmwatcher
+# Same, with an upload to a local S3 (SeaweedFS) to test the upload:
+#   docker compose --profile local-s3 up -d s3
+#   docker compose run --rm --no-deps --entrypoint aws rpmwatcher --endpoint-url http://s3:8333 s3 mb s3://reports
+#   S3_BUCKET=reports S3_ENDPOINT_URL=http://s3:8333 docker compose run --rm rpmwatcher
+services:
+  # resolves the dependencies with yum, in an XCP-ng 8.3 container
+  resolve:
+    build:
+      context: .
+      dockerfile: Dockerfile.resolve
+    platform: linux/amd64
+    command: ["${XCP_VERSION:-8.3}"]
+    volumes:
+      - work:/work
+
+  # produces the reports and uploads them
+  rpmwatcher:
+    build: .
+    command: ["${XCP_VERSION:-8.3}"]
+    depends_on:
+      resolve:
+        condition: service_completed_successfully
+    environment:
+      S3_BUCKET:
+      S3_PREFIX:
+      S3_ENDPOINT_URL:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-us-east-1}
+    volumes:
+      - ./out:/out
+      - work:/work
+
+  s3:
+    profiles: [local-s3]
+    image: chrislusf/seaweedfs:3.80
+    command: server -dir=/data -s3
+    ports: ["8333:8333"]
+
+volumes:
+  work:

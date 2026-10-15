@@ -1,0 +1,6 @@
+# XCP-ng 8.3 build environment, maintained by the project: it has the same yum as an XCP-ng host.
+# resolve.py uses its own yum configuration, so the repositories configured in the image don't matter.
+FROM ghcr.io/xcp-ng/xcp-ng-build-env:8.3
+ADD resolve.py /rpmwatcher/
+ADD data/koji-ca.crt /rpmwatcher/data/
+ENTRYPOINT ["/usr/bin/python2", "-u", "/rpmwatcher/resolve.py", "--output", "/work"]
