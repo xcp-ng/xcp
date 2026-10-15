@@ -3640,6 +3640,12 @@
         "package": "python-cryptography",
         "status": "packaged"
     },
+    "python-dataclasses": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "package": "python-dataclasses",
+        "status": "packaged"
+    },
     "python-defusedxml": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
