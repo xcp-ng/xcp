@@ -4093,6 +4093,13 @@
         "package": "r8125-module",
         "status": "packaged"
     },
+    "r8125-module-alt": {
+        "added_by": "XCP-ng",
+        "maintainer": "Hypervisor & Kernel",
+        "note": "additional driver",
+        "package": "r8125-module-alt",
+        "status": "packaged"
+    },
     "r8169-module-alt": {
         "added_by": "XCP-ng",
         "maintainer": "Hypervisor & Kernel",
