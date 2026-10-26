@@ -1915,6 +1915,12 @@
         "package": "libcap-ng",
         "status": "packaged"
     },
+    "libcbor": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "package": "libcbor",
+        "status": "packaged"
+    },
     "libcgroup": {
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
@@ -2012,6 +2018,12 @@
         "added_by": "XS",
         "maintainer": "OS Platform & Release",
         "package": "libffi",
+        "status": "packaged"
+    },
+    "libfido2": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "package": "libfido2",
         "status": "packaged"
     },
     "libfontenc": {
