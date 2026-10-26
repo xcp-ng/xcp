@@ -4998,7 +4998,7 @@
     },
     "xha": {
         "added_by": "XS",
-        "maintainer": "XAPI & Network",
+        "maintainer": "Storage",
         "package": "xha",
         "status": "packaged"
     },
