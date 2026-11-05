@@ -16,6 +16,7 @@ Those are common concepts in the RPM world.
 """
 
 from __future__ import print_function
+
 import argparse
 import subprocess
 import os
@@ -182,7 +183,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
     # For every SRPM built by ourselves, get its build dependencies
     # We use our local RPMs directory as target directory to avoid downloads
     print("\n*** Get build deps for every SRPM built by XCP-ng ***")
-    for srpm_nvr, build_info in xcp_builds.iteritems():
+    for srpm_nvr, build_info in xcp_builds.items():
         if build_info['built-by'] == 'xcp-ng':
             build_info['build-deps'] = get_build_deps(os.path.join(xcp_srpm_repo, srpm_nvr + ".src.rpm"),
                                                       install_root,
@@ -194,7 +195,7 @@ gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-xcpng
 
     # For each RPM from our repos, get its runtime dependencies, and add info from xcp_ng_rpms_srpms
     print("\n*** Get runtime deps for all RPMs ***")
-    for srpm_nvr, build_info in xcp_builds.iteritems():
+    for srpm_nvr, build_info in xcp_builds.items():
         for rpm_nvra in build_info['rpms']:
             installable, deps = get_all_runtime_deps(rpm_nvra, install_root)
             xcp_rpms[rpm_nvra] = {
