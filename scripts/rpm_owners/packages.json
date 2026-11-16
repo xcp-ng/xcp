@@ -953,6 +953,12 @@
         "package": "expect",
         "status": "packaged"
     },
+    "fakechroot": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "package": "fakechroot",
+        "status": "packaged"
+    },
     "fakeroot": {
         "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
@@ -3992,6 +3998,12 @@
         "package": "python3-ply",
         "status": "packaged"
     },
+    "python3-py": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "package": "python3-py",
+        "status": "packaged"
+    },
     "python3-pycparser": {
         "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
@@ -4002,6 +4014,12 @@
         "added_by": "XCP-ng",
         "maintainer": "OS Platform & Release",
         "package": "python3-pyparsing",
+        "status": "packaged"
+    },
+    "python3-pytest": {
+        "added_by": "XCP-ng",
+        "maintainer": "OS Platform & Release",
+        "package": "python3-pytest",
         "status": "packaged"
     },
     "python3-setuptools": {
