@@ -1,2 +1,4 @@
 "xen-4.17.6-12.3.xcpng8.3" = "git+https://github.com/xcp-ng-rpms/xen.git#4e1f1f0915d31e5649bf8f8d60f959e4a857a6fe"
 "blktap-3.55.5-9.5.xcpng8.3" = "git+https://github.com/xcp-ng-rpms/blktap.git#8c0e86a027350185753f32eff759e367ca8c3aff"
+"xapi-26.1.21-1.4.xcpng8.3" = "git+https://github.com/xcp-ng-rpms/xapi.git#c56d714fe6146741c1b1d1969561cfdb5d7af929"
+"xen-4.17.7-4.2.xcpng8.3" = "git+https://github.com/xcp-ng-rpms/xen.git#a9ddd3648534d467453646407cb68fcb911f78ac"
