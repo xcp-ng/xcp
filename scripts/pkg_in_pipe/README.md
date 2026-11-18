@@ -1,3 +1,16 @@
+# Milestone card links
+
+`plane_milestone_links.py` lists the cards of a given plane milestone, and the interesting links found in
+their description: links to help.vates.tech, github issues and xcp-ng.org forum posts. Only the cards with at
+least one such link are printed.
+
+It needs a plane token, through the `PLANE_TOKEN` environment variable or the `--plane-token` option,
+and the `requests` python module.
+
+```sh
+./plane_milestone_links.py '<milestone title>'
+```
+
 # Packages in pipe report generator
 
 Generates an html report with the packages in the current tags.
