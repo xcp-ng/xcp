@@ -51,6 +51,9 @@ class Build(BaseModel):
     url: str
     built_by: str
     maintained_by: str | None
+    # not in the reports generated before the categories were added to packages.json
+    category: str | None = None
+    optional: bool | None = None
     issues: list[Issue]
     pull_requests: list[PullRequest]
     build_linked: bool
@@ -70,6 +73,19 @@ class Report(BaseModel):
 
 
 PR_URL_RE = re.compile(r'^https://github\.com/([^/]+)/([^/]+)/pull/(\d+)$')
+
+# the categories of scripts/rpm_owners/packages.json, in the order of the release post
+CATEGORIES = [
+    'Virtualization',
+    'System',
+    'Control Plane',
+    'Storage',
+    'Network',
+    'UI',
+    'Drivers and Firmware',
+    'Others',
+]
+DEFAULT_CATEGORY = 'Others'
 
 RETENTION_TIME = 24 * 60 * 60  # 24 hours
 
@@ -211,6 +227,42 @@ def verbatim_lines(package: str, lines: list[str]) -> list[str]:
     return [f'- `{package}`:']
 
 
+def categories_by_package(tag_report: TagReport) -> dict[str, tuple[str, bool]]:
+    """Return the category and optional flag of each package, as {package: (category, optional)}.
+
+    They are taken from the latest build of the package, the first one in the report.
+    """
+    categories: dict[str, tuple[str, bool]] = {}
+    for build in tag_report.builds:
+        if build.package in categories:
+            continue
+        category = build.category
+        if category not in CATEGORIES:
+            problem = 'no category' if category is None else f'unknown category {category!r}'
+            print(f'warning: {problem} for {build.package}, using {DEFAULT_CATEGORY}', file=sys.stderr)
+            category = DEFAULT_CATEGORY
+        categories[build.package] = (category, bool(build.optional))
+    return categories
+
+
+def format_what_changed(items: dict[str, list[str]], categories: dict[str, tuple[str, bool]]) -> str:
+    """Group the items of the packages by category, with the optional packages at the end of their category."""
+    lines: list[str] = []
+    for category in CATEGORIES:
+        default_packages = sorted(p for p in items if categories[p] == (category, False))
+        optional_packages = sorted(p for p in items if categories[p] == (category, True))
+        if not default_packages and not optional_packages:
+            continue
+        lines += [f'### {category}', '']
+        for package in default_packages:
+            lines += items[package] + ['']
+        if optional_packages:
+            lines += ['#### Optional packages', '']
+            for package in optional_packages:
+                lines += items[package] + ['']
+    return '\n'.join(lines).rstrip()
+
+
 def versions_by_package(tag_report: TagReport) -> list[tuple[str, str | None, str]]:
     """Return the latest build of each package, as (package, previous_nvr, nvr), sorted by package name.
 
@@ -294,7 +346,8 @@ def main() -> None:
     cache = diskcache.Cache(args.cache)
     report = Report.model_validate_json(Path(args.report).read_text())
     tag_report = find_tag_report(report, args.tag)
-    what_changed: list[str] = []
+    categories = categories_by_package(tag_report)
+    items: dict[str, list[str]] = {}
     with tqdm(
         sorted(prs_by_package(tag_report).items()),
         desc='packages',
@@ -310,10 +363,10 @@ def main() -> None:
             lines = collect_sections(descriptions, pbar)
             if not lines:
                 warn(pbar, f'no "Explain the change to users" section available for the pull requests of {package}')
-            what_changed.extend(verbatim_lines(package, lines))
-            what_changed.append('')
+            items[package] = verbatim_lines(package, lines)
     version = args.version or args.tag[1:].split('-')[0]
-    print(format_post('\n'.join(what_changed).rstrip(), format_versions(versions_by_package(tag_report)), version))
+    versions = format_versions(versions_by_package(tag_report))
+    print(format_post(format_what_changed(items, categories), versions, version))
 
 
 if __name__ == '__main__':
