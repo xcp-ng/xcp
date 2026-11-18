@@ -3,3 +3,4 @@ report.json
 report.md
 .cache
 __pycache__/
+checklist_backup.json

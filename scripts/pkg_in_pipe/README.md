@@ -11,6 +11,36 @@ and the `requests` python module.
 ./plane_milestone_links.py '<milestone title>'
 ```
 
+# Milestone validation checklist
+
+`plane_milestone_checklist.py` sets the release validation checklist used by XCPNG-3350 (a
+`CI` / `Forum` / `QA` / `Blog` task list) on the cards of a milestone. CI, Forum and Blog are the same
+for every card of a release, so they can be passed on the command line; QA is filled in by whoever
+validates the card, so it is left alone unless `--qa` is given. An item is ticked when a value is
+given for it.
+
+A card that does not have the checklist yet gets it appended, and a card that already has one has the
+given values refreshed in place, so the checklist of a whole milestone can be updated by running the
+same command again with the new values. Only the items given on the command line are touched.
+
+Nothing is written without `--apply`, and the original descriptions are saved to a json file first, so
+a run can be undone:
+
+```sh
+# show what would change
+./plane_milestone_checklist.py '<milestone title>' --forum 'https://xcp-ng.org/forum/topic/.../'
+
+# write it, keeping a backup to undo with
+./plane_milestone_checklist.py '<milestone title>' --forum 'https://...' --apply
+
+# undo it
+./plane_milestone_checklist.py --restore checklist_backup.json --apply
+```
+
+A single card can be updated with `--card XCPNG-1234` instead of a whole milestone. Each card is read
+back after being written, because plane reformats the description on save, and the run stops at the
+first card that did not take the change.
+
 # Packages in pipe report generator
 
 Generates an html report with the packages in the current tags.
