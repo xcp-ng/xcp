@@ -317,28 +317,29 @@ def find_commits(gh, repo, start_sha, end_sha) -> list[Commit]:
 
 def find_pull_requests(repo, start_sha, end_sha):
     """Find the pull requests for the commits in the [start_sha,end_sha[ range."""
+    commits = find_commits(GITHUB, repo, start_sha, end_sha)
+    range_shas = {commit.sha for commit in commits}
     prs = set()
-    for commit in find_commits(GITHUB, repo, start_sha, end_sha):
-        cache_key = f'commit-prs-6-{commit.sha}'
-        if (commit_prs := cast(list[PullRequest], cached(cache_key))) is not None:
-            prs.update(commit_prs)
-        elif GITHUB:
+    for commit in commits:
+        cache_key = f'commit-prs-7-{commit.sha}'
+        if (commit_prs := cast(list[PullRequest], cached(cache_key))) is None:
+            if not GITHUB:
+                continue
             commit_prs = list(commit.get_pulls())
             if not commit_prs:
                 # github is not properly reporting some PRs. Try to workaround that problem by getting
                 # the PR number from the commit message
                 group = re.match(r'Merge pull request #(\d+) from ', commit.commit.message)
                 if group:
-                    pr = GITHUB.get_repo(repo).get_pull(int(group[1]))
-                    prs.add(pr)
-            # github sometimes returns a PR which is only related to the commit through its branch
-            # history, e.g. a PR whose branch was created from this commit, so we check that the
-            # commit is actually part of the PR: it must be one of its commits, or its merge
-            # commit. The latter is needed for the PRs merged by rebase or squash, whose merge
-            # commit on the base branch is not one of the PR commits.
-            commit_prs = [pr for pr in commit_prs if commit in pr.get_commits() or commit.sha == pr.merge_commit_sha]
+                    commit_prs = [GITHUB.get_repo(repo).get_pull(int(group[1]))]
             cache(cache_key, commit_prs)
-            prs.update(commit_prs)
+        # github also returns the PRs which are only related to the commit through their branch
+        # history: a PR whose branch was created from this commit, or a PR whose branch contains
+        # this commit because it is based on a branch which is not in the PR base branch (e.g. a 9.0
+        # PR targeting master, but based on the 8.3 branch). So we only keep the PRs which end in
+        # the commit range: their head is part of the build, or their merge commit is. The latter
+        # is needed for the PRs merged by rebase or squash, whose head is not in the base branch.
+        prs.update(pr for pr in commit_prs if pr.head.sha in range_shas or pr.merge_commit_sha in range_shas)
     return sorted(prs, key=lambda p: p.number, reverse=True)
 
 def get_koji_build(build_id) -> dict:
