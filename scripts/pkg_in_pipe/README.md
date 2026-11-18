@@ -18,6 +18,14 @@ An extra `--generated-info` command line option may be used to add some info abo
 
 The `--debug` option logs more details about the generation on stderr.
 
+The maintainers and categories of the packages are read from `scripts/rpm_owners/packages.json` in
+the master branch on github. The `--packages-json` option reads them from another path or URL instead,
+for example to test a change of that file before it is merged:
+
+```sh
+pkg_in_pipe --packages-json ../rpm_owners/packages.json --json-output report.json report.html
+```
+
 A machine readable version of the report can also be generated with the `--json-output` option:
 
 ```sh
