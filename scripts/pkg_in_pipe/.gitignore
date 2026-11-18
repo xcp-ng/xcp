@@ -1,3 +1,5 @@
 report.html
 report.json
+report.md
 .cache
+__pycache__/
