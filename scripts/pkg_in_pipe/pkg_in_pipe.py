@@ -542,7 +542,8 @@ with io.StringIO() as out:
                     if build['source'] is not None:
                         (repo, sha) = parse_source(build['source'])
                         prs = find_pull_requests(repo, sha, previous_build_sha)
-                    maintained_by = PACKAGES.get(tagged['package_name'], {}).get('maintainer')
+                    package_info = PACKAGES.get(tagged['package_name'], {})
+                    maintained_by = package_info.get('maintainer')
                     build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
                     print_table_line(
                         temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs, maintained_by
@@ -554,6 +555,8 @@ with io.StringIO() as out:
                         'url': build_url,
                         'built_by': tagged['owner_name'],
                         'maintained_by': maintained_by,
+                        'category': package_info.get('category'),
+                        'optional': package_info.get('optional'),
                         'issues': [{
                             'sequence_id': i['sequence_id'],
                             'url': f'https://project.vates.tech/vates-global/browse/XCPNG-{i["sequence_id"]}/',
