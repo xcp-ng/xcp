@@ -63,7 +63,8 @@ subsection at the end of their category. A package without a known category, e.g
 generated before the categories were added, is put in "Others" with a warning. The "Versions"
 section lists every package of the tag with its version, showing the previously released
 version as well when the report knows it (the `previous_nvr` field, the newest build of the
-package in the updates or base tag). The `--version` option overrides the version number of
+package in the updates or base tag), with the optional packages in an "Optional packages"
+subsection at the end. The `--version` option overrides the version number of
 the post, otherwise it is derived from the tag (e.g. `v8.3-ci` gives 8.3).
 
 The verbatim version is printed as a single list item: a one line section is written right

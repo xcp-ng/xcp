@@ -279,12 +279,20 @@ def version_release(package: str, nvr: str) -> str:
     return nvr.removeprefix(package + '-')
 
 
-def format_versions(versions: list[tuple[str, str | None, str]]) -> str:
-    lines = []
-    for package, previous_nvr, nvr in versions:
-        new_version = version_release(package, nvr)
-        item = f'{version_release(package, previous_nvr)} -> {new_version}' if previous_nvr is not None else new_version
-        lines.append(f'* `{package}`: {item}')
+def format_version(package: str, previous_nvr: str | None, nvr: str) -> str:
+    new_version = version_release(package, nvr)
+    item = f'{version_release(package, previous_nvr)} -> {new_version}' if previous_nvr is not None else new_version
+    return f'* `{package}`: {item}'
+
+
+def format_versions(versions: list[tuple[str, str | None, str]], categories: dict[str, tuple[str, bool]]) -> str:
+    """List the versions of the packages, with the optional packages in a subsection at the end."""
+    lines = [format_version(*version) for version in versions if not categories[version[0]][1]]
+    optional_lines = [format_version(*version) for version in versions if categories[version[0]][1]]
+    if optional_lines:
+        if lines:
+            lines.append('')
+        lines += ['### Optional packages', ''] + optional_lines
     return '\n'.join(lines)
 
 
@@ -365,7 +373,7 @@ def main() -> None:
                 warn(pbar, f'no "Explain the change to users" section available for the pull requests of {package}')
             items[package] = verbatim_lines(package, lines)
     version = args.version or args.tag[1:].split('-')[0]
-    versions = format_versions(versions_by_package(tag_report))
+    versions = format_versions(versions_by_package(tag_report), categories)
     print(format_post(format_what_changed(items, categories), versions, version))
 
 
