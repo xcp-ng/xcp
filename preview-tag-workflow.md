@@ -88,28 +88,18 @@ All the packages inside the `v8.3-v-<feature>preview` tag have to be built
 from the newly created `8.3-<feature>preview` branch, once the PRs have
 been merged.
 
-To do so, make sure to untag your stray test builds from your user tag, and
-do a normal build, in your use-tag again, because we have no dedicated
-`v8.3-v-<feature>preview-ci`, so the CI will be done from the build in your
-use-tag:
+To do so do a normal build, in `v8.3-v-<feature>preview-incoming` (like you
+would in v8.3-incoming):
 
 ```bash
 
 git fetch origin
 git checkout -B 8.3-featurepreview origin/8.3-featurepreview
-koji_build.py v8.3-u-<usertag> .
+koji_build.py v8.3-v-<feature>preview-incoming .
 ```
 
 This last build is the equivalent of the build in `v8.3-incoming`, and
 that's what needs to go to CI.
-
-> [!WARNING]
->
-> Our user tags inherit from v8.3-incoming, so make sure that your packages
-> do not have any dependencies on something in v8.3-incoming as the feature
-> tags only inherit from v8.3-updates.  As such, when your package is moved
-> into the feature tag, it could be come non-installable or worse, behaves
-> incorrectly.
 
 Once the CI comes back green, that build can be moved from the user tag
 into the `v8.3-v-<feature>preview`.
