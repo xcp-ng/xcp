@@ -26,7 +26,7 @@ git fetch origin
 git push origin origin/8.3:refs/heads/8.3-kernelpreview
 ```
 
-## Do pre-builds in your user tags for testing
+## Do test-builds in your user tags for testing
 
 Make sure to add a `<feature>preview` marker to the Release version, so
 that we cannot confuse a package meant for preview tags.
@@ -47,20 +47,21 @@ index 3d4345b78aef..fcfdc846b704 100644
 ```
 
 Then do your builds as you usually would, in your user tag with either
---pre-build or --test-build:
+--test-build (if you use --pre-builds, they won't have precedence over
+what's already in xcp-ng-updates):
 
 ```bash
-koji_build.py --pre-build testbuild v8.3-u-<usertag> .
+koji_build.py --test-build testbuild v8.3-u-<usertag> .
 ```
 
 For example, for a build targetting `v8.3-kernelpreview` built by Quentin
 Casasnovas:
 
 ```bash
-koji_build.py --pre-build testbuild v8.3-u-qcasasnovas1 .
+koji_build.py --test-build testbuild v8.3-u-qcasasnovas1 .
 ```
 
-This will add a `~0.tesbuild.<X>` suffix to your release, where <X> will be
+This will add a `-0.tesbuild.<X>` suffix to your release, where <X> will be
 auto-incremented every time you start a new build from the same EVR.
 
 The main difference between `--pre-build` and `--test-build` is precedence
