@@ -147,9 +147,11 @@ like this:
 # Disable the kernelpreview repository
 yum-config-manage --disable xcp-ng-kernelpreview
 
-yum downgrade --setopt=protected_packages=                                                            \
-	$(repoquery --repoid=xcp-ng-updates kernel)                                                              \
-	$(repoquery --installed --whatrequires 'kernel-uname-r = 4.19.325-cip137' | sed 's/-.:.*//')
+
+yum downgrade --setopt=protected_packages= \
+    $(repoquery --repoid=xcp-ng-updates kernel) \
+    $(repoquery --installed --qf '%{name}' kernel-devel kernel-headers perf python2-perf python3-perf) \
+    $(repoquery --installed --qf '%{name}' --whatrequires 'kernel-uname-r = 4.19.325-cip137')
 ```
 
 It should be made clear in the forum post that security updates are _not_
