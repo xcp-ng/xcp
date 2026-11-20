@@ -43,8 +43,16 @@ index 3d4345b78aef..fcfdc846b704 100644
  License: GPLv2
  Version: %{usver}
 -Release: %{?xsrel}.16%{?dist}
-+Release: %{?xsrel}.16.kernelpreview.1%{dist}
++Release: %{?xsrel}.16.0.kernelpreview.1%{dist}
 ```
+
+> [!IMPORTANT]
+>
+> Don't just prepend `.<feature>preview`, and make sur to have the `.0` (or
+> any other number as you create new releases) as a release suffix
+> otherwise the EVR in xcp-ng-updates takes precedence, as it will compare
+> the first character of your feature, 'k' for kernelpreview, or 's' for
+> storagepreview with the 'x' in xcpng8.3.  I've learned this the hard way.
 
 Then do your builds as you usually would, in your user tag with either
 --test-build (if you use --pre-builds, they won't have precedence over
