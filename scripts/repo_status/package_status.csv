@@ -1,0 +1,61 @@
+SRPM_name;status;comment
+auto-cert-kit;ignored;unused, why?
+automake16;ignored;unused, why?
+bpftool;ignored;unused, why?
+capstone;ignored;unused, why?
+citrix-crypto-module;ignored;proprietary, patched FIPS openssl
+compiler-rt18;ignored;unused, why?
+corosync;ignored;not supported
+dlm;ignored;previous dependency for corosync
+emu-manager;ignored;proprietary, replaced by xcp-emu-manager
+epel-release;ignored;unused, why?
+forkexecd;ignored;now in xapi
+fuse;;breq for e2fsprogs 1.47
+gfs2-utils;ignored;unsupported fs
+glib2;ignored;same version as el7, why?
+golang;ignored;for newer xe-guest-utilities
+hcp_nss;ignored;unused, “enforce any permitted user login as root”
+hwloc;ignored;unused, why?
+libbpf;ignored;unused, why?
+libcgroup;ignored;unused, same version as el7, why?
+libhbalinux;;unused? el7 fork, “Fix crash in fcoeadm/elxhbamgr on certain machines”
+libnbd;ignored;unused, dep for xapi-storage-plugins
+linuxconsoletools;ignored;unused, same version as el7, why?
+mbootpack;;for secureboot?
+message-switch;ignored;now in xapi
+mpdecimal;ignored;unused, why?
+ninja-build;ignored;unused
+pbis-open;ignored;unused, likely linked to upgrade-pbis-to-winbind
+pbis-open-upgrade;ignored;unused, likely linked to upgrade-pbis-to-winbind
+pvsproxy;ignored;proprietary
+python-monotonic;ignored;previous dependency for sm
+python-tqdm;ignored;unused, dependency for pvsproxy
+rrdd-plugins;ignored;now in xapi
+ruby;ignored;unused, why?
+sbd;;unused? "storage-based death functionality"
+sm-cli;ignored;now in xapi
+secureboot-certificates;ignored;proprietary, needs alternative?
+security-tools;ignored;proprietary, pool_secret tool
+sm-transport-lib;ignored;proprietary
+squeezed;ignored;now in xapi
+tix;ignored;unused, why?
+upgrade-pbis-to-winbind;ignored;proprietary
+v6d;ignored;proprietary, replaced by xcp-featured
+varstored-guard;ignored;now in xapi
+vendor-update-keys;ignored;proprietary
+vgpu;ignored;proprietary
+vhd-tool;ignored;now in xapi
+wsproxy;ignored;now in xapi
+xapi-clusterd;ignored;proprietary
+xapi-nbd;ignored;now in xapi
+xapi-storage;ignored;now in xapi
+xapi-storage-plugins;ignored;proprietarized, forked as xcp-ng-xapi-storage
+xapi-storage-script;ignored;now in xapi
+xcp-networkd;ignored;now in xapi
+xcp-rrdd;ignored;now in xapi
+xencert;;"automated testkit for certifying storage hardware with XenServer"
+xenopsd;ignored;now in xapi
+xenserver-release;forked;xcp-ng-release
+xenserver-snmp-agent;ignored;proprietary, SNMP MIB
+xenserver-telemetry;ignored;proprietary, xapi plugin
+xs-clipboardd;ignored;proprietary, replaced by xcp-clipboardd
