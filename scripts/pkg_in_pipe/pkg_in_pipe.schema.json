@@ -72,6 +72,8 @@
                                 "url",
                                 "built_by",
                                 "maintained_by",
+                                "category",
+                                "optional",
                                 "issues",
                                 "pull_requests",
                                 "build_linked"
@@ -105,6 +107,20 @@
                                     "description": "The maintainer of the package, when known",
                                     "type": [
                                         "string",
+                                        "null"
+                                    ]
+                                },
+                                "category": {
+                                    "description": "The part of XCP-ng the package is about, from scripts/rpm_owners/packages.json, when known",
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                },
+                                "optional": {
+                                    "description": "Whether the package is not installed by default, when known",
+                                    "type": [
+                                        "boolean",
                                         "null"
                                     ]
                                 },

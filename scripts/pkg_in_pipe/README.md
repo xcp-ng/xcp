@@ -18,6 +18,14 @@ An extra `--generated-info` command line option may be used to add some info abo
 
 The `--debug` option logs more details about the generation on stderr.
 
+The maintainers and categories of the packages are read from `scripts/rpm_owners/packages.json` in
+the master branch on github. The `--packages-json` option reads them from another path or URL instead,
+for example to test a change of that file before it is merged:
+
+```sh
+pkg_in_pipe --packages-json ../rpm_owners/packages.json --json-output report.json report.html
+```
+
 A machine readable version of the report can also be generated with the `--json-output` option:
 
 ```sh
@@ -48,11 +56,15 @@ release_post.py --report report.json
 
 The release post is written on the standard output, as a full post template: the "What changed"
 section contains one item per package with the `Explain the change to users` section of the pull
-request descriptions, printed verbatim. The post writer can then
-reorganize the items into the usual categories. The "Versions"
+request descriptions, printed verbatim. The items are grouped by the category of the package
+(the `category` field of the report, from `scripts/rpm_owners/packages.json`), and the packages
+which are not installed by default (the `optional` field) are put in an "Optional packages"
+subsection at the end of their category. A package without a known category, e.g. in a report
+generated before the categories were added, is put in "Others" with a warning. The "Versions"
 section lists every package of the tag with its version, showing the previously released
 version as well when the report knows it (the `previous_nvr` field, the newest build of the
-package in the updates or base tag). The `--version` option overrides the version number of
+package in the updates or base tag), with the optional packages in an "Optional packages"
+subsection at the end. The `--version` option overrides the version number of
 the post, otherwise it is derived from the tag (e.g. `v8.3-ci` gives 8.3).
 
 The verbatim version is printed as a single list item: a one line section is written right
@@ -63,12 +75,20 @@ A package without that section still gets an entry, with an empty description, a
 warning is printed on the standard error. For example:
 
 ```markdown
+### UI
+
 - `xo-lite`: * Update the UiTitle component to use the one from web-core (PR #9869)
+
+### Drivers and Firmware
 
 - `amd-microcode`:
     Update to 2026-05-19 drop as redistributed by XenServer
     Updated CPUs:
      BRH-C1 00b00f21: 2025-10-17, rev 0b002161 -> 2025-10-17, rev 0b002162
+
+#### Optional packages
+
+- `r8125-module-alt`: Update to the new upstream version
 ```
 
 The pull request descriptions are cached (same cache as the report

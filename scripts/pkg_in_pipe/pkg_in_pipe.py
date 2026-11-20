@@ -451,6 +451,11 @@ parser.add_argument(
     '--package', '-p', dest='packages', help="The packages to include in the report", action='append', default=[]
 )
 parser.add_argument('--re-cache', help="Refresh the cache", action='store_true')
+parser.add_argument(
+    '--packages-json',
+    help="The path or URL of the packages.json file with the maintainers and categories of the packages",
+    default='https://github.com/xcp-ng/xcp/raw/refs/heads/master/scripts/rpm_owners/packages.json',
+)
 parser.add_argument('--json-output', help="Also write a machine readable report in json format to this path")
 parser.add_argument('--debug', help="Log more details on stderr", action='store_true')
 args = parser.parse_args()
@@ -495,9 +500,14 @@ if args.github_token:
 else:
     log.warning("no github token, the pull requests come from the cache")
 
-# load the packages maintainers
-with urlopen('https://github.com/xcp-ng/xcp/raw/refs/heads/master/scripts/rpm_owners/packages.json') as f:
-    PACKAGES = json.load(f)
+# load the packages maintainers and categories
+if re.match(r'https?://', args.packages_json):
+    with urlopen(args.packages_json) as f:
+        PACKAGES = json.load(f)
+else:
+    with open(args.packages_json) as f:
+        PACKAGES = json.load(f)
+log.info("loaded %d packages from %s", len(PACKAGES), args.packages_json)
 
 report_data = {
     'generated_at': started_at.isoformat(),
@@ -542,7 +552,8 @@ with io.StringIO() as out:
                     if build['source'] is not None:
                         (repo, sha) = parse_source(build['source'])
                         prs = find_pull_requests(repo, sha, previous_build_sha)
-                    maintained_by = PACKAGES.get(tagged['package_name'], {}).get('maintainer')
+                    package_info = PACKAGES.get(tagged['package_name'], {})
+                    maintained_by = package_info.get('maintainer')
                     build_issues = filter_issues(issues, [build_url] + [pr.html_url for pr in prs])
                     print_table_line(
                         temp_out, tagged['nvr'], build_url, build_issues, tagged['owner_name'], prs, maintained_by
@@ -554,6 +565,8 @@ with io.StringIO() as out:
                         'url': build_url,
                         'built_by': tagged['owner_name'],
                         'maintained_by': maintained_by,
+                        'category': package_info.get('category'),
+                        'optional': package_info.get('optional'),
                         'issues': [{
                             'sequence_id': i['sequence_id'],
                             'url': f'https://project.vates.tech/vates-global/browse/XCPNG-{i["sequence_id"]}/',
