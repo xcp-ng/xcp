@@ -94,6 +94,14 @@ koji_build.py v8.3-u-<usertag> .
 This last build is the equivalent of the build in `v8.3-incoming`, and
 that's what needs to go to CI.
 
+> [!WARNING]
+>
+> Our user tags inherit from v8.3-incoming, so make sure that your packages
+> do not have any dependencies on something in v8.3-incoming as the feature
+> tags only inherit from v8.3-updates.  As such, when your package is moved
+> into the feature tag, it could be come non-installable or worse, behaves
+> incorrectly.
+
 Once the CI comes back green, that build can be moved from the user tag
 into the `v8.3-v-<feature>preview`.
 
