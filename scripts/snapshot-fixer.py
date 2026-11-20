@@ -116,7 +116,7 @@ def query_and_stop_ha():
 def fix_record(cls_name, record):
     nullref = 'OpaqueRef:NULL'
     snapshot_of = record.get('snapshot_of')
-    if record.get('is_a_snapshot') == 'false' and snapshot_of != nullref:
+    if record.get('is_a_snapshot') == 'false' and snapshot_of not in (nullref, ''):
         name = record.get('uuid')
         logging.info(f'The {cls_name} {name} has {snapshot_of} as its "snapshot_of" value, changing to null.')
         record.set('snapshot_of', 'OpaqueRef:NULL')
