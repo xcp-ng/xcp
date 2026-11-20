@@ -43,9 +43,11 @@ def main():
 
     setup_logger()
 
-    # --perm=build: without a permission, any Koji account could tag builds into the user tag
     run_command(["koji", "add-tag", args.TARGET, f"--parent={args.PARENT}",
-                 f"--arches={parent_arches(args.PARENT)}", "--perm=build"])
+                 f"--arches={parent_arches(args.PARENT)}"])
+    # Without a permission, any Koji account could tag builds into the user tag.
+    # koji add-tag has no --perm option, so set it right after, before the target exists.
+    run_command(["koji", "edit-tag", args.TARGET, "--perm=build"])
     run_command(["koji", "add-target", args.TARGET, args.TARGET, args.TARGET])
 
 if __name__ == "__main__":
