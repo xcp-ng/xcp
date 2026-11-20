@@ -23,12 +23,13 @@ import xml.etree.ElementTree as ET
 # In unlikely case the script corrupts the database, the script provides an
 # option to restore the database from the backup.
 
-xapi_db        = '/var/lib/xcp/state.db'
-xapi_db_backup = '/var/lib/xcp/state.db.snapshot_of.backup'
-xapi_db_fixed  = '/var/lib/xcp/state.db.snapshot_of.fixed'
-
-MIN_MAJOR = 8
-MIN_MINOR = 3
+class Config:
+    def __init__(self):
+        self.xapi_db = '/var/lib/xcp/state.db'
+        self.xapi_db_backup = '/var/lib/xcp/state.db.snapshot_of.backup'
+        self.bypass_checks = False
+        self.min_major = 8
+        self.min_minor = 3
 
 def service_status(name):
     cmd = ['systemctl', 'is-active', name]
@@ -45,8 +46,8 @@ def is_service_active(name):
 def is_service_inactive(name):
     return service_status(name) in [b'inactive', b'failed']
 
-def poke_service(name, cmd, check):
-    end = time.time() + 15
+def poke_service(name, cmd, check, timeout=15):
+    end = time.time() + timeout
     subprocess.run(['systemctl', cmd, name], check=True)
     while time.time() < end:
         if check(name):
@@ -67,7 +68,7 @@ def start_xapi(ha_enabled):
 def stop_xapi():
     logging.info('Shutting down xapi...')
     try:
-        poke_service('xapi', 'stop', is_service_inactive)
+        poke_service('xapi', 'stop', is_service_inactive, 60)
     except TimeoutError:
         logging.error('Timed out, aborting')
         sys.exit(1)
@@ -164,38 +165,53 @@ def ensure_file_missing(path):
 def copy_database(origin, to):
     shutil.copyfile(origin, to)
 
-def dry_run(args):
-    ensure_file_exists(xapi_db)
-    regenerate_database(xapi_db)
+def dry_run(args, cfg):
+    ensure_file_exists(cfg.xapi_db)
+    regenerate_database(cfg.xapi_db)
 
-def restore(args):
-    ensure_file_exists(xapi_db_backup)
-    ha_enabled = query_and_stop_ha()
-    stop_xapi()
-    try:
-        copy_database(xapi_db_backup, to=xapi_db)
-    finally:
-        start_xapi(ha_enabled)
-        if ha_enabled:
-            start_ha()
+def restore(args, cfg):
+    ha_enabled = False
 
-def rewrite(args):
-    ensure_file_exists(xapi_db)
-    ensure_file_missing(xapi_db_backup)
-    ha_enabled = query_and_stop_ha()
-    stop_xapi()
+    ensure_file_exists(cfg.xapi_db_backup)
+
     try:
-        copy_database(xapi_db, to=xapi_db_backup)
-        rewrite_database(xapi_db_backup, to=xapi_db)
+        if not cfg.bypass_checks:
+            ha_enabled = query_and_stop_ha()
+            stop_xapi()
+
+        copy_database(cfg.xapi_db_backup, to=cfg.xapi_db)
     finally:
-        start_xapi(ha_enabled)
-        if ha_enabled:
-            start_ha()
+        if not cfg.bypass_checks:
+            start_xapi(ha_enabled)
+            if ha_enabled:
+                start_ha()
+
+def rewrite(args, cfg):
+    ha_enabled = False
+
+    ensure_file_exists(cfg.xapi_db)
+    ensure_file_missing(cfg.xapi_db_backup)
+
+    try:
+        if not cfg.bypass_checks:
+            ha_enabled = query_and_stop_ha()
+            stop_xapi()
+
+        copy_database(cfg.xapi_db, to=cfg.xapi_db_backup)
+        rewrite_database(cfg.xapi_db_backup, to=cfg.xapi_db)
+    finally:
+        if not cfg.bypass_checks:
+            start_xapi(ha_enabled)
+            if ha_enabled:
+                start_ha()
 
 def get_xcpng_version():
     inventory = {}
+    path = '/etc/xensource-inventory'
 
-    with open("/etc/xensource-inventory") as f:
+    ensure_file_exists(path)
+
+    with open(path) as f:
         for line in f:
             if "=" in line:
                 k, v = line.strip().split("=", 1)
@@ -210,19 +226,20 @@ def get_xcpng_version():
     return int(major), int(minor)
 
 
-def ensure_supported_version():
+def ensure_supported_version(cfg):
     major, minor = get_xcpng_version()
 
-    if (major, minor) < (MIN_MAJOR, MIN_MINOR):
+    if (major, minor) < (cfg.min_major, cfg.min_minor):
         print(
             f"ERROR: snapshot-fixer.py requires XCP-ng "
-            f"{MIN_MAJOR}.{MIN_MINOR} or newer. "
+            f"{cfg.min_major}.{cfg.min_minor} or newer. "
             f"Detected version: {major}.{minor}"
         )
         sys.exit(1)
 
 def main():
     p = ArgumentParser(description='Rewrite erroneous VM snapshot links.')
+    p.add_argument('--database', default=None, help='Override the xapi database path (default: /var/lib/xcp/state.db)')
     ps = p.add_subparsers(dest='cmd')
     dp = ps.add_parser('dry-run', help='Prints invalid values in the database, does not stop xapi nor modify the database.')
     dp.set_defaults(func=dry_run)
@@ -235,11 +252,21 @@ def main():
         p.print_help()
         sys.exit(1)
 
-    ensure_supported_version()
+    cfg = Config()
+    if args.database:
+        # If the user provided a custom database, we will assume that the provided database is compatible with the script
+        # and we will bypass checking the XCP version and stopping / starting HA and XAPI
+        cfg.xapi_db = args.database
+        cfg.xapi_db_backup = cfg.xapi_db + '.snapshot_of.backup'
+        cfg.bypass_checks = True
+
+    if not cfg.bypass_checks:
+        ensure_supported_version(cfg)
+
     logging.basicConfig()
     logging.getLogger().setLevel(logging.INFO)
 
-    args.func(args)
+    args.func(args, cfg)
 
 if __name__ == '__main__':
     main()
