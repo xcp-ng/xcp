@@ -115,8 +115,11 @@ def query_and_stop_ha():
 
 def fix_record(cls_name, record):
     nullref = 'OpaqueRef:NULL'
-    snapshot_of = record.get('snapshot_of')
-    if record.get('is_a_snapshot') == 'false' and snapshot_of != nullref:
+    snapshot_of = record.get('snapshot_of') or ''
+    # '' is the datamodel default and 'Ref:N' is an unresolved export-local
+    # reference left by VM import: both point nowhere, treat them as null.
+    is_null = snapshot_of in (nullref, '') or snapshot_of.startswith('Ref:')
+    if record.get('is_a_snapshot') == 'false' and not is_null:
         name = record.get('uuid')
         logging.info(f'The {cls_name} {name} has {snapshot_of} as its "snapshot_of" value, changing to null.')
         record.set('snapshot_of', 'OpaqueRef:NULL')
